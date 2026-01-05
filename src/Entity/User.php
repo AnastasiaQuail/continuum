@@ -150,7 +150,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->lastVisitedAt;
     }
 
-    public function visit(): void
+    public function visited(): void
     {
         $this->lastVisitedAt = new DateTimeImmutable();
     }
