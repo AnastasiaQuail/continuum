@@ -24,6 +24,7 @@
         "symfony/runtime": "^8",
         "symfony/security-bundle": "^8",
         "symfony/twig-bundle": "^8",
+        "symfony/uid": "^8",
         "symfony/ux-icons": "^2.32",
         "symfony/yaml": "^8",
         "twig/extra-bundle": "^3.3"
@@ -80,7 +81,9 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "migration": "@php bin/console make:migration --formatted",
+        "migrations:migrate": "@php bin/console doctrine:migrations:migrate"
     },
     "conflict": {
         "symfony/symfony": "*"

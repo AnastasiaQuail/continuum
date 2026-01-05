@@ -1,0 +1,4 @@
+when@dev:
+    maker:
+        root_namespace: 'Continuum'
+        generate_final_entities: true

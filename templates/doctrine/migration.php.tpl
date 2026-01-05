@@ -11,11 +11,11 @@ final class <className> extends AbstractMigration
 {
     public function up(Schema $schema): void
     {
-        $this->addSql('');
+<up>
     }
 
     public function down(Schema $schema): void
     {
-        $this->addSql('');
-    }
+<down>
+    }<override>
 }
