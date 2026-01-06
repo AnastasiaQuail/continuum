@@ -83,7 +83,8 @@
             "@auto-scripts"
         ],
         "migration": "@php bin/console make:migration --formatted",
-        "migrations:migrate": "@php bin/console doctrine:migrations:migrate"
+        "migrations:migrate": "@php bin/console doctrine:migrations:migrate",
+        "icons:import": "@php bin/console ux:icons:lock -v"
     },
     "conflict": {
         "symfony/symfony": "*"
