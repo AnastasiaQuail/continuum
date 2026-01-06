@@ -42,7 +42,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     private DateTimeImmutable $updatedAt;
 
     #[ORM\Column]
-    private?DateTimeImmutable $lastVisitedAt;
+    private ?DateTimeImmutable $lastVisitedAt;
 
     public function __construct(
         #[ORM\Id]
@@ -68,7 +68,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __serialize(): array
     {
         $data = (array) $this;
-        $data["\0".self::class."\0password"] = hash('crc32c', $this->password);
+        $data["\0" . self::class . "\0password"] = hash('crc32c', $this->password);
 
         return $data;
     }

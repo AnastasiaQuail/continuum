@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block body_id %}calendar{% endblock %}
+
+{% block main %}
+    <div class="calendar-pagination">
+        <a class="page-link page-link-prev" href="{{ path('app_calendar', {'year': year - 1}) }}">
+            {{ ux_icon('lucide:chevron-right') }}
+            <span>{{ year - 1 }}</span>
+        </a>
+        <h2>{{ year }}</h2>
+        <a class="page-link page-link-next" href="{{ path('app_calendar', {'year': year + 1}) }}">
+            <span>{{ year + 1 }}</span>
+            {{ ux_icon('lucide:chevron-right') }}
+        </a>
+    </div>
+
+    <div class="card card-calendar">
+        <div class="calendar">
+            {% set current = 'now'|date('Y-m-d') %}
+            {% set currentDate = date(current) %}
+            {% set currentMonth = 'now'|date('Y-m') %}
+
+            {% for monthNumber in 1..12 %}
+                {% set month = year ~ '-' ~ (monthNumber < 10 ? '0') ~ monthNumber %}
+                {% set firstDay = month ~ '-01' %}
+                {% set firstWeekDay = firstDay|date('N') %}
+
+                <div class="month {{ currentMonth == month ? 'month-current' }}">
+                    <div class="month-title">{{ month|date('F') }}</div>
+                    <div class="month-days">
+                        {% if firstWeekDay > 1 %}
+                            <div class="day fake-day" style="--fake-days: {{ firstWeekDay - 1 }}">
+                                <span>1</span>
+                            </div>
+                        {% endif %}
+
+                        {% for dayNumber in 1..firstDay|date('t') %}
+                            {% set day = month ~ '-' ~ (dayNumber < 10 ? '0') ~ dayNumber %}
+                            {% set dayDate = date(day) %}
+
+                            <div
+                                class="day {{ dayDate < currentDate ? 'day-past' }} {{ day == current ? 'day-current' }} {{ dayDate < startDay ? 'day-inactive' }}"
+                                {% if events[day] is defined %}
+                                    data-event="{{ events[day].color }}" data-title="{{ events[day].text }}"
+                                {% endif %}
+                                data-id="{{ day }}">
+                                <span>{{ dayNumber }}</span>
+                                <div class="day-badges"></div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

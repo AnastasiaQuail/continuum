@@ -19,6 +19,7 @@
 </head>
 <body id="{% block body_id %}{% endblock %}">
     {% block sidebar %}
+        {% set _route = app.current_route %}
         <aside id="sidebar" class="sidebar">
             <div class="site-logo">
                 <a class="site-logo-link" href="{{ path('app_homepage') }}">
@@ -29,7 +30,7 @@
             <nav class="navbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">
+                        <a class="nav-link {{ _route == 'app_calendar' ? 'active' }}" href="{{ path('app_calendar') }}">
                             {{ ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) }}
                             <span>Calendar</span>
                         </a>
@@ -94,7 +95,6 @@
     {% endblock %}
 
     {% block header %}
-        {% set _route = app.current_route %}
         <header class="header">
             <nav class="header-container">
                 {% if block('sidebar') is not empty %}
