@@ -11,25 +11,44 @@ export class SidebarToggler {
 
     #set() {
         localStorage.setItem(this.#lsKey, this.#COLLAPSED);
-        document.documentElement.dataset.sidebar = this.#COLLAPSED;
     }
 
     #remove() {
         localStorage.removeItem(this.#lsKey);
+    }
+
+    #setDataset() {
+        document.documentElement.dataset.sidebar = this.#COLLAPSED;
+    }
+
+    #removeDataset() {
         delete document.documentElement.dataset.sidebar;
     }
 
     init() {
         if (this.#isCollapsed()) {
             this.#set();
+            this.#setDataset();
         }
+
+        window.addEventListener('storage', (event) => {
+            if (event.key === this.#lsKey) {
+                if (event.newValue === this.#COLLAPSED) {
+                    this.#setDataset();
+                } else {
+                    this.#removeDataset();
+                }
+            }
+        });
     }
 
     toggle() {
         if (this.#isCollapsed()) {
             this.#remove();
+            this.#removeDataset();
         } else {
             this.#set();
+            this.#setDataset();
         }
     }
 }

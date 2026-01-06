@@ -4,6 +4,10 @@
     --background-color: #fff;
     --border-color: #dee2e6;
 
+    --color-light: var(--body-background-color);
+    --color-dark: var(--color);
+    --color-inverse: var(--color-light);
+
     --color-blue: #0d6efd;
     --background-color-blue: #6ea8fe;
     --color-indigo: #6610f2;
@@ -24,8 +28,8 @@
     --background-color-teal: #79dfc1;
     --color-cyan: #0dcaf0;
     --background-color-cyan: #6edff6;
-    --color-gray: #adb5bd;
-    --background-color-gray: #dee2e6;
+    --color-gray: #6c757d;
+    --background-color-gray: #adb5bd;
 
     --link-color: var(--color-blue);
     --link-background-color: var(--background-color-blue);
@@ -41,6 +45,10 @@
     --body-background-color: #212529;
     --background-color: #292d31;
     --border-color: #343a40;
+
+    --color-light: var(--color);
+    --color-dark: var(--body-background-color);
+    --color-inverse: var(--color-dark);
 
     --background-color-blue: var(--color-blue);
     --background-color-indigo: var(--color-indigo);
@@ -347,7 +355,8 @@ textarea {
             background: none;
             transition: color .15s, background-color .15s;
 
-            &:hover {
+            &:hover,
+            &:focus {
                 color: var(--link-color);
                 background-color: color-mix(in srgb, var(--link-color) 10%, transparent);
             }
@@ -382,5 +391,157 @@ textarea {
 
     .body-container {
         padding: 1.5rem var(--body-padding-inline);
+    }
+}
+
+.form-control {
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color);
+    appearance: none;
+    background-color: var(--background-color);
+    background-clip: padding-box;
+    border: 1px solid var(--border-color);
+    border-radius: .5rem;
+    transition: border-color .15s, box-shadow .15s;
+
+    &:focus {
+        color: var(--color);
+        background-color: var(--background-color);
+        border-color: color-mix(in srgb, var(--link-background-color) 50%, var(--border-color));
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+
+    &::placeholder {
+        color: color-mix(in srgb, var(--color) 25%, transparent);
+        opacity: 1;
+    }
+}
+
+.btn {
+    --btn-general-color: var(--color);
+    --btn-color: var(--color-inverse);
+    --btn-border-color: var(--btn-general-color);
+    --btn-border-color-transparent: 90%;
+    --btn-background-color: var(--btn-general-color);
+    --btn-background-color-transparent: 90%;
+
+    display: inline-flex;
+    gap: .375rem;
+    align-items: center;
+    padding: .375rem .75rem;
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: 1.25;
+    color: var(--btn-color);
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    border: 1px solid color-mix(in srgb, var(--btn-border-color) var(--btn-border-color-transparent), transparent);
+    border-radius: .5rem;
+    background-color: color-mix(in srgb, var(--btn-background-color) var(--btn-background-color-transparent), transparent);
+    transition: color .15s, background-color .15s, border-color .15s;
+
+    &:hover {
+        --btn-border-color-transparent: 100%;
+        --btn-background-color-transparent: 100%;
+    }
+
+    &:focus-visible {
+        outline: 0;
+    }
+
+    &:disabled {
+        opacity: .5;
+        pointer-events: none;
+    }
+
+    &.btn-primary {
+        --btn-general-color: var(--color-blue);
+    }
+
+    &.btn-success {
+        --btn-general-color: var(--color-green);
+    }
+
+    &.btn-danger {
+        --btn-general-color: var(--color-red);
+    }
+
+    &.btn-warning {
+        --btn-general-color: var(--color-yellow);
+    }
+
+    &.btn-info {
+        --btn-general-color: var(--color-cyan);
+    }
+
+    &.btn-secondary {
+        --btn-general-color: var(--color-gray);
+    }
+
+    &.btn-outline {
+        &:not(:hover) {
+            --btn-color: var(--btn-general-color);
+            --btn-background-color-transparent: 0%;
+        }
+    }
+
+    &.btn-transparent {
+        --btn-color: var(--btn-general-color);
+        --btn-border-color-transparent: 0%;
+        --btn-background-color-transparent: 15%;
+
+        &:hover {
+            --btn-background-color-transparent: 25%;
+        }
+    }
+}
+
+.alert {
+    --alert-color: var(--color);
+
+    position: relative;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    color: color-mix(in srgb, var(--alert-color) 90%, var(--color));
+    border: 1px solid color-mix(in srgb, var(--alert-color) 25%, transparent);
+    border-radius: .5rem;
+    background-color: color-mix(in srgb, var(--alert-color) 15%, transparent);
+
+    a {
+        color: inherit;
+        font-weight: 500;
+    }
+
+    &.alert-primary {
+        --alert-color: var(--color-blue);
+    }
+
+    &.alert-success {
+        --alert-color: var(--color-green);
+    }
+
+    &.alert-danger {
+        --alert-color: var(--color-red);
+    }
+
+    &.alert-warning {
+        --alert-color: var(--color-yellow);
+    }
+
+    &.alert-info {
+        --alert-color: var(--color-cyan);
+    }
+
+    &.alert-secondary {
+        --alert-color: var(--color-gray);
     }
 }

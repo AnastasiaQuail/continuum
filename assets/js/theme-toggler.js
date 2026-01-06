@@ -17,25 +17,43 @@ export default class {
     }
 
     /**
+     * @param {string} theme
+     */
+    #set(theme) {
+        localStorage.setItem(this.#lsKey, theme);
+    }
+
+    /**
+     * @param {string} theme
+     */
+    #setDataset(theme) {
+        document.documentElement.dataset.theme = theme;
+    }
+
+    /**
      * @return {string}
      */
     #detect() {
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? this.#DARK : this.#LIGHT;
     }
 
-    /**
-     * @param {string} theme
-     */
-    #set(theme) {
-        localStorage.setItem(this.#lsKey, theme);
-        document.documentElement.dataset.theme = theme;
-    }
-
     init() {
-        this.#set(this.#get() ?? this.#detect());
+        const theme = this.#get() ?? this.#detect();
+
+        this.#set(theme);
+        this.#setDataset(theme);
+
+        window.addEventListener('storage', (event) => {
+            if (event.key === this.#lsKey) {
+                this.#setDataset(event.newValue);
+            }
+        });
     }
 
     toggle() {
-        this.#set(this.#get() === this.#LIGHT ? this.#DARK : this.#LIGHT);
+        const theme = this.#get() === this.#LIGHT ? this.#DARK : this.#LIGHT;
+
+        this.#set(theme);
+        this.#setDataset(theme);
     }
 }

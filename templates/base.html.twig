@@ -96,14 +96,18 @@
     {% block header %}
         {% set _route = app.current_route %}
         <header class="header">
-            <div class="header-container">
-                <button id="sidebar-toggler" class="header-button">{{ ux_icon('lucide:menu') }}</button>
+            <nav class="header-container">
+                {% if block('sidebar') is not empty %}
+                    <button id="sidebar-toggler" class="header-button">{{ ux_icon('lucide:menu') }}</button>
+                {% endif %}
                 <button id="theme-toggler" class="header-button">
                     <span class="theme-light">{{ ux_icon('lucide:sun') }}</span>
                     <span class="theme-dark">{{ ux_icon('lucide:moon') }}</span>
                 </button>
-                <a class="header-button" href="{{ logout_path() }}">{{ ux_icon('lucide:log-out') }}</a>
-            </div>
+                {% if is_granted('ROLE_USER') %}
+                    <a class="header-button" href="{{ logout_path() }}">{{ ux_icon('lucide:log-out') }}</a>
+                {% endif %}
+            </nav>
         </header>
     {% endblock %}
 
