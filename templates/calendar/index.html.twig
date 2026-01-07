@@ -2,8 +2,22 @@
 
 {% block body_id %}calendar{% endblock %}
 
-{% block main %}
-    <div class="calendar-pagination">
+{% block main -%}
+    {%- set current = 'now'|date('Y-m-d') -%}
+    {%- set currentDate = date(current) -%}
+    {%- set currentMonth = 'now'|date('Y-m') -%}
+
+    {% if upcomingNotifications is not empty %}
+        <section class="card calendar calendar-upcoming-notification">
+            {% for upcomingNotification in upcomingNotifications %}
+                <div class="notification-text" data-event-type="{{ upcomingNotification.type.value }}">
+                    <strong>{{ upcomingNotification.title }}</strong> - {{ upcomingNotification.text }}
+                </div>
+            {% endfor %}
+        </section>
+    {% endif %}
+
+    <nav class="calendar-pagination">
         <a class="page-link page-link-prev" href="{{ path('app_calendar', {'year': year - 1}) }}">
             {{ ux_icon('lucide:chevron-right') }}
             <span>{{ year - 1 }}</span>
@@ -13,45 +27,49 @@
             <span>{{ year + 1 }}</span>
             {{ ux_icon('lucide:chevron-right') }}
         </a>
-    </div>
+    </nav>
 
-    <div class="card card-calendar">
+    <section class="card card-calendar">
         <div class="calendar">
-            {% set current = 'now'|date('Y-m-d') %}
-            {% set currentDate = date(current) %}
-            {% set currentMonth = 'now'|date('Y-m') %}
+            {%- for monthNumber in 1..12 -%}
+                {%- set month = year ~ '-' ~ (monthNumber < 10 ? '0') ~ monthNumber -%}
+                {%- set firstDay = month ~ '-01' -%}
+                {%- set firstWeekDay = firstDay|date('N') -%}
 
-            {% for monthNumber in 1..12 %}
-                {% set month = year ~ '-' ~ (monthNumber < 10 ? '0') ~ monthNumber %}
-                {% set firstDay = month ~ '-01' %}
-                {% set firstWeekDay = firstDay|date('N') %}
-
-                <div class="month {{ currentMonth == month ? 'month-current' }}">
+                <div class="month {{- currentMonth == month ? ' month-current' }}">
                     <div class="month-title">{{ month|date('F') }}</div>
                     <div class="month-days">
-                        {% if firstWeekDay > 1 %}
+                        {%- if firstWeekDay > 1 -%}
                             <div class="day fake-day" style="--fake-days: {{ firstWeekDay - 1 }}">
                                 <span>1</span>
                             </div>
-                        {% endif %}
+                        {%- endif -%}
 
-                        {% for dayNumber in 1..firstDay|date('t') %}
-                            {% set day = month ~ '-' ~ (dayNumber < 10 ? '0') ~ dayNumber %}
-                            {% set dayDate = date(day) %}
+                        {%- for dayNumber in 1..firstDay|date('t') -%}
+                            {%- set day = month ~ '-' ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
+                            {%- set dayDate = date(day) -%}
+
+                            {%- set typeDay = days[day] is defined ? days[day].type : null -%}
+                            {%- set eventDays = days[day] is defined ? days[day].events : [] -%}
 
                             <div
-                                class="day {{ dayDate < currentDate ? 'day-past' }} {{ day == current ? 'day-current' }} {{ dayDate < startDay ? 'day-inactive' }}"
-                                {% if days[day] is defined %}
-                                    data-type="{{ days[day].type.value }}" data-title="{{ days[day].title }}"
-                                {% endif %}
+                                class="day {{- dayDate < currentDate ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- dayDate < startDay ? ' day-inactive' -}}"
+                                {%- if typeDay is not null %}data-event-type="{{ typeDay.type.value }}"{% endif -%}
                                 data-id="{{ day }}">
                                 <span>{{ dayNumber }}</span>
-                                <div class="day-badges"></div>
+
+                                {%- if eventDays is not empty -%}
+                                    <div class="day-badges">
+                                        {%- for eventDay in eventDays -%}
+                                            <span class="day-badge" data-event-type="{{ eventDay.type.value }}"></span>
+                                        {%- endfor -%}
+                                    </div>
+                                {%- endif -%}
                             </div>
-                        {% endfor %}
+                        {%- endfor -%}
                     </div>
                 </div>
-            {% endfor %}
+            {%- endfor -%}
         </div>
-    </div>
-{% endblock %}
+    </section>
+{%- endblock %}

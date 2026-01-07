@@ -397,10 +397,32 @@ textarea {
 }
 
 .body {
+    display: grid;
+    grid-template-rows: 1fr auto;
     overflow-y: auto;
 
     .body-container {
         padding: 1.5rem var(--body-padding-inline);
+    }
+
+    .footer-container {
+        display: flex;
+        align-items: center;
+        height: 50px;
+        padding-inline: 1.5rem var(--body-padding-inline);
+        font-size: .75rem;
+
+        .footer-datetime {
+            display: flex;
+            cursor: default;
+            opacity: .25;
+
+            & > span + span {
+                margin-left: .5rem;
+                padding-left: .5rem;
+                border-left: 1px solid color-mix(in srgb, var(--color) 50%, transparent);
+            }
+        }
     }
 }
 
@@ -619,6 +641,8 @@ textarea {
     --day-border-radius: calc(var(--day-font-size) / 1.6);
     --day-badge-size: 1.4vw;
 
+    --day-general-color: var(--color);
+
     display: grid;
     grid-template-columns: repeat(var(--grid-month-columns), 1fr);
     gap: 1.5rem 1rem;
@@ -642,7 +666,6 @@ textarea {
     }
 
     .day {
-        --day-general-color: var(--color);
         --day-color: var(--color-light);
         --day-border-width: 1px;
         --day-border-color: var(--day-general-color);
@@ -674,6 +697,47 @@ textarea {
             text-align: center;
         }
 
+        .day-badges {
+            display: flex;
+            flex-direction: row-reverse;
+            position: absolute;
+            right: -2px;
+            top: -2px;
+        }
+
+        .day-badge {
+            --day-badge-general-color: var(--day-general-color);
+            --day-badge-border-color: var(--day-badge-general-color);
+            --day-badge-border-color-transparent: 25%;
+            --day-badge-background-color: var(--day-badge-general-color);
+            --day-badge-background-color-transparent: 100%;
+
+            display: inline-block;
+            width: var(--day-badge-size, 6px);
+            height: var(--day-badge-size, 6px);
+            margin-left: -2px;
+            border: 1px solid color-mix(in srgb, var(--day-badge-border-color) var(--day-badge-border-color-transparent), var(--background-color));
+            border-radius: 50%;
+            background-color: color-mix(in srgb, var(--day-badge-background-color) var(--day-badge-background-color-transparent), var(--background-color));
+            z-index: auto;
+
+            &.hidden {
+                display: none;
+            }
+
+            &:nth-child(1) {
+                z-index: 10;
+            }
+
+            &:nth-child(2) {
+                z-index: 9;
+            }
+
+            &:nth-child(3) {
+                z-index: 8;
+            }
+        }
+
         &.fake-day {
             grid-column: span 1 / calc(var(--fake-days) + 1);
             opacity: 0;
@@ -693,59 +757,26 @@ textarea {
             }
         }
 
-        &:not(.day-past, [data-type]) {
+        &.day-past:not([data-event-type]) {
+            /* past days */
+
+            --day-general-color: var(--color-green);
+        }
+
+        &:not(.day-past) {
             /* empty current and future days */
 
             --day-color: var(--color);
             --day-border-color-transparent: 3%;
             --day-background-color-transparent: 3%;
+
+            .day-badge {
+                --day-badge-border-color-transparent: 10%;
+                --day-badge-background-color-transparent: 50%;
+            }
         }
 
-        &.day-past {
-            --day-general-color: var(--color-green);
-        }
-
-        &[data-type="blue"] {
-            --day-general-color: var(--color-blue);
-        }
-
-        &[data-type="indigo"] {
-            --day-general-color: var(--color-indigo);
-        }
-
-        &[data-type="purple"] {
-            --day-general-color: var(--color-purple);
-        }
-
-        &[data-type="pink"] {
-            --day-general-color: var(--color-pink);
-        }
-
-        &[data-type="red"] {
-            --day-general-color: var(--color-red);
-        }
-
-        &[data-type="orange"] {
-            --day-general-color: var(--color-orange);
-        }
-
-        &[data-type="yellow"] {
-            --day-general-color: var(--color-yellow);
-        }
-
-        &[data-type="green"] {
-            --day-general-color: var(--color-green);
-        }
-
-        &[data-type="teal"] {
-            --day-general-color: var(--color-teal);
-        }
-
-        &[data-type="cyan"] {
-            --day-general-color: var(--color-cyan);
-        }
-
-        &[data-type]:not(.day-past) {
+        &[data-event-type]:not(.day-past) {
             /* future events */
 
             --day-color: var(--day-general-color);
@@ -758,44 +789,71 @@ textarea {
                 --day-background-color-transparent: 25%;
             }
         }
+    }
+}
 
-        .day-badges {
-            display: flex;
-            flex-direction: row-reverse;
-            position: absolute;
-            right: -2px;
-            top: -2px;
+.calendar-upcoming-notification {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
 
-            .day-badge {
-                display: inline-block;
-                width: var(--day-badge-size, 6px);
-                height: var(--day-badge-size, 6px);
-                margin-left: -2px;
-                border-width: 1px;
-                border-style: solid;
-                border-radius: 50%;
-                z-index: auto;
+    .notification-text {
+        font-size: .75rem;
 
-                &.hidden {
-                    display: none;
-                }
+        > strong {
+            display: inline-flex;
+            padding: .15rem .25rem;
+            color: var(--day-general-color);
+            border: 1px solid color-mix(in srgb, var(--day-general-color) 95%, transaprent);
+            border-radius: .25rem;
+            background-color: color-mix(in srgb, var(--day-general-color) 15%, var(--background-color));
 
-                &:nth-child(0) {
-                    z-index: 10;
-                }
-
-                &:nth-child(1) {
-                    z-index: 9;
-                }
-
-                &:nth-child(2) {
-                    z-index: 8;
-                }
+            [data-theme="dark"] & {
+                color: color-mix(in srgb, var(--day-general-color) 50%, var(--color));
             }
         }
     }
 }
 
+[data-event-type="blue"] {
+    --day-general-color: var(--color-blue);
+}
+
+[data-event-type="indigo"] {
+    --day-general-color: var(--color-indigo);
+}
+
+[data-event-type="purple"] {
+    --day-general-color: var(--color-purple);
+}
+
+[data-event-type="pink"] {
+    --day-general-color: var(--color-pink);
+}
+
+[data-event-type="red"] {
+    --day-general-color: var(--color-red);
+}
+
+[data-event-type="orange"] {
+    --day-general-color: var(--color-orange);
+}
+
+[data-event-type="yellow"] {
+    --day-general-color: var(--color-yellow);
+}
+
+[data-event-type="green"] {
+    --day-general-color: var(--color-green);
+}
+
+[data-event-type="teal"] {
+    --day-general-color: var(--color-teal);
+}
+
+[data-event-type="cyan"] {
+    --day-general-color: var(--color-cyan);
+}
 
 @media (576px <= width < 768px) {
     .calendar {

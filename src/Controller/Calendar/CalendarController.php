@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Calendar;
 
-use Continuum\Entity\CalendarDay;
-use Continuum\Repository\CalendarDayRepository;
+use Continuum\Service\CalendarService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CalendarController extends AbstractController
 {
     public function __construct(
-        private readonly CalendarDayRepository $calendarDayRepository,
+        private readonly CalendarService $calendarService,
     ) {}
 
     #[Route(path: '/calendar/{year}', name: 'app_calendar')]
@@ -23,15 +22,13 @@ final class CalendarController extends AbstractController
         $year ??= (int) date('Y');
         $startDay = new DateTimeImmutable('2025-03-15');
 
-        /** @var list<string, CalendarDay> $days */
-        $days = [];
-        foreach ($this->calendarDayRepository->findByYear($year) as $calendarDay) {
-            $days[$calendarDay->getDate()->format('Y-m-d')] = $calendarDay;
-        }
+        $upcomingNotifications = $this->calendarService->getUpcomingNotifications();
+        $days = $this->calendarService->getDaysByYear($year);
 
         return $this->render('calendar/index.html.twig', [
             'year' => $year,
             'startDay' => $startDay,
+            'upcomingNotifications' => $upcomingNotifications,
             'days' => $days,
         ]);
     }

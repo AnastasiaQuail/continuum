@@ -9,6 +9,7 @@ use Continuum\Repository\CalendarDayRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use LogicException;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
@@ -31,6 +32,9 @@ final class CalendarDay
 
         #[ORM\Column(length: 255)]
         private readonly string $title,
+
+        #[ORM\Column(type: Types::TIME_IMMUTABLE, nullable: true)]
+        private readonly ?DateTimeImmutable $time = null,
     ) {
         $this->id = Uuid::v7();
     }
@@ -53,5 +57,15 @@ final class CalendarDay
     public function getTitle(): string
     {
         return $this->title;
+    }
+
+    public function isEvent(): bool
+    {
+        return $this->time !== null;
+    }
+
+    public function getTime(): DateTimeImmutable
+    {
+        return $this->time ?? throw new LogicException('There is no corresponding time for this day.');
     }
 }

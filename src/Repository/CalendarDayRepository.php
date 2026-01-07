@@ -22,13 +22,25 @@ final class CalendarDayRepository extends ServiceEntityRepository
     /**
      * @return list<CalendarDay>
      */
-    public function findByYear(int $year): array
+    public function findBetweenDates(DateTimeImmutable $from, DateTimeImmutable $to): array
     {
         return $this->createQueryBuilder('cd')
             ->andWhere('cd.date BETWEEN :from AND :to')
-            ->setParameter('from', new DateTimeImmutable(sprintf('%s-01-01', $year)))
-            ->setParameter('to', new DateTimeImmutable(sprintf('%s-12-31', $year)))
+            ->setParameter('from', $from)
+            ->setParameter('to', $to)
+            ->addOrderBy('cd.date', 'ASC')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @return list<CalendarDay>
+     */
+    public function findByYear(int $year): array
+    {
+        return $this->findBetweenDates(
+            from: new DateTimeImmutable(sprintf('%s-01-01', $year)),
+            to: new DateTimeImmutable(sprintf('%s-12-31', $year))
+        );
     }
 }

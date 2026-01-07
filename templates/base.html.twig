@@ -123,6 +123,15 @@
                 {%- block main %}{% endblock -%}
             </div>
         {%- endblock -%}
+
+        {%- block footer -%}
+            <footer class="footer-container">
+                <div class="footer-datetime">
+                    <span>{{ 'now'|date('j F Y') }}</span>
+                    <span>{{ 'now'|date('H:i:s') }}</span>
+                </div>
+            </footer>
+        {%- endblock -%}
     </div>
 </body>
 </html>
