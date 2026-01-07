@@ -3,16 +3,16 @@
 {% block title %}Log in{% endblock %}
 {% block body_id %}login{% endblock %}
 
-{% block main %}
+{% block main -%}
     <div class="login-body">
-        {% if app.user %}
+        {%- if app.user -%}
             <div class="alert alert-warning">
                 You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
             </div>
-        {% else %}
-            {% if error %}
+        {%- else -%}
+            {%- if error -%}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+            {%- endif -%}
 
             <form action="{{ path('app_login') }}" method="post">
                 <div>
@@ -37,6 +37,6 @@
                     </button>
                 </div>
             </form>
-        {% endif %}
+        {%- endif -%}
     </div>
-{% endblock %}
+{%- endblock %}

@@ -75,7 +75,7 @@ body {
     margin: 0;
     font-size: 1rem;
     font-family: "Inter", sans-serif;
-    font-weight: 400;
+    font-weight: 300;
     line-height: 1;
     color: var(--color);
     background-color: var(--body-background-color);
@@ -101,13 +101,17 @@ body {
 h6, h5, h4, h3, h2, h1 {
     margin-top: 0;
     margin-bottom: 0.5rem;
-    font-weight: 500;
+    font-weight: 400;
     line-height: 1.2;
 }
 
 p {
     margin-top: 0;
     margin-bottom: 1rem;
+}
+
+strong {
+    font-weight: 400;
 }
 
 a {
@@ -139,8 +143,9 @@ select,
 optgroup,
 textarea {
     margin: 0;
-    font-family: inherit;
     font-size: inherit;
+    font-weight: inherit;
+    font-family: inherit;
     line-height: inherit;
     text-transform: none;
 }
@@ -176,7 +181,7 @@ textarea {
             font-size: 1.25rem;
             color: var(--color);
             text-decoration: none;
-            transition: color .15s;
+            transition: color .15s, transform .15s;
 
             > svg {
                 height: 1.7rem;
@@ -186,6 +191,10 @@ textarea {
 
             &:hover {
                 color: var(--link-color);
+            }
+
+            &:active {
+                transform: translateY(1px);
             }
         }
     }
@@ -400,7 +409,7 @@ textarea {
     width: 100%;
     padding: .375rem .75rem;
     font-size: 1rem;
-    font-weight: 400;
+    font-weight: 300;
     line-height: 1.5;
     color: var(--color);
     appearance: none;
@@ -519,7 +528,7 @@ textarea {
 
     a {
         color: inherit;
-        font-weight: 500;
+        font-weight: 400;
     }
 
     &.alert-primary {
@@ -548,11 +557,15 @@ textarea {
 }
 
 .card {
-    padding: 1.5rem 1rem;
+    padding: 1rem;
     margin-bottom: 1.5rem;
     border: 1px solid color-mix(in srgb, var(--border-color) 50%, transparent);
     border-radius: .5rem;
     background-color: var(--background-color);
+
+    &.card-calendar {
+        padding-block: 1.5rem;
+    }
 }
 
 .calendar-pagination {
@@ -612,8 +625,9 @@ textarea {
 
     .month {
         .month-title {
-            margin-bottom: 10px;
-            font-size: 1rem;
+            margin-bottom: 1.25rem;
+            font-size: .875rem;
+            font-weight: 200;
             text-align: center;
             opacity: .4;
             cursor: default;

@@ -66,7 +66,7 @@ export class Sidebar {
 
     init() {
         for (const navDropdown of this.navDropdowns) {
-            navDropdown.onclick = () => this.#onclick(navDropdown);
+            navDropdown.querySelector('.nav-link').onclick = () => this.#onclick(navDropdown);
         }
     }
 
