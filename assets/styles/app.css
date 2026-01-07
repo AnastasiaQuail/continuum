@@ -158,6 +158,7 @@ textarea {
     width: var(--sidebar-width);
     border-right: 1px solid var(--border-color);
     background-color: var(--background-color);
+    z-index: 50;
 
     .site-logo {
         display: flex;
