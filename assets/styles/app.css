@@ -678,7 +678,7 @@ textarea {
             }
         }
 
-        &:not(.day-past, [data-event]) {
+        &:not(.day-past, [data-type]) {
             /* empty current and future days */
 
             --day-color: var(--color);
@@ -690,47 +690,47 @@ textarea {
             --day-general-color: var(--color-green);
         }
 
-        &[data-event="blue"] {
+        &[data-type="blue"] {
             --day-general-color: var(--color-blue);
         }
 
-        &[data-event="indigo"] {
+        &[data-type="indigo"] {
             --day-general-color: var(--color-indigo);
         }
 
-        &[data-event="purple"] {
+        &[data-type="purple"] {
             --day-general-color: var(--color-purple);
         }
 
-        &[data-event="pink"] {
+        &[data-type="pink"] {
             --day-general-color: var(--color-pink);
         }
 
-        &[data-event="red"] {
+        &[data-type="red"] {
             --day-general-color: var(--color-red);
         }
 
-        &[data-event="orange"] {
+        &[data-type="orange"] {
             --day-general-color: var(--color-orange);
         }
 
-        &[data-event="yellow"] {
+        &[data-type="yellow"] {
             --day-general-color: var(--color-yellow);
         }
 
-        &[data-event="green"] {
+        &[data-type="green"] {
             --day-general-color: var(--color-green);
         }
 
-        &[data-event="teal"] {
+        &[data-type="teal"] {
             --day-general-color: var(--color-teal);
         }
 
-        &[data-event="cyan"] {
+        &[data-type="cyan"] {
             --day-general-color: var(--color-cyan);
         }
 
-        &[data-event]:not(.day-past) {
+        &[data-type]:not(.day-past) {
             /* future events */
 
             --day-color: var(--day-general-color);

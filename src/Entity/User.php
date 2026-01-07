@@ -20,6 +20,12 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\HasLifecycleCallbacks]
 final class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[ORM\Id]
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+    #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    private Uuid $id;
+
     /**
      * @var non-empty-string
      */
@@ -45,18 +51,13 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?DateTimeImmutable $lastVisitedAt;
 
     public function __construct(
-        #[ORM\Id]
-        #[ORM\Column(type: UuidType::NAME, unique: true)]
-        #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-        #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-        private Uuid $id,
-
         /**
          * @var non-empty-string
          */
         #[ORM\Column(length: 180)]
         private readonly string $email,
     ) {
+        $this->id = Uuid::v7();
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
         $this->lastVisitedAt = new DateTimeImmutable();

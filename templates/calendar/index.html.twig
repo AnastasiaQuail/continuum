@@ -41,8 +41,8 @@
 
                             <div
                                 class="day {{ dayDate < currentDate ? 'day-past' }} {{ day == current ? 'day-current' }} {{ dayDate < startDay ? 'day-inactive' }}"
-                                {% if events[day] is defined %}
-                                    data-event="{{ events[day].color }}" data-title="{{ events[day].text }}"
+                                {% if days[day] is defined %}
+                                    data-type="{{ days[day].type.value }}" data-title="{{ days[day].title }}"
                                 {% endif %}
                                 data-id="{{ day }}">
                                 <span>{{ dayNumber }}</span>

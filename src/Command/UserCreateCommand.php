@@ -35,7 +35,7 @@ final readonly class UserCreateCommand
         #[Option]
         bool $isAdmin = false,
     ): int {
-        $user = new User(Uuid::v7(), $email);
+        $user = new User($email);
         $user->activate();
         $user->setPassword(
             $this->passwordHasher->hashPassword($user, $password)
