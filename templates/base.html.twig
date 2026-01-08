@@ -139,8 +139,10 @@
         {%- block footer -%}
             <footer class="footer-container">
                 <div class="footer-datetime">
-                    <span>{{ 'now'|date('j F Y') }}</span>
-                    <span>{{ 'now'|date('H:i:s') }}</span>
+                    <span>Server: {{ 'now'|date('j F, H:i') }}</span>
+                    {% if app.user %}
+                        <span>User: {{ 'now'|date('j F, H:i', app.user.timezone.name) }}</span>
+                    {% endif %}
                 </div>
             </footer>
         {%- endblock -%}
