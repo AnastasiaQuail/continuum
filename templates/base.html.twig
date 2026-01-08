@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-timezone="{{ app.user ? app.user.timezone.name }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -120,6 +120,18 @@
     <div class="body">
         {%- block body -%}
             <div class="body-container">
+                <div id="body-messages" class="body-messages">
+                    {%- block flash_messages -%}
+                        {%- if app.request.hasPreviousSession -%}
+                            {%- for type, messages in app.flashes -%}
+                                {%- for message in messages -%}
+                                    <div class="alert alert-{{ type }}" role="alert">{{ message|trans }}</div>
+                                {%- endfor -%}
+                            {%- endfor -%}
+                        {%- endif -%}
+                    {%- endblock -%}
+                </div>
+
                 {%- block main %}{% endblock -%}
             </div>
         {%- endblock -%}

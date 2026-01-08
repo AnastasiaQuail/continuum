@@ -403,6 +403,24 @@ textarea {
 
     .body-container {
         padding: 1.5rem var(--body-padding-inline);
+
+        .body-messages {
+            display: none;
+            margin-bottom: 1.5rem;
+
+            &:has(*) {
+                display: inherit;
+            };
+
+            .alert {
+                margin-bottom: .5rem;
+                font-size: .875rem;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
     }
 
     .footer-container {
@@ -495,6 +513,18 @@ textarea {
         pointer-events: none;
     }
 
+    &.btn-xs {
+        padding: .125rem .25rem;
+        font-size: .75rem;
+        border-radius: .25rem;
+    }
+
+    &.btn-sm {
+        padding: .25rem .5rem;
+        font-size: .875rem;
+        border-radius: .4rem;
+    }
+
     &.btn-primary {
         --btn-general-color: var(--color-blue);
     }
@@ -541,7 +571,7 @@ textarea {
     --alert-color: var(--color);
 
     position: relative;
-    padding: 1rem;
+    padding: .75rem 1rem;
     margin-bottom: 1rem;
     color: color-mix(in srgb, var(--alert-color) 90%, var(--color));
     border: 1px solid color-mix(in srgb, var(--alert-color) 25%, transparent);
@@ -575,6 +605,13 @@ textarea {
 
     &.alert-secondary {
         --alert-color: var(--color-gray);
+    }
+
+    &.alert-timezone-mismatch {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: .25rem;
     }
 }
 

@@ -8,6 +8,7 @@ use Continuum\Repository\UserRepository;
 use Continuum\Security\User\UserRole;
 use Continuum\Security\User\UserStatus;
 use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -50,6 +51,9 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?DateTimeImmutable $lastVisitedAt;
 
+    #[ORM\Column(length: 64)]
+    private string $timezone;
+
     public function __construct(
         /**
          * @var non-empty-string
@@ -61,6 +65,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new DateTimeImmutable();
         $this->updatedAt = new DateTimeImmutable();
         $this->lastVisitedAt = new DateTimeImmutable();
+        $this->timezone = date_default_timezone_get();
     }
 
     /**
@@ -154,5 +159,15 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function visited(): void
     {
         $this->lastVisitedAt = new DateTimeImmutable();
+    }
+
+    public function getTimezone(): DateTimeZone
+    {
+        return new DateTimeZone($this->timezone);
+    }
+
+    public function setTimezone(DateTimeZone $timezone): void
+    {
+        $this->timezone = $timezone->getName();
     }
 }

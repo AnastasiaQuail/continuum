@@ -3,40 +3,40 @@
 {% block title %}Log in{% endblock %}
 {% block body_id %}login{% endblock %}
 
+{% block flash_messages %}
+    {%- if app.user -%}
+        <div class="alert alert-warning">
+            You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+        </div>
+    {%- elseif error -%}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+    {%- endif -%}
+{% endblock %}
+
 {% block main -%}
-    <div class="login-body">
-        {%- if app.user -%}
-            <div class="alert alert-warning">
-                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
+    {%- if app.user is empty -%}
+        <form action="{{ path('app_login') }}" method="post">
+            <div>
+                <label for="username" hidden>Email</label>
+                <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control"
+                       autocomplete="email" placeholder="Email" required autofocus>
             </div>
-        {%- else -%}
-            {%- if error -%}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {%- endif -%}
 
-            <form action="{{ path('app_login') }}" method="post">
-                <div>
-                    <label for="username" hidden>Email</label>
-                    <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control"
-                           autocomplete="email" placeholder="Email" required autofocus>
-                </div>
+            <div class="form-control-group">
+                <label for="password" hidden>Password</label>
+                <input type="password" name="_password" id="password" class="form-control"
+                       autocomplete="current-password" minlength="6" placeholder="Password" required>
+            </div>
 
-                <div class="form-control-group">
-                    <label for="password" hidden>Password</label>
-                    <input type="password" name="_password" id="password" class="form-control"
-                           autocomplete="current-password" minlength="6" placeholder="Password" required>
-                </div>
+            <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
+                   value="{{ csrf_token('authenticate') }}">
 
-                <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
-                       value="{{ csrf_token('authenticate') }}">
-
-                <div class="form-control-group">
-                    <button class="btn btn-login btn-outline" type="submit" id="submit">
-                        {{ ux_icon('lucide:log-in') }}
-                        <span>Sign in</span>
-                    </button>
-                </div>
-            </form>
-        {%- endif -%}
-    </div>
+            <div class="form-control-group">
+                <button class="btn btn-login btn-outline" type="submit" id="submit">
+                    {{ ux_icon('lucide:log-in') }}
+                    <span>Sign in</span>
+                </button>
+            </div>
+        </form>
+    {%- endif -%}
 {%- endblock %}

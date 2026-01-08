@@ -6,19 +6,15 @@
 .body {
     .body-container {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
         height: 100%;
     }
 }
 
-.login-body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
+#login {
     .alert {
-        font-size: .875rem;
         padding-block: .75rem;
     }
 
