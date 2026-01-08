@@ -4,9 +4,9 @@
 {% block body_id %}calendar{% endblock %}
 
 {% block main -%}
-    {%- set current = 'now'|date('Y-m-d') -%}
-    {%- set currentDate = date(current) -%}
-    {%- set currentMonth = 'now'|date('Y-m') -%}
+    {%- set currentDate = date('now', app.user.timezone) -%}
+    {%- set current = currentDate.format('Y-m-d') -%}
+    {%- set currentMonth = currentDate.format('Y-m') -%}
 
     {% if upcomingNotifications is not empty %}
         <section class="card calendar calendar-upcoming-notification">

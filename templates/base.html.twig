@@ -141,7 +141,7 @@
                 <div class="footer-datetime">
                     <span>Server: {{ 'now'|date('j F, H:i') }}</span>
                     {% if app.user %}
-                        <span>User: {{ 'now'|date('j F, H:i', app.user.timezone.name) }}</span>
+                        <span>User: {{ 'now'|date('j F, H:i', app.user.timezone) }}</span>
                     {% endif %}
                 </div>
             </footer>

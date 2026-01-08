@@ -7,6 +7,7 @@ namespace Continuum\Service;
 use Continuum\Dto\Calendar\CombinedCalendarDay;
 use Continuum\Dto\Calendar\UpcomingNotification;
 use Continuum\Entity\CalendarDay;
+use Continuum\Entity\User;
 use Continuum\Repository\CalendarDayRepository;
 use DateTimeImmutable;
 
@@ -19,9 +20,9 @@ final readonly class CalendarService
     /**
      * @return list<UpcomingNotification>
      */
-    public function getUpcomingNotifications(): array
+    public function getUpcomingNotifications(User $user): array
     {
-        $currentDate = new DateTimeImmutable()->setTime(0, 0);
+        $currentDate = new DateTimeImmutable();
         $endDate = new DateTimeImmutable('+21 days');
 
         $calendarDays = $this->calendarDayRepository->findBetweenDates($currentDate, $endDate);
@@ -50,38 +51,68 @@ final readonly class CalendarService
         $notifications = [];
 
         foreach ($data as $calendarDay) {
-            $dateDiff = $currentDate->diff($calendarDay->getDate());
-            $text = $this->getUpcomingNotificationText($calendarDay, $dateDiff->days);
+            $text = $this->getUpcomingNotificationText($user, $calendarDay);
 
-            $notifications[] = new UpcomingNotification(
-                type: $calendarDay->getType(),
-                title: $calendarDay->getTitle(),
-                text: $text,
-            );
+            if ($text !== null) {
+                $notifications[] = new UpcomingNotification(
+                    type: $calendarDay->getType(),
+                    title: $calendarDay->getTitle(),
+                    text: $text,
+                );
+            }
         }
 
         return $notifications;
     }
 
-    private function getUpcomingNotificationText(CalendarDay $calendarDay, int $days): string
+    private function getUpcomingNotificationText(User $user, CalendarDay $calendarDay): ?string
     {
+        $currentDate = new DateTimeImmutable('now', $user->getTimezone());
+        $calendarDate = $calendarDay->getDate();
+
+        if ($calendarDay->isEvent()) {
+            $calendarDate = $calendarDate
+                ->setTime(
+                    (int) $calendarDay->getTime()->format('H'),
+                    (int) $calendarDay->getTime()->format('i'),
+                    (int) $calendarDay->getTime()->format('s')
+                )
+                ->setTimezone($user->getTimezone());
+        } else {
+            $calendarDate = $calendarDate
+                ->setTimezone($user->getTimezone())
+                ->setTime(0, 0);
+        }
+
+        if ($calendarDate < $currentDate) {
+            return null;
+        }
+
+        $days = $currentDate->diff($calendarDate)->days;
+
         if ($days >= 7) {
             $weeks = round($days / 7);
 
             return $weeks > 1 ? sprintf('in %d weeks', $weeks) : 'in a week';
         }
 
-        if ($days >= 2) {
-            return sprintf('in %d days', $days);
+        if (!$calendarDay->isEvent()) {
+            if ($days >= 1) {
+                return $days > 1 ? sprintf('in %d days', $days) : 'in a day';
+            }
+
+            return $currentDate->format('d') !== $calendarDate->format('d') ? 'tomorrow' : 'today';
         }
 
-        $time = $calendarDay->isEvent() ? $calendarDay->getTime()->format('H:s') : null;
+        $time = $calendarDate->format('H:i');
 
-        if ($days === 1) {
-            return $time !== null ? sprintf('tomorrow at %s', $time) : 'tomorrow';
+        if ($days >= 1) {
+            return $days > 1 ? sprintf('in %d days at %s', $days, $time) : sprintf('in a day at %s', $time);
         }
 
-        return $time !== null ? sprintf('today at %s', $time) : 'today';
+        return $currentDate->format('d') !== $calendarDate->format('d')
+            ? sprintf('tomorrow at %s', $time)
+            : sprintf('today at %s', $time);
     }
 
     /**
@@ -109,7 +140,7 @@ final readonly class CalendarService
         }
 
         return array_map(
-            static fn ($day) => new CombinedCalendarDay($day['type'], $day['events'],),
+            static fn ($day) => new CombinedCalendarDay($day['type'], $day['events']),
             $dayData
         );
     }
