@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Calendar {{ year }}{% endblock %}
+{% block title %}Calendar | {{ year }}{% endblock %}
 {% block body_id %}calendar{% endblock %}
 
 {% block main -%}
@@ -52,7 +52,7 @@
                             {%- set dayEvent = events[day] is defined ? events[day].dayEvent : null -%}
                             {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
 
-                            <div
+                            <a href="{{ path('app_calendar_date', {date: day}) }}"
                                 class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay|date('Y-m-d') ? ' day-inactive' -}}"
                                 {%- if dayEvent is not null %}data-event-type="{{ dayEvent.type.value }}"{% endif -%}
                                 data-id="{{ day }}">
@@ -65,7 +65,7 @@
                                         {%- endfor -%}
                                     </div>
                                 {%- endif -%}
-                            </div>
+                            </a>
                         {%- endfor -%}
                     </div>
                 </div>

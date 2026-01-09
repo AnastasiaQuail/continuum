@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Continuum\Controller\Calendar;
 
 use Continuum\Entity\User;
-use Continuum\Service\CalendarService;
+use Continuum\Service\CalendarEventService;
+use Continuum\Service\UpcomingEventService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +16,8 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 final class CalendarController extends AbstractController
 {
     public function __construct(
-        private readonly CalendarService $calendarService,
+        private readonly UpcomingEventService $upcomingEventService,
+        private readonly CalendarEventService $calendarEventService,
     ) {}
 
     #[Route(path: '/calendar/{year}', name: 'app_calendar', methods: ['GET'])]
@@ -24,8 +26,8 @@ final class CalendarController extends AbstractController
         $year ??= (int) new DateTimeImmutable('now', $user->getTimezone())->format('Y');
         $startDay = new DateTimeImmutable('2025-03-15');
 
-        $upcomingNotifications = $this->calendarService->getUpcomingNotifications($user);
-        $events = $this->calendarService->getEventsByYear($user, $year);
+        $upcomingNotifications = $this->upcomingEventService->getUpcomingNotifications($user);
+        $events = $this->calendarEventService->getByYear($user, $year);
 
         return $this->render('calendar/index.html.twig', [
             'year' => $year,

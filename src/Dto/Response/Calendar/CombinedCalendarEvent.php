@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Continuum\Dto\Calendar;
+namespace Continuum\Dto\Response\Calendar;
 
 use Continuum\Entity\CalendarEvent;
 

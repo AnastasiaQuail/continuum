@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Calendar | {{ date.format('j F Y') }}{% endblock %}
+{% block body_id %}calendar-date{% endblock %}
+
+{% block main -%}
+    <h2>{{ date.format('j F Y') }}</h2>
+
+    {%- if events is not empty -%}
+        <section class="card">
+            <h3 class="card-title">Events</h3>
+
+            {%- for event in events -%}
+                {%- set eventDate = event.datetime.setTimezone(app.user.timezone) -%}
+
+                <div class="calendar-event" data-event-type="{{ event.type.value }}">
+                    <span class="calendar-event-type">{{ event.title }}</span>
+                    {%- if not event.allDay -%}
+                        <span> at {{ eventDate.format('H:i') }}</span>
+                    {%- endif -%}
+
+                    <form method="post" action="{{ path('app_calendar_event_delete', {id: event.id}) }}"
+                          onsubmit="return confirm('Delete?')">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="btn btn-sm btn-transparent btn-danger">{{ ux_icon('lucide:trash') }}</button>
+                    </form>
+                </div>
+            {%- endfor -%}
+        </section>
+    {%- endif -%}
+
+    <section class="card card-calendar-event">
+        <h3 class="card-title">Create new event</h3>
+
+        {{- form_start(form, {method: 'POST', action: path('app_calendar_date', {date: date.format('Y-m-d')})}) -}}
+
+        {{- form_row(form.title) -}}
+
+        <div class="mb-3">
+            {{- form_label(form.type) -}}
+            <div>
+                {%- for choice in form.type.vars.choices -%}
+                    <label class="form-control-event-type" data-event-type="{{ choice.value }}">
+                        <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
+                               value="{{ choice.value }}"
+                               {%- if choice.value == form.type.vars.value %}checked{% endif %}>
+                        <span class="btn btn-sm">{{ choice.label }}</span>
+                    </label>
+                {%- endfor -%}
+            </div>
+            {{- form_errors(form.type) -}}
+            {%- do form.type.setRendered -%}
+        </div>
+
+        <div class="mb-3">
+            {{- form_label(form.time) -}}
+            <div class="form-control-time">
+                {{- form_widget(form.time) -}}
+                <button class="btn" onclick="document.getElementById('time').value = null; return false;">
+                    {{ ux_icon('lucide:x') }}
+                </button>
+            </div>
+            {{- form_errors(form.time) -}}
+        </div>
+
+        <div class="card-submit">
+            <button type="submit" class="btn btn-primary btn-outline">Create event</button>
+        </div>
+
+        {{- form_end(form) -}}
+    </section>
+{%- endblock %}

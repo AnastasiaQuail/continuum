@@ -55,4 +55,29 @@ final class CalendarEventRepository extends ServiceEntityRepository
             new DateTimeImmutable(sprintf('%s-12-31 23:59:59', $year), $timeZone),
         );
     }
+
+    /**
+     * @return list<CalendarEvent>
+     */
+    public function findByDay(DateTimeImmutable $date, DateTimeZone $timeZone): array
+    {
+        $day = $date->format('Y-m-d');
+
+        return $this->findBetweenDates(
+            new DateTimeImmutable(sprintf('%s 00:00:00', $day), $timeZone),
+            new DateTimeImmutable(sprintf('%s 23:59:59', $day), $timeZone),
+        );
+    }
+
+    public function delete(CalendarEvent $event): void
+    {
+        $this->getEntityManager()->remove($event);
+        $this->getEntityManager()->flush();
+    }
+
+    public function create(CalendarEvent $event): void
+    {
+        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->flush();
+    }
 }

@@ -61,6 +61,7 @@
 
     --control-padding-inline: .75rem;
     --control-padding-block: calc(var(--control-padding-inline) / 2);
+    --control-border-color: var(--border-color);
 }
 
 [data-theme="dark"] {
@@ -84,6 +85,8 @@
     --background-color-teal: var(--color-teal);
     --background-color-cyan: var(--color-cyan);
     --background-color-gray: var(--color-gray);
+
+    --control-border-color: #495057;
 }
 
 *, ::after, ::before {
@@ -123,7 +126,7 @@ body {
 
 h6, h5, h4, h3, h2, h1 {
     margin-top: 0;
-    margin-bottom: calc(var(--gap-block) / 2);
+    margin-bottom: var(--gap-block);
     font-weight: var(--font-weight-bold);
     line-height: 1.2;
 }
@@ -173,6 +176,10 @@ textarea {
     text-transform: none;
 }
 
+.mb-3 {
+    margin-bottom: var(--gap-block);
+}
+
 .icon-fix-top {
     transform: translateY(-1px);
 }
@@ -206,7 +213,7 @@ textarea {
         gap: calc(var(--gap-inline) / 2);
         width: 100%;
         height: var(--header-height);
-        padding-inline: var(--gap-inline);
+        padding-inline: var(--body-gap-inline);
         border: var(--body-border-width) solid var(--body-border-color);
         border-radius: var(--body-border-radius);
         background-color: var(--background-color);
@@ -458,21 +465,18 @@ textarea {
 
         .body-messages {
             display: none;
+            flex-direction: column;
+            gap: calc(var(--gap-block) / 2);
             margin-bottom: var(--body-gap-block);
 
             &:has(*) {
-                display: inherit;
+                display: flex;
             }
-        ;
 
             .alert {
-                margin-bottom: calc(var(--gap-block) / 2);
+                margin-bottom: 0;
                 font-size: var(--font-size-medium);
                 border-radius: var(--body-border-radius);
-
-                &:last-child {
-                    margin-bottom: 0;
-                }
             }
         }
     }
@@ -498,25 +502,32 @@ textarea {
     }
 }
 
+.form-label {
+    display: inline-block;
+    margin-bottom: calc(var(--gap-block) / 2);
+    font-size: var(--font-size-medium);
+    color: color-mix(in srgb, var(--color) 70%, transparent);
+}
+
 .form-control {
     display: block;
     width: 100%;
     padding: var(--control-padding-block) var(--control-padding-inline);
     font-size: var(--font-size);
     font-weight: var(--font-weight);
-    line-height: 1.5;
+    line-height: 1;
     color: var(--color);
     appearance: none;
     background-color: var(--background-color);
     background-clip: padding-box;
-    border: var(--border-width) solid var(--border-color);
+    border: var(--border-width) solid var(--control-border-color);
     border-radius: var(--border-radius);
     transition: border-color .15s, box-shadow .15s;
 
     &:focus {
         color: var(--color);
         background-color: var(--background-color);
-        border-color: color-mix(in srgb, var(--link-background-color) 50%, var(--border-color));
+        border-color: color-mix(in srgb, var(--link-background-color) 50%, var(--control-border-color));
         outline: 0;
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
     }
@@ -670,26 +681,30 @@ textarea {
 }
 
 .card {
-    padding: var(--gap-block) var(--gap-inline);
+    padding: var(--body-gap-block) var(--body-gap-inline);
     margin-bottom: var(--body-gap-block);
     border: var(--body-border-width) solid var(--body-border-color);
     border-radius: var(--body-border-radius);
     background-color: var(--background-color);
 
-    &.card-calendar {
-        padding-block: var(--body-gap-block);
+    .card-title {
+        margin-bottom: var(--body-gap-block);
+    }
+
+    .card-submit {
+        margin-top: var(--body-gap-block);
     }
 }
 
 .calendar-pagination {
     display: flex;
     align-items: center;
-    gap: .6rem;
+    gap: calc(var(--gap-inline) * .6);
     margin-bottom: var(--gap-block);
 
     .page-link {
         display: inline-flex;
-        padding: .25rem;
+        padding: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 4);
         font-size: var(--font-size-medium);
         color: var(--color);
         text-decoration: none;
@@ -740,7 +755,7 @@ textarea {
 
     .month {
         .month-title {
-            margin-bottom: 1.25rem;
+            margin-bottom: calc(var(--gap-block) * 1.25);
             font-size: var(--font-size-medium);
             font-weight: var(--font-weight-light);
             text-align: center;
@@ -771,11 +786,12 @@ textarea {
         min-width: 0; /* fix for safari */
         align-content: center;
         font-size: var(--day-font-size);
+        text-decoration: none;
         color: var(--day-color);
         background-color: color-mix(in srgb, var(--day-background-color) var(--day-background-color-transparent), transparent);
         border: var(--day-border-width) solid color-mix(in srgb, var(--day-border-color) var(--day-border-color-transparent), transparent);
         border-radius: var(--day-border-radius);
-        cursor: default;
+        cursor: pointer;
         user-select: none;
         transition: transform .15s;
 
@@ -786,6 +802,7 @@ textarea {
         & > span {
             display: block;
             text-align: center;
+            transition: transform .15s;
         }
 
         .day-badges {
@@ -880,13 +897,19 @@ textarea {
                 --day-background-color-transparent: 25%;
             }
         }
+
+        &:hover {
+            & > span {
+                transform: scale(1.5);
+            }
+        }
     }
 }
 
 .calendar-upcoming-notification {
     display: flex;
     flex-direction: column;
-    gap: .25rem;
+    gap: calc(var(--gap-block) / 3);
 
     .notification-text {
         font-size: var(--font-size-small);
@@ -895,8 +918,7 @@ textarea {
             display: inline-flex;
             padding: .15rem .25rem;
             color: var(--day-general-color);
-            border: 1px solid color-mix(in srgb, var(--day-general-color) 95%, transaprent);
-            border-radius: .25rem;
+            border-radius: calc(var(--border-radius) / 2);
             background-color: color-mix(in srgb, var(--day-general-color) 15%, var(--background-color));
 
             [data-theme="dark"] & {
@@ -989,5 +1011,89 @@ textarea {
 
 @media (width >= 1400px) {
     .calendar {
+    }
+}
+
+.calendar-event {
+    display: flex;
+    gap: calc(var(--gap-inline) / 2);
+    align-items: center;
+    padding: calc(var(--gap-block) / 2) var(--gap-inline);
+    border: var(--border-width) solid color-mix(in srgb, var(--day-general-color) 20%, transparent);
+    border-radius: var(--border-radius);
+    background-color: color-mix(in srgb, var(--day-general-color) 5%, var(--background-color));
+
+    & + & {
+        margin-top: calc(var(--gap-block) / 2);
+    }
+
+    .calendar-event-type {
+        --event-type-transparent: 60%;
+
+        display: inline-flex;
+        padding: calc(var(--control-padding-block) / 1.5) calc(var(--control-padding-inline) / 1.5);
+        color: var(--color-light);
+        font-weight: var(--font-weight-bold);
+        border-radius: calc(var(--border-radius) / 2);
+        background-color: color-mix(in srgb, var(--day-general-color) var(--event-type-transparent), transparent);
+
+        [data-theme="dark"] & {
+            --event-type-transparent: 90%;
+        }
+    }
+
+    form {
+        margin-left: auto;
+    }
+}
+
+.card-calendar-event {
+    .form-control-event-type {
+        & input[type="radio"] {
+            display: none;
+        }
+
+        & .btn {
+            --btn-general-color: var(--day-general-color);
+            --btn-border-color-transparent: 0%;
+            --btn-background-color-transparent: 60%;
+
+            [data-theme="dark"] & {
+                --btn-color: var(--color-light);
+                --btn-background-color-transparent: 90%;
+            }
+        }
+
+        &:not(:has(input[type="radio"]:checked)) .btn {
+            --btn-color: var(--btn-general-color);
+            --btn-border-color-transparent: 0%;
+            --btn-background-color-transparent: 15%;
+
+            &:hover {
+                --btn-border-color-transparent: 50%;
+            }
+        }
+    }
+
+    .form-control-time {
+        display: flex;
+        align-items: center;
+        gap: calc(var(--gap-inline) / 2);
+
+        & > input[type="time"] {
+            width: 150px;
+        }
+
+        & > .btn {
+            --btn-border-color-transparent: 0;
+            --btn-background-color-transparent: 0;
+            --btn-color: var(--btn-general-color);
+            padding-inline: var(--control-padding-block);
+
+            &:hover {
+                --btn-general-color: var(--link-color);
+                --btn-background-color-transparent: 5%;
+            }
+        }
     }
 }
