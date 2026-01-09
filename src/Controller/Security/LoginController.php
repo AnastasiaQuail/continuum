@@ -15,7 +15,7 @@ final class LoginController extends AbstractController
         private readonly AuthenticationUtils $authenticationUtils,
     ) {}
 
-    #[Route(path: '/login', name: 'app_login')]
+    #[Route(path: '/login', name: 'app_login', methods: ['GET', 'POST'])]
     public function __invoke(): Response
     {
         // get the login error if there is one

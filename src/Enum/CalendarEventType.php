@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Enum;
 
-enum CalendarDayType: string
+enum CalendarEventType: string
 {
     case Blue = 'blue';
     case Indigo = 'indigo';

@@ -18,7 +18,7 @@ final class CalendarController extends AbstractController
         private readonly CalendarService $calendarService,
     ) {}
 
-    #[Route(path: '/calendar/{year}', name: 'app_calendar')]
+    #[Route(path: '/calendar/{year}', name: 'app_calendar', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, ?int $year = null): Response
     {
         $year ??= (int) new DateTimeImmutable('now', $user->getTimezone())->format('Y');
