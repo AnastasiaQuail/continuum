@@ -49,19 +49,19 @@
                         {%- for dayNumber in 1..firstDay|date('t') -%}
                             {%- set day = month ~ '-' ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
 
-                            {%- set typeDay = days[day] is defined ? days[day].type : null -%}
-                            {%- set eventDays = days[day] is defined ? days[day].events : [] -%}
+                            {%- set dayEvent = events[day] is defined ? events[day].dayEvent : null -%}
+                            {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
 
                             <div
                                 class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay|date('Y-m-d') ? ' day-inactive' -}}"
-                                {%- if typeDay is not null %}data-event-type="{{ typeDay.type.value }}"{% endif -%}
+                                {%- if dayEvent is not null %}data-event-type="{{ dayEvent.type.value }}"{% endif -%}
                                 data-id="{{ day }}">
                                 <span>{{ dayNumber }}</span>
 
-                                {%- if eventDays is not empty -%}
+                                {%- if hourEvents is not empty -%}
                                     <div class="day-badges">
-                                        {%- for eventDay in eventDays -%}
-                                            <span class="day-badge" data-event-type="{{ eventDay.type.value }}"></span>
+                                        {%- for hourEvent in hourEvents -%}
+                                            <span class="day-badge" data-event-type="{{ hourEvent.type.value }}"></span>
                                         {%- endfor -%}
                                     </div>
                                 {%- endif -%}

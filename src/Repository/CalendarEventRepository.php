@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Continuum\Repository;
 
 use Continuum\Entity\CalendarEvent;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,5 +18,41 @@ final class CalendarEventRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CalendarEvent::class);
+    }
+
+    /**
+     * @return list<CalendarEvent>
+     */
+    private function findBetweenDates(DateTimeImmutable $from, DateTimeImmutable $to): array
+    {
+        return $this->createQueryBuilder('cd')
+            ->andWhere('cd.datetime BETWEEN :from AND :to')
+            ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
+            ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
+            ->addOrderBy('cd.datetime', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return list<CalendarEvent>
+     */
+    public function findUpcomingByNextDays(int $days, DateTimeZone $timeZone): array
+    {
+        return $this->findBetweenDates(
+            new DateTimeImmutable('now', $timeZone)->setTime(0, 0),
+            new DateTimeImmutable(sprintf('+%d days', $days), $timeZone),
+        );
+    }
+
+    /**
+     * @return list<CalendarEvent>
+     */
+    public function findByYear(int $year, DateTimeZone $timeZone): array
+    {
+        return $this->findBetweenDates(
+            new DateTimeImmutable(sprintf('%s-01-01 00:00:00', $year), $timeZone),
+            new DateTimeImmutable(sprintf('%s-12-31 23:59:59', $year), $timeZone),
+        );
     }
 }

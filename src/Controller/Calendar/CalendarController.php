@@ -25,13 +25,13 @@ final class CalendarController extends AbstractController
         $startDay = new DateTimeImmutable('2025-03-15');
 
         $upcomingNotifications = $this->calendarService->getUpcomingNotifications($user);
-        $days = $this->calendarService->getDaysByYear($year);
+        $events = $this->calendarService->getEventsByYear($user, $year);
 
         return $this->render('calendar/index.html.twig', [
             'year' => $year,
             'startDay' => $startDay,
             'upcomingNotifications' => $upcomingNotifications,
-            'days' => $days,
+            'events' => $events,
         ]);
     }
 }

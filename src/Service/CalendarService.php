@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Continuum\Service;
 
-use Continuum\Dto\Calendar\CombinedCalendarDay;
+use Continuum\Dto\Calendar\CombinedCalendarEvent;
 use Continuum\Dto\Calendar\UpcomingNotification;
-use Continuum\Entity\CalendarDay;
+use Continuum\Entity\CalendarEvent;
 use Continuum\Entity\User;
-use Continuum\Repository\CalendarDayRepository;
+use Continuum\Repository\CalendarEventRepository;
 use DateTimeImmutable;
 
 final readonly class CalendarService
 {
     public function __construct(
-        private CalendarDayRepository $calendarDayRepository,
+        private CalendarEventRepository $calendarEventRepository,
     ) {}
 
     /**
@@ -22,41 +22,38 @@ final readonly class CalendarService
      */
     public function getUpcomingNotifications(User $user): array
     {
-        $currentDate = new DateTimeImmutable();
-        $endDate = new DateTimeImmutable('+21 days');
+        $calendarEvents = $this->calendarEventRepository->findUpcomingByNextDays(21, $user->getTimezone());
 
-        $calendarDays = $this->calendarDayRepository->findBetweenDates($currentDate, $endDate);
+        /** @var array<string, CalendarEvent> $dayEvents */
+        $dayEvents = [];
+        /** @var array<string, CalendarEvent> $hourEvents */
+        $hourEvents = [];
 
-        /** @var array<string, CalendarDay> $types */
-        $types = [];
-        /** @var array<string, CalendarDay> $events */
-        $events = [];
+        foreach ($calendarEvents as $calendarEvent) {
+            $type = $calendarEvent->getType()->value;
 
-        foreach ($calendarDays as $calendarDay) {
-            $type = $calendarDay->getType()->value;
-
-            if ($calendarDay->isEvent()) {
-                if (!array_key_exists($type, $events)) {
-                    $events[$type] = $calendarDay;
+            if ($calendarEvent->isAllDay()) {
+                if (!array_key_exists($type, $dayEvents)) {
+                    $dayEvents[$type] = $calendarEvent;
                 }
-            } elseif (!array_key_exists($type, $types)) {
-                $types[$type] = $calendarDay;
+            } elseif (!array_key_exists($type, $hourEvents)) {
+                $hourEvents[$type] = $calendarEvent;
             }
         }
 
-        /** @var array<CalendarDay> $data */
-        $data = [...$events, ...$types];
-        usort($data, static fn (CalendarDay $a, CalendarDay $b) => $a->getDate() <=> $b->getDate());
+        /** @var array<CalendarEvent> $data */
+        $data = [...$hourEvents, ...$dayEvents];
+        usort($data, static fn (CalendarEvent $a, CalendarEvent $b) => $a->getDatetime() <=> $b->getDatetime());
 
         $notifications = [];
 
-        foreach ($data as $calendarDay) {
-            $text = $this->getUpcomingNotificationText($user, $calendarDay);
+        foreach ($data as $calendarEvent) {
+            $text = $this->getUpcomingNotificationText($user, $calendarEvent);
 
             if ($text !== null) {
                 $notifications[] = new UpcomingNotification(
-                    type: $calendarDay->getType(),
-                    title: $calendarDay->getTitle(),
+                    type: $calendarEvent->getType(),
+                    title: $calendarEvent->getTitle(),
                     text: $text,
                 );
             }
@@ -65,24 +62,10 @@ final readonly class CalendarService
         return $notifications;
     }
 
-    private function getUpcomingNotificationText(User $user, CalendarDay $calendarDay): ?string
+    private function getUpcomingNotificationText(User $user, CalendarEvent $calendarEvent): ?string
     {
         $currentDate = new DateTimeImmutable('now', $user->getTimezone());
-        $calendarDate = $calendarDay->getDate();
-
-        if ($calendarDay->isEvent()) {
-            $calendarDate = $calendarDate
-                ->setTime(
-                    (int) $calendarDay->getTime()->format('H'),
-                    (int) $calendarDay->getTime()->format('i'),
-                    (int) $calendarDay->getTime()->format('s')
-                )
-                ->setTimezone($user->getTimezone());
-        } else {
-            $calendarDate = $calendarDate
-                ->setTimezone($user->getTimezone())
-                ->setTime(0, 0);
-        }
+        $calendarDate = $calendarEvent->getDatetime()->setTimezone($user->getTimezone());
 
         if ($calendarDate < $currentDate) {
             return null;
@@ -96,7 +79,7 @@ final readonly class CalendarService
             return $weeks > 1 ? sprintf('in %d weeks', $weeks) : 'in a week';
         }
 
-        if (!$calendarDay->isEvent()) {
+        if ($calendarEvent->isAllDay()) {
             if ($days >= 1) {
                 return $days > 1 ? sprintf('in %d days', $days) : 'in a day';
             }
@@ -116,32 +99,32 @@ final readonly class CalendarService
     }
 
     /**
-     * @return array<CombinedCalendarDay>
+     * @return array<CombinedCalendarEvent>
      */
-    public function getDaysByYear(int $year): array
+    public function getEventsByYear(User $user, int $year): array
     {
-        $dayData = [];
+        $events = [];
 
-        foreach ($this->calendarDayRepository->findByYear($year) as $calendarDay) {
-            $date = $calendarDay->getDate()->format('Y-m-d');
+        foreach ($this->calendarEventRepository->findByYear($year, $user->getTimezone()) as $calendarEvent) {
+            $date = $calendarEvent->getDatetime()->setTimezone($user->getTimezone())->format('Y-m-d');
 
-            if (!array_key_exists($date, $dayData)) {
-                $dayData[$date] = [
-                    'type' => null,
-                    'events' => [],
+            if (!array_key_exists($date, $events)) {
+                $events[$date] = [
+                    'day' => null,
+                    'hours' => [],
                 ];
             }
 
-            if ($calendarDay->isEvent()) {
-                $dayData[$date]['events'][] = $calendarDay;
+            if ($calendarEvent->isAllDay()) {
+                $events[$date]['day'] = $calendarEvent;
             } else {
-                $dayData[$date]['type'] = $calendarDay;
+                $events[$date]['hours'][] = $calendarEvent;
             }
         }
 
         return array_map(
-            static fn ($day) => new CombinedCalendarDay($day['type'], $day['events']),
-            $dayData
+            static fn ($day) => new CombinedCalendarEvent($day['day'], $day['hours']),
+            $events
         );
     }
 }
