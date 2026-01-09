@@ -3,9 +3,13 @@
 {% block title %}Calendar | {{ date.format('j F Y') }}{% endblock %}
 {% block body_id %}calendar-date{% endblock %}
 
-{% block main -%}
-    <h2>{{ date.format('j F Y') }}</h2>
+{% set breadcrumbs = [
+    { label: 'Calendar', url: path('app_calendar') },
+    { label: date.format('Y'), url: path('app_calendar', {year: date.format('Y')}) },
+    { label: date.format('j F') },
+] %}
 
+{% block main -%}
     {%- if events is not empty -%}
         <section class="card">
             <h3 class="card-title">Events</h3>

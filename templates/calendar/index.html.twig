@@ -3,6 +3,11 @@
 {% block title %}Calendar | {{ year }}{% endblock %}
 {% block body_id %}calendar{% endblock %}
 
+{% set breadcrumbs = [
+    { label: 'Calendar', url: path('app_calendar') },
+    { label: year },
+] %}
+
 {% block main -%}
     {%- set currentDate = date('now', app.user.timezone) -%}
     {%- set current = currentDate.format('Y-m-d') -%}

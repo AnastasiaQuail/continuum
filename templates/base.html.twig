@@ -120,6 +120,25 @@
     <div class="body">
         {%- block body -%}
             <div class="body-container">
+                {%- block breadcrumb -%}
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="{{ path('app_homepage') }}">{{ ux_icon('lucide:house') }}</a>
+                            </li>
+                            {%- for crumb in breadcrumbs|default([{ label: 'Homepage' }]) -%}
+                                <li class="breadcrumb-item {% if loop.last %}active{% endif %}">
+                                    {%- if crumb.url is defined -%}
+                                        <a href="{{ crumb.url }}">{{ crumb.label }}</a>
+                                    {%- else -%}
+                                        {{ crumb.label }}
+                                    {%- endif -%}
+                                </li>
+                            {%- endfor -%}
+                        </ol>
+                    </nav>
+                {%- endblock -%}
+
                 <div id="body-messages" class="body-messages">
                     {%- block flash_messages -%}
                         {%- if app.request.hasPreviousSession -%}
