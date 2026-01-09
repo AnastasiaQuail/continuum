@@ -48,13 +48,12 @@
 
                         {%- for dayNumber in 1..firstDay|date('t') -%}
                             {%- set day = month ~ '-' ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
-                            {%- set dayDate = date(day) -%}
 
                             {%- set typeDay = days[day] is defined ? days[day].type : null -%}
                             {%- set eventDays = days[day] is defined ? days[day].events : [] -%}
 
                             <div
-                                class="day {{- dayDate < currentDate ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- dayDate < startDay ? ' day-inactive' -}}"
+                                class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay|date('Y-m-d') ? ' day-inactive' -}}"
                                 {%- if typeDay is not null %}data-event-type="{{ typeDay.type.value }}"{% endif -%}
                                 data-id="{{ day }}">
                                 <span>{{ dayNumber }}</span>

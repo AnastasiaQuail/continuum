@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggle(inputPassword, isValid);
 
             if (!isValid) {
-                toggle(inputPassword);
+                toggle(buttonSubmit);
             }
         });
 

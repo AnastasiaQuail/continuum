@@ -17,15 +17,32 @@
     {% endblock %}
 </head>
 <body id="{% block body_id %}{% endblock %}">
+    {%- block header -%}
+        <header class="header">
+            <nav class="header-container">
+                {%- if block('sidebar') is not empty -%}
+                    <div class="header-logo">
+                        <a class="header-logo-link" href="{{ path('app_homepage') }}">
+                            {{ ux_icon('hugeicons:infinity-02') }}
+                            <span>Continuum</span>
+                        </a>
+                    </div>
+                    <button id="sidebar-toggler" class="header-button">{{ ux_icon('lucide:menu') }}</button>
+                {%- endif -%}
+                <button id="theme-toggler" class="header-button">
+                    <span class="theme-light">{{ ux_icon('lucide:sun') }}</span>
+                    <span class="theme-dark">{{ ux_icon('lucide:moon') }}</span>
+                </button>
+                {%- if is_granted('ROLE_USER') -%}
+                    <a class="header-button" href="{{ logout_path() }}">{{ ux_icon('lucide:log-out') }}</a>
+                {%- endif -%}
+            </nav>
+        </header>
+    {%- endblock -%}
+
     {%- block sidebar -%}
         {%- set _route = app.current_route -%}
         <aside id="sidebar" class="sidebar">
-            <div class="site-logo">
-                <a class="site-logo-link" href="{{ path('app_homepage') }}">
-                    {{ ux_icon('hugeicons:infinity-02') }}
-                    <span>Continuum</span>
-                </a>
-            </div>
             <nav class="navbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -98,23 +115,6 @@
                 </ul>
             </nav>
         </aside>
-    {%- endblock -%}
-
-    {%- block header -%}
-        <header class="header">
-            <nav class="header-container">
-                {%- if block('sidebar') is not empty -%}
-                    <button id="sidebar-toggler" class="header-button">{{ ux_icon('lucide:menu') }}</button>
-                {%- endif -%}
-                <button id="theme-toggler" class="header-button">
-                    <span class="theme-light">{{ ux_icon('lucide:sun') }}</span>
-                    <span class="theme-dark">{{ ux_icon('lucide:moon') }}</span>
-                </button>
-                {%- if is_granted('ROLE_USER') -%}
-                    <a class="header-button" href="{{ logout_path() }}">{{ ux_icon('lucide:log-out') }}</a>
-                {%- endif -%}
-            </nav>
-        </header>
     {%- endblock -%}
 
     <div class="body">
