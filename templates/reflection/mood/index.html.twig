@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% set weekName = week.format('F Y') %}
+{% set isCurrentWeek = weekName == date('now', app.user.timezone)|date('F Y') %}
+
+{% block title %}Mood tracker{{ not isCurrentWeek ? ' | ' ~ weekName }}{% endblock %}
+{% block body_id %}mood-tracker{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Mood tracker', url: path('app_reflection_mood') },
+    { label: weekName },
+] %}
+
+{% block main -%}
+    <section class="card">
+    </section>
+{%- endblock %}
