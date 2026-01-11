@@ -541,6 +541,8 @@ textarea {
     list-style: none;
 
     .breadcrumb-item {
+        cursor: default;
+
         & + & {
             padding-left: calc(var(--gap-inline) / 3);
 
