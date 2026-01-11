@@ -6,6 +6,10 @@
     <title>{% block title %}Continuum{% endblock %}</title>
     <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
+    <script>
+        document.documentElement.dataset.theme = localStorage.getItem('site-theme');
+        document.documentElement.dataset.sidebar = localStorage.getItem('site-sidebar-collapsed');
+    </script>
     {% block stylesheets %}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

@@ -38,9 +38,13 @@ export default class {
     }
 
     init() {
-        const theme = this.#get() ?? this.#detect();
+        let theme = this.#get();
 
-        this.#set(theme);
+        if (null === theme) {
+            theme = this.#detect();
+            this.#set(theme);
+        }
+
         this.#setDataset(theme);
 
         window.addEventListener('storage', (event) => {
