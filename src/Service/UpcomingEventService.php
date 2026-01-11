@@ -69,7 +69,12 @@ final readonly class UpcomingEventService
         $eventDate = $event->getDatetime()->setTimezone($user->getTimezone());
 
         if ($eventDate < $currentDate) {
-            return null;
+            if (
+                !$event->isAllDay()
+                || ($currentDate->setTime(0, 0) < $eventDate->setTime(0, 0))
+            ) {
+                return null;
+            }
         }
 
         return $this->getText($currentDate, $eventDate, $event->isAllDay());
