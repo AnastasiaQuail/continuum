@@ -307,15 +307,18 @@ textarea {
     position: relative;
     display: grid;
     grid-template-rows: auto 1fr;
-    width: calc(var(--sidebar-width) + var(--body-gap-inline));
-    padding-left: var(--body-gap-inline);
-    /*overflow-y: auto;*/ /* collapsed dropdown is not displayed */
+    padding-inline: var(--body-gap-inline);
+    overflow-y: auto;
     z-index: 50;
 
     .navbar {
         padding-block: var(--body-gap-block);
+        width: var(--sidebar-width);
 
         .navbar-nav {
+            --nav-link-gap: calc(var(--gap-inline) / 2);
+            --nav-link-padding: var(--control-padding-inline);
+
             display: flex;
             flex-direction: column;
             gap: calc(var(--gap-block) / 4);
@@ -325,9 +328,6 @@ textarea {
 
             .nav-item {
                 .nav-link {
-                    --nav-link-gap: calc(var(--gap-inline) / 2);
-                    --nav-link-padding: var(--control-padding-inline);
-
                     display: flex;
                     gap: var(--nav-link-gap);
                     width: 100%;
@@ -380,12 +380,27 @@ textarea {
                 }
             }
 
-            .dropdown-divider {
-                height: 0;
+            .nav-title-divider {
+                display: block;
+                margin-top: var(--gap-block);
+                margin-bottom: calc(var(--gap-block) / 4);
+                padding-inline: var(--nav-link-padding);
+                font-size: var(--font-size-small);
+                font-weight: var(--font-weight-light);
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                cursor: default;
                 overflow: hidden;
+                opacity: .5;
+            }
+
+            .nav-divider {
+                height: 0;
+                margin-block: calc(var(--gap-block) / 2);
                 border: 0;
                 border-top: var(--border-width) solid var(--border-color);
                 opacity: .5;
+                overflow: hidden;
             }
         }
     }
@@ -393,63 +408,72 @@ textarea {
     [data-sidebar="collapsed"] & {
         --sidebar-width: var(--sidebar-collapsed-width);
 
-        .nav-link > span,
-        .dropdown-toggle-chevron {
-            display: none;
-        }
-
-        .nav-item.dropdown {
-            & > .nav-link {
-                cursor: default;
+        .navbar {
+            .nav-link > span,
+            .dropdown-toggle-chevron {
+                display: none;
             }
 
-            .nav-dropdown {
-                position: absolute;
-                display: inherit;
-                left: -100vw;
-                margin: 0;
-                padding: .6rem .6rem .6rem 1.1rem;
-                transform: translateY(-45px);
-                opacity: 0;
-                transition: opacity .15s;
+            .nav-item.dropdown {
+                & > .nav-link {
+                    cursor: default;
+                }
 
-                .nav-link {
-                    white-space: nowrap;
+                .nav-dropdown {
+                    position: absolute;
+                    display: inherit;
+                    left: -100vw;
+                    margin: 0;
+                    padding: .6rem .6rem .6rem 1.1rem;
+                    transform: translateY(-45px);
+                    opacity: 0;
+                    transition: opacity .15s;
 
-                    & > span {
-                        display: inherit;
+                    .nav-link {
+                        white-space: nowrap;
+
+                        & > span {
+                            display: inherit;
+                        }
+                    }
+
+                    &:before {
+                        position: absolute;
+                        content: '';
+                        inset: 0;
+                        left: .5rem;
+                        border: var(--body-border-width) solid var(--body-border-color);
+                        border-radius: var(--body-border-radius);
+                        background-color: var(--background-color);
+                    }
+
+                    &:after {
+                        position: absolute;
+                        content: '';
+                        top: 21px;
+                        left: 3px;
+                        width: .6rem;
+                        height: .6rem;
+                        border-top: var(--body-border-width) solid var(--body-border-color);
+                        border-left: var(--body-border-width) solid var(--body-border-color);
+                        background-color: var(--background-color);
+                        transform: rotate(-45deg);
                     }
                 }
 
-                &:before {
-                    position: absolute;
-                    content: '';
-                    inset: 0;
-                    left: .5rem;
-                    border: var(--body-border-width) solid var(--body-border-color);
-                    border-radius: var(--body-border-radius);
-                    background-color: var(--background-color);
-                }
-
-                &:after {
-                    position: absolute;
-                    content: '';
-                    top: 21px;
-                    left: 3px;
-                    width: .6rem;
-                    height: .6rem;
-                    border-top: var(--body-border-width) solid var(--body-border-color);
-                    border-left: var(--body-border-width) solid var(--body-border-color);
-                    background-color: var(--background-color);
-                    transform: rotate(-45deg);
+                &:hover {
+                    .nav-dropdown {
+                        left: 100%;
+                        opacity: 1;
+                    }
                 }
             }
 
-            &:hover {
-                .nav-dropdown {
-                    left: 100%;
-                    opacity: 1;
-                }
+            .nav-title-divider {
+                margin-inline: calc(var(--gap-inline) / 2 * -1);
+                padding-inline: 0;
+                font-size: calc(var(--font-size-small) * .8);
+                text-align: center;
             }
         }
     }
@@ -462,6 +486,7 @@ textarea {
 
     .body-container {
         padding: var(--body-gap-block) var(--body-gap-inline);
+        padding-left: 0;
 
         & > *:not(.card) {
             padding-inline: var(--gap-inline);

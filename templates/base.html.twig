@@ -52,58 +52,42 @@
                             <span>Calendar</span>
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <button class="nav-link">
-                            {{ ux_icon('lucide:brain') }}
-                            <span>Brain</span>
-                            {{ ux_icon('lucide:chevron-right', {class: 'dropdown-toggle-chevron'}) }}
-                        </button>
-                        <ul class="navbar-nav nav-dropdown">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    {{ ux_icon('lucide:smile-plus') }}
-                                    <span>Mental pulse</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    {{ ux_icon('lucide:medal') }}
-                                    <span>Week reflection</span>
-                                </a>
-                            </li>
-                        </ul>
+
+                    <li>
+                        <span class="nav-title-divider">Reflection</span>
                     </li>
-                    <li class="nav-item dropdown">
-                        <button class="nav-link">
-                            {{ ux_icon('lucide:biceps-flexed') }}
-                            <span>Body</span>
-                            {{ ux_icon('lucide:chevron-right', {class: 'dropdown-toggle-chevron'}) }}
-                        </button>
-                        <ul class="navbar-nav nav-dropdown">
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    {{ ux_icon('lucide:dumbbell') }}
-                                    <span>Exercises</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    {{ ux_icon('lucide:ruler-dimension-line') }}
-                                    <span>Measurements</span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    {{ ux_icon('lucide:chart-line') }}
-                                    <span>Statistics</span>
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            {{ ux_icon('lucide:smile-plus') }}
+                            <span>Mood tracker</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            {{ ux_icon('lucide:medal') }}
+                            <span>Week in review</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <span class="nav-title-divider">Health</span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            {{ ux_icon('lucide:dumbbell') }}
+                            <span>Exercises</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            {{ ux_icon('lucide:ruler-dimension-line') }}
+                            <span>Measurements</span>
+                        </a>
                     </li>
 
                     {%- if is_granted('ROLE_ADMIN') -%}
                         <li>
-                            <hr class="dropdown-divider">
+                            <hr class="nav-divider">
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
