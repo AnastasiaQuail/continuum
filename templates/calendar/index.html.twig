@@ -1,6 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Calendar | {{ year }}{% endblock %}
+{% set currentDate = date('now', app.user.timezone) %}
+
+{% block title %}Calendar{{ year != currentDate|date('Y') ? ' | ' ~ year }}{% endblock %}
 {% block body_id %}calendar{% endblock %}
 
 {% set breadcrumbs = [
@@ -9,7 +11,6 @@
 ] %}
 
 {% block main -%}
-    {%- set currentDate = date('now', app.user.timezone) -%}
     {%- set current = currentDate.format('Y-m-d') -%}
     {%- set currentMonth = currentDate.format('Y-m') -%}
 
@@ -61,7 +62,7 @@
                             {%- set dayEvent = events[day] is defined ? events[day].dayEvent : null -%}
                             {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
 
-                            <a href="{{ path('app_calendar_date', {date: day}) }}"
+                            <a href="{{ path('app_calendar_day', {day: day}) }}"
                                class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay|date('Y-m-d') ? ' day-inactive' -}}"
                                {%- if dayEvent is not null %}data-event-type="{{ dayEvent.type.value }}"{% endif -%}
                                data-id="{{ day }}">

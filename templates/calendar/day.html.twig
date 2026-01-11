@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Calendar | {{ date.format('j F Y') }}{% endblock %}
+{% block title %}Calendar | {{ day.format('j F Y') }}{% endblock %}
 {% block body_id %}calendar-date{% endblock %}
 
 {% set breadcrumbs = [
     { label: 'Calendar', url: path('app_calendar') },
-    { label: date.format('Y'), url: path('app_calendar', {year: date.format('Y')}) },
-    { label: date.format('j F') },
+    { label: day.format('Y'), url: path('app_calendar', {year: day.format('Y')}) },
+    { label: day.format('j F') },
 ] %}
 
 {% block main -%}
@@ -36,7 +36,7 @@
     <section class="card card-calendar-event">
         <h3 class="card-title">Create new event</h3>
 
-        {{- form_start(form, {method: 'POST', action: path('app_calendar_date', {date: date.format('Y-m-d')})}) -}}
+        {{- form_start(form, {method: 'POST', action: path('app_calendar_day', {day: day.format('Y-m-d')})}) -}}
 
         {{- form_row(form.title) -}}
 
