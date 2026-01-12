@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Continuum\Form\Calendar;
+namespace Continuum\Form;
 
 use Continuum\Dto\Request\Calendar\NewCalendarEvent;
 use Continuum\Enum\CalendarEventType;
-use Continuum\Form\AbstractImmutableType;
 use DateTimeZone;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -49,6 +48,6 @@ final class NewCalendarEventType extends AbstractImmutableType
         parent::configureOptions($resolver);
 
         $resolver->setDefault('timezone', null);
-        $resolver->setAllowedTypes('timezone', [DateTimeZone::class]);
+        $resolver->setAllowedTypes('timezone', ['null', DateTimeZone::class]);
     }
 }

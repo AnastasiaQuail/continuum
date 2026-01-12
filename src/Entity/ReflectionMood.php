@@ -15,6 +15,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: ReflectionMoodRepository::class)]
 #[ORM\Table(name: 'reflection_moods')]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_DATE', fields: ['date'])]
 final class ReflectionMood
 {
     #[ORM\Id]
@@ -23,15 +24,15 @@ final class ReflectionMood
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     private Uuid $id;
 
+    #[ORM\Column(enumType: MoodType::class)]
+    private MoodType $type = MoodType::Okay;
+
+    #[ORM\Column(length: 255)]
+    private string $text = '';
+
     public function __construct(
         #[ORM\Column(type: Types::DATE_IMMUTABLE)]
         private readonly DateTimeImmutable $date,
-
-        #[ORM\Column(enumType: MoodType::class)]
-        private MoodType $type,
-
-        #[ORM\Column(length: 255)]
-        private string $text = '',
     ) {
         $this->id = Uuid::v7();
     }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Continuum\Controller\Reflection;
+namespace Continuum\Controller\Reflection\Weekly;
 
 use Continuum\Entity\User;
 use DateTimeImmutable;

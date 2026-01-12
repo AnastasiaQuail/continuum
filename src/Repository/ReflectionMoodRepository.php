@@ -55,7 +55,12 @@ final class ReflectionMoodRepository extends ServiceEntityRepository
         );
     }
 
-    public function create(ReflectionMood $event): void
+    public function findOneByDay(DateTimeImmutable $day): ?ReflectionMood
+    {
+        return $this->findOneBy(['date' => $day]);
+    }
+
+    public function save(ReflectionMood $event): void
     {
         $this->getEntityManager()->persist($event);
         $this->getEntityManager()->flush();

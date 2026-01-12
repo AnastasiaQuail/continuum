@@ -33,7 +33,7 @@
         </section>
     {%- endif -%}
 
-    <section class="card card-calendar-event">
+    <section class="card">
         <h3 class="card-title">Create new event</h3>
 
         {{- form_start(form, {method: 'POST', action: path('app_calendar_day', {'day': day.format('Y-m-d')})}) -}}
@@ -44,7 +44,7 @@
             {{- form_label(form.type) -}}
             <div>
                 {%- for choice in form.type.vars.choices -%}
-                    <label class="form-control-event-type" data-event-type="{{ choice.value }}">
+                    <label class="form-control-radio-type" data-event-type="{{ choice.value }}">
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
                                {%- if choice.value == form.type.vars.value %}checked{% endif %}>

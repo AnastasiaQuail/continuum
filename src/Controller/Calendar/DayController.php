@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Controller\Calendar;
 
 use Continuum\Entity\User;
-use Continuum\Form\Calendar\NewCalendarEventType;
+use Continuum\Form\NewCalendarEventType;
 use Continuum\Service\CalendarEventService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +20,7 @@ final class DayController extends AbstractController
         private readonly CalendarEventService $calendarEventService,
     ) {}
 
-    #[Route(path: '/calendar/dates/{day}', name: 'app_calendar_day', methods: ['GET', 'POST'])]
+    #[Route(path: '/calendar/days/{day}', name: 'app_calendar_day', methods: ['GET', 'POST'])]
     public function __invoke(Request $request, #[CurrentUser] User $user, DateTimeImmutable $day): Response
     {
         $form = $this->createForm(NewCalendarEventType::class, options: ['timezone' => $user->getTimezone()]);

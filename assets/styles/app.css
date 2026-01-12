@@ -500,6 +500,7 @@ textarea {
             flex-direction: column;
             gap: calc(var(--gap-block) / 2);
             margin-bottom: var(--body-gap-block);
+            padding-inline: 0;
 
             &:has(*) {
                 display: flex;
@@ -629,6 +630,54 @@ textarea {
     &::placeholder {
         color: color-mix(in srgb, var(--color) 25%, transparent);
         opacity: 1;
+    }
+}
+
+.form-control-radio-type {
+    & input[type="radio"] {
+        display: none;
+    }
+
+    & .btn {
+        --btn-general-color: var(--day-general-color);
+        --btn-border-color-transparent: 0%;
+        --btn-background-color-transparent: var(--background-color-transparent);
+
+        [data-theme="dark"] & {
+            --btn-color: var(--color-light);
+        }
+    }
+
+    &:not(:has(input[type="radio"]:checked)) .btn {
+        --btn-color: var(--btn-general-color);
+        --btn-border-color-transparent: 0%;
+        --btn-background-color-transparent: 15%;
+
+        &:hover {
+            --btn-border-color-transparent: 50%;
+        }
+    }
+}
+
+.form-control-time {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--gap-inline) / 2);
+
+    & > input[type="time"] {
+        width: 150px;
+    }
+
+    & > .btn {
+        --btn-border-color-transparent: 0;
+        --btn-background-color-transparent: 0;
+        --btn-color: var(--btn-general-color);
+        padding-inline: var(--control-padding-block);
+
+        &:hover {
+            --btn-general-color: var(--link-color);
+            --btn-background-color-transparent: 5%;
+        }
     }
 }
 
@@ -1141,56 +1190,6 @@ textarea {
 
     form {
         margin-left: auto;
-    }
-}
-
-.card-calendar-event {
-    .form-control-event-type {
-        & input[type="radio"] {
-            display: none;
-        }
-
-        & .btn {
-            --btn-general-color: var(--day-general-color);
-            --btn-border-color-transparent: 0%;
-            --btn-background-color-transparent: var(--background-color-transparent);
-
-            [data-theme="dark"] & {
-                --btn-color: var(--color-light);
-            }
-        }
-
-        &:not(:has(input[type="radio"]:checked)) .btn {
-            --btn-color: var(--btn-general-color);
-            --btn-border-color-transparent: 0%;
-            --btn-background-color-transparent: 15%;
-
-            &:hover {
-                --btn-border-color-transparent: 50%;
-            }
-        }
-    }
-
-    .form-control-time {
-        display: flex;
-        align-items: center;
-        gap: calc(var(--gap-inline) / 2);
-
-        & > input[type="time"] {
-            width: 150px;
-        }
-
-        & > .btn {
-            --btn-border-color-transparent: 0;
-            --btn-background-color-transparent: 0;
-            --btn-color: var(--btn-general-color);
-            padding-inline: var(--control-padding-block);
-
-            &:hover {
-                --btn-general-color: var(--link-color);
-                --btn-background-color-transparent: 5%;
-            }
-        }
     }
 }
 

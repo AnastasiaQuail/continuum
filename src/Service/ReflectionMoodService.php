@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Service;
 
+use Continuum\Dto\Request\Reflection\EditReflectionMood;
 use Continuum\Entity\ReflectionMood;
 use Continuum\Repository\ReflectionMoodRepository;
 use DateTimeImmutable;
@@ -47,5 +48,21 @@ final readonly class ReflectionMoodService
         }
 
         return $moods;
+    }
+
+    public function findMoodByDay(DateTimeImmutable $day): ?ReflectionMood
+    {
+        return $this->reflectionMoodRepository->findOneByDay($day);
+    }
+
+    public function save(DateTimeImmutable $day, ?ReflectionMood $mood, EditReflectionMood $dto): ReflectionMood
+    {
+        $mood ??= new ReflectionMood($day);
+        $mood->setType($dto->type);
+        $mood->setText($dto->text);
+
+        $this->reflectionMoodRepository->save($mood);
+
+        return $mood;
     }
 }

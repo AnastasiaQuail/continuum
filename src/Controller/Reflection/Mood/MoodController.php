@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Continuum\Controller\Reflection;
+namespace Continuum\Controller\Reflection\Mood;
 
 use Continuum\Entity\User;
 use Continuum\Service\ReflectionMoodService;

@@ -60,7 +60,7 @@
                         {%- set day = month.format('Y-m-') ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
                         {%- set mood = moods[day] is defined ? moods[day] : null -%}
 
-                        <a href="#"
+                        <a href="{{ path('app_reflection_mood_day', {'day': day}) }}"
                            class="day {{- day == current ? ' day-current' -}} {{- mood is not null ? ' day-past' }}"
                            {%- if mood is not null %}data-event-type="{{ mood.calendarEventType.value }}"{% endif -%}>
                             <span>{{ dayNumber }}</span>
