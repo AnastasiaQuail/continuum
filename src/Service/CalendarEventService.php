@@ -26,7 +26,7 @@ final readonly class CalendarEventService
      */
     public function getByNextDays(User $user): array
     {
-        return $this->calendarEventRepository->findUpcomingByNextDays(self::NEXT_DAYS, $user->getTimezone());
+        return $this->calendarEventRepository->findUpcomingNextDays(self::NEXT_DAYS, $user->getTimezone());
     }
 
     /**

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% set weekName = week.format('F Y') %}
-{% set isCurrentWeek = weekName == date('now', app.user.timezone)|date('F Y') %}
+{% set isCurrentWeek = weekName == user_date('now').format('F Y') %}
 
 {% block title %}Week in review{{ not isCurrentWeek ? ' | ' ~ weekName }}{% endblock %}
 {% block body_id %}week-in-review{% endblock %}

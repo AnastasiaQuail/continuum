@@ -41,6 +41,7 @@ final readonly class DateTimeValidControllerArgumentListener
 
             if ($argument instanceof DateTimeImmutable) {
                 match ($name) {
+                    'month' => $this->validateMonth($argument),
                     'week' => $this->validateWeek($argument),
                     'day' => $this->validateDay($argument),
                     default => $this->validateYear((int) $argument->format('Y')),
@@ -76,12 +77,25 @@ final readonly class DateTimeValidControllerArgumentListener
         }
     }
 
+    private function validateMonth(DateTimeImmutable $month): void
+    {
+        $this->validateYear((int) $month->format('Y'));
+
+        if ($month->format('d:H:i:s') !== '01:00:00:00') {
+            throw new BadRequestHttpException('Wrong month format. Allowed only "Y-m" format.');
+        }
+    }
+
     private function validateWeek(DateTimeImmutable $week): void
     {
         $this->validateYear((int) $week->format('Y'));
 
-        if ($week->format('d:H:i:s') !== '01:00:00:00') {
-            throw new BadRequestHttpException('Wrong week format. Allowed only "Y-m" format.');
+        if ($week->format('D') !== 'Sun') {
+            throw new BadRequestHttpException('Wrong week format. Allowed only sunday.');
+        }
+
+        if ($week->format('H:i:s') !== '00:00:00') {
+            throw new BadRequestHttpException('Wrong week format. Allowed only "Y-m-d" format.');
         }
     }
 

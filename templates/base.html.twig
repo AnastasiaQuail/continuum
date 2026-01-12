@@ -70,7 +70,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{- _route == 'app_reflection_weekly' ? ' active' }}"
                            href="{{ path('app_reflection_weekly') }}">
-                            {{- ux_icon('lucide:medal') -}}
+                            {{- ux_icon('lucide:star') -}}
                             <span>Week in review</span>
                         </a>
                     </li>
@@ -150,7 +150,7 @@
                 <div class="footer-datetime">
                     <span>Server: {{ 'now'|date('j F, H:i') }}</span>
                     {%- if app.user -%}
-                        <span>User: {{ 'now'|date('j F, H:i', app.user.timezone) }}</span>
+                        <span>User: {{ user_date('now').format('j F, H:i') }}</span>
                     {%- endif -%}
                 </div>
                 <div class="footer-bird">

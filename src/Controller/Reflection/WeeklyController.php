@@ -18,6 +18,7 @@ final class WeeklyController extends AbstractController
     #[Route(path: '/reflection/weekly/{week}', name: 'app_reflection_weekly', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, ?DateTimeImmutable $week = null): Response
     {
+        /* @todo validate week */
         $week ??= new DateTimeImmutable('first day of this month', $user->getTimezone());
 
         return $this->render('reflection/weekly/index.html.twig', [

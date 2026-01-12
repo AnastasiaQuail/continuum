@@ -1,17 +1,73 @@
 {% extends 'base.html.twig' %}
 
-{% set weekName = week.format('F Y') %}
-{% set isCurrentWeek = weekName == date('now', app.user.timezone)|date('F Y') %}
+{% set monthName = month.format('F Y') %}
+{% set isCurrentWeek = monthName == user_date('now')|date('F Y') %}
 
-{% block title %}Mood tracker{{ not isCurrentWeek ? ' | ' ~ weekName }}{% endblock %}
+{% block title %}Mood tracker{{ not isCurrentWeek ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}mood-tracker{% endblock %}
 
 {% set breadcrumbs = [
     { label: 'Mood tracker', url: path('app_reflection_mood') },
-    { label: weekName },
+    { label: monthName },
 ] %}
 
 {% block main -%}
-    <section class="card">
+    <section class="card card-mood-chart">
+        <div class="mood-chart" style="--chart-columns: {{ lastMoods|length }}">
+            {% for lastMood in lastMoods %}
+                <div class="chart-day" data-type="{{ lastMood != null ? lastMood.type.value }}"
+                     data-event-type="{{ lastMood != null ? lastMood.calendarEventType.value }}">
+                    <div class="chart-day-type"></div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <nav class="calendar-pagination">
+        {%- set year = month.format('Y') -%}
+
+        {%- if year > app_year_min -%}
+            <a class="page-link page-link-prev"
+               href="{{ path('app_reflection_mood', {'month': month.modify('-1 month').format('Y-m')}) }}">
+                {{ ux_icon('lucide:chevron-right') }}
+                <span>{{ month.modify('-1 month').format('F') }}</span>
+            </a>
+        {%- endif -%}
+        <h2>{{ month.format('F') }}</h2>
+        {%- if year < app_year_max -%}
+            <a class="page-link page-link-next"
+               href="{{ path('app_reflection_mood', {'month': month.modify('+1 month').format('Y-m')}) }}">
+                <span>{{ month.modify('+1 month').format('F') }}</span>
+                {{- ux_icon('lucide:chevron-right') -}}
+            </a>
+        {%- endif -%}
+    </nav>
+
+    <section class="card card-calendar-mood">
+        <div class="calendar">
+            <div class="month">
+                {%- set current = user_date('now').format('Y-m-d') -%}
+                {%- set firstWeekDay = month.format('N') -%}
+
+                <div class="month-days">
+                    {%- if firstWeekDay > 1 -%}
+                        <div class="day fake-day" style="--fake-days: {{ firstWeekDay - 1 }}">
+                            <span>1</span>
+                        </div>
+                    {%- endif -%}
+
+                    {%- for dayNumber in 1..month.format('t') -%}
+                        {%- set day = month.format('Y-m-') ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
+                        {%- set mood = moods[day] is defined ? moods[day] : null -%}
+
+                        <a href="#"
+                           class="day {{- day == current ? ' day-current' -}} {{- mood is not null ? ' day-past' }}"
+                           {%- if mood is not null %}data-event-type="{{ mood.calendarEventType.value }}"{% endif -%}>
+                            <span>{{ dayNumber }}</span>
+                        </a>
+                    {%- endfor -%}
+                </div>
+            </div>
+        </div>
     </section>
 {%- endblock %}

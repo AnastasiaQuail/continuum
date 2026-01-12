@@ -5,7 +5,7 @@
 
 {% set breadcrumbs = [
     { label: 'Calendar', url: path('app_calendar') },
-    { label: day.format('Y'), url: path('app_calendar', {year: day.format('Y')}) },
+    { label: day.format('Y'), url: path('app_calendar', {'year': day.format('Y')}) },
     { label: day.format('j F') },
 ] %}
 
@@ -23,7 +23,7 @@
                         <span> at {{ eventDate.format('H:i') }}</span>
                     {%- endif -%}
 
-                    <form method="post" action="{{ path('app_calendar_event_delete', {id: event.id}) }}"
+                    <form method="post" action="{{ path('app_calendar_event_delete', {'id': event.id}) }}"
                           onsubmit="return confirm('Delete?')">
                         <input type="hidden" name="_method" value="DELETE">
                         <button class="btn btn-sm btn-transparent btn-danger">{{ ux_icon('lucide:trash') }}</button>
@@ -36,7 +36,7 @@
     <section class="card card-calendar-event">
         <h3 class="card-title">Create new event</h3>
 
-        {{- form_start(form, {method: 'POST', action: path('app_calendar_day', {day: day.format('Y-m-d')})}) -}}
+        {{- form_start(form, {method: 'POST', action: path('app_calendar_day', {'day': day.format('Y-m-d')})}) -}}
 
         {{- form_row(form.title) -}}
 

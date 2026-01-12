@@ -1,8 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% set currentDate = date('now', app.user.timezone) %}
+{% set currentDate = user_date('now') %}
 
-{% block title %}Calendar{{ year != currentDate|date('Y') ? ' | ' ~ year }}{% endblock %}
+{% block title %}Calendar{{ year != currentDate.format('Y') ? ' | ' ~ year }}{% endblock %}
 {% block body_id %}calendar{% endblock %}
 
 {% set breadcrumbs = [
@@ -11,9 +11,6 @@
 ] %}
 
 {% block main -%}
-    {%- set current = currentDate.format('Y-m-d') -%}
-    {%- set currentMonth = currentDate.format('Y-m') -%}
-
     {%- if upcomingNotifications is not empty -%}
         <section class="card calendar calendar-upcoming-notification">
             {%- for upcomingNotification in upcomingNotifications -%}
@@ -42,12 +39,14 @@
 
     <section class="card card-calendar">
         <div class="calendar">
+            {%- set current = currentDate.format('Y-m-d') -%}
+
             {%- for monthNumber in 1..12 -%}
                 {%- set month = year ~ '-' ~ (monthNumber < 10 ? '0') ~ monthNumber -%}
                 {%- set firstDay = month ~ '-01' -%}
                 {%- set firstWeekDay = firstDay|date('N') -%}
 
-                <div class="month {{- currentMonth == month ? ' month-current' }}">
+                <div class="month">
                     <div class="month-title">{{ month|date('F') }}</div>
                     <div class="month-days">
                         {%- if firstWeekDay > 1 -%}
@@ -62,10 +61,9 @@
                             {%- set dayEvent = events[day] is defined ? events[day].dayEvent : null -%}
                             {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
 
-                            <a href="{{ path('app_calendar_day', {day: day}) }}"
-                               class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay|date('Y-m-d') ? ' day-inactive' -}}"
-                               {%- if dayEvent is not null %}data-event-type="{{ dayEvent.type.value }}"{% endif -%}
-                               data-id="{{ day }}">
+                            <a href="{{ path('app_calendar_day', {'day': day}) }}"
+                               class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}}"
+                               {%- if dayEvent is not null %}data-event-type="{{ dayEvent.type.value }}"{% endif -%}>
                                 <span>{{ dayNumber }}</span>
 
                                 {%- if hourEvents is not empty -%}
