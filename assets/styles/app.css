@@ -516,12 +516,12 @@ textarea {
         padding: var(--body-gap-block) var(--body-gap-inline);
         padding-left: 0;
         font-size: var(--font-size-small);
-        opacity: .25;
 
         .footer-datetime {
             display: flex;
             padding-inline: var(--gap-inline);
             cursor: default;
+            opacity: .25;
 
             & > span + span {
                 margin-left: calc(var(--gap-inline) / 2);
@@ -535,8 +535,22 @@ textarea {
             gap: calc(var(--gap-inline) / 4);
             padding-inline: var(--gap-inline);
             margin-left: auto;
-            cursor: default;
             transform: scaleX(-1);
+
+            & > div {
+                opacity: .25;
+                transition: color .15s, opacity .3s;
+
+                &:hover {
+                    color: var(--link-color);
+                    cursor: pointer;
+                    opacity: 1;
+                }
+
+                &:active {
+                    transform: translateY(-1px);
+                }
+            }
         }
     }
 }

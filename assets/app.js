@@ -71,4 +71,29 @@ document.addEventListener('DOMContentLoaded', () => {
         };
         alert.append(button);
     }
+
+    (function () {
+        document.getElementById('footer-bird').onclick = (event) => {
+            const data = event.currentTarget.dataset;
+            const style = document.body.style;
+
+            switch (data.position) {
+                case undefined:
+                    data.position = 'x';
+                    style.transform = 'scaleX(-1)';
+                    break;
+                case 'x':
+                    data.position = 'xy';
+                    style.transform = 'scaleX(-1) scaleY(-1)';
+                    break;
+                case 'xy':
+                    data.position = 'y';
+                    style.transform = 'scaleY(-1)';
+                    break;
+                default:
+                    delete data.position;
+                    style.transform = null;
+            }
+        }
+    })();
 });
