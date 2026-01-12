@@ -10,15 +10,15 @@
         document.documentElement.dataset.theme = localStorage.getItem('site-theme');
         document.documentElement.dataset.sidebar = localStorage.getItem('site-sidebar-collapsed');
     </script>
-    {% block stylesheets %}
+    {%- block stylesheets -%}
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet"
               href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap">
-    {% endblock %}
-    {% block javascripts %}
-        {% block importmap %}{{ importmap('app') }}{% endblock %}
-    {% endblock %}
+    {%- endblock -%}
+    {%- block javascripts -%}
+        {%- block importmap %}{{ importmap('app') }}{% endblock -%}
+    {%- endblock -%}
 </head>
 <body id="{% block body_id %}{% endblock %}">
     {%- block header -%}
@@ -27,7 +27,7 @@
                 {%- if block('sidebar') is not empty -%}
                     <div class="header-logo">
                         <a class="header-logo-link" href="{{ path('app_homepage') }}">
-                            {{ ux_icon('hugeicons:infinity-02') }}
+                            {{- ux_icon('hugeicons:infinity-02') -}}
                             <span>Continuum</span>
                         </a>
                     </div>
@@ -52,7 +52,7 @@
                     <li class="nav-item">
                         <a class="nav-link {{- _route == 'app_calendar' or _route == 'app_calendar_day' ? ' active' }}"
                            href="{{ path('app_calendar') }}">
-                            {{ ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) }}
+                            {{- ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) -}}
                             <span>Calendar</span>
                         </a>
                     </li>
@@ -63,14 +63,14 @@
                     <li class="nav-item">
                         <a class="nav-link {{- _route == 'app_reflection_mood' ? ' active' }}"
                            href="{{ path('app_reflection_mood') }}">
-                            {{ ux_icon('lucide:smile-plus') }}
+                            {{- ux_icon('lucide:smile-plus') -}}
                             <span>Mood tracker</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{- _route == 'app_reflection_weekly' ? ' active' }}"
                            href="{{ path('app_reflection_weekly') }}">
-                            {{ ux_icon('lucide:medal') }}
+                            {{- ux_icon('lucide:medal') -}}
                             <span>Week in review</span>
                         </a>
                     </li>
@@ -80,13 +80,13 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            {{ ux_icon('lucide:dumbbell') }}
+                            {{- ux_icon('lucide:dumbbell') -}}
                             <span>Exercises</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">
-                            {{ ux_icon('lucide:ruler-dimension-line') }}
+                            {{- ux_icon('lucide:ruler-dimension-line') -}}
                             <span>Measurements</span>
                         </a>
                     </li>
@@ -97,7 +97,7 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">
-                                {{ ux_icon('lucide:shield-user') }}
+                                {{- ux_icon('lucide:shield-user') -}}
                                 <span>Admin</span>
                             </a>
                         </li>
@@ -121,7 +121,7 @@
                                     {%- if crumb.url is defined -%}
                                         <a href="{{ crumb.url }}">{{ crumb.label }}</a>
                                     {%- else -%}
-                                        {{ crumb.label }}
+                                        {{- crumb.label -}}
                                     {%- endif -%}
                                 </li>
                             {%- endfor -%}
@@ -149,10 +149,11 @@
             <footer class="footer-container">
                 <div class="footer-datetime">
                     <span>Server: {{ 'now'|date('j F, H:i') }}</span>
-                    {% if app.user %}
+                    {%- if app.user -%}
                         <span>User: {{ 'now'|date('j F, H:i', app.user.timezone) }}</span>
-                    {% endif %}
+                    {%- endif -%}
                 </div>
+                <div class="footer-bird">{{- ux_icon('lucide:bird') -}}</div>
             </footer>
         {%- endblock -%}
     </div>

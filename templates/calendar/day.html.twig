@@ -61,7 +61,7 @@
             <div class="form-control-time">
                 {{- form_widget(form.time) -}}
                 <button class="btn" onclick="document.getElementById('time').value = null; return false;">
-                    {{ ux_icon('lucide:x') }}
+                    {{- ux_icon('lucide:x') -}}
                 </button>
             </div>
             {{- form_errors(form.time) -}}

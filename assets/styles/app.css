@@ -514,19 +514,29 @@ textarea {
         display: flex;
         align-items: center;
         padding: var(--body-gap-block) var(--body-gap-inline);
+        padding-left: 0;
         font-size: var(--font-size-small);
+        opacity: .25;
 
         .footer-datetime {
             display: flex;
             padding-inline: var(--gap-inline);
             cursor: default;
-            opacity: .25;
 
             & > span + span {
                 margin-left: calc(var(--gap-inline) / 2);
                 padding-left: calc(var(--gap-inline) / 2);
                 border-left: var(--border-width) solid color-mix(in srgb, var(--color) 50%, transparent);
             }
+        }
+
+        .footer-bird {
+            display: flex;
+            gap: calc(var(--gap-inline) / 4);
+            padding-inline: var(--gap-inline);
+            margin-left: auto;
+            cursor: default;
+            transform: scaleX(-1);
         }
     }
 }
