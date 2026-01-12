@@ -33,13 +33,49 @@
                     </div>
                     <button id="sidebar-toggler" class="header-button">{{ ux_icon('lucide:menu') }}</button>
                 {%- endif -%}
-                <button id="theme-toggler" class="header-button">
-                    <span class="theme-light">{{ ux_icon('lucide:sun') }}</span>
-                    <span class="theme-dark">{{ ux_icon('lucide:moon') }}</span>
-                </button>
-                {%- if is_granted('ROLE_USER') -%}
-                    <a class="header-button" href="{{ logout_path() }}">{{ ux_icon('lucide:log-out') }}</a>
-                {%- endif -%}
+
+                <div class="header-controls">
+                    {%- if is_granted('ROLE_USER') -%}
+                        <div class="header-events">
+                            <button class="header-button">{{ ux_icon('lucide:plus') }}</button>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-item">
+                                    <a class="dropdown-link"
+                                       href="{{ path('app_calendar_day', {'day': user_date('+1 day').format('Y-m-d')}) }}">
+                                        {{- ux_icon('lucide:calendar-plus') -}}
+                                        <span>New event</span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="dropdown-link"
+                                       href="{{ path('app_reflection_mood_day', {'day': user_date('now').format('Y-m-d')}) }}">
+                                        {{- ux_icon('lucide:scan-face') -}}
+                                        <span>Track today mood</span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-item">
+                                    <a class="dropdown-link" href="#">
+                                        {{ ux_icon('lucide:biceps-flexed') }}
+                                        <span>Start training</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="header-divider"></div>
+                    {%- endif -%}
+
+                    <button id="theme-toggler" class="header-button">
+                        <span class="theme-light">{{ ux_icon('lucide:sun') }}</span>
+                        <span class="theme-dark">{{ ux_icon('lucide:moon') }}</span>
+                    </button>
+
+                    {%- if is_granted('ROLE_USER') -%}
+                        <a class="header-button" href="{{ logout_path() }}">{{ ux_icon('lucide:log-out') }}</a>
+                    {%- endif -%}
+                </div>
             </nav>
         </header>
     {%- endblock -%}

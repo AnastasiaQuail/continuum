@@ -213,7 +213,6 @@ textarea {
     .header-container {
         display: flex;
         align-items: center;
-        gap: calc(var(--gap-inline) / 2);
         width: 100%;
         height: var(--header-height);
         padding-inline: var(--body-gap-inline);
@@ -258,6 +257,14 @@ textarea {
             }
         }
 
+        .header-controls {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: calc(var(--body-gap-inline) / 4);
+            margin-left: auto;
+        }
+
         .header-button {
             display: flex;
             padding: calc(var(--control-padding-block) / 1.2) calc(var(--control-padding-inline) / 1.5);
@@ -274,8 +281,6 @@ textarea {
             }
 
             &#theme-toggler {
-                margin-left: auto;
-
                 & > * {
                     display: flex;
                 }
@@ -292,6 +297,105 @@ textarea {
                     & > .theme-dark {
                         display: inherit;
                     }
+                }
+            }
+        }
+
+        .header-divider {
+            height: calc(var(--header-height) / 2);
+            margin-inline: calc(var(--body-gap-inline) / 4);
+            border-left: var(--border-width) solid var(--color);
+            opacity: .1;
+        }
+
+        .header-events {
+            position: relative;
+
+            .dropdown-menu {
+                --dropdown-offset: calc(var(--body-gap-block) / 2);
+
+                position: absolute;
+                top: -100vw;
+                right: calc(var(--gap-inline) * -1);
+                display: flex;
+                flex-direction: column;
+                gap: calc(var(--gap-block) / 4);
+                margin: 0;
+                padding: calc(var(--gap-block) / 1.5) calc(var(--gap-inline) / 1.5);
+                padding-top: calc(calc(var(--gap-block) / 1.5) + var(--dropdown-offset));
+                list-style: none;
+                opacity: 0;
+                z-index: 1;
+                transition: opacity .15s;
+
+                &:before {
+                    position: absolute;
+                    content: '';
+                    inset: 0;
+                    top: var(--dropdown-offset);
+                    border: var(--body-border-width) solid var(--body-border-color);
+                    border-radius: var(--body-border-radius);
+                    background-color: var(--background-color);
+                }
+
+                &:after {
+                    position: absolute;
+                    content: '';
+                    right: calc(var(--gap-inline) + 10px);
+                    top: calc(var(--dropdown-offset) / 2);
+                    width: var(--dropdown-offset);
+                    height: var(--dropdown-offset);
+                    border-top: var(--body-border-width) solid var(--body-border-color);
+                    border-right: var(--body-border-width) solid var(--body-border-color);
+                    background-color: var(--background-color);
+                    transform: rotate(-45deg) skew(-10deg, -10deg);
+                }
+
+                .dropdown-item {
+                    position: relative;
+                    white-space: nowrap;
+
+                    .dropdown-link {
+                        display: inline-flex;
+                        align-items: center;
+                        width: 100%;
+                        gap: calc(var(--gap-inline) / 3);
+                        padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
+                        font-size: var(--font-size-medium);
+                        text-decoration: none;
+                        color: var(--color);
+                        border-radius: var(--border-radius);
+                        transition: background-color .15s;
+
+                        &:hover {
+                            background-color: color-mix(in srgb, var(--color-gray) 5%, transparent);
+
+                            [data-theme="dark"] & {
+                                background-color: color-mix(in srgb, var(--color-gray) 10%, transparent);
+                            }
+                        }
+                    }
+
+                    .dropdown-divider {
+                        height: 0;
+                        margin-block: calc(var(--gap-block) / 3);
+                        border: 0;
+                        border-top: var(--border-width) solid var(--border-color);
+                        opacity: .5;
+                    }
+                }
+            }
+
+            &:hover {
+                .header-button {
+                    color: var(--link-color);
+                    background-color: color-mix(in srgb, var(--link-color) 10%, transparent);
+                    cursor: default;
+                }
+
+                .dropdown-menu {
+                    top: 100%;
+                    opacity: 1;
                 }
             }
         }
