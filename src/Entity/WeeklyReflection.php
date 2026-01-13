@@ -12,8 +12,8 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: WeeklyReflectionRepository::class)]
-#[ORM\Table(name: 'weekly_reflection')]
-#[ORM\UniqueConstraint(name: 'UNIQ_WEEKLY_REFLECTION_DATE', fields: ['date'])]
+#[ORM\Table(name: 'weekly_reflections')]
+#[ORM\UniqueConstraint(name: 'UNIQ_WEEKLY_REFLECTIONS_DATE', fields: ['date'])]
 final class WeeklyReflection
 {
     #[ORM\Id]
