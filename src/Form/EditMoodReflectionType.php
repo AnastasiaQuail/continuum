@@ -4,33 +4,33 @@ declare(strict_types=1);
 
 namespace Continuum\Form;
 
-use Continuum\Dto\Request\Reflection\EditReflectionMood;
-use Continuum\Entity\ReflectionMood;
+use Continuum\Dto\Request\Reflection\EditMoodReflection;
+use Continuum\Entity\MoodReflection;
 use Continuum\Enum\MoodType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class EditReflectionMoodType extends AbstractImmutableType
+final class EditMoodReflectionType extends AbstractImmutableType
 {
     /**
-     * @param array{mood: null|ReflectionMood} $options
+     * @param array{moodReflection: null|MoodReflection} $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $reflectionMood = $options['mood'];
+        $moodReflection = $options['moodReflection'];
 
         $builder->setDataMapper($this)
             ->add('type', null, [
-                'data' => $reflectionMood?->getType() ?? MoodType::Okay,
+                'data' => $moodReflection?->getType() ?? MoodType::Okay,
             ])
             ->add('text', null, [
-                'data' => $reflectionMood?->getText() ?? '',
+                'data' => $moodReflection?->getText() ?? '',
             ]);
     }
 
-    protected function mapDataClass(array $forms): EditReflectionMood
+    protected function mapDataClass(array $forms): EditMoodReflection
     {
-        return new EditReflectionMood(
+        return new EditMoodReflection(
             $forms['type']->getData(),
             $forms['text']->getData() ?? '',
         );
@@ -40,7 +40,7 @@ final class EditReflectionMoodType extends AbstractImmutableType
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefault('mood', null);
-        $resolver->setAllowedTypes('mood', ['null', ReflectionMood::class]);
+        $resolver->setDefault('moodReflection', null);
+        $resolver->setAllowedTypes('moodReflection', ['null', MoodReflection::class]);
     }
 }

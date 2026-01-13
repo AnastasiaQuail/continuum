@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Controller\Reflection\Mood;
 
 use Continuum\Entity\User;
-use Continuum\Service\ReflectionMoodService;
+use Continuum\Service\MoodReflectionService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,16 +15,16 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 final class MoodController extends AbstractController
 {
     public function __construct(
-        private readonly ReflectionMoodService $reflectionMoodService,
+        private readonly MoodReflectionService $moodReflectionService,
     ) {}
 
-    #[Route(path: '/reflection/mood/{month}', name: 'app_reflection_mood', methods: ['GET'])]
+    #[Route(path: '/reflection/mood/{month}', name: 'app_mood_reflection', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, ?DateTimeImmutable $month = null): Response
     {
         $month ??= new DateTimeImmutable('first day of this month', $user->getTimezone())->setTime(0, 0);
 
-        $lastMoods = $this->reflectionMoodService->getPreviousDays();
-        $moods = $this->reflectionMoodService->getByMonth($month);
+        $lastMoods = $this->moodReflectionService->getPreviousDays();
+        $moods = $this->moodReflectionService->getByMonth($month);
 
         return $this->render('reflection/mood/index.html.twig', [
             'month' => $month,

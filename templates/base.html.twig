@@ -51,7 +51,7 @@
                                 </li>
                                 <li class="dropdown-item">
                                     <a class="dropdown-link"
-                                       href="{{ path('app_reflection_mood_day', {'day': user_date('now').format('Y-m-d')}) }}">
+                                       href="{{ path('app_mood_reflection_edit', {'day': user_date('now').format('Y-m-d')}) }}">
                                         {{- ux_icon('lucide:scan-face') -}}
                                         <span>Track today mood</span>
                                     </a>
@@ -97,8 +97,8 @@
                         <span class="nav-title-divider">Reflection</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{- _route == 'app_reflection_mood' or _route == 'app_reflection_mood_day' ? ' active' }}"
-                           href="{{ path('app_reflection_mood') }}">
+                        <a class="nav-link {{- _route == 'app_mood_reflection' or _route == 'app_mood_reflection_edit' ? ' active' }}"
+                           href="{{ path('app_mood_reflection') }}">
                             {{- ux_icon('lucide:smile-plus') -}}
                             <span>Mood tracker</span>
                         </a>

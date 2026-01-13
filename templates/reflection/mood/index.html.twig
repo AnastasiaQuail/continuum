@@ -7,7 +7,7 @@
 {% block body_id %}mood-tracker{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Mood tracker', url: path('app_reflection_mood') },
+    { label: 'Mood tracker', url: path('app_mood_reflection') },
     { label: monthName },
 ] %}
 
@@ -29,7 +29,7 @@
 
         {%- if prevDate.format('Y') >= app_year_min -%}
             <a class="page-link page-link-prev"
-               href="{{ path('app_reflection_mood', {'month': prevDate.format('Y-m')}) }}">
+               href="{{ path('app_mood_reflection', {'month': prevDate.format('Y-m')}) }}">
                 {{ ux_icon('lucide:chevron-right') }}
                 <span>{{ prevDate.format('F') }}</span>
             </a>
@@ -39,7 +39,7 @@
 
         {%- if nextDate.format('Y') <= app_year_max -%}
             <a class="page-link page-link-next"
-               href="{{ path('app_reflection_mood', {'month': nextDate.format('Y-m')}) }}">
+               href="{{ path('app_mood_reflection', {'month': nextDate.format('Y-m')}) }}">
                 <span>{{ nextDate.format('F') }}</span>
                 {{- ux_icon('lucide:chevron-right') -}}
             </a>
@@ -63,7 +63,7 @@
                         {%- set day = month.format('Y-m-') ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
                         {%- set mood = moods[day] is defined ? moods[day] : null -%}
 
-                        <a href="{{ path('app_reflection_mood_day', {'day': day}) }}"
+                        <a href="{{ path('app_mood_reflection_edit', {'day': day}) }}"
                            class="day {{- day == current ? ' day-current' -}} {{- mood is not null ? ' day-past' }}"
                            {%- if mood is not null %}data-event-type="{{ mood.calendarEventType.value }}"{% endif -%}>
                             <span>{{ dayNumber }}</span>

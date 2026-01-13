@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Continuum\Service;
 
-use Continuum\Dto\Request\Reflection\EditReflectionMood;
-use Continuum\Entity\ReflectionMood;
-use Continuum\Repository\ReflectionMoodRepository;
+use Continuum\Dto\Request\Reflection\EditMoodReflection;
+use Continuum\Entity\MoodReflection;
+use Continuum\Repository\MoodReflectionRepository;
 use DateTimeImmutable;
 
-final readonly class ReflectionMoodService
+final readonly class MoodReflectionService
 {
     private const int PREVIOUS_DAYS = 60;
 
     public function __construct(
-        private ReflectionMoodRepository $reflectionMoodRepository,
+        private MoodReflectionRepository $moodReflectionRepository,
     ) {}
 
     /**
-     * @return non-empty-array<string, ReflectionMood>
+     * @return non-empty-array<string, MoodReflection>
      */
     public function getPreviousDays(): array
     {
@@ -27,7 +27,7 @@ final readonly class ReflectionMoodService
             $moods[new DateTimeImmutable(sprintf('-%d days', $day))->format('Y-m-d')] = null;
         }
 
-        foreach ($this->reflectionMoodRepository->findPreviousDays(self::PREVIOUS_DAYS) as $mood) {
+        foreach ($this->moodReflectionRepository->findPreviousDays(self::PREVIOUS_DAYS) as $mood) {
             $moods[$mood->getDate()->format('Y-m-d')] = $mood;
         }
 
@@ -35,7 +35,7 @@ final readonly class ReflectionMoodService
     }
 
     /**
-     * @return array<string, ReflectionMood>
+     * @return array<string, MoodReflection>
      */
     public function getByMonth(DateTimeImmutable $date): array
     {
@@ -43,25 +43,25 @@ final readonly class ReflectionMoodService
         $month = (int) $date->format('n');
 
         $moods = [];
-        foreach ($this->reflectionMoodRepository->findByMonth($year, $month) as $mood) {
+        foreach ($this->moodReflectionRepository->findByMonth($year, $month) as $mood) {
             $moods[$mood->getDate()->format('Y-m-d')] = $mood;
         }
 
         return $moods;
     }
 
-    public function findMoodByDay(DateTimeImmutable $day): ?ReflectionMood
+    public function findMoodByDay(DateTimeImmutable $day): ?MoodReflection
     {
-        return $this->reflectionMoodRepository->findOneByDay($day);
+        return $this->moodReflectionRepository->findOneByDay($day);
     }
 
-    public function save(DateTimeImmutable $day, ?ReflectionMood $mood, EditReflectionMood $dto): ReflectionMood
+    public function save(DateTimeImmutable $day, ?MoodReflection $mood, EditMoodReflection $dto): MoodReflection
     {
-        $mood ??= new ReflectionMood($day);
+        $mood ??= new MoodReflection($day);
         $mood->setType($dto->type);
         $mood->setText($dto->text);
 
-        $this->reflectionMoodRepository->save($mood);
+        $this->moodReflectionRepository->save($mood);
 
         return $mood;
     }

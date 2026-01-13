@@ -4,8 +4,8 @@
 {% block body_id %}mood-tracker-day{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Mood tracker', url: path('app_reflection_mood') },
-    { label: day.format('F Y'), url: path('app_reflection_mood', {'month': day.format('Y-m')}) },
+    { label: 'Mood tracker', url: path('app_mood_reflection') },
+    { label: day.format('F Y'), url: path('app_mood_reflection', {'month': day.format('Y-m')}) },
     { label: day.format('j') },
 ] %}
 
@@ -13,7 +13,7 @@
     <section class="card">
         <h3 class="card-title">Mood of the day</h3>
 
-        {{- form_start(form, {method: 'POST', action: path('app_reflection_mood_day', {'day': day.format('Y-m-d')})}) -}}
+        {{- form_start(form, {method: 'POST', action: path('app_mood_reflection_edit', {'day': day.format('Y-m-d')})}) -}}
 
         <div class="mb-3">
             {{- form_label(form.type) -}}
