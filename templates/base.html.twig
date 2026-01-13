@@ -189,8 +189,17 @@
                         <span>User: {{ user_date('now').format('j F, H:i') }}</span>
                     {%- endif -%}
                 </div>
-                <div class="footer-bird">
-                    <div id="footer-bird">{{- ux_icon('lucide:bird') -}}</div>
+
+                <div class="footer-controls">
+                    {% if app.debug %}
+                        <div class="footer-toolbar">
+                            <div id="footer-toolbar">{{ ux_icon('lucide:app-window') }}</div>
+                        </div>
+                    {% endif %}
+
+                    <div class="footer-bird">
+                        <div id="footer-bird">{{ ux_icon('lucide:bird') }}</div>
+                    </div>
                 </div>
             </footer>
         {%- endblock -%}

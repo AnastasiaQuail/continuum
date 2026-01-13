@@ -96,4 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     })();
+
+    (function () {
+        document.getElementById('footer-toolbar').onclick = () => {
+            const link = document.querySelector('body > .sf-toolbar .sf-toolbar-block-request > a');
+
+            if (link) {
+                window.open(link.href, '_blank');
+            }
+        }
+    })();
 });

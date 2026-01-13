@@ -645,11 +645,17 @@ textarea {
             }
         }
 
+        .footer-controls {
+            display: flex;
+            gap: var(--gap-inline);
+            padding-inline: var(--gap-inline);
+            margin-left: auto;
+        }
+
+        .footer-toolbar,
         .footer-bird {
             display: flex;
             gap: calc(var(--gap-inline) / 4);
-            padding-inline: var(--gap-inline);
-            margin-left: auto;
             transform: scaleX(-1);
 
             & > div {
@@ -668,6 +674,10 @@ textarea {
             }
         }
     }
+}
+
+.sf-toolbar {
+    display: none !important;
 }
 
 .breadcrumb {
