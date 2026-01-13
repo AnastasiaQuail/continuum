@@ -4,6 +4,15 @@
 
 {% block main -%}
     <section class="card">
+        <div class="progress-group">
+            <div class="progress" style="--progress: {{ calendarProgress }}%;">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="progress-text">{{ calendarProgress }}%</div>
+        </div>
+    </section>
+
+    <section class="card">
         ...homepage...
     </section>
 {%- endblock %}

@@ -12,7 +12,7 @@ use DateTimeImmutable;
 final readonly class WeeklyReflectionService
 {
     public function __construct(
-        private WeeklyReflectionRepository $weeklyReflectionRepository,
+        private WeeklyReflectionRepository $repository,
     ) {}
 
     /**
@@ -33,7 +33,7 @@ final readonly class WeeklyReflectionService
             $sunday = $sunday->modify('+1 week');
         } while ($sunday < $endDate);
 
-        foreach ($this->weeklyReflectionRepository->findByDays(...$days) as $reflection) {
+        foreach ($this->repository->findByDays(...$days) as $reflection) {
             $reflections[$reflection->getDate()->format('Y-m-d')] = $reflection;
         }
 
@@ -42,7 +42,7 @@ final readonly class WeeklyReflectionService
 
     public function findByWeek(DateTimeImmutable $week): ?WeeklyReflection
     {
-        return $this->weeklyReflectionRepository->findOneByDay($week);
+        return $this->repository->findOneByDay($week);
     }
 
     public function save(
@@ -58,7 +58,7 @@ final readonly class WeeklyReflectionService
         $weeklyReflection->setAchievement($dto->achievement);
         $weeklyReflection->setIsAchievementPrivate($dto->isAchievementPrivate);
 
-        $this->weeklyReflectionRepository->save($weeklyReflection);
+        $this->repository->save($weeklyReflection);
 
         return $weeklyReflection;
     }

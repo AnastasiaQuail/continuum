@@ -8,10 +8,13 @@ use Continuum\Dto\Response\Calendar\UpcomingNotification;
 use Continuum\Entity\CalendarEvent;
 use Continuum\Entity\User;
 use DateTimeImmutable;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class UpcomingEventService
 {
     public function __construct(
+        #[Autowire(param: 'app.calendar.upcoming_notification.days')]
+        private int $upcomingNotificationDays,
         private CalendarEventService $calendarEventService,
     ) {}
 
@@ -20,7 +23,7 @@ final readonly class UpcomingEventService
      */
     public function getUpcomingNotifications(User $user): array
     {
-        $events = $this->calendarEventService->getByNextDays($user);
+        $events = $this->calendarEventService->getByNextDays($user, $this->upcomingNotificationDays);
 
         /** @var array<string, CalendarEvent> $dayEvents */
         $dayEvents = [];

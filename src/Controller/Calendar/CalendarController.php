@@ -9,6 +9,7 @@ use Continuum\Service\CalendarEventService;
 use Continuum\Service\UpcomingEventService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
@@ -16,6 +17,8 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 final class CalendarController extends AbstractController
 {
     public function __construct(
+        #[Autowire(env: 'string:APP_DATE_START')]
+        private readonly string $startDate,
         private readonly UpcomingEventService $upcomingEventService,
         private readonly CalendarEventService $calendarEventService,
     ) {}
@@ -24,7 +27,7 @@ final class CalendarController extends AbstractController
     public function __invoke(#[CurrentUser] User $user, ?int $year = null): Response
     {
         $year ??= (int) new DateTimeImmutable('now', $user->getTimezone())->format('Y');
-        $startDay = new DateTimeImmutable('2025-03-15');
+        $startDay = new DateTimeImmutable($this->startDate, $user->getTimezone());
 
         $upcomingNotifications = $this->upcomingEventService->getUpcomingNotifications($user);
         $events = $this->calendarEventService->getByYear($user, $year);

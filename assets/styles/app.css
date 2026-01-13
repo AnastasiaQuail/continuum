@@ -1024,6 +1024,51 @@ textarea {
     }
 }
 
+.progress {
+    --progress: 0%;
+    --progress-height: calc(var(--gap-block) / 2);
+    --progress-color: var(--color-green);
+    --progress-color-transparent: 10%;
+    --progress-border-width: var(--border-width);
+    --progress-border-radius: calc(var(--border-radius) / 2);
+
+    display: flex;
+    height: var(--progress-height);
+    width: 100%;
+    background-color: color-mix(in srgb, var(--progress-color) var(--progress-color-transparent), transparent);
+    border: var(--progress-border-width) solid color-mix(in srgb, var(--progress-color) var(--progress-color-transparent), transparent);
+    border-radius: var(--progress-border-radius);
+
+    [data-theme="dark"] & {
+        --progress-color-transparent: 15%;
+    }
+
+    .progress-bar {
+        position: relative;
+        display: inline-flex;
+        height: calc(var(--progress-border-width) * 2 + 100%);
+        width: calc(var(--progress-border-width) * 2 + var(--progress));
+        margin: calc(var(--progress-border-width) * -1);
+        background-color: color-mix(in srgb, var(--progress-color) var(--background-color-transparent), var(--background-color));
+        border-radius: var(--progress-border-radius);
+        transition: width .3s;
+    }
+}
+
+.progress-group {
+    display: flex;
+    align-items: center;
+    gap: calc(var(--body-gap-inline) / 1.5);
+    width: 100%;
+
+    .progress-text {
+        font-size: var(--font-size-medium);
+        white-space: nowrap;
+        user-select: none;
+        opacity: .5;
+    }
+}
+
 .calendar-pagination {
     display: flex;
     align-items: center;

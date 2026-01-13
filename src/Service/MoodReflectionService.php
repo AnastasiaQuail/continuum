@@ -8,13 +8,14 @@ use Continuum\Dto\Request\Reflection\EditMoodReflection;
 use Continuum\Entity\MoodReflection;
 use Continuum\Repository\MoodReflectionRepository;
 use DateTimeImmutable;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class MoodReflectionService
 {
-    private const int PREVIOUS_DAYS = 60;
-
     public function __construct(
-        private MoodReflectionRepository $moodReflectionRepository,
+        #[Autowire(param: 'app.reflection.mood_trend.days')]
+        private int $trendDuration,
+        private MoodReflectionRepository $repository,
     ) {}
 
     /**
@@ -23,11 +24,11 @@ final readonly class MoodReflectionService
     public function getPreviousDays(): array
     {
         $moods = [];
-        for ($day = self::PREVIOUS_DAYS - 1; $day >= 0; $day--) {
+        for ($day = $this->trendDuration - 1; $day >= 0; $day--) {
             $moods[new DateTimeImmutable(sprintf('-%d days', $day))->format('Y-m-d')] = null;
         }
 
-        foreach ($this->moodReflectionRepository->findPreviousDays(self::PREVIOUS_DAYS) as $mood) {
+        foreach ($this->repository->findPreviousDays($this->trendDuration) as $mood) {
             $moods[$mood->getDate()->format('Y-m-d')] = $mood;
         }
 
@@ -43,7 +44,7 @@ final readonly class MoodReflectionService
         $month = (int) $date->format('n');
 
         $moods = [];
-        foreach ($this->moodReflectionRepository->findByMonth($year, $month) as $mood) {
+        foreach ($this->repository->findByMonth($year, $month) as $mood) {
             $moods[$mood->getDate()->format('Y-m-d')] = $mood;
         }
 
@@ -52,7 +53,7 @@ final readonly class MoodReflectionService
 
     public function findMoodByDay(DateTimeImmutable $day): ?MoodReflection
     {
-        return $this->moodReflectionRepository->findOneByDay($day);
+        return $this->repository->findOneByDay($day);
     }
 
     public function save(DateTimeImmutable $day, ?MoodReflection $mood, EditMoodReflection $dto): MoodReflection
@@ -61,7 +62,7 @@ final readonly class MoodReflectionService
         $mood->setType($dto->type);
         $mood->setText($dto->text);
 
-        $this->moodReflectionRepository->save($mood);
+        $this->repository->save($mood);
 
         return $mood;
     }

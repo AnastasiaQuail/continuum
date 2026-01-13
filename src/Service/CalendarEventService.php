@@ -15,18 +15,16 @@ use DateTimeZone;
 
 final readonly class CalendarEventService
 {
-    private const int NEXT_DAYS = 21;
-
     public function __construct(
-        private CalendarEventRepository $calendarEventRepository,
+        private CalendarEventRepository $repository,
     ) {}
 
     /**
      * @return list<CalendarEvent>
      */
-    public function getByNextDays(User $user): array
+    public function getByNextDays(User $user, int $days): array
     {
-        return $this->calendarEventRepository->findUpcomingNextDays(self::NEXT_DAYS, $user->getTimezone());
+        return $this->repository->findUpcomingNextDays($days, $user->getTimezone());
     }
 
     /**
@@ -36,7 +34,7 @@ final readonly class CalendarEventService
     {
         $events = [];
 
-        foreach ($this->calendarEventRepository->findByYear($year, $user->getTimezone()) as $event) {
+        foreach ($this->repository->findByYear($year, $user->getTimezone()) as $event) {
             $date = $event->getDatetime()->setTimezone($user->getTimezone())->format('Y-m-d');
 
             if (!array_key_exists($date, $events)) {
@@ -64,12 +62,12 @@ final readonly class CalendarEventService
      */
     public function getByDay(User $user, DateTimeImmutable $date): array
     {
-        return $this->calendarEventRepository->findByDay($date, $user->getTimezone());
+        return $this->repository->findByDay($date, $user->getTimezone());
     }
 
     public function delete(CalendarEvent $event): void
     {
-        $this->calendarEventRepository->delete($event);
+        $this->repository->delete($event);
     }
 
     public function create(User $user, DateTimeImmutable $date, NewCalendarEvent $dto): CalendarEvent
@@ -86,7 +84,7 @@ final readonly class CalendarEventService
             title: $dto->title,
         );
 
-        $this->calendarEventRepository->create($event);
+        $this->repository->create($event);
 
         return $event;
     }
