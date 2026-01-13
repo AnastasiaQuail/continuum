@@ -1,17 +1,87 @@
 {% extends 'base.html.twig' %}
 
-{% set weekName = week.format('F Y') %}
-{% set isCurrentWeek = weekName == user_date('now').format('F Y') %}
+{% set monthName = month.format('F Y') %}
+{% set isCurrentWeek = monthName == user_date('now').format('F Y') %}
 
-{% block title %}Week in review{{ not isCurrentWeek ? ' | ' ~ weekName }}{% endblock %}
-{% block body_id %}week-in-review{% endblock %}
+{% block title %}Weekly reflection{{ not isCurrentWeek ? ' | ' ~ monthName }}{% endblock %}
+{% block body_id %}weekly-reflection{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Week in review', url: path('app_reflection_weekly') },
-    { label: week.format('F Y') },
+    { label: 'Weekly reflection', url: path('app_weekly_reflection') },
+    { label: month.format('F Y') },
 ] %}
 
 {% block main -%}
+    <nav class="calendar-pagination">
+        {%- set prevDate = month.modify('-1 month') -%}
+        {%- set nextDate = month.modify('+1 month') -%}
+
+        {%- if prevDate.format('Y') >= app_year_min -%}
+            <a class="page-link page-link-prev"
+               href="{{ path('app_weekly_reflection', {'month': prevDate.format('Y-m')}) }}">
+                {{ ux_icon('lucide:chevron-right') }}
+                <span>{{ prevDate.format('F') }}</span>
+            </a>
+        {%- endif -%}
+
+        <h2>{{ month.format('F') }}</h2>
+
+        {%- if nextDate.format('Y') <= app_year_max -%}
+            <a class="page-link page-link-next"
+               href="{{ path('app_weekly_reflection', {'month': nextDate.format('Y-m')}) }}">
+                <span>{{ nextDate.format('F') }}</span>
+                {{- ux_icon('lucide:chevron-right') -}}
+            </a>
+        {%- endif -%}
+    </nav>
+
     <section class="card">
+        <div class="weekly-reflection">
+            {%- for date, reflection in weeklyReflections -%}
+                <div class="week">
+                    <div class="week-title">
+                        {%- set monday = date(date).modify('-6 days') -%}
+                        {%- set sunday = date(date) -%}
+
+                        <a href="{{ path('app_weekly_reflection_edit', {'week': date}) }}">
+                            {%- if monday.format('n') != sunday.format('n') -%}
+                                {{- monday.format('j F') }} - {{ sunday.format('j F') -}}
+                            {%- else -%}
+                                {{- monday.format('j') }} - {{ sunday.format('j F') -}}
+                            {%- endif -%}
+                        </a>
+                    </div>
+                    <div class="week-body">
+                        <div class="alert alert-{{ not reflection ? 'empty' : 'success' }}">
+                            <div class="alert-title">
+                                {{- ux_icon('lucide:heart') -}}
+                                <span>Joy</span>
+                            </div>
+                            <div class="alert-body {{- reflection and reflection.joyPrivate ? ' private' }}">
+                                {{- reflection ? reflection.joy -}}
+                            </div>
+                        </div>
+                        <div class="alert alert-{{ not reflection ? 'empty' : 'warning' }}">
+                            <div class="alert-title">
+                                {{- ux_icon('lucide:triangle-alert') -}}
+                                <span>Difficulty</span>
+                            </div>
+                            <div class="alert-body {{- reflection and reflection.difficultyPrivate ? ' private' }}">
+                                {{- reflection ? reflection.difficulty -}}
+                            </div>
+                        </div>
+                        <div class="alert alert-{{ not reflection ? 'empty' : 'primary' }}">
+                            <div class="alert-title">
+                                {{- ux_icon('lucide:trophy') -}}
+                                <span>Achievement</span>
+                            </div>
+                            <div class="alert-body {{- reflection and reflection.achievementPrivate ? ' private' }}">
+                                {{- reflection ? reflection.achievement -}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {%- endfor -%}
+        </div>
     </section>
 {%- endblock %}

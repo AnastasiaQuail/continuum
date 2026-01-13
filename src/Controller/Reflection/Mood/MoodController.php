@@ -21,7 +21,7 @@ final class MoodController extends AbstractController
     #[Route(path: '/reflection/mood/{month}', name: 'app_reflection_mood', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, ?DateTimeImmutable $month = null): Response
     {
-        $month ??= new DateTimeImmutable('first day of this month', $user->getTimezone());
+        $month ??= new DateTimeImmutable('first day of this month', $user->getTimezone())->setTime(0, 0);
 
         $lastMoods = $this->reflectionMoodService->getPreviousDays();
         $moods = $this->reflectionMoodService->getByMonth($month);

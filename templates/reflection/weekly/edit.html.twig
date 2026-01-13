@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% set monday = week.modify('-6 days') %}
+{% if monday.format('n') != week.format('n') %}
+    {% set currentTitle = monday.format('j F') ~ ' - ' ~ week.format('j F') %}
+{% else %}
+    {% set currentTitle = monday.format('j') ~ ' - ' ~ week.format('j F') %}
+{% endif %}
+
+{% block title %}Weekly reflection | {{ currentTitle }}{% endblock %}
+{% block body_id %}weekly-reflection-edit{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Weekly reflection', url: path('app_weekly_reflection') },
+    { label: week.format('F Y'), url: path('app_weekly_reflection', {'month': week.format('Y-m')}) },
+    { label: currentTitle },
+] %}
+
+{% block main -%}
+    <section class="card">
+        <h3 class="card-title">Week reflection</h3>
+
+        {{- form_start(form, {method: 'POST', action: path('app_weekly_reflection_edit', {'week': week.format('Y-m-d')})}) -}}
+
+        <div class="weekly-reflection weekly-reflection-form">
+            <div class="alert alert-success">
+                <div class="alert-title">
+                    {{- ux_icon('lucide:heart') -}}
+                    <span>Joy</span>
+                </div>
+                <div class="alert-body">
+                    <div class="alert-form-textarea">
+                        {{- form_widget(form.joy) -}}
+                        {{- form_errors(form.joy) -}}
+                    </div>
+                    {{- form_widget(form.isJoyPrivate) -}}
+                </div>
+            </div>
+            <div class="alert alert-warning">
+                <div class="alert-title">
+                    {{- ux_icon('lucide:triangle-alert') -}}
+                    <span>Difficulty</span>
+                </div>
+                <div class="alert-body">
+                    <div class="alert-form-textarea">
+                        {{- form_widget(form.difficulty) -}}
+                        {{- form_errors(form.difficulty) -}}
+                    </div>
+                    {{- form_widget(form.isDifficultyPrivate) -}}
+                </div>
+            </div>
+            <div class="alert alert-primary">
+                <div class="alert-title">
+                    {{- ux_icon('lucide:trophy') -}}
+                    <span>Achievement</span>
+                </div>
+                <div class="alert-body">
+                    <div class="alert-form-textarea">
+                        {{- form_widget(form.achievement) -}}
+                        {{- form_errors(form.achievement) -}}
+                    </div>
+                    {{- form_widget(form.isAchievementPrivate) -}}
+                </div>
+            </div>
+        </div>
+
+        <div class="card-submit">
+            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        </div>
+
+        {{- form_end(form) -}}
+    </section>
+{%- endblock %}

@@ -97,15 +97,15 @@
                         <span class="nav-title-divider">Reflection</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{- _route == 'app_reflection_mood' ? ' active' }}"
+                        <a class="nav-link {{- _route == 'app_reflection_mood' or _route == 'app_reflection_mood_day' ? ' active' }}"
                            href="{{ path('app_reflection_mood') }}">
                             {{- ux_icon('lucide:smile-plus') -}}
                             <span>Mood tracker</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{- _route == 'app_reflection_weekly' ? ' active' }}"
-                           href="{{ path('app_reflection_weekly') }}">
+                        <a class="nav-link {{- _route == 'app_weekly_reflection' or _route == 'app_weekly_reflection_edit' ? ' active' }}"
+                           href="{{ path('app_weekly_reflection') }}">
                             {{- ux_icon('lucide:star') -}}
                             <span>Week in review</span>
                         </a>

@@ -37,7 +37,7 @@ final class NewCalendarEventType extends AbstractImmutableType
         $time = $forms['time']->getData();
 
         return new NewCalendarEvent(
-            $forms['title']->getData(),
+            $forms['title']->getData() ?? '',
             $forms['type']->getData(),
             $time !== '' ? $time : null,
         );
