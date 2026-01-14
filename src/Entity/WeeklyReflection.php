@@ -42,7 +42,7 @@ final class WeeklyReflection
 
     public function __construct(
         #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-        private DateTimeImmutable $date,
+        private readonly DateTimeImmutable $date,
     ) {
         $this->id = Uuid::v7();
     }
