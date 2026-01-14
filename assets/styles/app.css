@@ -112,6 +112,7 @@ body {
     font-optical-sizing: auto;
     font-style: normal;
     overflow: hidden;
+    transition: transform .15s;
 
     > .sidebar {
         grid-row: 2;
@@ -1390,7 +1391,7 @@ textarea {
 @media (width >= 1200px) {
     .calendar {
         --grid-month-columns: 6;
-        --gap-month-days: 2.5px;
+        --gap-month-days: 3px;
         --day-font-size: 0.65em;
         --day-border-radius: 7px;
         --day-badge-size: 6px;

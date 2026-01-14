@@ -50,7 +50,7 @@
                     <div class="month-title">{{ month|date('F') }}</div>
                     <div class="month-days">
                         {%- if firstWeekDay > 1 -%}
-                            <div class="day fake-day" style="--fake-days: {{ firstWeekDay - 1 }}">
+                            <div class="day fake-day" style="--fake-days: {{ firstWeekDay - 1 }};">
                                 <span>1</span>
                             </div>
                         {%- endif -%}

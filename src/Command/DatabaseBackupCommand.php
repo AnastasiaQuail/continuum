@@ -23,9 +23,8 @@ final readonly class DatabaseBackupCommand
         private string $backupDir,
     ) {}
 
-    public function __invoke(
-        SymfonyStyle $io,
-    ): int {
+    public function __invoke(SymfonyStyle $io): int
+    {
         $parts = parse_url($this->databaseUrl);
 
         if (!is_array($parts)) {

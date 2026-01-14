@@ -13,7 +13,7 @@
 
 {% block main -%}
     <section class="card card-mood-chart">
-        <div class="mood-chart" style="--chart-columns: {{ lastMoods|length }}">
+        <div class="mood-chart" style="--chart-columns: {{ lastMoods|length }};">
             {% for lastMood in lastMoods %}
                 <div class="chart-day" data-type="{{ lastMood != null ? lastMood.type.value }}"
                      data-event-type="{{ lastMood != null ? lastMood.calendarEventType.value }}">
@@ -54,7 +54,7 @@
 
                 <div class="month-days">
                     {%- if firstWeekDay > 1 -%}
-                        <div class="day fake-day" style="--fake-days: {{ firstWeekDay - 1 }}">
+                        <div class="day fake-day" style="--fake-days: {{ firstWeekDay - 1 }};">
                             <span>1</span>
                         </div>
                     {%- endif -%}

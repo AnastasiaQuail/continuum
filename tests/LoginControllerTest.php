@@ -8,7 +8,6 @@ use Continuum\Entity\User;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Uid\Uuid;
 
 final class LoginControllerTest extends WebTestCase
 {
@@ -41,7 +40,7 @@ final class LoginControllerTest extends WebTestCase
 
     public function testLogin(): void
     {
-        // Denied - Can't login with invalid email address.
+        // Denied - Can't log in with invalid email address.
         $this->client->request('GET', '/login');
         self::assertResponseIsSuccessful();
 
@@ -56,7 +55,7 @@ final class LoginControllerTest extends WebTestCase
         // Ensure we do not reveal if the user exists or not.
         self::assertSelectorTextContains('.alert-danger', 'Invalid credentials.');
 
-        // Denied - Can't login with invalid password.
+        // Denied - Can't log in with invalid password.
         $this->client->request('GET', '/login');
         self::assertResponseIsSuccessful();
 
