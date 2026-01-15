@@ -23,45 +23,35 @@
         {{- form_start(form, {method: 'POST', action: path('app_weekly_reflection_edit', {'week': week.format('Y-m-d')})}) -}}
 
         <div class="weekly-reflection weekly-reflection-form">
-            <div class="alert alert-success">
-                <div class="alert-title">
-                    {{- ux_icon('lucide:heart') -}}
-                    <span>Joy</span>
-                </div>
-                <div class="alert-body">
+            {%- embed 'reflection/weekly/_alert.html.twig' with {type: 'joy'} -%}
+                {%- block alert_body -%}
                     <div class="alert-form-textarea">
                         {{- form_widget(form.joy) -}}
                         {{- form_errors(form.joy) -}}
                     </div>
                     {{- form_widget(form.isJoyPrivate) -}}
-                </div>
-            </div>
-            <div class="alert alert-warning">
-                <div class="alert-title">
-                    {{- ux_icon('lucide:triangle-alert') -}}
-                    <span>Difficulty</span>
-                </div>
-                <div class="alert-body">
+                {%- endblock -%}
+            {%- endembed -%}
+
+            {%- embed 'reflection/weekly/_alert.html.twig' with {type: 'difficulty'} -%}
+                {%- block alert_body -%}
                     <div class="alert-form-textarea">
                         {{- form_widget(form.difficulty) -}}
                         {{- form_errors(form.difficulty) -}}
                     </div>
                     {{- form_widget(form.isDifficultyPrivate) -}}
-                </div>
-            </div>
-            <div class="alert alert-primary">
-                <div class="alert-title">
-                    {{- ux_icon('lucide:trophy') -}}
-                    <span>Achievement</span>
-                </div>
-                <div class="alert-body">
+                {%- endblock -%}
+            {%- endembed -%}
+
+            {%- embed 'reflection/weekly/_alert.html.twig' with {type: 'achievement'} -%}
+                {%- block alert_body -%}
                     <div class="alert-form-textarea">
                         {{- form_widget(form.achievement) -}}
                         {{- form_errors(form.achievement) -}}
                     </div>
                     {{- form_widget(form.isAchievementPrivate) -}}
-                </div>
-            </div>
+                {%- endblock -%}
+            {%- endembed -%}
         </div>
 
         <div class="card-submit">

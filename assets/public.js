@@ -2,12 +2,9 @@ import './styles/app.css';
 import './styles/public.css';
 import ThemeToggler from './js/theme-toggler.js';
 
-const themeToggler = new ThemeToggler();
-themeToggler.init();
+new ThemeToggler().onClick('#theme-toggler');
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('theme-toggler').onclick = () => themeToggler.toggle();
-
     (function () {
         const inputEmail = document.getElementById('username');
         const inputPassword = document.getElementById('password');

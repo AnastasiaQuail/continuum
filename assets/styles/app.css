@@ -127,6 +127,18 @@ body {
         grid-row: 2;
         grid-column: 2;
     }
+
+    [data-egg-bird="1"] & {
+        transform: scaleX(-1);
+    }
+
+    [data-egg-bird="2"] & {
+        transform: scaleX(-1) scaleY(-1);
+    }
+
+    [data-egg-bird="3"] & {
+        transform: scaleY(-1);
+    }
 }
 
 h6, h5, h4, h3, h2, h1 {
@@ -1257,25 +1269,30 @@ textarea {
 
             --day-color: var(--color);
             --day-border-color-transparent: 3%;
-            --day-background-color-transparent: 3%;
+            --day-background-color-transparent: 2%;
 
             .day-badge {
                 --day-badge-border-color-transparent: 10%;
                 --day-badge-background-color-transparent: 50%;
             }
-        }
 
-        &[data-event-type]:not(.day-past) {
-            /* future events */
+            &.day-weekend {
+                --day-color: color-mix(in srgb, var(--color) 60%, transparent);
+                --day-background-color-transparent: 4%;
+            }
 
-            --day-color: var(--day-general-color);
-            --day-border-color-transparent: 5%;
-            --day-background-color-transparent: 15%;
+            &[data-event-type] {
+                /* future events */
 
-            [data-theme="dark"] & {
-                --day-color: color-mix(in srgb, var(--day-general-color) 50%, var(--color));
-                --day-border-color-transparent: 15%;
-                --day-background-color-transparent: 25%;
+                --day-color: var(--day-general-color);
+                --day-border-color-transparent: 5%;
+                --day-background-color-transparent: 15%;
+
+                [data-theme="dark"] & {
+                    --day-color: color-mix(in srgb, var(--day-general-color) 20%, var(--color));
+                    --day-border-color-transparent: 15%;
+                    --day-background-color-transparent: 25%;
+                }
             }
         }
 
@@ -1299,23 +1316,90 @@ textarea {
     }
 }
 
-.calendar-upcoming-notification {
+.calendar-upcoming-notifications {
     display: flex;
-    flex-direction: column;
-    gap: calc(var(--gap-block) / 3);
+    cursor: pointer;
+    user-select: none;
+    transition: padding-block .15s;
 
-    .notification-text {
-        font-size: var(--font-size-small);
+    .notifications-body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        gap: calc(var(--gap-block) / 3);
+        padding-right: var(--body-gap-inline);
 
-        > strong {
-            display: inline-flex;
-            padding: .15rem .25rem;
-            color: var(--day-general-color);
-            border-radius: calc(var(--border-radius) / 2);
-            background-color: color-mix(in srgb, var(--day-general-color) 15%, var(--background-color));
+        .notification-text {
+            --notification-background-color-transparent: 15%;
 
-            [data-theme="dark"] & {
-                color: color-mix(in srgb, var(--day-general-color) 50%, var(--color));
+            font-size: var(--font-size-small);
+
+            & > strong {
+                display: inline-flex;
+                padding: .15rem .25rem;
+                color: var(--day-general-color);
+                border-radius: calc(var(--border-radius) / 2);
+                background-color: color-mix(in srgb, var(--day-general-color) var(--notification-background-color-transparent), var(--background-color));
+
+                [data-theme="dark"] & {
+                    color: color-mix(in srgb, var(--day-general-color) 50%, var(--color));
+                }
+            }
+        }
+
+        .notifications-arrow {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            transform: rotate(90deg);
+            transform-origin: center;
+            transition: transform .15s;
+        }
+    }
+
+    :root:not([data-calendar-notifications="open"]) & {
+        padding-block: calc(var(--body-gap-block) / 2);
+
+        .notifications-body {
+            flex-direction: row;
+            align-items: center;
+
+            .notification-text {
+                --margin-offset: calc(var(--gap-block) / 3 * -1);
+
+                transition: margin .15s;
+
+                &:first-child {
+                    margin-right: calc(var(--margin-offset) / 2);
+                }
+
+                &:not(:first-child) {
+                    margin-left: calc(var(--margin-offset) * 2);
+                    font-size: 0;
+
+                    > strong {
+                        --notification-background-color-transparent: 50%;
+
+                        padding: calc(var(--gap-block) / 2) calc(var(--gap-block) / 1.5);
+                        border: calc(var(--border-width) * 2) solid var(--background-color);
+                    }
+                }
+
+                & > strong {
+                    border-radius: calc(var(--border-radius) * 1.5);
+                }
+
+                & > span {
+                    font-size: 0;
+                }
+            }
+
+            .notifications-arrow {
+                top: calc(50% - calc(var(--font-size) / 2));
+                transform: rotate(0);
+                transition: top .15s, transform .15s;
             }
         }
     }
@@ -1554,6 +1638,15 @@ textarea {
                     transition: backdrop-filter .5s;
                 }
             }
+
+            &.private-secure {
+                min-height: var(--font-size);
+                justify-content: center;
+                color: color-mix(in srgb, var(--alert-color) 30%, var(--color) 10%);
+                border-radius: calc(var(--border-radius) / 2);
+                background-color: color-mix(in srgb, var(--alert-color) 10%, transparent);
+                box-shadow: 0 0 10px color-mix(in srgb, var(--alert-color) 20%, transparent);
+            }
         }
 
         &.alert-empty {
@@ -1562,7 +1655,7 @@ textarea {
             border-style: dashed;
 
             .alert-body {
-                height: var(--font-size);
+                min-height: var(--font-size);
             }
         }
     }

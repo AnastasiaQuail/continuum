@@ -7,8 +7,9 @@
     <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
 
     <script>
-        document.documentElement.setAttribute('data-theme', localStorage.getItem('site-theme'));
-        document.documentElement.setAttribute('data-sidebar', localStorage.getItem('site-sidebar-collapsed'));
+        Object.keys(localStorage)
+            .filter(key => key.startsWith('continuum-ls-'))
+            .map(key => document.documentElement.setAttribute(`data-${key.slice(13)}`, localStorage.getItem(key)));
     </script>
     {%- block stylesheets -%}
         <link rel="preconnect" href="https://fonts.googleapis.com">

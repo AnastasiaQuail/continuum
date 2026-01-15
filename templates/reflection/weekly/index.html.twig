@@ -52,33 +52,24 @@
                         </a>
                     </div>
                     <div class="week-body">
-                        <div class="alert alert-{{ not reflection ? 'empty' : 'success' }}">
-                            <div class="alert-title">
-                                {{- ux_icon('lucide:heart') -}}
-                                <span>Joy</span>
-                            </div>
-                            <div class="alert-body {{- reflection and reflection.joyPrivate ? ' private' }}">
-                                {{- reflection ? reflection.joy -}}
-                            </div>
-                        </div>
-                        <div class="alert alert-{{ not reflection ? 'empty' : 'warning' }}">
-                            <div class="alert-title">
-                                {{- ux_icon('lucide:triangle-alert') -}}
-                                <span>Difficulty</span>
-                            </div>
-                            <div class="alert-body {{- reflection and reflection.difficultyPrivate ? ' private' }}">
-                                {{- reflection ? reflection.difficulty -}}
-                            </div>
-                        </div>
-                        <div class="alert alert-{{ not reflection ? 'empty' : 'primary' }}">
-                            <div class="alert-title">
-                                {{- ux_icon('lucide:trophy') -}}
-                                <span>Achievement</span>
-                            </div>
-                            <div class="alert-body {{- reflection and reflection.achievementPrivate ? ' private' }}">
-                                {{- reflection ? reflection.achievement -}}
-                            </div>
-                        </div>
+                        {% include 'reflection/weekly/_alert.html.twig' with {
+                            type: 'joy',
+                            isEmpty: reflection is null,
+                            text: reflection ? reflection.joy,
+                            isPrivate: reflection ? reflection.joyPrivate,
+                        } %}
+                        {% include 'reflection/weekly/_alert.html.twig' with {
+                            type: 'difficulty',
+                            isEmpty: reflection is null,
+                            text: reflection ? reflection.difficulty,
+                            isPrivate: reflection ? reflection.difficultyPrivate,
+                        } %}
+                        {% include 'reflection/weekly/_alert.html.twig' with {
+                            type: 'achievement',
+                            isEmpty: reflection is null,
+                            text: reflection ? reflection.achievement,
+                            isPrivate: reflection ? reflection.achievementPrivate,
+                        } %}
                     </div>
                 </div>
             {%- endfor -%}

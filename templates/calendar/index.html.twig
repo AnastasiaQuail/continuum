@@ -12,12 +12,16 @@
 
 {% block main -%}
     {%- if upcomingNotifications is not empty -%}
-        <section class="card calendar calendar-upcoming-notification">
-            {%- for upcomingNotification in upcomingNotifications -%}
-                <div class="notification-text" data-event-type="{{ upcomingNotification.type.value }}">
-                    <strong>{{ upcomingNotification.title }}</strong> - {{ upcomingNotification.text -}}
-                </div>
-            {%- endfor -%}
+        <section class="card calendar calendar-upcoming-notifications" id="calendar-notifications">
+            <div class="notifications-body">
+                {%- for upcomingNotification in upcomingNotifications -%}
+                    <div class="notification-text" data-event-type="{{ upcomingNotification.type.value }}">
+                        <strong>{{ upcomingNotification.title }}</strong>
+                        <span>- {{ upcomingNotification.text -}}</span>
+                    </div>
+                {%- endfor -%}
+                <div class="notifications-arrow">{{ ux_icon('lucide:chevron-right') }}</div>
+            </div>
         </section>
     {%- endif -%}
 
@@ -46,7 +50,7 @@
                 {%- set firstDay = month ~ '-01' -%}
                 {%- set firstWeekDay = firstDay|date('N') -%}
 
-                <div class="month">
+                <div class="month" style="--month-offset: {{ firstWeekDay - 1 }};">
                     <div class="month-title">{{ month|date('F') }}</div>
                     <div class="month-days">
                         {%- if firstWeekDay > 1 -%}
@@ -57,12 +61,13 @@
 
                         {%- for dayNumber in 1..firstDay|date('t') -%}
                             {%- set day = month ~ '-' ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
+                            {%- set isWeekend = day|date('N') == 6 or day|date('N') == 7 -%}
 
                             {%- set dayEvent = events[day] is defined ? events[day].dayEvent : null -%}
                             {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
 
                             <a href="{{ path('app_calendar_day', {'day': day}) }}"
-                               class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}}"
+                               class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}} {{- isWeekend ? ' day-weekend' -}}"
                                {%- if dayEvent is not null %}data-event-type="{{ dayEvent.type.value }}"{% endif -%}>
                                 <span>{{ dayNumber }}</span>
 

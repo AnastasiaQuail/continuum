@@ -25,6 +25,9 @@ final class EditMoodReflectionType extends AbstractImmutableType
             ])
             ->add('text', null, [
                 'data' => $moodReflection?->getText() ?? '',
+                'attr' => [
+                    'autocomplete' => 'off',
+                ],
             ]);
     }
 

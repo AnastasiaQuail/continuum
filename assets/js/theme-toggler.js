@@ -1,63 +1,32 @@
-export default class {
-    #lsKey = 'site-theme';
-    #DARK = 'dark';
-    #LIGHT = 'light';
+import {Storage} from './components.js';
 
-    /**
-     * @return {string|null}
-     */
-    #get() {
-        const theme = localStorage.getItem(this.#lsKey);
-
-        if (theme === this.#DARK || theme === this.#LIGHT) {
-            return theme;
-        }
-
-        return null;
+export default class extends Storage {
+    constructor() {
+        super('continuum-ls-theme');
     }
 
     /**
-     * @param {string} theme
+     * @param {string} value
      */
-    #set(theme) {
-        localStorage.setItem(this.#lsKey, theme);
+    set(value) {
+        document.documentElement.dataset.theme = value;
     }
 
     /**
-     * @param {string} theme
+     * @return string
      */
-    #setDataset(theme) {
-        document.documentElement.dataset.theme = theme;
+    getDefault() {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
 
     /**
-     * @return {string}
+     * @param {string} id
      */
-    #detect() {
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? this.#DARK : this.#LIGHT;
-    }
-
-    init() {
-        let theme = this.#get();
-
-        if (null === theme) {
-            theme = this.#detect();
-            this.#set(theme);
-        }
-
-        this.#setDataset(theme);
-
-        window.addEventListener('storage', (event) => {
-            if (event.key === this.#lsKey) {
-                this.#setDataset(event.newValue);
-            }
-        });
-    }
-
-    toggle() {
-        const theme = this.#get() === this.#LIGHT ? this.#DARK : this.#LIGHT;
-
-        this.#set(theme);
-        this.#setDataset(theme);
+    onClick(id) {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector(id).onclick = () => {
+                this.save(this.get() === 'light' ? 'dark' : 'light');
+            };
+        })
     }
 }

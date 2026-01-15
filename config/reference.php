@@ -1,6 +1,4 @@
-<?php /** @noinspection ALL */
-
-declare(strict_types=1);
+<?php
 
 // This file is auto-generated and is for apps only. Bundles SHOULD NOT rely on its content.
 
