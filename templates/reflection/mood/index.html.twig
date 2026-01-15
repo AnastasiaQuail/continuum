@@ -48,7 +48,7 @@
 
     <section class="card card-calendar-mood">
         <div class="calendar">
-            <div class="month">
+            <article class="month">
                 {%- set current = user_date('now').format('Y-m-d') -%}
                 {%- set firstWeekDay = month.format('N') -%}
 
@@ -70,7 +70,7 @@
                         </a>
                     {%- endfor -%}
                 </div>
-            </div>
+            </article>
         </div>
     </section>
 {%- endblock %}

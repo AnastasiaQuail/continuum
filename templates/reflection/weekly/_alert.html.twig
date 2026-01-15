@@ -23,7 +23,7 @@
     }
 } -%}
 
-<div class="alert {{ isEmpty|default(false) ? 'alert-empty' : types[type].class }}">
+<article class="alert {{ isEmpty|default(false) ? 'alert-empty' : types[type].class }}">
     <div class="alert-title">
         {{- ux_icon(types[type].icon) -}}
         <span>{{ types[type].title }}</span>
@@ -33,4 +33,4 @@
             {{- isSecure ? ux_icon('lucide:lock') : text|default('') -}}
         {%- endblock -%}
     </div>
-</div>
+</article>

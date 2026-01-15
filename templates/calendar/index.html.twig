@@ -50,7 +50,7 @@
                 {%- set firstDay = month ~ '-01' -%}
                 {%- set firstWeekDay = firstDay|date('N') -%}
 
-                <div class="month" style="--month-offset: {{ firstWeekDay - 1 }};">
+                <article class="month" style="--month-offset: {{ firstWeekDay - 1 }};">
                     <div class="month-title">{{ month|date('F') }}</div>
                     <div class="month-days">
                         {%- if firstWeekDay > 1 -%}
@@ -81,7 +81,7 @@
                             </a>
                         {%- endfor -%}
                     </div>
-                </div>
+                </article>
             {%- endfor -%}
         </div>
     </section>
