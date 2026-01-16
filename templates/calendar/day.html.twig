@@ -47,6 +47,7 @@
                     <label class="form-control-radio-type" data-general-type="{{ choice.value }}">
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
+                               {%- if form.type.vars.required %}required="required"{% endif %}
                                {%- if choice.value == form.type.vars.value %}checked{% endif %}>
                         <span class="btn btn-sm">{{ choice.label }}</span>
                     </label>

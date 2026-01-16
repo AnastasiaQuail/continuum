@@ -23,6 +23,7 @@
                            data-general-type="{{ choice.data.color.value }}">
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
+                               {%- if form.type.vars.required %}required="required"{% endif %}
                                {%- if choice.value == form.type.vars.value %}checked{% endif %}>
                         <span class="btn">
                             {% if choice.value == 'terrible' %}
