@@ -17,10 +17,10 @@
 
         <div class="mb-3">
             {{- form_label(form.type) -}}
-            <div>
+            <div class="form-control-radio-type-group">
                 {%- for choice in form.type.vars.choices -%}
                     <label class="form-control-radio-type"
-                           data-event-type="{{ choice.data.toCalendarEventType.value }}">
+                           data-general-type="{{ choice.data.color.value }}">
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
                                {%- if choice.value == form.type.vars.value %}checked{% endif %}>

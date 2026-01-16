@@ -15,7 +15,7 @@
         <section class="card calendar calendar-upcoming-notifications" id="calendar-notifications">
             <div class="notifications-body">
                 {%- for upcomingNotification in upcomingNotifications -%}
-                    <div class="notification-text" data-event-type="{{ upcomingNotification.type.value }}">
+                    <div class="notification-text" data-general-type="{{ upcomingNotification.type.value }}">
                         <strong>{{ upcomingNotification.title }}</strong>
                         <span>- {{ upcomingNotification.text -}}</span>
                     </div>
@@ -68,13 +68,13 @@
 
                             <a href="{{ path('app_calendar_day', {'day': day}) }}"
                                class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}} {{- isWeekend ? ' day-weekend' -}}"
-                               {%- if dayEvent is not null %}data-event-type="{{ dayEvent.type.value }}"{% endif -%}>
+                               {%- if dayEvent is not null %}data-general-type="{{ dayEvent.type.value }}"{% endif -%}>
                                 <span>{{ dayNumber }}</span>
 
                                 {%- if hourEvents is not empty -%}
                                     <div class="day-badges">
                                         {%- for hourEvent in hourEvents -%}
-                                            <span class="day-badge" data-event-type="{{ hourEvent.type.value }}"></span>
+                                            <span class="day-badge" data-general-type="{{ hourEvent.type.value }}"></span>
                                         {%- endfor -%}
                                     </div>
                                 {%- endif -%}

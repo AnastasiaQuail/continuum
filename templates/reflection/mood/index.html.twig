@@ -14,12 +14,19 @@
 {% block main -%}
     <section class="card card-mood-chart">
         <div class="mood-chart" style="--chart-columns: {{ lastMoods|length }};">
-            {% for lastMood in lastMoods %}
-                <div class="chart-day" data-type="{{ lastMood != null ? lastMood.type.value }}"
-                     data-event-type="{{ lastMood != null ? lastMood.calendarEventType.value }}">
-                    <div class="chart-day-type"></div>
-                </div>
-            {% endfor %}
+            {%- for lastMood in lastMoods -%}
+                {%- if lastMood -%}
+                    <a class="chart-day" data-type="{{ lastMood.type.value }}"
+                       data-general-type="{{ lastMood.type.color.value }}"
+                       href="{{ path('app_mood_reflection_edit', {'day': lastMood.date.format('Y-m-d')}) }}">
+                        <div class="chart-day-type">{{ lastMood.date.format('j') }}</div>
+                    </a>
+                {%- else -%}
+                    <div class="chart-day">
+                        <div class="chart-day-type"></div>
+                    </div>
+                {%- endif -%}
+            {%- endfor -%}
         </div>
     </section>
 
@@ -65,7 +72,7 @@
 
                         <a href="{{ path('app_mood_reflection_edit', {'day': day}) }}"
                            class="day {{- day == current ? ' day-current' -}} {{- mood is not null ? ' day-past' }}"
-                           {%- if mood is not null %}data-event-type="{{ mood.calendarEventType.value }}"{% endif -%}>
+                           {%- if mood is not null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
                             <span>{{ dayNumber }}</span>
                         </a>
                     {%- endfor -%}

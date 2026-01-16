@@ -52,11 +52,6 @@ final class MoodReflection
         return $this->type;
     }
 
-    public function getCalendarEventType(): CalendarEventType
-    {
-        return $this->type->toCalendarEventType();
-    }
-
     public function setType(MoodType $type): void
     {
         $this->type = $type;

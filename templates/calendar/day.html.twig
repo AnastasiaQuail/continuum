@@ -17,7 +17,7 @@
             {%- for event in events -%}
                 {%- set eventDate = event.datetime.setTimezone(app.user.timezone) -%}
 
-                <div class="calendar-event" data-event-type="{{ event.type.value }}">
+                <div class="calendar-event" data-general-type="{{ event.type.value }}">
                     <span class="calendar-event-type">{{ event.title }}</span>
                     {%- if not event.allDay -%}
                         <span> at {{ eventDate.format('H:i') }}</span>
@@ -42,9 +42,9 @@
 
         <div class="mb-3">
             {{- form_label(form.type) -}}
-            <div>
+            <div class="form-control-radio-type-group">
                 {%- for choice in form.type.vars.choices -%}
-                    <label class="form-control-radio-type" data-event-type="{{ choice.value }}">
+                    <label class="form-control-radio-type" data-general-type="{{ choice.value }}">
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
                                {%- if choice.value == form.type.vars.value %}checked{% endif %}>

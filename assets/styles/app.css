@@ -29,15 +29,15 @@
     --color-zinc: oklch(55.2% 0.016 285.938);
     --color-neutral: oklch(55.6% 0 0);
     --color-stone: oklch(55.3% 0.013 58.071);
+    --color-light: oklch(0.982 0 89.876);
+    --color-dark: oklch(0.262 0.009 248.19);
 
-    --color: oklch(0.262 0.009 248.19);
-
-    --body-background-color: oklch(0.982 0 89.876);
-    --background-color: oklch(1 0 89.876);
-
-    --color-light: var(--body-background-color);
-    --color-dark: var(--color);
+    --color: var(--color-dark);
     --color-inverse: var(--color-light);
+    --general-color: var(--color);
+
+    --body-background-color: var(--color-inverse);
+    --background-color: #fff;
 
     --link-color: var(--color-blue);
 
@@ -68,19 +68,92 @@
 
 [data-theme="dark"] {
     --color-green: oklch(72.3% 0.219 149.579);
+    --color-light: oklch(0.911 0.007 247.901);
 
-    --color: oklch(0.911 0.007 247.901);
-
-    --body-background-color: oklch(0.262 0.009 248.19);
-    --background-color: oklch(0.295 0.009 248.141);
-
-    --color-light: var(--color);
-    --color-dark: var(--body-background-color);
+    --color: var(--color-light);
     --color-inverse: var(--color-dark);
+
+    --background-color: color-mix(in srgb, var(--body-background-color) 98%, #fff);
 
     --border-color: oklch(0.345 0.013 248.212);
 
     --control-border-color: oklch(0.428 0.015 248.172);
+}
+
+[data-general-type="red"] {
+    --general-color: var(--color-red);
+}
+
+[data-general-type="orange"] {
+    --general-color: var(--color-orange);
+}
+
+[data-general-type="amber"] {
+    --general-color: var(--color-amber);
+}
+
+[data-general-type="yellow"] {
+    --general-color: var(--color-yellow);
+}
+
+[data-general-type="lime"] {
+    --general-color: var(--color-lime);
+}
+
+[data-general-type="green"] {
+    --general-color: var(--color-green);
+}
+
+[data-general-type="emerald"] {
+    --general-color: var(--color-emerald);
+}
+
+[data-general-type="teal"] {
+    --general-color: var(--color-teal);
+}
+
+[data-general-type="cyan"] {
+    --general-color: var(--color-cyan);
+}
+
+[data-general-type="sky"] {
+    --general-color: var(--color-sky);
+}
+
+[data-general-type="blue"] {
+    --general-color: var(--color-blue);
+}
+
+[data-general-type="indigo"] {
+    --general-color: var(--color-indigo);
+}
+
+[data-general-type="violet"] {
+    --general-color: var(--color-violet);
+}
+
+[data-general-type="purple"] {
+    --general-color: var(--color-purple);
+}
+
+[data-general-type="fuchsia"] {
+    --general-color: var(--color-fuchsia);
+}
+
+[data-general-type="pink"] {
+    --general-color: var(--color-pink);
+}
+
+[data-general-type="rose"] {
+    --general-color: var(--color-rose);
+}
+
+[data-general-type="slate"] {
+    --general-color: var(--color-slate);
+}
+
+[data-general-type="stone"] {
+    --general-color: var(--color-stone);
 }
 
 *, ::after, ::before {
@@ -817,28 +890,36 @@ textarea {
     gap: calc(var(--gap-inline) / 4);
 }
 
-.form-control-radio-type {
-    & input[type="radio"] {
-        display: none;
-    }
+.form-control-radio-type-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--gap-inline) / 4);
 
-    & .btn {
-        --btn-general-color: var(--day-general-color);
-        --btn-border-color-transparent: 0%;
-        --btn-background-color-transparent: var(--transparent-color);
+    .form-control-radio-type {
+        display: inline-flex;
 
-        [data-theme="dark"] & {
-            --btn-color: var(--color-light);
+        & input[type="radio"] {
+            display: none;
         }
-    }
 
-    &:not(:has(input[type="radio"]:checked)) .btn {
-        --btn-color: var(--btn-general-color);
-        --btn-border-color-transparent: 0%;
-        --btn-background-color-transparent: 15%;
+        & .btn {
+            --btn-general-color: var(--general-color);
+            --btn-border-color-transparent: 0%;
+            --btn-background-color-transparent: var(--transparent-color);
 
-        &:hover {
-            --btn-border-color-transparent: 50%;
+            [data-theme="dark"] & {
+                --btn-color: var(--color-light);
+            }
+        }
+
+        &:not(:has(input[type="radio"]:checked)) .btn {
+            --btn-color: var(--btn-general-color);
+            --btn-border-color-transparent: 0%;
+            --btn-background-color-transparent: 15%;
+
+            &:hover {
+                --btn-border-color-transparent: 50%;
+            }
         }
     }
 }
@@ -1129,8 +1210,6 @@ textarea {
     --day-border-radius: calc(var(--day-font-size) / 1.6);
     --day-badge-size: 1.4vw;
 
-    --day-general-color: var(--color);
-
     display: grid;
     grid-template-columns: repeat(var(--grid-month-columns), 1fr);
     gap: var(--body-gap-block) var(--gap-inline);
@@ -1156,9 +1235,9 @@ textarea {
     .day {
         --day-color: var(--color-light);
         --day-border-width: 1px;
-        --day-border-color: var(--day-general-color);
+        --day-border-color: var(--general-color);
         --day-border-color-transparent: transparent;
-        --day-background-color: var(--day-general-color);
+        --day-background-color: var(--general-color);
         --day-background-color-transparent: var(--transparent-color);
         --fake-days: 1;
 
@@ -1192,7 +1271,7 @@ textarea {
         }
 
         .day-badge {
-            --day-badge-general-color: var(--day-general-color);
+            --day-badge-general-color: var(--general-color);
             --day-badge-border-color: var(--day-badge-general-color);
             --day-badge-border-color-transparent: 25%;
             --day-badge-background-color: var(--day-badge-general-color);
@@ -1244,10 +1323,10 @@ textarea {
             }
         }
 
-        &.day-past:not([data-event-type]) {
+        &.day-past:not([data-general-type]) {
             /* past days */
 
-            --day-general-color: var(--color-green);
+            --general-color: var(--color-green);
         }
 
         &:not(.day-past) {
@@ -1267,15 +1346,15 @@ textarea {
                 --day-background-color-transparent: 4%;
             }
 
-            &[data-event-type] {
+            &[data-general-type] {
                 /* future events */
 
-                --day-color: var(--day-general-color);
+                --day-color: var(--general-color);
                 --day-border-color-transparent: 5%;
                 --day-background-color-transparent: 15%;
 
                 [data-theme="dark"] & {
-                    --day-color: color-mix(in srgb, var(--day-general-color) var(--transparent-color-tiny), var(--color));
+                    --day-color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
                 }
             }
         }
@@ -1322,12 +1401,12 @@ textarea {
             & > strong {
                 display: inline-flex;
                 padding: .15rem .25rem;
-                color: var(--day-general-color);
+                color: var(--general-color);
                 border-radius: calc(var(--border-radius) / 2);
-                background-color: color-mix(in srgb, var(--day-general-color) var(--notification-background-color-transparent), var(--background-color));
+                background-color: color-mix(in srgb, var(--general-color) var(--notification-background-color-transparent), var(--background-color));
 
                 [data-theme="dark"] & {
-                    color: color-mix(in srgb, var(--day-general-color) var(--transparent-color-tiny), var(--color));
+                    color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
                 }
             }
         }
@@ -1389,46 +1468,6 @@ textarea {
     }
 }
 
-[data-event-type="blue"] {
-    --day-general-color: var(--color-blue);
-}
-
-[data-event-type="indigo"] {
-    --day-general-color: var(--color-indigo);
-}
-
-[data-event-type="purple"] {
-    --day-general-color: var(--color-purple);
-}
-
-[data-event-type="pink"] {
-    --day-general-color: var(--color-pink);
-}
-
-[data-event-type="red"] {
-    --day-general-color: var(--color-red);
-}
-
-[data-event-type="orange"] {
-    --day-general-color: var(--color-orange);
-}
-
-[data-event-type="yellow"] {
-    --day-general-color: var(--color-yellow);
-}
-
-[data-event-type="green"] {
-    --day-general-color: var(--color-green);
-}
-
-[data-event-type="teal"] {
-    --day-general-color: var(--color-teal);
-}
-
-[data-event-type="cyan"] {
-    --day-general-color: var(--color-cyan);
-}
-
 @media (576px <= width < 768px) {
     .calendar {
         --grid-month-columns: 3;
@@ -1480,9 +1519,9 @@ textarea {
     gap: calc(var(--gap-inline) / 2);
     align-items: center;
     padding: calc(var(--gap-block) / 2) var(--gap-inline);
-    border: var(--border-width) solid color-mix(in oklch, var(--day-general-color) 20%, transparent);
+    border: var(--border-width) solid color-mix(in oklch, var(--general-color) 20%, transparent);
     border-radius: var(--border-radius);
-    background-color: color-mix(in oklch, var(--day-general-color) 10%, transparent);
+    background-color: color-mix(in oklch, var(--general-color) 10%, transparent);
 
     & + & {
         margin-top: calc(var(--gap-block) / 2);
@@ -1494,7 +1533,7 @@ textarea {
         color: var(--color-light);
         font-weight: var(--font-weight-bold);
         border-radius: calc(var(--border-radius) / 2);
-        background-color: color-mix(in oklch, var(--day-general-color) var(--transparent-color), transparent);
+        background-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
     }
 
     form {
@@ -1524,16 +1563,6 @@ textarea {
             position: relative;
             overflow: hidden;
 
-            .chart-day-type {
-                position: absolute;
-                width: 100%;
-                height: var(--chart-bar-height);
-                top: calc(var(--chart-bar-height) * calc(var(--chart-bar-position) - 1) + var(--chart-padding));
-                border-radius: 2px;
-                background-color: color-mix(in oklch, var(--day-general-color, var(--border-color)) var(--transparent-color), transparent);
-                box-shadow: 0 12px 24px var(--day-general-color, var(--border-color));
-            }
-
             &[data-type="great"] {
                 --chart-bar-position: 1;
             }
@@ -1548,6 +1577,32 @@ textarea {
 
             &[data-type="terrible"] {
                 --chart-bar-position: 5;
+            }
+
+            &:not([data-general-type]) {
+                --general-color: var(--border-color);
+            }
+
+            .chart-day-type {
+                position: absolute;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                height: var(--chart-bar-height);
+                top: calc(var(--chart-bar-height) * calc(var(--chart-bar-position) - 1) + var(--chart-padding));
+                font-size: 0;
+                color: var(--color-light);
+                border-radius: 2px;
+                background-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
+                box-shadow: 0 12px 24px var(--general-color, var(--border-color));
+                transition: height .15s, font-size .15s, transform .15s;
+            }
+
+            &[data-general-type]:hover .chart-day-type {
+                height: calc(var(--chart-bar-height) * 2);
+                font-size: var(--font-size-small);
+                transform: translateY(calc(var(--chart-bar-height) / 2 * -1));
             }
         }
     }

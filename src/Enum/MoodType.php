@@ -12,14 +12,14 @@ enum MoodType: string
     case Good = 'good';
     case Great = 'great';
 
-    public function toCalendarEventType(): CalendarEventType
+    public function getColor(): Color
     {
         return match ($this) {
-            self::Terrible => CalendarEventType::Red,
-            self::Bad => CalendarEventType::Yellow,
-            self::Okay => CalendarEventType::Teal,
-            self::Good => CalendarEventType::Cyan,
-            self::Great => CalendarEventType::Blue,
+            self::Terrible => Color::Red,
+            self::Bad => Color::Yellow,
+            self::Okay => Color::Green,
+            self::Good => Color::Sky,
+            self::Great => Color::Indigo,
         };
     }
 }
