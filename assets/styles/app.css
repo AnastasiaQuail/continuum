@@ -7,40 +7,39 @@
     --font-weight: 300;
     --font-weight-bold: 400;
 
-    --color: #212529;
+    --color: oklch(0.262 0.009 248.19);
 
-    --body-background-color: #f9f9f9;
-    --background-color: #fff;
+    --body-background-color: oklch(0.982 0 89.876);
+    --background-color: oklch(1 0 89.876);
 
     --color-light: var(--body-background-color);
     --color-dark: var(--color);
     --color-inverse: var(--color-light);
 
-    --color-blue: #0d6efd;
-    --background-color-blue: #6ea8fe;
-    --color-indigo: #6610f2;
-    --background-color-indigo: #a370f7;
-    --color-purple: #6f42c1;
-    --background-color-purple: #a98eda;
-    --color-pink: #d63384;
-    --background-color-pink: #e685b5;
-    --color-red: #dc3545;
-    --background-color-red: #ea868f;
-    --color-orange: #fd7e14;
-    --background-color-orange: #feb272;
-    --color-yellow: #ffc107;
-    --background-color-yellow: #ffda6a;
-    --color-green: #198754;
-    --background-color-green: #75b798;
-    --color-teal: #20c997;
-    --background-color-teal: #79dfc1;
-    --color-cyan: #0dcaf0;
-    --background-color-cyan: #6edff6;
-    --color-gray: #6c757d;
-    --background-color-gray: #adb5bd;
+    --color-red: oklch(63.7% 0.237 25.331);
+    --color-orange: oklch(70.5% 0.213 47.604);
+    --color-amber: oklch(76.9% 0.188 70.08);
+    --color-yellow: oklch(79.5% 0.184 86.047);
+    --color-lime: oklch(76.8% 0.233 130.85);
+    --color-green: oklch(62.7% 0.194 149.214); /* oklch(72.3% 0.219 149.579) */
+    --color-emerald: oklch(69.6% 0.17 162.48);
+    --color-teal: oklch(70.4% 0.14 182.503);
+    --color-cyan: oklch(71.5% 0.143 215.221);
+    --color-sky: oklch(68.5% 0.169 237.323);
+    --color-blue: oklch(62.3% 0.214 259.815);
+    --color-indigo: oklch(58.5% 0.233 277.117);
+    --color-violet: oklch(60.6% 0.25 292.717);
+    --color-purple: oklch(62.7% 0.265 303.9);
+    --color-fuchsia: oklch(66.7% 0.295 322.15);
+    --color-pink: oklch(65.6% 0.241 354.308);
+    --color-rose: oklch(64.5% 0.246 16.439);
+    --color-slate: oklch(55.4% 0.046 257.417);
+    --color-gray: oklch(55.1% 0.027 264.364);
+    --color-zinc: oklch(55.2% 0.016 285.938);
+    --color-neutral: oklch(55.6% 0 0);
+    --color-stone: oklch(55.3% 0.013 58.071);
 
     --link-color: var(--color-blue);
-    --link-background-color: var(--background-color-blue);
 
     --header-height: 40px;
 
@@ -53,10 +52,10 @@
     --body-gap-inline: calc(var(--gap-inline) * 1.5);
 
     --border-width: 1px;
-    --border-color: #dee2e6;
+    --border-color: oklch(0.911 0.007 247.901);
     --border-radius: .5rem;
     --body-border-width: var(--border-width);
-    --body-border-color: color-mix(in srgb, var(--border-color) 50%, transparent);
+    --body-border-color: color-mix(in oklch, var(--border-color) 50%, transparent);
     --body-border-radius: calc(var(--border-radius) * 2);
 
     --control-padding-inline: .75rem;
@@ -67,30 +66,18 @@
 }
 
 [data-theme="dark"] {
-    --color: #dee2e6;
-    --body-background-color: #212529;
-    --background-color: #292d31;
-    --border-color: #343a40;
+    --color: oklch(0.911 0.007 247.901);
+    --body-background-color: oklch(0.262 0.009 248.19);
+    --background-color: oklch(0.295 0.009 248.141);
+    --border-color: oklch(0.345 0.013 248.212);
 
     --color-light: var(--color);
     --color-dark: var(--body-background-color);
     --color-inverse: var(--color-dark);
 
-    --background-color-blue: var(--color-blue);
-    --background-color-indigo: var(--color-indigo);
-    --background-color-purple: var(--color-purple);
-    --background-color-pink: var(--color-pink);
-    --background-color-red: var(--color-red);
-    --background-color-orange: var(--color-orange);
-    --background-color-yellow: var(--color-yellow);
-    --background-color-green: var(--color-green);
-    --background-color-teal: var(--color-teal);
-    --background-color-cyan: var(--color-cyan);
-    --background-color-gray: var(--color-gray);
+    --color-green: oklch(72.3% 0.219 149.579);
 
-    --control-border-color: #495057;
-
-    --background-color-transparent: 90%;
+    --control-border-color: oklch(0.428 0.015 248.172);
 }
 
 *, ::after, ::before {
@@ -211,8 +198,8 @@ textarea {
 
     &:after {
         --clr: var(--body-background-color);
-        --clr_33: color-mix(in srgb, var(--clr) 90%, transparent);
-        --clr_66: color-mix(in srgb, var(--clr) 40%, transparent);
+        --clr_33: color-mix(in oklch, var(--clr) 90%, transparent);
+        --clr_66: color-mix(in oklch, var(--clr) 40%, transparent);
 
         content: '';
         position: absolute;
@@ -292,7 +279,7 @@ textarea {
                 --h-b-color-transparent: 10%;
 
                 color: var(--link-color);
-                background-color: color-mix(in srgb, var(--link-color) var(--h-b-color-transparent), transparent);
+                background-color: color-mix(in oklch, var(--link-color) var(--h-b-color-transparent), transparent);
 
                 [data-theme="dark"] & {
                     --h-b-color-transparent: 15%;
@@ -388,7 +375,7 @@ textarea {
                         &:hover {
                             --d-i-color-transparent: 5%;
 
-                            background-color: color-mix(in srgb, var(--color-gray) var(--d-i-color-transparent), transparent);
+                            background-color: color-mix(in oklch, var(--color-gray) var(--d-i-color-transparent), transparent);
 
                             [data-theme="dark"] & {
                                 --d-i-color-transparent: 10%;
@@ -409,7 +396,7 @@ textarea {
             &:hover {
                 .header-button {
                     color: var(--link-color);
-                    background-color: color-mix(in srgb, var(--link-color) 10%, transparent);
+                    background-color: color-mix(in oklch, var(--link-color) 10%, transparent);
                     cursor: default;
                 }
 
@@ -467,12 +454,12 @@ textarea {
                     transition: color .15s, background-color .15s;
 
                     &:hover {
-                        background-color: color-mix(in srgb, var(--color-gray) 5%, transparent);
+                        background-color: color-mix(in oklch, var(--color-gray) 5%, transparent);
                     }
 
                     &.active {
                         color: var(--link-color);
-                        background-color: color-mix(in srgb, var(--link-color) 10%, transparent);
+                        background-color: color-mix(in oklch, var(--link-color) 10%, transparent);
                     }
 
                     .dropdown-toggle-chevron {
@@ -654,7 +641,7 @@ textarea {
             & > span + span {
                 margin-left: calc(var(--gap-inline) / 2);
                 padding-left: calc(var(--gap-inline) / 2);
-                border-left: var(--border-width) solid color-mix(in srgb, var(--color) 50%, transparent);
+                border-left: var(--border-width) solid color-mix(in oklch, var(--color) 50%, transparent);
             }
         }
 
@@ -718,7 +705,7 @@ textarea {
         & + &::before,
         &:not(:last-child) {
             font-weight: var(--font-weight-light);
-            color: color-mix(in srgb, var(--color) 70%, transparent);
+            color: color-mix(in oklch, var(--color) 70%, transparent);
         }
 
         a {
@@ -735,7 +722,7 @@ textarea {
     display: inline-block;
     margin-bottom: calc(var(--gap-block) / 2);
     font-size: var(--font-size-medium);
-    color: color-mix(in srgb, var(--color) 70%, transparent);
+    color: color-mix(in oklch, var(--color) 70%, transparent);
 }
 
 .form-control {
@@ -756,19 +743,19 @@ textarea {
     &:focus {
         color: var(--color);
         background-color: var(--background-color);
-        border-color: color-mix(in srgb, var(--link-background-color) 50%, var(--control-border-color));
+        border-color: color-mix(in oklch, var(--link-color) var(--background-color-transparent), transparent);
         outline: 0;
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
     }
 
     &::placeholder {
-        color: color-mix(in srgb, var(--color) 25%, transparent);
+        color: color-mix(in oklch, var(--color) 25%, transparent);
         opacity: 1;
     }
 
     .was-validated &:invalid,
     &.is-invalid {
-        border-color: color-mix(in srgb, var(--color-red) var(--background-color-transparent), transparent);
+        border-color: color-mix(in oklch, var(--color-red) var(--background-color-transparent), transparent);
     }
 }
 
@@ -797,14 +784,14 @@ textarea {
     }
 
     &:focus {
-        border-color: color-mix(in srgb, var(--link-background-color) 50%, var(--control-border-color));
+        border-color: color-mix(in oklch, var(--link-color) var(--background-color-transparent), transparent);
         outline: 0;
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
     }
 
     &:checked {
         border-color: transparent;
-        background-color: color-mix(in srgb, var(--color-blue) var(--background-color-transparent), var(--background-color));
+        background-color: color-mix(in oklch, var(--color-blue) var(--background-color-transparent), transparent);
 
         &[type=checkbox] {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
@@ -817,7 +804,7 @@ textarea {
 
     .was-validated &:invalid,
     &.is-invalid {
-        border-color: color-mix(in srgb, var(--color-red) var(--background-color-transparent), transparent);
+        border-color: color-mix(in oklch, var(--color-red) var(--background-color-transparent), transparent);
     }
 }
 
@@ -909,9 +896,9 @@ textarea {
     vertical-align: middle;
     cursor: pointer;
     user-select: none;
-    border: var(--border-width) solid color-mix(in srgb, var(--btn-border-color) var(--btn-border-color-transparent), transparent);
+    border: var(--border-width) solid color-mix(in oklch, var(--btn-border-color) var(--btn-border-color-transparent), transparent);
     border-radius: var(--border-radius);
-    background-color: color-mix(in srgb, var(--btn-background-color) var(--btn-background-color-transparent), transparent);
+    background-color: color-mix(in oklch, var(--btn-background-color) var(--btn-background-color-transparent), transparent);
     transition: color .15s, background-color .15s, border-color .15s;
 
     &:hover {
@@ -984,15 +971,15 @@ textarea {
 
 .alert {
     --alert-color: var(--color);
-    --alert-background-color-transparent: 15%;
+    --alert-background-color-transparent: 10%;
 
     position: relative;
     padding: calc(var(--gap-block) * 0.75) var(--gap-block);
     margin-bottom: var(--gap-block);
-    color: color-mix(in srgb, var(--alert-color) 90%, var(--color));
-    border: var(--border-width) solid color-mix(in srgb, var(--alert-color) 25%, transparent);
+    color: color-mix(in srgb, var(--alert-color) 80%, var(--color));
+    border: var(--border-width) solid color-mix(in oklch, var(--alert-color) 20%, transparent);
     border-radius: var(--border-radius);
-    background-color: color-mix(in srgb, var(--alert-color) var(--alert-background-color-transparent), transparent);
+    background-color: color-mix(in oklch, var(--alert-color) var(--alert-background-color-transparent), transparent);
 
     a {
         color: inherit;
@@ -1058,13 +1045,9 @@ textarea {
     display: flex;
     height: var(--progress-height);
     width: 100%;
-    background-color: color-mix(in srgb, var(--progress-color) var(--progress-color-transparent), transparent);
-    border: var(--progress-border-width) solid color-mix(in srgb, var(--progress-color) var(--progress-color-transparent), transparent);
+    background-color: color-mix(in oklch, var(--progress-color) var(--progress-color-transparent), transparent);
+    border: var(--progress-border-width) solid color-mix(in oklch, var(--progress-color) var(--progress-color-transparent), transparent);
     border-radius: var(--progress-border-radius);
-
-    [data-theme="dark"] & {
-        --progress-color-transparent: 15%;
-    }
 
     .progress-bar {
         position: relative;
@@ -1184,8 +1167,8 @@ textarea {
         font-size: var(--day-font-size);
         text-decoration: none;
         color: var(--day-color);
-        background-color: color-mix(in srgb, var(--day-background-color) var(--day-background-color-transparent), transparent);
-        border: var(--day-border-width) solid color-mix(in srgb, var(--day-border-color) var(--day-border-color-transparent), transparent);
+        background-color: color-mix(in oklch, var(--day-background-color) var(--day-background-color-transparent), transparent);
+        border: var(--day-border-width) solid color-mix(in oklch, var(--day-border-color) var(--day-border-color-transparent), transparent);
         border-radius: var(--day-border-radius);
         cursor: pointer;
         user-select: none;
@@ -1245,7 +1228,7 @@ textarea {
         }
 
         &.day-inactive {
-            color: color-mix(in srgb, var(--day-color) 50%, transparent);
+            color: color-mix(in oklch, var(--day-color) 50%, transparent);
             opacity: .5;
         }
 
@@ -1277,7 +1260,7 @@ textarea {
             }
 
             &.day-weekend {
-                --day-color: color-mix(in srgb, var(--color) 60%, transparent);
+                --day-color: color-mix(in oklch, var(--color) 60%, transparent);
                 --day-background-color-transparent: 4%;
             }
 
@@ -1289,9 +1272,7 @@ textarea {
                 --day-background-color-transparent: 15%;
 
                 [data-theme="dark"] & {
-                    --day-color: color-mix(in srgb, var(--day-general-color) 20%, var(--color));
-                    --day-border-color-transparent: 15%;
-                    --day-background-color-transparent: 25%;
+                    --day-color: color-mix(in srgb, var(--day-general-color) 80%, var(--color));
                 }
             }
         }
@@ -1331,7 +1312,7 @@ textarea {
         padding-right: var(--body-gap-inline);
 
         .notification-text {
-            --notification-background-color-transparent: 15%;
+            --notification-background-color-transparent: 10%;
 
             font-size: var(--font-size-small);
 
@@ -1343,7 +1324,7 @@ textarea {
                 background-color: color-mix(in srgb, var(--day-general-color) var(--notification-background-color-transparent), var(--background-color));
 
                 [data-theme="dark"] & {
-                    color: color-mix(in srgb, var(--day-general-color) 50%, var(--color));
+                    color: color-mix(in srgb, var(--day-general-color) 80%, var(--color));
                 }
             }
         }
@@ -1496,9 +1477,9 @@ textarea {
     gap: calc(var(--gap-inline) / 2);
     align-items: center;
     padding: calc(var(--gap-block) / 2) var(--gap-inline);
-    border: var(--border-width) solid color-mix(in srgb, var(--day-general-color) 20%, transparent);
+    border: var(--border-width) solid color-mix(in oklch, var(--day-general-color) 20%, transparent);
     border-radius: var(--border-radius);
-    background-color: color-mix(in srgb, var(--day-general-color) 5%, var(--background-color));
+    background-color: color-mix(in oklch, var(--day-general-color) 10%, transparent);
 
     & + & {
         margin-top: calc(var(--gap-block) / 2);
@@ -1510,7 +1491,7 @@ textarea {
         color: var(--color-light);
         font-weight: var(--font-weight-bold);
         border-radius: calc(var(--border-radius) / 2);
-        background-color: color-mix(in srgb, var(--day-general-color) var(--background-color-transparent), transparent);
+        background-color: color-mix(in oklch, var(--day-general-color) var(--background-color-transparent), transparent);
     }
 
     form {
@@ -1546,7 +1527,7 @@ textarea {
                 height: var(--chart-bar-height);
                 top: calc(var(--chart-bar-height) * calc(var(--chart-bar-position) - 1) + var(--chart-padding));
                 border-radius: 2px;
-                background-color: color-mix(in srgb, var(--day-general-color, var(--border-color)) var(--background-color-transparent), transparent);
+                background-color: color-mix(in oklch, var(--day-general-color, var(--border-color)) var(--background-color-transparent), transparent);
                 box-shadow: 0 12px 24px var(--day-general-color, var(--border-color));
             }
 
@@ -1613,7 +1594,7 @@ textarea {
             gap: calc(var(--gap-inline) / 4);
             padding-top: 2px;
             font-size: var(--font-size-small);
-            color: color-mix(in srgb, var(--alert-color) 50%, var(--color));
+            color: color-mix(in srgb, var(--alert-color) 80%, var(--color));
             cursor: default;
             opacity: .7;
         }
@@ -1644,8 +1625,8 @@ textarea {
                 justify-content: center;
                 color: color-mix(in srgb, var(--alert-color) 30%, var(--color) 10%);
                 border-radius: calc(var(--border-radius) / 2);
-                background-color: color-mix(in srgb, var(--alert-color) 10%, transparent);
-                box-shadow: 0 0 10px color-mix(in srgb, var(--alert-color) 20%, transparent);
+                background-color: color-mix(in oklch, var(--alert-color) 10%, transparent);
+                box-shadow: 0 0 10px color-mix(in oklch, var(--alert-color) 20%, transparent);
             }
         }
 
@@ -1675,13 +1656,12 @@ textarea {
 
                 .form-control,
                 .form-check-input:not(:checked) {
-                    background-color: color-mix(in srgb, var(--background-color) 60%, transparent);
+                    background-color: color-mix(in oklch, var(--background-color) 40%, transparent);
                 }
 
                 .form-check-label {
                     font-size: var(--font-size-small);
                 }
-
             }
         }
     }
