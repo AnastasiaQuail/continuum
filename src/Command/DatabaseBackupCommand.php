@@ -19,7 +19,7 @@ final readonly class DatabaseBackupCommand
     public function __construct(
         #[Autowire(env: 'DATABASE_URL')]
         private string $databaseUrl,
-        #[Autowire('%kernel.project_dir%/var/backups')]
+        #[Autowire('%kernel.project_dir%/data/backups')]
         private string $backupDir,
     ) {}
 
