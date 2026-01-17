@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% set monthName = month.format('F Y') %}
-{% set isCurrentWeek = monthName == user_date('now')|date('F Y') %}
+{% set isCurrentMonth = monthName == user_date('now')|date('F Y') %}
 
-{% block title %}Mood tracker{{ not isCurrentWeek ? ' | ' ~ monthName }}{% endblock %}
+{% block title %}Mood tracker{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}mood-tracker{% endblock %}
 
 {% set breadcrumbs = [

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Continuum\Entity;
 
-use Continuum\Enum\CalendarEventType;
 use Continuum\Enum\MoodType;
 use Continuum\Repository\MoodReflectionRepository;
 use DateTimeImmutable;

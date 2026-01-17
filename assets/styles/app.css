@@ -1262,7 +1262,7 @@ textarea {
     }
 
     .day {
-        --day-color: var(--color-light);
+        --day-color: var(--color);
         --day-border-width: 1px;
         --day-border-color: var(--general-color);
         --day-border-color-transparent: transparent;
@@ -1352,16 +1352,19 @@ textarea {
             }
         }
 
-        &.day-past:not([data-general-type]) {
+        &.day-past {
             /* past days */
 
-            --general-color: var(--color-green);
+            --day-color: var(--color-light);
+
+            &:not([data-general-type]) {
+                --general-color: var(--color-green);
+            }
         }
 
         &:not(.day-past) {
             /* empty current and future days */
 
-            --day-color: var(--color);
             --day-border-color-transparent: 3%;
             --day-background-color-transparent: 2%;
 
@@ -1371,7 +1374,12 @@ textarea {
             }
 
             &.day-weekend {
-                --day-color: color-mix(in oklch, var(--color) 60%, transparent);
+                /* current and future weekend days */
+
+                &:not(.day-current) {
+                    --day-color: color-mix(in oklch, var(--color) 60%, transparent);
+                }
+
                 --day-background-color-transparent: 4%;
             }
 
@@ -1751,5 +1759,102 @@ textarea {
                 }
             }
         }
+    }
+}
+
+.card-body-measurements {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--body-gap-block);
+}
+
+.body-measurement {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--gap-block) / 3);
+
+    .measurement-date {
+        padding-inline: calc(var(--gap-inline) / 1.5);
+
+        & > a {
+            font-size: var(--font-size-small);
+            text-decoration: none;
+
+            &:not(:hover) {
+                color: color-mix(in oklch, var(--color) 80%, transparent);
+            }
+        }
+    }
+
+    .measurement-values,
+    .measurement-values-fat {
+        display: flex;
+        flex-wrap: wrap;
+        gap: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
+    }
+
+    .measurement-values {
+        --measurement-color: var(--color);
+        --measurement-color-transparent: 15%;
+        --measurement-label-color: var(--color);
+        --measurement-label-color-transparent: 80%;
+
+        padding: calc(var(--gap-block) / 1.5) calc(var(--gap-inline) / 1.5);
+        border-radius: var(--border-radius);
+        background-color: color-mix(in oklch, var(--measurement-color) 2%, transparent);
+
+        .measurement-values-fat {
+            --measurement-color: var(--color-orange);
+            --measurement-color-transparent: 80%;
+            --measurement-label-color: var(--color-light);
+            --measurement-label-color-transparent: 100%;
+
+            width: 100%;
+        }
+
+        .measurement-value {
+            --value-color: color-mix(in oklch, var(--measurement-color) var(--measurement-color-transparent), transparent);
+
+            display: inline-flex;
+            border: var(--border-width) solid var(--value-color);
+            border-radius: calc(var(--border-radius) / 2);
+            overflow: hidden;
+
+            .measurement-label,
+            .measurement-body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .measurement-label {
+                padding: 0 calc(var(--gap-inline) / 2);
+                font-size: var(--font-size-small);
+                color: color-mix(in oklch, var(--measurement-label-color) var(--measurement-label-color-transparent), transparent);
+                background-color: var(--value-color);
+                user-select: none;
+            }
+
+            .measurement-body {
+                gap: calc(var(--gap-inline) / 6);
+                align-items: baseline;
+                padding: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 3);
+
+                & > span:last-child {
+                    font-size: var(--font-size-small);
+                    opacity: .6;
+                }
+            }
+        }
+    }
+
+    &.body-empty {
+        flex-direction: row;
+        gap: calc(var(--gap-block) / 2);
+        padding: var(--gap-block) var(--gap-inline);
+        color: color-mix(in oklch, var(--color) 40%, transparent);
+        border: var(--border-width) dashed color-mix(in oklch, var(--color) 20%, transparent);
+        border-radius: var(--border-radius);
+        user-select: none;
     }
 }

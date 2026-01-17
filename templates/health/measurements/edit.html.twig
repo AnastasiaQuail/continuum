@@ -1,16 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Body measurements | {{ user_date('now').format('j F Y') }}{% endblock %}
+{% set date = measurement ? measurement.datetime : user_date('now') %}
+
+{% block title %}Body measurements | {{ date.format('j F Y') }}{% endblock %}
 {% block body_id %}body-measurement-edit{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Body measurements' },
-    { label: (measurement ? measurement.datetime : user_date('now')).format('Y F j, H:i') },
+    { label: 'Body measurements', url: path('app_health_measurements') },
+    { label: date.format('F Y'), url: path('app_health_measurements', {'month': date.format('Y-m')}) },
+    { label: date.format('j \\i\\n H:i') },
 ] %}
 
 {% block main -%}
     <section class="card">
-        <h3 class="card-title">{{ measurement ? 'Add measurement' : 'Edit measurement' }}</h3>
+        <h3 class="card-title">{{ measurement ? 'Edit measurement' : 'Add measurement' }}</h3>
 
         {{- form_start(form, {method: 'POST', action: path('app_health_measurement_edit', {id: measurement ? measurement.id})}) -}}
 

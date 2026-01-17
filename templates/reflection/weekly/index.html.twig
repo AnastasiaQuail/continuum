@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% set monthName = month.format('F Y') %}
-{% set isCurrentWeek = monthName == user_date('now').format('F Y') %}
+{% set isCurrentMonth = monthName == user_date('now').format('F Y') %}
 
-{% block title %}Weekly reflection{{ not isCurrentWeek ? ' | ' ~ monthName }}{% endblock %}
+{% block title %}Weekly reflection{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}weekly-reflection{% endblock %}
 
 {% set breadcrumbs = [

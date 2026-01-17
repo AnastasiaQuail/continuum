@@ -21,6 +21,17 @@ final readonly class BodyMeasurementService
         private BodyMeasurementRepository $repository,
     ) {}
 
+    /**
+     * @return array<string, BodyMeasurement>
+     */
+    public function getByMonth(User $user, DateTimeImmutable $date): array
+    {
+        $year = (int) $date->format('Y');
+        $month = (int) $date->format('n');
+
+        return $this->repository->findByMonth($year, $month, $user->getTimezone());
+    }
+
     public function save(User $user, ?BodyMeasurement $measurement, EditBodyMeasurement $dto): BodyMeasurement
     {
         if ($measurement === null) {

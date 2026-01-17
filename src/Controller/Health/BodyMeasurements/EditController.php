@@ -21,7 +21,7 @@ final class EditController extends AbstractController
         private readonly BodyMeasurementService $bodyMeasurementService,
     ) {}
 
-    #[Route(path: '/health/measurements/{id?}', name: 'app_health_measurement_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/health/measurements/body/{id?}', name: 'app_health_measurement_edit', methods: ['GET', 'POST'])]
     public function __invoke(
         #[CurrentUser] User $user,
         Request $request,
@@ -43,7 +43,7 @@ final class EditController extends AbstractController
                 sprintf('The "%s" measurement was saved', $measurement->getDatetime()->format('Y-m-d H:i:s')),
             );
 
-            return $this->redirectToRoute('app_health_measurement_edit');
+            return $this->redirectToRoute('app_health_measurements');
         }
 
         return $this->render('health/measurements/edit.html.twig', [
