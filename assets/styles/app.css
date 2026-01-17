@@ -1087,7 +1087,7 @@ textarea {
     --alert-background-color-transparent: 10%;
 
     position: relative;
-    padding: calc(var(--gap-block) * 0.75) var(--gap-block);
+    padding: calc(var(--gap-block) * 0.75) var(--gap-inline);
     margin-bottom: var(--gap-block);
     color: color-mix(in srgb, var(--alert-color) var(--transparent-color-tiny), var(--color));
     border: var(--border-width) solid color-mix(in oklch, var(--alert-color) 20%, transparent);
@@ -1655,16 +1655,15 @@ textarea {
 
         .week-title {
             font-size: var(--font-size-small);
-            opacity: .8;
 
             > a {
                 display: inline-flex;
-                padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
+                padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
                 text-decoration: none;
                 transition: color .15s;
 
                 &:not(:hover) {
-                    color: var(--color);
+                    color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
                 }
             }
         }
@@ -1765,23 +1764,19 @@ textarea {
 .card-body-measurements {
     display: flex;
     flex-direction: column-reverse;
-    gap: var(--body-gap-block);
+    gap: calc(var(--body-gap-block) / 1.5);
 }
 
 .body-measurement {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--gap-block) / 3);
-
     .measurement-date {
-        padding-inline: calc(var(--gap-inline) / 1.5);
-
         & > a {
+            display: inline-flex;
+            padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
             font-size: var(--font-size-small);
             text-decoration: none;
 
             &:not(:hover) {
-                color: color-mix(in oklch, var(--color) 80%, transparent);
+                color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
             }
         }
     }
@@ -1797,15 +1792,15 @@ textarea {
         --measurement-color: var(--color);
         --measurement-color-transparent: 15%;
         --measurement-label-color: var(--color);
-        --measurement-label-color-transparent: 80%;
+        --measurement-label-color-transparent: var(--transparent-color-tiny);
 
-        padding: calc(var(--gap-block) / 1.5) calc(var(--gap-inline) / 1.5);
+        padding: calc(var(--gap-block) * 0.75) var(--gap-inline);
         border-radius: var(--border-radius);
         background-color: color-mix(in oklch, var(--measurement-color) 2%, transparent);
 
         .measurement-values-fat {
             --measurement-color: var(--color-orange);
-            --measurement-color-transparent: 80%;
+            --measurement-color-transparent: var(--transparent-color);
             --measurement-label-color: var(--color-light);
             --measurement-label-color-transparent: 100%;
 
@@ -1828,7 +1823,7 @@ textarea {
             }
 
             .measurement-label {
-                padding: 0 calc(var(--gap-inline) / 2);
+                padding: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 2);
                 font-size: var(--font-size-small);
                 color: color-mix(in oklch, var(--measurement-label-color) var(--measurement-label-color-transparent), transparent);
                 background-color: var(--value-color);
@@ -1849,7 +1844,7 @@ textarea {
     }
 
     &.body-empty {
-        flex-direction: row;
+        display: flex;
         gap: calc(var(--gap-block) / 2);
         padding: var(--gap-block) var(--gap-inline);
         color: color-mix(in oklch, var(--color) 40%, transparent);
