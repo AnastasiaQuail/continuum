@@ -31,7 +31,7 @@ final class EditController extends AbstractController
 
             $this->addFlash(
                 'success',
-                sprintf('The weekly reflection for %s was updated.', $weeklyReflection->getDate()->format('j F'))
+                sprintf('The weekly reflection for %s was saved.', $weeklyReflection->getDate()->format('j F'))
             );
 
             return $this->redirectToRoute('app_weekly_reflection', ['month' => $week->format('Y-m')]);

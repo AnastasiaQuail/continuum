@@ -60,9 +60,9 @@ final class MoodReflectionRepository extends ServiceEntityRepository
         return $this->findOneBy(['date' => $day]);
     }
 
-    public function save(MoodReflection $event): void
+    public function save(MoodReflection $moodReflection): void
     {
-        $this->getEntityManager()->persist($event);
+        $this->getEntityManager()->persist($moodReflection);
         $this->getEntityManager()->flush();
     }
 }

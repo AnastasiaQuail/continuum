@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Body measurements | {{ user_date('now').format('j F Y') }}{% endblock %}
+{% block body_id %}body-measurement-edit{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Body measurements' },
+    { label: (measurement ? measurement.datetime : user_date('now')).format('Y F j, H:i') },
+] %}
+
+{% block main -%}
+    <section class="card">
+        <h3 class="card-title">{{ measurement ? 'Add measurement' : 'Edit measurement' }}</h3>
+
+        {{- form_start(form, {method: 'POST', action: path('app_health_measurement_edit', {id: measurement ? measurement.id})}) -}}
+
+        <div class="form-row form-row-2 form-row-sm-3">
+            {{- form_row(form.weight) -}}
+            {{- form_row(form.neck) -}}
+            {{- form_row(form.waist) -}}
+            {{- form_row(form.chest) -}}
+            {{- form_row(form.shoulders) -}}
+            {{- form_row(form.flexedBiceps) -}}
+            {{- form_row(form.hips) -}}
+            {{- form_row(form.thigh) -}}
+            {{- form_row(form.calf) -}}
+        </div>
+
+        <div class="card-submit">
+            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        </div>
+
+        {{- form_end(form) -}}
+    </section>
+{%- endblock %}
