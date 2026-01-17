@@ -88,6 +88,11 @@ final class BodyMeasurement
         return $this->datetime;
     }
 
+    public function setDatetime(DateTimeImmutable $datetime): void
+    {
+        $this->datetime = $datetime;
+    }
+
     public function getFatUsNavy(): ?float
     {
         return $this->from($this->fatUsNavy, coefficient: 100, precision: 2);

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Dto\Request\Health;
 
+use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
@@ -29,6 +30,7 @@ final readonly class EditBodyMeasurement
     public const int CALF_MAX = 60;
 
     public function __construct(
+        public DateTimeImmutable $datetime,
         #[Assert\NotBlank]
         #[Assert\Range(min: self::WEIGHT_MIN, max: self::WEIGHT_MAX)]
         public float $weight,

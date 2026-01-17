@@ -46,7 +46,7 @@
                 <div class="body-measurement">
                     <div class="measurement-date">
                         <a href="{{ path('app_health_measurement_edit', {'id': measurement.id}) }}">
-                            {{- measurement.datetime.format('j F H:i') -}}
+                            {{- measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -}}
                         </a>
                     </div>
                     <div class="measurement-values">

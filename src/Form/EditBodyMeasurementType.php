@@ -7,12 +7,21 @@ namespace Continuum\Form;
 use Continuum\Dto\Request\Health\EditBodyMeasurement;
 use Continuum\Dto\Response\Health\LastBodyMeasurement;
 use Continuum\Entity\BodyMeasurement;
+use Continuum\Entity\User;
 use Continuum\Form\Type\MeasurementType;
+use DateTimeImmutable;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Form\Exception\LogicException;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class EditBodyMeasurementType extends AbstractImmutableType
 {
+    public function __construct(
+        private readonly Security $security,
+    ) {}
+
     /**
      * @param array{lastMeasurement: null|LastBodyMeasurement, measurement: null|BodyMeasurement} $options
      */
@@ -20,8 +29,20 @@ final class EditBodyMeasurementType extends AbstractImmutableType
     {
         $lastMeasurement = $options['lastMeasurement'];
         $measurement = $options['measurement'];
+        $user = $this->security->getUser();
+
+        if (!$user instanceof User) {
+            throw new LogicException('User must be authenticated.');
+        }
 
         $builder->setDataMapper($this)
+            ->add('datetime', DateTimeType::class, [
+                'data' => ($measurement?->getDatetime() ?? new DateTimeImmutable('now'))
+                    ->setTimezone($user->getTimezone()),
+                'model_timezone' => $user->getTimezone()->getName(),
+                'view_timezone' => $user->getTimezone()->getName(),
+                'input' => 'datetime_immutable',
+            ])
             ->add('weight', MeasurementType::class, [
                 'data' => $measurement?->getWeight(),
                 'help' => $this->getHelp($lastMeasurement->weight),
@@ -93,6 +114,7 @@ final class EditBodyMeasurementType extends AbstractImmutableType
     protected function mapDataClass(array $forms): EditBodyMeasurement
     {
         return new EditBodyMeasurement(
+            datetime: $forms['datetime']->getData(),
             weight: $forms['weight']->getData(),
             neck: $forms['neck']->getData(),
             chest: $forms['chest']->getData(),

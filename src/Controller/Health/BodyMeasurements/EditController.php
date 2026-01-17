@@ -37,11 +37,9 @@ final class EditController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $measurement = $this->bodyMeasurementService->save($user, $measurement, $form->getData());
+            $datetime = $measurement->getDatetime()->setTimezone($user->getTimezone());
 
-            $this->addFlash(
-                'success',
-                sprintf('The "%s" measurement was saved', $measurement->getDatetime()->format('Y-m-d H:i:s')),
-            );
+            $this->addFlash('success', sprintf('The "%s" measurement was saved', $datetime->format('j F H:i')));
 
             return $this->redirectToRoute('app_health_measurements');
         }

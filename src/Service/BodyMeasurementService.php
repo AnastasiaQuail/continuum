@@ -9,15 +9,12 @@ use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Repository\BodyMeasurementRepository;
 use DateTimeImmutable;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use DateTimeZone;
 
 final readonly class BodyMeasurementService
 {
     public function __construct(
-        #[Autowire(env: 'APP_USER_BIRTH_DATE')]
-        private string $userBirthDate,
-        #[Autowire(env: 'int:APP_USER_HEIGHT')]
-        private int $userHeight,
+        private UserService $userService,
         private BodyMeasurementRepository $repository,
     ) {}
 
@@ -35,15 +32,13 @@ final readonly class BodyMeasurementService
     public function save(User $user, ?BodyMeasurement $measurement, EditBodyMeasurement $dto): BodyMeasurement
     {
         if ($measurement === null) {
-            $birthday = new DateTimeImmutable($this->userBirthDate, $user->getTimezone())->setTime(0, 0);
-            $now = new DateTimeImmutable('now', $user->getTimezone());
-
             $measurement = new BodyMeasurement(
-                age: $birthday->diff($now)->y,
-                height: $this->userHeight,
+                age: $this->userService->getAge($user),
+                height: $this->userService->getHeight(),
             );
         }
 
+        $measurement->setDatetime($dto->datetime->setTimezone(new DateTimeZone('UTC')));
         $measurement->setWeight($dto->weight);
         $measurement->setNeck($dto->neck);
         $measurement->setChest($dto->chest);

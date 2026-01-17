@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% set date = measurement ? measurement.datetime : user_date('now') %}
+{% set date = measurement ? measurement.datetime.setTimezone(app.user.timezone) : user_date('now') %}
 
 {% block title %}Body measurements | {{ date.format('j F Y') }}{% endblock %}
 {% block body_id %}body-measurement-edit{% endblock %}
@@ -16,6 +16,8 @@
         <h3 class="card-title">{{ measurement ? 'Edit measurement' : 'Add measurement' }}</h3>
 
         {{- form_start(form, {method: 'POST', action: path('app_health_measurement_edit', {id: measurement ? measurement.id})}) -}}
+
+        {{ form_row(form.datetime) }}
 
         <div class="form-row form-row-2 form-row-sm-3">
             {{- form_row(form.weight) -}}
