@@ -11,30 +11,23 @@
     { label: month.format('F Y') },
 ] %}
 
+{% set prevMonth = month.modify('-1 month') %}
+{% set nextMonth = month.modify('+1 month') %}
+{% set paginations = {
+    prev: {
+        url: path('app_weekly_reflection', {'month': prevMonth.format('Y-m')}),
+        label: prevMonth.format('F'),
+        isGranted: prevMonth.format('Y') >= app_year_min,
+    },
+    title: month.format('F'),
+    next: {
+        url: path('app_weekly_reflection', {'month': nextMonth.format('Y-m')}),
+        label: nextMonth.format('F'),
+        isGranted: nextMonth.format('Y') <= app_year_max,
+    },
+} %}
+
 {% block main -%}
-    <nav class="calendar-pagination">
-        {%- set prevDate = month.modify('-1 month') -%}
-        {%- set nextDate = month.modify('+1 month') -%}
-
-        {%- if prevDate.format('Y') >= app_year_min -%}
-            <a class="page-link page-link-prev"
-               href="{{ path('app_weekly_reflection', {'month': prevDate.format('Y-m')}) }}">
-                {{ ux_icon('lucide:chevron-right') }}
-                <span>{{ prevDate.format('F') }}</span>
-            </a>
-        {%- endif -%}
-
-        <h2>{{ month.format('F') }}</h2>
-
-        {%- if nextDate.format('Y') <= app_year_max -%}
-            <a class="page-link page-link-next"
-               href="{{ path('app_weekly_reflection', {'month': nextDate.format('Y-m')}) }}">
-                <span>{{ nextDate.format('F') }}</span>
-                {{- ux_icon('lucide:chevron-right') -}}
-            </a>
-        {%- endif -%}
-    </nav>
-
     <section class="card">
         <div class="weekly-reflection">
             {%- for date, reflection in weeklyReflections -%}

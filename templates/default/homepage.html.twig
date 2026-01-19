@@ -2,7 +2,7 @@
 
 {% block body_id %}homepage{% endblock %}
 
-{% block main -%}
+{% block showcase -%}
     <section class="card">
         <div class="progress-group">
             <div class="progress" style="--progress: {{ calendarProgress }}%;">
@@ -11,7 +11,9 @@
             <div class="progress-text">{{ calendarProgress }}%</div>
         </div>
     </section>
+{%- endblock %}
 
+{% block main -%}
     <section class="card">
         ...homepage...
     </section>

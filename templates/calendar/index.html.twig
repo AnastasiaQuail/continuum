@@ -10,7 +10,21 @@
     { label: year },
 ] %}
 
-{% block main -%}
+{% set paginations = {
+    prev: {
+        url: path('app_calendar', {'year': year - 1}),
+        label: year - 1,
+        isGranted: year > app_year_min,
+    },
+    title: year,
+    next: {
+        url: path('app_calendar', {'year': year + 1}),
+        label: year + 1,
+        isGranted: year < app_year_max,
+    },
+} %}
+
+{% block showcase -%}
     {%- if upcomingNotifications is not empty -%}
         <section class="card calendar calendar-upcoming-notifications" id="calendar-notifications">
             <div class="notifications-body">
@@ -24,23 +38,9 @@
             </div>
         </section>
     {%- endif -%}
+{%- endblock %}
 
-    <nav class="calendar-pagination">
-        {%- if year > app_year_min -%}
-            <a class="page-link page-link-prev" href="{{ path('app_calendar', {'year': year - 1}) }}">
-                {{ ux_icon('lucide:chevron-right') }}
-                <span>{{ year - 1 }}</span>
-            </a>
-        {%- endif -%}
-        <h2>{{ year }}</h2>
-        {%- if year < app_year_max -%}
-            <a class="page-link page-link-next" href="{{ path('app_calendar', {'year': year + 1}) }}">
-                <span>{{ year + 1 }}</span>
-                {{- ux_icon('lucide:chevron-right') -}}
-            </a>
-        {%- endif -%}
-    </nav>
-
+{% block main -%}
     <section class="card card-calendar">
         <div class="calendar">
             {%- set current = currentDate.format('Y-m-d') -%}
@@ -74,7 +74,8 @@
                                 {%- if hourEvents is not empty -%}
                                     <div class="day-badges">
                                         {%- for hourEvent in hourEvents -%}
-                                            <span class="day-badge" data-general-type="{{ hourEvent.type.value }}"></span>
+                                            <span class="day-badge"
+                                                  data-general-type="{{ hourEvent.type.value }}"></span>
                                         {%- endfor -%}
                                     </div>
                                 {%- endif -%}

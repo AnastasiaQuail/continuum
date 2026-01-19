@@ -185,6 +185,28 @@
                     {%- endblock -%}
                 </div>
 
+                {%- block showcase %}{% endblock -%}
+
+                {%- block pagination -%}
+                    {%- if paginations is defined -%}
+                        <nav class="calendar-pagination">
+                            {%- if paginations.prev.isGranted -%}
+                                <a class="page-link page-link-prev" href="{{ paginations.prev.url }}">
+                                    {{ ux_icon('lucide:chevron-right') }}
+                                    <span>{{ paginations.prev.label }}</span>
+                                </a>
+                            {%- endif -%}
+                            <h2>{{ paginations.title }}</h2>
+                            {%- if paginations.next.isGranted -%}
+                                <a class="page-link page-link-next" href="{{ paginations.next.url }}">
+                                    <span>{{ paginations.next.label }}</span>
+                                    {{- ux_icon('lucide:chevron-right') -}}
+                                </a>
+                            {%- endif -%}
+                        </nav>
+                    {%- endif -%}
+                {%- endblock -%}
+
                 {%- block main %}{% endblock -%}
             </main>
         {%- endblock -%}
