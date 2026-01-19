@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Repository;
 
+use Continuum\Dto\Response\Health\LastBodyMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -67,6 +68,32 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
     public function findLast(int $limit): array
     {
         return $this->findBy([], ['datetime' => 'ASC'], $limit);
+    }
+
+    public function findOneLastWithNotNull(): LastBodyMeasurement
+    {
+        return new LastBodyMeasurement(
+            weight: $this->findLastFieldWithNotNull('weight')?->getWeight(),
+            neck: $this->findLastFieldWithNotNull('neck')?->getNeck(),
+            chest: $this->findLastFieldWithNotNull('chest')?->getChest(),
+            shoulders: $this->findLastFieldWithNotNull('shoulders')?->getShoulders(),
+            waist: $this->findLastFieldWithNotNull('waist')?->getWaist(),
+            flexedBiceps: $this->findLastFieldWithNotNull('flexedBiceps')?->getFlexedBiceps(),
+            hips: $this->findLastFieldWithNotNull('hips')?->getHips(),
+            thigh: $this->findLastFieldWithNotNull('thigh')?->getThigh(),
+            calf: $this->findLastFieldWithNotNull('calf')?->getCalf(),
+        );
+    }
+
+    private function findLastFieldWithNotNull(string $field): ?BodyMeasurement
+    {
+        $query = $this->createQueryBuilder('bm')
+            ->andWhere(sprintf('bm.%s IS NOT NULL', $field))
+            ->orderBy('bm.datetime', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery();
+
+        return $query->getOneOrNullResult();
     }
 
     public function save(BodyMeasurement $measurement): void

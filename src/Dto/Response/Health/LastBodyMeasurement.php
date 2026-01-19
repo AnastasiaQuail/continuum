@@ -7,9 +7,7 @@ namespace Continuum\Dto\Response\Health;
 final readonly class LastBodyMeasurement
 {
     public function __construct(
-        public int $age,
-        public int $height,
-        public float $weight,
+        public ?float $weight = null,
         public ?float $neck = null,
         public ?float $chest = null,
         public ?float $shoulders = null,

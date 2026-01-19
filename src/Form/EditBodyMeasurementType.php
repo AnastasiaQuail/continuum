@@ -45,7 +45,7 @@ final class EditBodyMeasurementType extends AbstractImmutableType
             ])
             ->add('weight', MeasurementType::class, [
                 'data' => $measurement?->getWeight(),
-                'help' => $this->getHelp($lastMeasurement->weight),
+                'help' => $this->getHelp($lastMeasurement?->weight, 'kg'),
                 'min' => EditBodyMeasurement::WEIGHT_MIN,
                 'max' => EditBodyMeasurement::WEIGHT_MAX,
                 'attr' => [
@@ -55,56 +55,56 @@ final class EditBodyMeasurementType extends AbstractImmutableType
             ])
             ->add('neck', MeasurementType::class, [
                 'data' => $measurement?->getNeck(),
-                'help' => $this->getHelp($lastMeasurement->neck),
+                'help' => $this->getHelp($lastMeasurement?->neck),
                 'min' => EditBodyMeasurement::NECK_MIN,
                 'max' => EditBodyMeasurement::NECK_MAX,
                 'required' => false,
             ])
             ->add('chest', MeasurementType::class, [
                 'data' => $measurement?->getChest(),
-                'help' => $this->getHelp($lastMeasurement->chest),
+                'help' => $this->getHelp($lastMeasurement?->chest),
                 'min' => EditBodyMeasurement::CHEST_MIN,
                 'max' => EditBodyMeasurement::CHEST_MAX,
                 'required' => false,
             ])
             ->add('shoulders', MeasurementType::class, [
                 'data' => $measurement?->getShoulders(),
-                'help' => $this->getHelp($lastMeasurement->shoulders),
+                'help' => $this->getHelp($lastMeasurement?->shoulders),
                 'min' => EditBodyMeasurement::SHOULDERS_MIN,
                 'max' => EditBodyMeasurement::SHOULDERS_MAX,
                 'required' => false,
             ])
             ->add('waist', MeasurementType::class, [
                 'data' => $measurement?->getWaist(),
-                'help' => $this->getHelp($lastMeasurement->waist),
+                'help' => $this->getHelp($lastMeasurement?->waist),
                 'min' => EditBodyMeasurement::WAIST_MIN,
                 'max' => EditBodyMeasurement::WAIST_MAX,
                 'required' => false,
             ])
             ->add('flexedBiceps', MeasurementType::class, [
                 'data' => $measurement?->getFlexedBiceps(),
-                'help' => $this->getHelp($lastMeasurement->flexedBiceps),
+                'help' => $this->getHelp($lastMeasurement?->flexedBiceps),
                 'min' => EditBodyMeasurement::BICEPS_MIN,
                 'max' => EditBodyMeasurement::BICEPS_MAX,
                 'required' => false,
             ])
             ->add('hips', MeasurementType::class, [
                 'data' => $measurement?->getHips(),
-                'help' => $this->getHelp($lastMeasurement->hips),
+                'help' => $this->getHelp($lastMeasurement?->hips),
                 'min' => EditBodyMeasurement::HIPS_MIN,
                 'max' => EditBodyMeasurement::HIPS_MAX,
                 'required' => false,
             ])
             ->add('thigh', MeasurementType::class, [
                 'data' => $measurement?->getThigh(),
-                'help' => $this->getHelp($lastMeasurement->thigh),
+                'help' => $this->getHelp($lastMeasurement?->thigh),
                 'min' => EditBodyMeasurement::THIGH_MIN,
                 'max' => EditBodyMeasurement::THIGH_MAX,
                 'required' => false,
             ])
             ->add('calf', MeasurementType::class, [
                 'data' => $measurement?->getCalf(),
-                'help' => $this->getHelp($lastMeasurement->calf),
+                'help' => $this->getHelp($lastMeasurement?->calf),
                 'min' => EditBodyMeasurement::CALF_MIN,
                 'max' => EditBodyMeasurement::CALF_MAX,
                 'required' => false,
@@ -137,16 +137,16 @@ final class EditBodyMeasurementType extends AbstractImmutableType
         $resolver->setAllowedTypes('measurement', ['null', BodyMeasurement::class]);
     }
 
-    private function getHelp(null|float|int $value): ?string
+    private function getHelp(null|float|int $value, string $name = 'cm'): ?string
     {
         if ($value === null) {
             return null;
         }
 
         if (is_int($value) || fmod($value, 1.0) === 0.0) {
-            return sprintf('Last: %d cm', $value);
+            return sprintf('Last: %d %s', $value, $name);
         }
 
-        return sprintf('Last: %.1f cm', $value);
+        return sprintf('Last: %.1f %s', $value, $name);
     }
 }

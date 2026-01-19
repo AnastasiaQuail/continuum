@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Health\BodyMeasurements;
 
-use Continuum\Dto\Response\Health\LastBodyMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Form\EditBodyMeasurementType;
@@ -27,10 +26,8 @@ final class EditController extends AbstractController
         Request $request,
         ?BodyMeasurement $measurement = null
     ): Response {
-        $lastMeasurement = new LastBodyMeasurement(20, 150, 100.0);
-
         $form = $this->createForm(EditBodyMeasurementType::class, null, [
-            'lastMeasurement' => $lastMeasurement,
+            'lastMeasurement' => $measurement === null ? $this->bodyMeasurementService->getLastMeasurement() : null,
             'measurement' => $measurement,
         ]);
         $form->handleRequest($request);

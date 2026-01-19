@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Service;
 
 use Continuum\Dto\Request\Health\EditBodyMeasurement;
+use Continuum\Dto\Response\Health\LastBodyMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Repository\BodyMeasurementRepository;
@@ -24,6 +25,11 @@ final readonly class BodyMeasurementService
     public function getByMonth(User $user, DateTimeImmutable $date): array
     {
         return $this->repository->findByMonth($date, $user->getTimezone());
+    }
+
+    public function getLastMeasurement(): LastBodyMeasurement
+    {
+        return $this->repository->findOneLastWithNotNull();
     }
 
     public function getInitMeasurement(User $user, DateTimeImmutable $date): ?BodyMeasurement
