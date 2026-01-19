@@ -1,5 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{%- block javascripts -%}
+    {{ parent() }}
+    {% if chartMeasurements %}
+        <script src="{{ asset('js/echarts.min.js') }}"></script>
+        <script src="{{ asset('js/chart.js') }}"></script>
+    {%- endif -%}
+{%- endblock -%}
+
 {% set monthName = month.format('F Y') %}
 {% set isCurrentMonth = monthName == user_date('now')|date('F Y') %}
 
@@ -12,6 +20,46 @@
 ] %}
 
 {% block main -%}
+    <section class="card card-weight-result">
+        <div class="weight-change">
+            {%- set result = 0 -%}
+
+            {%- if chartMeasurements is not empty -%}
+                {%- set result = ((chartMeasurements|last).weight - (chartMeasurements|first).weight)|round(1) -%}
+
+                {%- set min = 1000 -%}
+                {%- set max = 0 -%}
+
+                {%- for chartMeasurement in chartMeasurements -%}
+                    {%- if not (loop.first and chartMeasurement.time == 0) -%}
+                        {%- if chartMeasurement.weight > max -%}
+                            {%- set max = chartMeasurement.weight -%}
+                        {%- elseif chartMeasurement.weight < min -%}
+                            {%- set min = chartMeasurement.weight -%}
+                        {%- endif -%}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endif -%}
+
+            <h3 class="weight-change-title">Weight Change</h3>
+            <div class="weight-change-result {{ result > 0 ? 'value-bad' }}{{ result < 0 ? 'value-good' }}">
+                <span>{{ result > 0 ? '+' ~ result : result }} kg</span>
+            </div>
+            {%- if chartMeasurements is not empty -%}
+                <div class="weight-change-difference">
+                    <span>{{ ux_icon('lucide:trending-up-down') }}</span>
+                    <span>{{ min }} - {{ max }} kg</span>
+                </div>
+            {%- endif -%}
+        </div>
+
+        <div class="weight-chart"
+            {%- if chartMeasurements -%}
+            data-chart="weight-month" data-values="{{ chartMeasurements|json_encode }}"
+            {%- endif -%}>
+        </div>
+    </section>
+
     <nav class="calendar-pagination">
         {%- set prevDate = month.modify('-1 month') -%}
         {%- set nextDate = month.modify('+1 month') -%}

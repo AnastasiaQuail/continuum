@@ -19,14 +19,18 @@ final readonly class BodyMeasurementService
     ) {}
 
     /**
-     * @return array<string, BodyMeasurement>
+     * @return list<BodyMeasurement>
      */
     public function getByMonth(User $user, DateTimeImmutable $date): array
     {
-        $year = (int) $date->format('Y');
-        $month = (int) $date->format('n');
+        return $this->repository->findByMonth($date, $user->getTimezone());
+    }
 
-        return $this->repository->findByMonth($year, $month, $user->getTimezone());
+    public function getInitMeasurement(User $user, DateTimeImmutable $date): ?BodyMeasurement
+    {
+        $date = $date->modify('-1 month');
+
+        return $this->repository->findOneLastByMonth($date, $user->getTimezone());
     }
 
     public function save(User $user, ?BodyMeasurement $measurement, EditBodyMeasurement $dto): BodyMeasurement

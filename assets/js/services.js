@@ -19,6 +19,7 @@ export class SidebarToggler extends Storage {
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector(id).onclick = () => {
                 this.save(this.get() === 'collapsed' ? '' : 'collapsed');
+                document.dispatchEvent(new CustomEvent('app:sidebar:changed'));
             };
         })
     }

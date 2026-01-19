@@ -40,11 +40,8 @@ final readonly class MoodReflectionService
      */
     public function getByMonth(DateTimeImmutable $date): array
     {
-        $year = (int) $date->format('Y');
-        $month = (int) $date->format('n');
-
         $moods = [];
-        foreach ($this->repository->findByMonth($year, $month) as $mood) {
+        foreach ($this->repository->findByMonth($date) as $mood) {
             $moods[$mood->getDate()->format('Y-m-d')] = $mood;
         }
 

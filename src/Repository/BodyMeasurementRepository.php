@@ -23,8 +23,17 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
     /**
      * @return list<BodyMeasurement>
      */
-    private function findBetweenDates(DateTimeImmutable $from, DateTimeImmutable $to): array
+    public function findByMonth(DateTimeImmutable $month, DateTimeZone $timeZone): array
     {
+        $from = new DateTimeImmutable(
+            sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m')),
+            $timeZone
+        );
+        $to = new DateTimeImmutable(
+            sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
+            $timeZone
+        );
+
         return $this->createQueryBuilder('bm')
             ->andWhere('bm.datetime BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
@@ -34,15 +43,30 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    /**
-     * @return list<BodyMeasurement>
-     */
-    public function findByMonth(int $year, int $month, DateTimeZone $timeZone): array
+    public function findOneLastByMonth(DateTimeImmutable $month, DateTimeZone $timeZone): ?BodyMeasurement
     {
-        return $this->findBetweenDates(
-            new DateTimeImmutable(sprintf('%d-%d-01 00:00:00', $year, $month), $timeZone),
-            new DateTimeImmutable(sprintf('%d-%d-31 23:59:59', $year, $month), $timeZone),
+        $from = new DateTimeImmutable(
+            sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m')),
+            $timeZone
         );
+        $to = new DateTimeImmutable(
+            sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
+            $timeZone
+        );
+
+        return $this->createQueryBuilder('bm')
+            ->andWhere('bm.datetime BETWEEN :from AND :to')
+            ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
+            ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
+            ->addOrderBy('bm.datetime', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findLast(int $limit): array
+    {
+        return $this->findBy([], ['datetime' => 'ASC'], $limit);
     }
 
     public function save(BodyMeasurement $measurement): void

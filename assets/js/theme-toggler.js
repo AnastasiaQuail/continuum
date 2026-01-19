@@ -26,6 +26,7 @@ export default class extends Storage {
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector(id).onclick = () => {
                 this.save(this.get() === 'light' ? 'dark' : 'light');
+                document.dispatchEvent(new CustomEvent('app:theme:changed'));
             };
         })
     }

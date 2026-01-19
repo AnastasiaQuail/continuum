@@ -84,10 +84,10 @@
             "@auto-scripts"
         ],
         "migration": "@php bin/console make:migration --formatted",
-        "migrations:migrate": "@php bin/console doctrine:migrations:migrate",
-        "migrations:rollback": "@migrations:migrate prev",
-        "icons:import": "@php bin/console ux:icons:lock",
-        "db:backup": "@php bin/console app:db:backup"
+        "migration:migrate": "@php bin/console doctrine:migrations:migrate",
+        "migration:rollback": "@migrations:migrate prev",
+        "icons": "@php bin/console ux:icons:lock",
+        "backup": "@php bin/console app:db:backup"
     },
     "conflict": {
         "symfony/symfony": "*"

@@ -47,11 +47,15 @@ final class MoodReflectionRepository extends ServiceEntityRepository
     /**
      * @return list<MoodReflection>
      */
-    public function findByMonth(int $year, int $month): array
+    public function findByMonth(DateTimeImmutable $month): array
     {
         return $this->findBetweenDates(
-            new DateTimeImmutable(sprintf('%d-%d-01 00:00:00', $year, $month)),
-            new DateTimeImmutable(sprintf('%d-%d-31 23:59:59', $year, $month)),
+            new DateTimeImmutable(
+                sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m'))
+            ),
+            new DateTimeImmutable(
+                sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t'))
+            ),
         );
     }
 

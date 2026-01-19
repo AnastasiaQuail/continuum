@@ -41,7 +41,7 @@ final class EditController extends AbstractController
 
             $this->addFlash('success', sprintf('The "%s" measurement was saved', $datetime->format('j F H:i')));
 
-            return $this->redirectToRoute('app_health_measurements');
+            return $this->redirectToRoute('app_health_measurements', ['month' => $datetime->format('Y-m')]);
         }
 
         return $this->render('health/measurements/edit.html.twig', [

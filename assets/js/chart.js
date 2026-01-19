@@ -1,0 +1,198 @@
+/**
+ * @param {string} property
+ * @return {string}
+ */
+function getHexColorByCssProperty(property) {
+    const color = getComputedStyle(document.documentElement).getPropertyValue(property).trim();
+
+    const ctx = document.createElement('canvas').getContext('2d');
+    ctx.fillStyle = color;
+    ctx.fillRect(0, 0, 1, 1);
+
+    const [r, g, b] = ctx.getImageData(0, 0, 1, 1).data;
+
+    return "#" + [r, g, b].map(v => v.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * @return {number}
+ */
+function getSecondsInCurrentMonth() {
+    const date = new Date();
+    const start = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0);
+    const startNext = new Date(date.getFullYear(), date.getMonth() + 1, 1, 0, 0, 0);
+
+    return Math.floor((startNext - start) / 1000);
+}
+
+class DimensionCalculator {
+    /**
+     @param {number} values
+     * @return {number}
+     */
+    #getMin(...values) {
+        return +Math.min(...values).toFixed(1);
+    }
+
+    /**
+     @param {number} values
+     * @return {number}
+     */
+    #getMax(...values) {
+        return +Math.max(...values).toFixed(1);
+    }
+
+    /**
+     * @param {number} min
+     * @param {number} max
+     * @param {number} coefficient
+     * @return {{min: number, max: number}}
+     */
+    getExpandedBoundaries(min, max, coefficient) {
+        const diff = +(max - min).toFixed(1);
+        const additionalDiff = +(diff * coefficient).toFixed(1);
+
+        return {
+            min: +(min - additionalDiff).toFixed(1),
+            max: +(max + additionalDiff).toFixed(1),
+        }
+    }
+
+
+    /**
+     * @param {Array<number>} values
+     * @param {number} coefficient
+     * @return {{min: number, max: number, interval: number}}
+     */
+    getBoundariesByValues(values, coefficient) {
+        const boundaries = this.getExpandedBoundaries(
+            this.#getMin(...values),
+            this.#getMax(...values),
+            coefficient
+        );
+
+        return this.#getBoundaries(boundaries.min, boundaries.max);
+    }
+
+    /**
+     * @param {number} min
+     * @param {number} max
+     * @return {{min: number, max: number, interval: number}}
+     */
+    #getBoundaries(min, max) {
+        let difference = +(max - min).toFixed(1) * 10;
+        let interval = 1;
+
+        if (difference > 1) {
+            if (difference % 3 !== 0 && difference % 2 !== 0) {
+                return this.#getBoundaries(+(min - 0.1).toFixed(1), max);
+            }
+
+            if (difference % 3 === 0) {
+                interval = +(difference / 30).toFixed(1);
+            } else if (difference % 4 === 0) {
+                interval = +(difference / 40).toFixed(1);
+            } else {
+                interval = +(difference / 20).toFixed(1);
+            }
+        }
+
+        return {
+            min: min,
+            max: max,
+            interval: interval
+        };
+    }
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {Array<{type: string, prev_time: number, time: number, fat: number}>} data
+ */
+function initChart(element, data) {
+    const redColor = getHexColorByCssProperty('--color-red');
+    const greenColor = getHexColorByCssProperty('--color-green');
+
+    const myChart = echarts.init(element);
+
+    const calculator = new DimensionCalculator();
+    const xAxis = calculator.getExpandedBoundaries(0, getSecondsInCurrentMonth(), 0.05);
+    const yAxis = calculator.getBoundariesByValues(data.map(item => item.fat), 0.1);
+
+    myChart.setOption({
+        // animation: false,
+        animationDuration: 200,
+        grid: {left: 4, bottom: 4, top: 4, right: 4},
+        xAxis: {
+            min: xAxis.min,
+            max: xAxis.max,
+            axisLine: false,
+            axisLabel: false,
+            splitLine: {show: false}
+        },
+        yAxis: {
+            min: yAxis.min,
+            max: yAxis.max,
+            interval: yAxis.interval,
+            axisLine: false,
+            axisLabel: {
+                fontSize: 10,
+                formatter: '{value} %',
+                color: getHexColorByCssProperty('--color'),
+                opacity: 0.2,
+            },
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: getHexColorByCssProperty('--color'),
+                    opacity: 0.04,
+                }
+            },
+        },
+        visualMap: {
+            show: false,
+            dimension: 0,
+            pieces: data.map(item => {
+                return {
+                    gt: item.prev_time ?? null,
+                    lte: item.time,
+                    color: item.type === 'increase' ? redColor : greenColor
+                };
+            }),
+        },
+        series: [
+            {
+                type: 'line',
+                data: data.map(item => [item.time, item.fat]),
+                smooth: true,
+                // showSymbol: false,
+                // itemStyle: {color: greenColor},
+            },
+        ]
+    });
+
+    window.addEventListener('resize', () => {
+        myChart.resize();
+    });
+
+    document.addEventListener('app:theme:changed', () => {
+        myChart.setOption({
+            yAxis: {
+                axisLabel: {color: getHexColorByCssProperty('--color')},
+                splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}},
+            }
+        });
+    });
+
+    document.addEventListener('app:sidebar:changed', () => {
+        myChart.resize();
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-chart]').forEach((element) => {
+        if (element.dataset.chart === 'weight-month') {
+            initChart(element, JSON.parse(element.dataset.values));
+        }
+    })
+});
