@@ -6,6 +6,7 @@ namespace Continuum\Controller\Calendar;
 
 use Continuum\Entity\User;
 use Continuum\Form\NewCalendarEventType;
+use Continuum\Security\Authorization\Voter\CalendarVoter;
 use Continuum\Service\CalendarEventService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class DayController extends AbstractController
 {
@@ -21,6 +23,7 @@ final class DayController extends AbstractController
     ) {}
 
     #[Route(path: '/calendar/days/{day}', name: 'app_calendar_day', methods: ['GET', 'POST'])]
+    #[IsGranted(CalendarVoter::EDIT)]
     public function __invoke(Request $request, #[CurrentUser] User $user, DateTimeImmutable $day): Response
     {
         $form = $this->createForm(NewCalendarEventType::class, options: ['timezone' => $user->getTimezone()]);

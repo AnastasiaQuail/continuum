@@ -1282,7 +1282,6 @@ textarea {
         background-color: color-mix(in oklch, var(--day-background-color) var(--day-background-color-transparent), transparent);
         border: var(--day-border-width) solid color-mix(in oklch, var(--day-border-color) var(--day-border-color-transparent), transparent);
         border-radius: var(--day-border-radius);
-        cursor: pointer;
         user-select: none;
         transition: transform .15s;
 
@@ -1397,9 +1396,13 @@ textarea {
             }
         }
 
-        &:hover {
-            & > span {
-                transform: scale(1.5);
+        &:is(a) {
+            cursor: pointer;
+
+            &:hover {
+                & > span {
+                    transform: scale(1.5);
+                }
             }
         }
     }

@@ -44,6 +44,7 @@
     <section class="card card-calendar">
         <div class="calendar">
             {%- set current = currentDate.format('Y-m-d') -%}
+            {%- set isGranted = is_granted('CALENDAR_EDIT') -%}
 
             {%- for monthNumber in 1..12 -%}
                 {%- set month = year ~ '-' ~ (monthNumber < 10 ? '0') ~ monthNumber -%}
@@ -66,9 +67,10 @@
                             {%- set dayEvent = events[day] is defined ? events[day].dayEvent : null -%}
                             {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
 
-                            <a href="{{ path('app_calendar_day', {'day': day}) }}"
-                               class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}} {{- isWeekend ? ' day-weekend' -}}"
-                               {%- if dayEvent is not null %}data-general-type="{{ dayEvent.type.value }}"{% endif -%}>
+                            <{% if isGranted %}a{% else %}div{% endif %}
+                                href="{{ path('app_calendar_day', {'day': day}) }}"
+                                class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}} {{- isWeekend ? ' day-weekend' -}}"
+                                {%- if dayEvent is not null %}data-general-type="{{ dayEvent.type.value }}"{% endif -%}>
                                 <span>{{ dayNumber }}</span>
 
                                 {%- if hourEvents is not empty -%}
@@ -79,7 +81,7 @@
                                         {%- endfor -%}
                                     </div>
                                 {%- endif -%}
-                            </a>
+                            </{% if isGranted %}a{% else %}div{% endif %}>
                         {%- endfor -%}
                     </div>
                 </article>

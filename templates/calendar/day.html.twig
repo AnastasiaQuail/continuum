@@ -23,11 +23,13 @@
                         <span> at {{ eventDate.format('H:i') }}</span>
                     {%- endif -%}
 
-                    <form method="post" action="{{ path('app_calendar_event_delete', {'id': event.id}) }}"
-                          onsubmit="return confirm('Delete?')">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button class="btn btn-sm btn-transparent btn-danger">{{ ux_icon('lucide:trash') }}</button>
-                    </form>
+                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                        <form method="post" action="{{ path('app_calendar_event_delete', {'id': event.id}) }}"
+                              onsubmit="return confirm('Delete?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button class="btn btn-sm btn-transparent btn-danger">{{ ux_icon('lucide:trash') }}</button>
+                        </form>
+                    {% endif %}
                 </div>
             {%- endfor -%}
         </section>
@@ -48,7 +50,7 @@
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
                                {%- if form.type.vars.required %}required="required"{% endif %}
-                               {%- if choice.value == form.type.vars.value %}checked{% endif %}>
+                            {%- if choice.value == form.type.vars.value %}checked{% endif %}>
                         <span class="btn btn-sm">{{ choice.label }}</span>
                     </label>
                 {%- endfor -%}

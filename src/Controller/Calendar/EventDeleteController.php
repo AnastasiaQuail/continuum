@@ -6,11 +6,13 @@ namespace Continuum\Controller\Calendar;
 
 use Continuum\Entity\CalendarEvent;
 use Continuum\Entity\User;
+use Continuum\Security\Authorization\Voter\CalendarVoter;
 use Continuum\Service\CalendarEventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class EventDeleteController extends AbstractController
 {
@@ -19,6 +21,7 @@ final class EventDeleteController extends AbstractController
     ) {}
 
     #[Route(path: '/calendar/events/{id}', name: 'app_calendar_event_delete', methods: ['DELETE'])]
+    #[IsGranted(CalendarVoter::EVENT_DELETE)]
     public function __invoke(#[CurrentUser] User $user, CalendarEvent $event): Response
     {
         $this->calendarEventService->delete($event);
