@@ -88,9 +88,12 @@
             {%- for measurement in measurements -%}
                 <div class="body-measurement">
                     <div class="measurement-date">
-                        <a href="{{ path('app_health_measurement_edit', {'id': measurement.id}) }}">
-                            {{- measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -}}
-                        </a>
+                        {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
+                        {%- if is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
+                            <a href="{{ path('app_health_measurement_edit', {'id': measurement.id}) }}">{{ time }}</a>
+                        {%- else -%}
+                            <span>{{ time }}</span>
+                        {%- endif -%}
                     </div>
                     <div class="measurement-values">
                         <div class="measurement-values-fat">

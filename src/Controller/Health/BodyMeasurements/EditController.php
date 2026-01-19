@@ -7,12 +7,14 @@ namespace Continuum\Controller\Health\BodyMeasurements;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Form\EditBodyMeasurementType;
+use Continuum\Security\Authorization\Voter\BodyMeasurementVoter;
 use Continuum\Service\BodyMeasurementService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class EditController extends AbstractController
 {
@@ -21,6 +23,7 @@ final class EditController extends AbstractController
     ) {}
 
     #[Route(path: '/health/measurements/body/{id?}', name: 'app_health_measurement_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(BodyMeasurementVoter::EDIT, 'measurement')]
     public function __invoke(
         #[CurrentUser] User $user,
         Request $request,

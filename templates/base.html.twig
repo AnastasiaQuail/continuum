@@ -59,12 +59,14 @@
                                         <span>Track mood</span>
                                     </a>
                                 </li>
-                                <li class="dropdown-item">
-                                    <a class="dropdown-link" href="{{ path('app_health_measurement_edit') }}">
-                                        {{ ux_icon('lucide:ruler') }}
-                                        <span>Add measurement</span>
-                                    </a>
-                                </li>
+                                {%- if is_granted('BODY_MEASUREMENT_EDIT') -%}
+                                    <li class="dropdown-item">
+                                        <a class="dropdown-link" href="{{ path('app_health_measurement_edit') }}">
+                                            {{ ux_icon('lucide:ruler') }}
+                                            <span>Add measurement</span>
+                                        </a>
+                                    </li>
+                                {%- endif -%}
                                 <li class="dropdown-item">
                                     <a class="dropdown-link" href="#">
                                         {{ ux_icon('lucide:biceps-flexed') }}
