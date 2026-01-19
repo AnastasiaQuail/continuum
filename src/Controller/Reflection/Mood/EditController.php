@@ -6,6 +6,7 @@ namespace Continuum\Controller\Reflection\Mood;
 
 use Continuum\Entity\User;
 use Continuum\Form\EditMoodReflectionType;
+use Continuum\Security\Attribute\IsFutureMonthGranted;
 use Continuum\Service\MoodReflectionService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +22,7 @@ final class EditController extends AbstractController
     ) {}
 
     #[Route(path: '/reflection/mood/days/{day}', name: 'app_mood_reflection_edit', methods: ['GET', 'POST'])]
+    #[IsFutureMonthGranted('day')]
     public function __invoke(Request $request, #[CurrentUser] User $user, DateTimeImmutable $day): Response
     {
         $moodReflection = $this->moodReflectionService->findMoodByDay($day);

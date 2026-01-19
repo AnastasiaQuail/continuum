@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Controller\Reflection\Weekly;
 
 use Continuum\Form\EditWeeklyReflectionType;
+use Continuum\Security\Attribute\IsFutureMonthGranted;
 use Continuum\Service\WeeklyReflectionService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +20,7 @@ final class EditController extends AbstractController
     ) {}
 
     #[Route(path: '/reflection/weekly/weeks/{week}', name: 'app_weekly_reflection_edit', methods: ['GET', 'POST'])]
+    #[IsFutureMonthGranted('week')]
     public function __invoke(Request $request, DateTimeImmutable $week): Response
     {
         $weeklyReflection = $this->weeklyReflectionService->findByWeek($week);

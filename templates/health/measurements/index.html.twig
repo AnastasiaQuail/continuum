@@ -31,7 +31,7 @@
     next: {
         url: path('app_health_measurements', {'month': nextMonth.format('Y-m')}),
         label: nextMonth.format('F'),
-        isGranted: nextMonth.format('Y') <= app_year_max,
+        isGranted: is_granted('FUTURE_MONTH', nextMonth),
     },
 } %}
 

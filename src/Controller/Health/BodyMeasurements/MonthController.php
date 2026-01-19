@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Controller\Health\BodyMeasurements;
 
 use Continuum\Entity\User;
+use Continuum\Security\Attribute\IsFutureMonthGranted;
 use Continuum\Service\BodyMeasurementService;
 use Continuum\Service\ChartMeasurementService;
 use DateTimeImmutable;
@@ -21,6 +22,7 @@ final class MonthController extends AbstractController
     ) {}
 
     #[Route(path: '/health/measurements/{month}', name: 'app_health_measurements', methods: ['GET'])]
+    #[IsFutureMonthGranted('month')]
     public function __invoke(#[CurrentUser] User $user, ?DateTimeImmutable $month = null): Response
     {
         $month ??= new DateTimeImmutable('first day of this month', $user->getTimezone())->setTime(0, 0);

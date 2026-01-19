@@ -9,12 +9,15 @@ use Continuum\Dto\Response\Health\LastBodyMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Form\Type\MeasurementType;
+use Continuum\Security\Attribute\IsFutureMonthGranted;
 use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 final class EditBodyMeasurementType extends AbstractImmutableType
 {
@@ -42,6 +45,14 @@ final class EditBodyMeasurementType extends AbstractImmutableType
                 'model_timezone' => $user->getTimezone()->getName(),
                 'view_timezone' => $user->getTimezone()->getName(),
                 'input' => 'datetime_immutable',
+                'constraints' => [
+                    new Callback(function (DateTimeImmutable $datetime, ExecutionContextInterface $context): void {
+                        if (!$this->security->isGranted(IsFutureMonthGranted::ATTRIBUTE, $datetime)) {
+                            $context->buildViolation('You cannot manage measurements for future months.')
+                                ->addViolation();
+                        }
+                    }),
+                ],
             ])
             ->add('weight', MeasurementType::class, [
                 'data' => $measurement?->getWeight(),
