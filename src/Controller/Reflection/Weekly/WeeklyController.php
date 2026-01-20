@@ -23,7 +23,7 @@ final class WeeklyController extends AbstractController
 
     #[Route(path: '/reflection/weekly/{month}', name: 'app_weekly_reflection', methods: ['GET'])]
     #[IsFutureMonthGranted('month')]
-    #[IsGranted(WeeklyReflectionVoter::VIEW)]
+    #[IsGranted(WeeklyReflectionVoter::VIEW, 'month')]
     public function __invoke(#[CurrentUser] User $user, ?DateTimeImmutable $month = null): Response
     {
         $month ??= new DateTimeImmutable('first day of this month', $user->getTimezone())->setTime(0, 0);

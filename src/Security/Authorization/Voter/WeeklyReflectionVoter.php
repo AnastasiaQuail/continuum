@@ -6,6 +6,7 @@ namespace Continuum\Security\Authorization\Voter;
 
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
+use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -23,7 +24,7 @@ final class WeeklyReflectionVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute || self::PRIVATE === $attribute|| self::EDIT === $attribute;
+        return self::VIEW === $attribute || self::PRIVATE === $attribute || self::EDIT === $attribute;
     }
 
     protected function voteOnAttribute(
@@ -39,9 +40,28 @@ final class WeeklyReflectionVoter extends Voter
         }
 
         return match ($attribute) {
-            self::VIEW => true,
+            self::VIEW => $this->isViewGranted($user, $subject),
             self::PRIVATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EDIT => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
         };
+    }
+
+    private function isViewGranted(User $user, mixed $subject): bool
+    {
+        if ($subject === null) {
+            return true;
+        }
+
+        if ($this->security->isGrantedForUser($user, UserRole::Admin->value)) {
+            return true;
+        }
+
+        if (!$subject instanceof DateTimeImmutable) {
+            return false;
+        }
+
+        $currentDate = new DateTimeImmutable('now', $user->getTimezone());
+
+        return $currentDate->format('Y-m') === $subject->format('Y-m');
     }
 }

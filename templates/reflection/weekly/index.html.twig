@@ -17,7 +17,7 @@
     prev: {
         url: path('app_weekly_reflection', {'month': prevMonth.format('Y-m')}),
         label: prevMonth.format('F'),
-        isGranted: prevMonth.format('Y') >= app_year_min,
+        isGranted: prevMonth.format('Y') >= app_year_min and is_granted('WEEKLY_REFLECTION_VIEW', prevMonth),
     },
     title: month.format('F'),
     next: {

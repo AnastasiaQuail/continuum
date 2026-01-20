@@ -25,7 +25,7 @@
 } %}
 
 {% block showcase -%}
-    {%- if upcomingNotifications is not empty -%}
+    {%- if upcomingNotifications is not empty and is_granted('CALENDAR_UPCOMING_NOTIFICATIONS') -%}
         <section class="card calendar calendar-upcoming-notifications" id="calendar-notifications">
             <div class="notifications-body">
                 {%- for upcomingNotification in upcomingNotifications -%}

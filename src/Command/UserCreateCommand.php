@@ -32,7 +32,7 @@ final readonly class UserCreateCommand
         #[Argument]
         string $password,
         #[Option]
-        bool $isAdmin = false,
+        ?UserRole $role = null,
     ): int {
         $user = new User($email);
         $user->activate();
@@ -40,8 +40,8 @@ final readonly class UserCreateCommand
             $this->passwordHasher->hashPassword($user, $password)
         );
 
-        if ($isAdmin) {
-            $user->addRole(UserRole::Admin);
+        if (null !== $role) {
+            $user->addRole($role);
         }
 
         $this->entityManager->persist($user);

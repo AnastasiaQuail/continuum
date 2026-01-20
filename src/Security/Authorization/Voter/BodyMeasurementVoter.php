@@ -38,10 +38,14 @@ final class BodyMeasurementVoter extends Voter
             return false;
         }
 
-        if ($attribute === self::VIEW) {
-            return true;
-        }
+        return match ($attribute) {
+            self::VIEW => true,
+            self::EDIT => $this->isEditGranted($user, $subject),
+        };
+    }
 
+    private function isEditGranted(User $user, mixed $subject): bool
+    {
         if ($subject === null) {
             return $this->security->isGrantedForUser($user, UserRole::Admin->value);
         }
