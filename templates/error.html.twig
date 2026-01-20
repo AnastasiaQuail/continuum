@@ -8,7 +8,11 @@
 {% block sidebar %}{% endblock %}
 
 {% block body -%}
-    <div class="body-error-code" data-code="{{ status_code }}">{{ status_code }}</div>
+    <div class="body-error-code" data-code="{{ status_code }}">
+        {%- for digit in status_code|split('') -%}
+            <span>{{ digit }}</span>
+        {%- endfor -%}
+    </div>
     <div class="body-error-container">
         {%- block main %}{% endblock -%}
     </div>
@@ -19,8 +23,7 @@
                 <div class="exception-class">{{ exception.class }}</div>
             </div>
             <div class="exception-trace">
-                {{- exception.file }}({{ exception.line }})<br>
-                {{- exception.traceAsString|nl2br -}}
+                {{- exception.file }}({{ exception.line }})<br><br>{{ exception.traceAsString|nl2br -}}
             </div>
         </div>
     {%- endif -%}

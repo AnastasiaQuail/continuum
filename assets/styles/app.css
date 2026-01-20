@@ -500,6 +500,7 @@ textarea {
     grid-template-rows: auto 1fr;
     padding-inline: var(--body-gap-inline);
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 50;
 
     .navbar {
@@ -674,6 +675,7 @@ textarea {
     display: grid;
     grid-template-rows: 1fr auto;
     overflow-y: auto;
+    overflow-x: hidden;
 
     .body-container {
         padding: var(--body-gap-block) var(--body-gap-inline);
@@ -844,6 +846,7 @@ textarea {
         color: var(--color);
         background-color: var(--background-color);
         border-color: color-mix(in oklch, var(--link-color) var(--transparent-color), transparent);
+        caret-color: color-mix(in oklch, var(--link-color) var(--transparent-color), transparent);
         outline: 0;
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
     }
@@ -1983,6 +1986,17 @@ textarea {
         &[data-code="401"] {
             color: var(--color-orange);
         }
+
+        & > span {
+            transform: translateY(calc(sibling-index() * -10vh));
+            opacity: calc(1 - sibling-index() * 0.3);
+            transition: transform .6s, opacity 1.2s;
+
+            [data-error-page="opened"] & {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     }
 
     .body-error-container {
@@ -2009,6 +2023,17 @@ textarea {
 
         .error-description {
             color: color-mix(in oklch, var(--color) 80%, transparent);
+        }
+
+        & > * {
+            transform: translateY(calc(sibling-index() * 10vh)) scale(2);
+            opacity: calc(1 - sibling-index() * 0.3);
+            transition: transform .6s, opacity 1.2s;
+
+            [data-error-page="opened"] & {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
         }
     }
 

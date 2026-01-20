@@ -1,6 +1,10 @@
 import './styles/app.css';
 
 document.addEventListener('DOMContentLoaded', () => {
+    requestAnimationFrame(() => {
+        document.documentElement.dataset.errorPage = 'opened';
+    });
+
     document.querySelectorAll('[data-button-action]').forEach((button) => {
         button.onclick = () => {
             switch (button.dataset.buttonAction) {
