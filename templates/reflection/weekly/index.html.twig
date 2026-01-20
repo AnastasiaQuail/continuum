@@ -35,14 +35,14 @@
                     <div class="week-title">
                         {%- set monday = date(date).modify('-6 days') -%}
                         {%- set sunday = date(date) -%}
+                        {%- set isDifferentMonth = monday.format('n') != sunday.format('n') -%}
+                        {%- set time = monday.format(isDifferentMonth ? 'j F' : 'j') ~ ' - ' ~ sunday.format('j F') -%}
 
-                        <a href="{{ path('app_weekly_reflection_edit', {'week': date}) }}">
-                            {%- if monday.format('n') != sunday.format('n') -%}
-                                {{- monday.format('j F') }} - {{ sunday.format('j F') -}}
-                            {%- else -%}
-                                {{- monday.format('j') }} - {{ sunday.format('j F') -}}
-                            {%- endif -%}
-                        </a>
+                        {%- if is_granted('WEEKLY_REFLECTION_EDIT') -%}
+                            <a href="{{ path('app_weekly_reflection_edit', {'week': date}) }}">{{ time }}</a>
+                        {%- else -%}
+                            <span>{{ time }}</span>
+                        {%- endif -%}
                     </div>
                     <div class="week-body">
                         {% include 'reflection/weekly/_alert.html.twig' with {

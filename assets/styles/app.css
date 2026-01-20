@@ -1661,13 +1661,15 @@ textarea {
         .week-title {
             font-size: var(--font-size-small);
 
-            > a {
+            > a,
+            > span {
                 display: inline-flex;
                 padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
                 text-decoration: none;
                 transition: color .15s;
 
-                &:not(:hover) {
+                &:is(span),
+                &:is(a):not(:hover) {
                     color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
                 }
             }

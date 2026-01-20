@@ -117,11 +117,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{- _route == 'app_weekly_reflection' or _route == 'app_weekly_reflection_edit' ? ' active' }}"
-                           href="{{ path('app_weekly_reflection') }}">
-                            {{- ux_icon('lucide:star') -}}
-                            <span>Week in review</span>
-                        </a>
+                        {%- if is_granted('WEEKLY_REFLECTION_VIEW') -%}
+                            <a class="nav-link {{- _route == 'app_weekly_reflection' or _route == 'app_weekly_reflection_edit' ? ' active' }}"
+                               href="{{ path('app_weekly_reflection') }}">
+                                {{- ux_icon('lucide:star') -}}
+                                <span>Week in review</span>
+                            </a>
+                        {%- endif -%}
                     </li>
 
                     <li>
