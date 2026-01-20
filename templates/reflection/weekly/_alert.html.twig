@@ -4,7 +4,7 @@
 {# @var isPrivate = bool|null #}
 
 {%- set isPrivate = isPrivate|default(false) -%}
-{%- set isSecure = isPrivate and not is_granted('ROLE_ADMIN') -%}
+{%- set isSecure = isPrivate and not is_granted('WEEKLY_REFLECTION_PRIVATE') -%}
 {%- set types = {
     'joy': {
         'class': 'alert-success',

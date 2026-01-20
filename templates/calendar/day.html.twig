@@ -23,7 +23,7 @@
                         <span> at {{ eventDate.format('H:i') }}</span>
                     {%- endif -%}
 
-                    {% if is_granted('ROLE_SUPER_ADMIN') %}
+                    {% if is_granted('CALENDAR_EVENT_DELETE') %}
                         <form method="post" action="{{ path('app_calendar_event_delete', {'id': event.id}) }}"
                               onsubmit="return confirm('Delete?')">
                             <input type="hidden" name="_method" value="DELETE">

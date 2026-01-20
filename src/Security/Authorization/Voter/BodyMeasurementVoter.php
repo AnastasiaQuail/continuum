@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 final class BodyMeasurementVoter extends Voter
 {
+    public const string VIEW = 'BODY_MEASUREMENT_VIEW';
     public const string EDIT = 'BODY_MEASUREMENT_EDIT';
 
     public function __construct(
@@ -22,7 +23,7 @@ final class BodyMeasurementVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::EDIT === $attribute;
+        return self::VIEW === $attribute || self::EDIT === $attribute;
     }
 
     protected function voteOnAttribute(
@@ -35,6 +36,10 @@ final class BodyMeasurementVoter extends Voter
 
         if (!$user instanceof User) {
             return false;
+        }
+
+        if ($attribute === self::VIEW) {
+            return true;
         }
 
         if ($subject === null) {

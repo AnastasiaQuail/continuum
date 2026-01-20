@@ -98,44 +98,50 @@
         <aside id="sidebar" class="sidebar">
             <nav class="navbar">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link {{- _route == 'app_calendar' or _route == 'app_calendar_day' ? ' active' }}"
-                           href="{{ path('app_calendar') }}">
-                            {{- ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) -}}
-                            <span>Calendar</span>
-                        </a>
-                    </li>
+                    {%- if is_granted('CALENDAR_VIEW') -%}
+                        <li class="nav-item">
+                            <a class="nav-link {{- _route == 'app_calendar' or _route == 'app_calendar_day' ? ' active' }}"
+                               href="{{ path('app_calendar') }}">
+                                {{- ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) -}}
+                                <span>Calendar</span>
+                            </a>
+                        </li>
+                    {%- endif -%}
 
                     <li>
                         <span class="nav-title-divider">Reflection</span>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{- _route == 'app_mood_reflection' or _route == 'app_mood_reflection_edit' ? ' active' }}"
-                           href="{{ path('app_mood_reflection') }}">
-                            {{- ux_icon('lucide:smile-plus') -}}
-                            <span>Mood tracker</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        {%- if is_granted('WEEKLY_REFLECTION_VIEW') -%}
+                    {%- if is_granted('MOOD_REFLECTION_VIEW') -%}
+                        <li class="nav-item">
+                            <a class="nav-link {{- _route == 'app_mood_reflection' or _route == 'app_mood_reflection_edit' ? ' active' }}"
+                               href="{{ path('app_mood_reflection') }}">
+                                {{- ux_icon('lucide:smile-plus') -}}
+                                <span>Mood tracker</span>
+                            </a>
+                        </li>
+                    {%- endif -%}
+                    {%- if is_granted('WEEKLY_REFLECTION_VIEW') -%}
+                        <li class="nav-item">
                             <a class="nav-link {{- _route == 'app_weekly_reflection' or _route == 'app_weekly_reflection_edit' ? ' active' }}"
                                href="{{ path('app_weekly_reflection') }}">
                                 {{- ux_icon('lucide:star') -}}
                                 <span>Week in review</span>
                             </a>
-                        {%- endif -%}
-                    </li>
+                        </li>
+                    {%- endif -%}
 
                     <li>
                         <span class="nav-title-divider">Health</span>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link {{- _route == 'app_health_measurements' or _route == 'app_health_measurement_edit' ? ' active' }}"
-                           href="{{ path('app_health_measurements') }}">
-                            {{- ux_icon('lucide:ruler-dimension-line') -}}
-                            <span>Measurements</span>
-                        </a>
-                    </li>
+                    {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
+                        <li class="nav-item">
+                            <a class="nav-link {{- _route == 'app_health_measurements' or _route == 'app_health_measurement_edit' ? ' active' }}"
+                               href="{{ path('app_health_measurements') }}">
+                                {{- ux_icon('lucide:ruler-dimension-line') -}}
+                                <span>Measurements</span>
+                            </a>
+                        </li>
+                    {%- endif -%}
                     <li class="nav-item">
                         <a class="nav-link" href="#">
                             {{- ux_icon('lucide:dumbbell') -}}

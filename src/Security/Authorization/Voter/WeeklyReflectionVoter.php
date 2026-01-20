@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class WeeklyReflectionVoter extends Voter
 {
     public const string VIEW = 'WEEKLY_REFLECTION_VIEW';
+    public const string PRIVATE = 'WEEKLY_REFLECTION_PRIVATE';
     public const string EDIT = 'WEEKLY_REFLECTION_EDIT';
 
     public function __construct(
@@ -22,7 +23,7 @@ final class WeeklyReflectionVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute || self::EDIT === $attribute;
+        return self::VIEW === $attribute || self::PRIVATE === $attribute|| self::EDIT === $attribute;
     }
 
     protected function voteOnAttribute(
@@ -38,7 +39,8 @@ final class WeeklyReflectionVoter extends Voter
         }
 
         return match ($attribute) {
-            self::VIEW => $this->security->isGrantedForUser($user, UserRole::Admin->value),
+            self::VIEW => true,
+            self::PRIVATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EDIT => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
         };
     }

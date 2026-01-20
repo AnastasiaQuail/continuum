@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Controller\Calendar;
 
 use Continuum\Entity\User;
+use Continuum\Security\Authorization\Voter\CalendarVoter;
 use Continuum\Service\CalendarEventService;
 use Continuum\Service\UpcomingEventService;
 use DateTimeImmutable;
@@ -13,6 +14,7 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class CalendarController extends AbstractController
 {
@@ -24,6 +26,7 @@ final class CalendarController extends AbstractController
     ) {}
 
     #[Route(path: '/calendar/{year}', name: 'app_calendar', requirements: ['year' => '\d+'], methods: ['GET'])]
+    #[IsGranted(CalendarVoter::VIEW)]
     public function __invoke(#[CurrentUser] User $user, ?int $year = null): Response
     {
         $year ??= (int) new DateTimeImmutable('now', $user->getTimezone())->format('Y');
