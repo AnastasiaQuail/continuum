@@ -10,6 +10,7 @@ use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Form\Type\MeasurementType;
 use Continuum\Security\Attribute\IsFutureMonthGranted;
+use Continuum\Security\Authorization\Voter\FutureMonthVoter;
 use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Exception\LogicException;
@@ -47,7 +48,7 @@ final class EditBodyMeasurementType extends AbstractImmutableType
                 'input' => 'datetime_immutable',
                 'constraints' => [
                     new Callback(function (DateTimeImmutable $datetime, ExecutionContextInterface $context): void {
-                        if (!$this->security->isGranted(IsFutureMonthGranted::ATTRIBUTE, $datetime)) {
+                        if (!$this->security->isGranted(FutureMonthVoter::ATTRIBUTE, $datetime)) {
                             $context->buildViolation('You cannot manage measurements for future months.')
                                 ->addViolation();
                         }
