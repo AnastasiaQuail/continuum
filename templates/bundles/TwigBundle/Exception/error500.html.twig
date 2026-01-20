@@ -1,0 +1,16 @@
+{% extends 'error.html.twig' %}
+
+{% block main -%}
+    <h1 class="error-title">Well… this is awkward.</h1>
+    <p class="error-description">Something broke on our side. We’re already looking into it.</p>
+    <nav>
+        <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
+            {{ ux_icon('lucide:house') }}
+            <span>Go Home</span>
+        </a>
+        <button class="btn btn-secondary btn-transparent" data-button-action="retry">
+            {{ ux_icon('lucide:refresh-cw') }}
+            <span>Retry</span>
+        </button>
+    </nav>
+{%- endblock %}

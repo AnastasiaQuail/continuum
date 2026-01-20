@@ -18,6 +18,10 @@ return [
         'path' => './assets/public.js',
         'entrypoint' => true,
     ],
+    'error' => [
+        'path' => './assets/error.js',
+        'entrypoint' => true,
+    ],
     'app' => [
         'path' => './assets/app.js',
         'entrypoint' => true,

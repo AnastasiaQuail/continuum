@@ -930,10 +930,6 @@ textarea {
             --btn-general-color: var(--general-color);
             --btn-border-color-transparent: 0%;
             --btn-background-color-transparent: var(--transparent-color);
-
-            [data-theme="dark"] & {
-                --btn-color: var(--color-light);
-            }
         }
 
         &:not(:has(input[type="radio"]:checked)) .btn {
@@ -991,9 +987,9 @@ textarea {
 
 .btn {
     --btn-general-color: var(--color);
-    --btn-color: var(--color-inverse);
+    --btn-color: var(--color-light);
     --btn-border-color: var(--btn-general-color);
-    --btn-border-color-transparent: var(--transparent-color);
+    --btn-border-color-transparent: 0%;
     --btn-background-color: var(--btn-general-color);
     --btn-background-color-transparent: var(--transparent-color);
 
@@ -1062,10 +1058,18 @@ textarea {
     }
 
     &.btn-secondary {
-        --btn-general-color: var(--color-gray);
+        --btn-general-color: color-mix(in srgb, var(--color) 50%, var(--background-color));
+
+        &.btn-outline:not(:hover),
+        &.btn-transparent,
+        &.btn-link {
+            --btn-color: color-mix(in srgb, var(--color) 70%, var(--background-color));
+        }
     }
 
     &.btn-outline {
+        --btn-border-color-transparent: var(--transparent-color);
+
         &:not(:hover) {
             --btn-color: var(--btn-general-color);
             --btn-background-color-transparent: 0%;
@@ -1079,6 +1083,32 @@ textarea {
 
         &:hover {
             --btn-background-color-transparent: 25%;
+        }
+    }
+
+    &.btn-action {
+        &:not(:hover):not(:focus) {
+            --btn-color: color-mix(in srgb, var(--color) var(--transparent-color-tiny), var(--background-color));
+            --btn-border-color: var(--color);
+            --btn-border-color-transparent: var(--transparent-color);
+            --btn-background-color-transparent: 0%;
+        }
+
+        &:hover,
+        &:focus {
+            --btn-color: var(--btn-general-color);
+            --btn-border-color-transparent: 0%;
+            --btn-background-color-transparent: 15%;
+        }
+    }
+
+    &.btn-link {
+        --btn-color: var(--btn-general-color);
+        --btn-border-color-transparent: 0%;
+        --btn-background-color-transparent: 0%;
+
+        &:hover {
+            --btn-background-color-transparent: 5%;
         }
     }
 }
@@ -1923,5 +1953,95 @@ textarea {
         border: var(--border-width) dashed color-mix(in oklch, var(--color) 20%, transparent);
         border-radius: var(--border-radius);
         user-select: none;
+    }
+}
+
+#error .body {
+    perspective: 1px;
+
+    .body-error-code {
+        position: absolute;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        padding-bottom: 10vh;
+        font-size: min(90vh, 50vw);
+        font-weight: 500;
+        letter-spacing: min(-1vh, -1vw);
+        color: var(--color-zinc);
+        transform: translateZ(-1px) scale(2);
+        z-index: -1;
+
+        &[data-code="403"],
+        &[data-code="500"] {
+            color: var(--color-red);
+        }
+
+        &[data-code="400"],
+        &[data-code="401"] {
+            color: var(--color-orange);
+        }
+    }
+
+    .body-error-container {
+        --clr: var(--body-background-color);
+        --clr_25: color-mix(in oklch, var(--clr) 98%, transparent);
+        --clr_50: color-mix(in oklch, var(--clr) 70%, transparent);
+        --clr_75: color-mix(in oklch, var(--clr) 50%, transparent);
+
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        height: 100vh;
+        padding: calc(var(--body-gap-block) * 3) var(--body-gap-inline);
+        text-align: center;
+        background: linear-gradient(0deg, var(--clr), var(--clr_25), var(--clr_50), var(--clr_75), transparent);
+        z-index: 1;
+
+        .error-title {
+            font-size: calc(var(--font-size) * 3);
+            font-weight: var(--font-weight-bold-extra);
+            line-height: 1;
+        }
+
+        .error-description {
+            color: color-mix(in oklch, var(--color) 80%, transparent);
+        }
+    }
+
+    .body-error-exception {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        padding: calc(var(--body-gap-block) * 3) var(--body-gap-inline);
+        gap: calc(var(--body-gap-block) * 2);
+        word-break: break-word;
+        background-color: var(--body-background-color);
+        overflow-x: hidden;
+        z-index: 2;
+
+        .exception-base {
+            text-align: center;
+
+            .exception-message {
+                font-size: calc(var(--font-size) * 2);
+                text-align: center;
+                color: color-mix(in srgb, var(--color-red) 80%, var(--color));
+            }
+        }
+
+        .exception-trace {
+            max-width: min(calc(300px + 40vw), calc(100vw - calc(var(--body-gap-block) * 2)));
+            padding: var(--body-gap-block) var(--body-gap-inline);
+            white-space: pre-line;
+            color: color-mix(in oklch, var(--color) 80%, transparent);
+            border: var(--border-width) solid var(--body-border-color);
+            border-radius: var(--body-border-radius);
+            background-color: var(--background-color);
+        }
     }
 }

@@ -14,7 +14,12 @@
 {% endblock %}
 
 {% block main -%}
-    {%- if app.user is empty -%}
+    {%- if app.user -%}
+        <a class="btn btn-primary btn-action" href="{{ path('app_homepage') }}">
+            {{ ux_icon('lucide:house') }}
+            <span>Go home</span>
+        </a>
+    {%- else -%}
         <form action="{{ path('app_login') }}" method="post">
             <div>
                 <label for="username" hidden>Email</label>
@@ -32,7 +37,7 @@
                    value="{{ csrf_token('authenticate') }}">
 
             <div class="form-control-group">
-                <button class="btn btn-login btn-outline" type="submit" id="submit">
+                <button class="btn btn-primary btn-action" type="submit" id="submit">
                     {{ ux_icon('lucide:log-in') }}
                     <span>Sign in</span>
                 </button>

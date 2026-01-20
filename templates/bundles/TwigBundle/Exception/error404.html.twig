@@ -1,0 +1,16 @@
+{% extends 'error.html.twig' %}
+
+{% block main -%}
+    <h1 class="error-title">Oops, I think we're lost...</h1>
+    <p class="error-description">Let's get you back to somewhere familiar.</p>
+    <nav>
+        <button class="btn btn-primary btn-transparent" data-button-action="back">
+            {{ ux_icon('lucide:arrow-left') }}
+            <span>Go Back</span>
+        </button>
+        <a class="btn btn-secondary btn-transparent" href="{{ path('app_homepage') }}">
+            {{ ux_icon('lucide:house') }}
+            <span>Back to Home</span>
+        </a>
+    </nav>
+{%- endblock %}

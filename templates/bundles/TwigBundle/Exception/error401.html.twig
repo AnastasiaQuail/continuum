@@ -1,0 +1,12 @@
+{% extends 'error.html.twig' %}
+
+{% block main -%}
+    <h1 class="error-title">Hold on… who are you?</h1>
+    <p class="error-description">You need to sign in to access this page.</p>
+    <nav>
+        <a class="btn btn-primary btn-transparent" href="{{ path('app_login') }}">
+            {{ ux_icon('lucide:log-in') }}
+            <span>Sign in</span>
+        </a>
+    </nav>
+{%- endblock %}

@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block importmap %}{{ importmap('error') }}{% endblock %}
+
+{% block body_id 'error' %}
+
+{% block header %}{% endblock %}
+{% block sidebar %}{% endblock %}
+
+{% block body -%}
+    <div class="body-error-code" data-code="{{ status_code }}">{{ status_code }}</div>
+    <div class="body-error-container">
+        {%- block main %}{% endblock -%}
+    </div>
+    {%- if is_granted('ROLE_SUPER_ADMIN') -%}
+        <div class="body-error-exception">
+            <div class="exception-base">
+                <h2 class="exception-message">{{ exception.message }}</h2>
+                <div class="exception-class">{{ exception.class }}</div>
+            </div>
+            <div class="exception-trace">
+                {{- exception.file }}({{ exception.line }})<br>
+                {{- exception.traceAsString|nl2br -}}
+            </div>
+        </div>
+    {%- endif -%}
+{%- endblock %}
+
+{% block footer %}{% endblock %}

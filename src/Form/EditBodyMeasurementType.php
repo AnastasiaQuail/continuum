@@ -9,7 +9,6 @@ use Continuum\Dto\Response\Health\LastBodyMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Form\Type\MeasurementType;
-use Continuum\Security\Attribute\IsFutureMonthGranted;
 use Continuum\Security\Authorization\Voter\FutureMonthVoter;
 use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;

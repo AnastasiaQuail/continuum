@@ -48,16 +48,4 @@
             display: block;
         }
     }
-
-    .btn-login {
-        --btn-border-color: var(--color-gray);
-
-        &:hover,
-        &:focus {
-            --btn-general-color: var(--link-color);
-            --btn-color: var(--btn-general-color);
-            --btn-border-color-transparent: 0%;
-            --btn-background-color-transparent: 15%;
-        }
-    }
 }
