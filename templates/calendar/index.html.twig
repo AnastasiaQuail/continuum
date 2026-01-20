@@ -68,7 +68,7 @@
                             {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
 
                             <{% if isGranted %}a{% else %}div{% endif %}
-                                href="{{ path('app_calendar_day', {'day': day}) }}"
+                                {% if isGranted %}href="{{ path('app_calendar_day', {'day': day}) }}"{% endif %}
                                 class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}} {{- isWeekend ? ' day-weekend' -}}"
                                 {%- if dayEvent is not null %}data-general-type="{{ dayEvent.type.value }}"{% endif -%}>
                                 <span>{{ dayNumber }}</span>

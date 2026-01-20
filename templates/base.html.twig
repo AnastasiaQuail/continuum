@@ -52,13 +52,15 @@
                                         <hr class="dropdown-divider">
                                     </li>
                                 {%- endif -%}
-                                <li class="dropdown-item">
-                                    <a class="dropdown-link"
-                                       href="{{ path('app_mood_reflection_edit', {'day': user_date('now').format('Y-m-d')}) }}">
-                                        {{- ux_icon('lucide:scan-face') -}}
-                                        <span>Track mood</span>
-                                    </a>
-                                </li>
+                                {%- if is_granted('MOOD_REFLECTION_EDIT') -%}
+                                    <li class="dropdown-item">
+                                        <a class="dropdown-link"
+                                           href="{{ path('app_mood_reflection_edit', {'day': user_date('now').format('Y-m-d')}) }}">
+                                            {{- ux_icon('lucide:scan-face') -}}
+                                            <span>Track mood</span>
+                                        </a>
+                                    </li>
+                                {%- endif -%}
                                 {%- if is_granted('BODY_MEASUREMENT_EDIT') -%}
                                     <li class="dropdown-item">
                                         <a class="dropdown-link" href="{{ path('app_health_measurement_edit') }}">

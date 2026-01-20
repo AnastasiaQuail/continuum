@@ -27,16 +27,19 @@
     },
 } %}
 
+{% set isGranted = is_granted('MOOD_REFLECTION_EDIT') %}
+
 {% block showcase -%}
     <section class="card card-mood-chart">
         <div class="mood-chart" style="--chart-columns: {{ lastMoods|length }};">
             {%- for lastMood in lastMoods -%}
                 {%- if lastMood -%}
-                    <a class="chart-day" data-type="{{ lastMood.type.value }}"
-                       data-general-type="{{ lastMood.type.color.value }}"
-                       href="{{ path('app_mood_reflection_edit', {'day': lastMood.date.format('Y-m-d')}) }}">
+                    <{% if isGranted %}a{% else %}div{% endif %}
+                        {% if isGranted %}href="{{ path('app_mood_reflection_edit', {'day': lastMood.date.format('Y-m-d')}) }}"{% endif %}
+                        class="chart-day" data-type="{{ lastMood.type.value }}"
+                        data-general-type="{{ lastMood.type.color.value }}">
                         <div class="chart-day-type">{{ lastMood.date.format('j') }}</div>
-                    </a>
+                    </{% if isGranted %}a{% else %}div{% endif %}>
                 {%- else -%}
                     <div class="chart-day">
                         <div class="chart-day-type"></div>
@@ -65,11 +68,12 @@
                         {%- set day = month.format('Y-m-') ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
                         {%- set mood = moods[day] is defined ? moods[day] : null -%}
 
-                        <a href="{{ path('app_mood_reflection_edit', {'day': day}) }}"
-                           class="day {{- day == current ? ' day-current' -}} {{- mood is not null ? ' day-past' }}"
-                           {%- if mood is not null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
+                        <{% if isGranted %}a{% else %}div{% endif %}
+                            {% if isGranted %}href="{{ path('app_mood_reflection_edit', {'day': day}) }}"{% endif %}
+                            class="day {{- day == current ? ' day-current' -}} {{- mood is not null ? ' day-past' }}"
+                            {%- if mood is not null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
                             <span>{{ dayNumber }}</span>
-                        </a>
+                        </{% if isGranted %}a{% else %}div{% endif %}>
                     {%- endfor -%}
                 </div>
             </article>

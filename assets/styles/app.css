@@ -1637,6 +1637,7 @@ textarea {
                 border-radius: 2px;
                 background-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
                 box-shadow: 0 12px 24px var(--general-color, var(--border-color));
+                cursor: default;
                 transition: height .15s, font-size .15s, transform .15s;
             }
 
