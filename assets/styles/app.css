@@ -265,6 +265,17 @@ textarea {
     transform: translateY(-1px);
 }
 
+@keyframes fader {
+    from {
+        opacity: 0;
+        transform: translateY(var(--fade-offset, 5vh));
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .header {
     position: relative;
     display: flex;
@@ -1695,6 +1706,10 @@ textarea {
     .week {
         --week-columns: 3;
 
+        animation: fader 1s ease-out;
+        animation-timeline: view();
+        animation-range: entry 0% cover 20%;
+
         .week-title {
             font-size: var(--font-size-small);
 
@@ -1720,11 +1735,16 @@ textarea {
     }
 
     .alert {
+        --fade-offset: 2vh;
+
         display: grid;
         grid-template-rows: auto 1fr;
         gap: calc(var(--gap-block) / 2);
         margin-bottom: 0;
         overflow: hidden;
+        animation: fader 1s ease-out;
+        animation-timeline: view();
+        animation-range: entry 0% cover 20%;
 
         .alert-title {
             display: flex;
@@ -1875,6 +1895,10 @@ textarea {
 }
 
 .body-measurement {
+    animation: fader 1s ease-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
+
     .measurement-date {
         & > a,
         & > span {
