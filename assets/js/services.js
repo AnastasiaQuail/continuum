@@ -77,7 +77,7 @@ export class TimezoneDetector {
         const alert = document.createElement('div');
         alert.classList.add('alert');
         alert.classList.add('alert-warning');
-        alert.classList.add('alert-timezone-mismatch');
+        alert.classList.add('alert-inline');
 
         const mismatchText = document.createElement('strong');
         mismatchText.innerText = 'Time zone mismatch!';

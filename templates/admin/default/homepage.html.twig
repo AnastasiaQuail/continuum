@@ -1,0 +1,26 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block body_id %}admin-homepage{% endblock %}
+
+{% block main -%}
+    <section class="card">
+        {%-if false -%}
+            <div class="alert alert-danger alert-inline">
+                <span>25 hours from last backup!</span>
+                <form method="post" action="{{ path('app_admin_database_backup_create') }}">
+                    <button class="btn btn-danger btn-xs">
+                        {{- ux_icon('lucide:database-backup') -}}
+                        <span>Create Backup</span>
+                    </button>
+                </form>
+            </div>
+        {%-else -%}
+            <form method="post" action="{{ path('app_admin_database_backup_create') }}">
+                <button class="btn btn-primary btn-transparent">
+                    {{- ux_icon('lucide:database-backup') -}}
+                    <span>Create Backup</span>
+                </button>
+            </form>
+        {%-endif -%}
+    </section>
+{%- endblock %}

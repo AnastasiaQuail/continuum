@@ -556,6 +556,12 @@ textarea {
                         margin-left: auto;
                         transition: transform .15s;
                     }
+
+                    .nav-icon-cloud-alert {
+                        display: inline-flex;
+                        margin-left: auto;
+                        color: var(--color-red);
+                    }
                 }
 
                 .nav-dropdown {
@@ -1177,7 +1183,7 @@ textarea {
         --alert-color: var(--color-gray);
     }
 
-    &.alert-timezone-mismatch {
+    &.alert-inline {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
