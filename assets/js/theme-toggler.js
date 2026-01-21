@@ -10,6 +10,7 @@ export default class extends Storage {
      */
     set(value) {
         document.documentElement.dataset.theme = value;
+        document.dispatchEvent(new CustomEvent('app:theme:changed'));
     }
 
     /**
@@ -26,7 +27,6 @@ export default class extends Storage {
         document.addEventListener('DOMContentLoaded', () => {
             document.querySelector(id).onclick = () => {
                 this.save(this.get() === 'light' ? 'dark' : 'light');
-                document.dispatchEvent(new CustomEvent('app:theme:changed'));
             };
         })
     }
