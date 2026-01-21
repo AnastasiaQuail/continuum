@@ -1019,6 +1019,10 @@ textarea {
         --btn-background-color-transparent: calc(var(--transparent-color) + 10%);
     }
 
+    &:active {
+        transform: translateY(1px);
+    }
+
     &:focus-visible {
         outline: 0;
     }
@@ -1959,6 +1963,28 @@ textarea {
     }
 }
 
+@keyframes error_page_top {
+    from {
+        transform: translateY(calc(sibling-index() * -10vh));;
+        opacity: calc(1 - sibling-index() * 0.3);
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes error_page_bottom {
+    from {
+        transform: translateY(calc(sibling-index() * sibling-index() * 10vh)) scale(calc(sibling-index() * 1.5));
+        opacity: calc(1 - sibling-index() * 0.5);
+    }
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
 #error .body {
     perspective: 1px;
 
@@ -1988,14 +2014,7 @@ textarea {
         }
 
         & > span {
-            transform: translateY(calc(sibling-index() * -10vh));
-            opacity: calc(1 - sibling-index() * 0.3);
-            transition: transform .6s, opacity 1.2s;
-
-            [data-error-page="opened"] & {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            animation: error_page_top 1s ease-out;
         }
     }
 
@@ -2026,14 +2045,7 @@ textarea {
         }
 
         & > * {
-            transform: translateY(calc(sibling-index() * 10vh)) scale(2);
-            opacity: calc(1 - sibling-index() * 0.3);
-            transition: transform .6s, opacity 1.2s;
-
-            [data-error-page="opened"] & {
-                transform: translateY(0) scale(1);
-                opacity: 1;
-            }
+            animation: error_page_bottom calc(0.6s + sibling-index() * .1s) ease-out;
         }
     }
 

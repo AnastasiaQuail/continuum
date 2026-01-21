@@ -5,7 +5,7 @@
 
 {% block flash_messages %}
     {%- if app.user -%}
-        <div class="alert alert-warning">
+        <div class="alert alert-secondary">
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
         </div>
     {%- elseif error -%}
@@ -15,7 +15,7 @@
 
 {% block main -%}
     {%- if app.user -%}
-        <a class="btn btn-primary btn-action" href="{{ path('app_homepage') }}">
+        <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
             {{ ux_icon('lucide:house') }}
             <span>Go home</span>
         </a>
