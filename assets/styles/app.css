@@ -2,6 +2,7 @@
     --font-size: 1rem;
     --font-size-medium: calc(var(--font-size) * 0.875);
     --font-size-small: calc(var(--font-size) * 0.75);
+    --font-size-extra-small: calc(var(--font-size) * 0.625);
 
     --font-weight-light: 200;
     --font-weight: 300;
@@ -675,7 +676,7 @@ textarea {
             .nav-title-divider {
                 margin-inline: calc(var(--gap-inline) / 2 * -1);
                 padding-inline: 0;
-                font-size: calc(var(--font-size-small) * .8);
+                font-size: var(--font-size-extra-small);
                 text-align: center;
             }
         }
@@ -1138,10 +1139,14 @@ textarea {
     position: relative;
     padding: calc(var(--gap-block) * 0.75) var(--gap-inline);
     margin-bottom: var(--gap-block);
-    color: color-mix(in srgb, var(--alert-color) var(--transparent-color-tiny), var(--color));
+    color: var(--alert-color);
     border: var(--border-width) solid color-mix(in oklch, var(--alert-color) 20%, transparent);
     border-radius: var(--border-radius);
     background-color: color-mix(in oklch, var(--alert-color) var(--alert-background-color-transparent), transparent);
+
+    [data-theme="dark"] {
+        color: color-mix(in srgb, var(--alert-color) var(--transparent-color-tiny), var(--color));
+    }
 
     a {
         color: inherit;
@@ -1752,9 +1757,7 @@ textarea {
             gap: calc(var(--gap-inline) / 4);
             padding-top: 2px;
             font-size: var(--font-size-small);
-            color: color-mix(in srgb, var(--alert-color) var(--transparent-color-tiny), var(--color));
             cursor: default;
-            opacity: .7;
         }
 
         .alert-body {
@@ -1922,29 +1925,25 @@ textarea {
     }
 
     .measurement-values {
-        --measurement-color: var(--color);
-        --measurement-color-transparent: 15%;
-        --measurement-label-color: var(--color);
-        --measurement-label-color-transparent: var(--transparent-color-tiny);
+        --measurement-color: color-mix(in srgb, var(--color) var(--transparent-color-tiny), var(--color-inverse));
+        --measurement-color-transparent: 10%;
 
         padding: calc(var(--gap-block) * 0.75) var(--gap-inline);
         border-radius: var(--border-radius);
-        background-color: color-mix(in oklch, var(--measurement-color) 2%, transparent);
+        background-color: color-mix(in oklch, var(--color) 2%, transparent);
 
         .measurement-values-fat {
             --measurement-color: var(--color-orange);
-            --measurement-color-transparent: var(--transparent-color);
-            --measurement-label-color: var(--color-light);
-            --measurement-label-color-transparent: 100%;
+            --measurement-color-transparent: 15%;
 
             width: 100%;
         }
 
         .measurement-value {
-            --value-color: color-mix(in oklch, var(--measurement-color) var(--measurement-color-transparent), transparent);
+            --measurement-background-color: color-mix(in oklch, var(--measurement-color) var(--measurement-color-transparent), transparent);
 
             display: inline-flex;
-            border: var(--border-width) solid var(--value-color);
+            border: var(--border-width) solid var(--measurement-background-color);
             border-radius: calc(var(--border-radius) / 2);
             overflow: hidden;
 
@@ -1958,9 +1957,13 @@ textarea {
             .measurement-label {
                 padding: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 2);
                 font-size: var(--font-size-small);
-                color: color-mix(in oklch, var(--measurement-label-color) var(--measurement-label-color-transparent), transparent);
-                background-color: var(--value-color);
+                color: var(--measurement-color);
+                background-color: var(--measurement-background-color);
                 user-select: none;
+
+                [data-theme="dark"] & {
+                    color: color-mix(in srgb, var(--measurement-color) var(--transparent-color-tiny), var(--color));
+                }
             }
 
             .measurement-body {
@@ -1969,7 +1972,7 @@ textarea {
                 padding: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 3);
 
                 & > span:last-child {
-                    font-size: var(--font-size-small);
+                    font-size: var(--font-size-extra-small);
                     opacity: .6;
                 }
             }
@@ -2019,7 +2022,7 @@ textarea {
         justify-content: center;
         width: 100vw;
         height: 100vh;
-        padding-bottom: 10vh;
+        padding-bottom: calc(10vh * calc(1vh / (1vw)));
         font-size: min(90vh, 50vw);
         font-weight: 500;
         letter-spacing: min(-1vh, -1vw);
@@ -2053,7 +2056,7 @@ textarea {
         flex-direction: column;
         justify-content: end;
         height: 100vh;
-        padding: calc(var(--body-gap-block) * 3) var(--body-gap-inline);
+        padding: calc(6vh * calc(1vw / (1vh))) var(--body-gap-inline);
         text-align: center;
         background: linear-gradient(0deg, var(--clr), var(--clr_25), var(--clr_50), var(--clr_75), transparent);
         z-index: 1;
