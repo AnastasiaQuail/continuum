@@ -8,10 +8,13 @@ use Continuum\Entity\User;
 use Continuum\Security\Authorization\Voter\CalendarVoter;
 use Continuum\Service\Calendar\CalendarEventService;
 use Continuum\Service\Calendar\UpcomingEventService;
+use Continuum\Service\RequestValidator;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -19,25 +22,29 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class IndexController extends AbstractController
 {
     public function __construct(
+        private readonly RequestValidator $requestValidator,
         #[Autowire(env: 'string:APP_DATE_START')]
         private readonly string $startDate,
         private readonly UpcomingEventService $upcomingEventService,
         private readonly CalendarEventService $calendarEventService,
     ) {}
 
-    #[Route(path: '/calendar/{year}', name: 'app_calendar', requirements: ['year' => '\d+'], methods: ['GET'])]
+    #[Route(path: '/calendar', name: 'app_calendar', methods: ['GET'])]
     #[IsGranted(CalendarVoter::VIEW)]
-    public function __invoke(#[CurrentUser] User $user, ?int $year = null): Response
+    public function __invoke(#[CurrentUser] User $user, #[MapQueryParameter] ?int $year = null): Response
     {
         $year ??= (int) new DateTimeImmutable('now', $user->getTimezone())->format('Y');
-        $startDay = new DateTimeImmutable($this->startDate, $user->getTimezone());
+
+        if (null !== $error = $this->requestValidator->validateYear($year)) {
+            throw new BadRequestHttpException($error);
+        }
 
         $upcomingNotifications = $this->upcomingEventService->getUpcomingNotifications($user);
         $events = $this->calendarEventService->getByYear($user, $year);
 
         return $this->render('calendar/index.html.twig', [
             'year' => $year,
-            'startDay' => $startDay,
+            'startDay' => new DateTimeImmutable($this->startDate, $user->getTimezone()),
             'upcomingNotifications' => $upcomingNotifications,
             'events' => $events,
         ]);

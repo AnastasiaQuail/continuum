@@ -34,8 +34,6 @@ final readonly class DateTimeValidControllerArgumentListener
 
         foreach ($arguments as $name => $argument) {
             if ($name === 'year' && is_numeric($argument)) {
-                $this->validateYear((int) $argument);
-
                 continue;
             }
 

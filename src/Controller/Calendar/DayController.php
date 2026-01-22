@@ -22,7 +22,7 @@ final class DayController extends AbstractController
         private readonly CalendarEventService $calendarEventService,
     ) {}
 
-    #[Route(path: '/calendar/days/{day}', name: 'app_calendar_day', methods: ['GET', 'POST'])]
+    #[Route(path: '/calendar/{day}', name: 'app_calendar_day', methods: ['GET', 'POST'])]
     #[IsGranted(CalendarVoter::EDIT)]
     public function __invoke(Request $request, #[CurrentUser] User $user, DateTimeImmutable $day): Response
     {
