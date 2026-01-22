@@ -557,8 +557,7 @@ textarea {
                         transition: transform .15s;
                     }
 
-                    .nav-icon-cloud-alert {
-                        display: inline-flex;
+                    .nav-icon-alert {
                         margin-left: auto;
                         color: var(--color-red);
                     }
@@ -1187,7 +1186,7 @@ textarea {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: calc(var(--gap-block) / 4);
+        gap: calc(var(--gap-block) / 2);
     }
 }
 

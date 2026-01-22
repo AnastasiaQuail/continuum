@@ -11,18 +11,41 @@ use Symfony\Component\Process\Process;
 
 final readonly class DatabaseDumper
 {
+    public const string CACHE_KEY = 'app.db.backup_last_file';
+
     public function __construct(
         #[Autowire(env: 'DATABASE_URL')]
         private string $databaseUrl,
         #[Autowire('%kernel.project_dir%/data/backups')]
         private string $backupDir,
         private LoggerInterface $logger,
+        private DatabaseDumpCache $cache,
     ) {}
 
     /**
      * @throws RuntimeException
      */
     public function makeBackup(): string
+    {
+        try {
+            $backupPath = $this->doBackup();
+        } catch (RuntimeException $exception) {
+            $this->logger->error($exception->getMessage());
+
+            throw $exception;
+        }
+
+        $this->cache->save($backupPath);
+
+        $this->clearLegacyDumps();
+
+        return $backupPath;
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    private function doBackup(): string
     {
         $parts = parse_url($this->databaseUrl);
 
@@ -83,6 +106,11 @@ final readonly class DatabaseDumper
             )
         );
 
+        return $backupPath;
+    }
+
+    private function clearLegacyDumps(): void
+    {
         $removedFiles = 0;
 
         foreach (glob($this->backupDir . '/*.sql') as $file) {
@@ -95,7 +123,5 @@ final readonly class DatabaseDumper
         if ($removedFiles > 0) {
             $this->logger->info(sprintf('Removed %d files', $removedFiles));
         }
-
-        return $backupPath;
     }
 }

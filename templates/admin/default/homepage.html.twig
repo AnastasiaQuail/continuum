@@ -4,9 +4,9 @@
 
 {% block main -%}
     <section class="card">
-        {%-if false -%}
+        {%-if not hasDBBackup -%}
             <div class="alert alert-danger alert-inline">
-                <span>25 hours from last backup!</span>
+                <span>More one day from last backup!</span>
                 <form method="post" action="{{ path('app_admin_database_backup_create') }}">
                     <button class="btn btn-danger btn-xs">
                         {{- ux_icon('lucide:database-backup') -}}
