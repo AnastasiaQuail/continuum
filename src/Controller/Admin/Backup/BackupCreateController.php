@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Admin\Backup;
 
-use Continuum\Service\DatabaseDumper;
+use Continuum\Service\Database\DatabaseDumper;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

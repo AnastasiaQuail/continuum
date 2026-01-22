@@ -21,7 +21,7 @@ final class TimezoneUpdateController extends AbstractController
         private readonly EntityManagerInterface $entityManager,
     ) {}
 
-    #[Route(path: '/user/timezone', name: 'app_user_timezone_update', methods: ['PATCH'])]
+    #[Route(path: '/users/timezone', name: 'app_user_timezone_update', methods: ['PATCH'])]
     public function __invoke(#[CurrentUser] User $user, Request $request): Response
     {
         try {

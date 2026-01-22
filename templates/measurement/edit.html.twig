@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% set date = measurement ? measurement.datetime.setTimezone(app.user.timezone) : user_date('now') %}
+
+{% block title %}Body measurements | {{ date.format('j F Y') }}{% endblock %}
+{% block body_id %}body-measurement-edit{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Body measurements', url: path('app_measurements') },
+    { label: date.format('F Y'), url: path('app_measurements', {'month': date.format('Y-m')}) },
+    { label: date.format('j \\i\\n H:i') },
+] %}
+
+{% block main -%}
+    <section class="card">
+        <h3 class="card-title">{{ measurement ? 'Edit measurement' : 'Add measurement' }}</h3>
+
+        {{- form_start(form, {method: 'POST', action: path('app_measurement_edit', {id: measurement ? measurement.id})}) -}}
+
+        {{ form_row(form.datetime) }}
+
+        <div class="form-row form-row-2 form-row-sm-3">
+            {{- form_row(form.weight) -}}
+            {{- form_row(form.neck) -}}
+            {{- form_row(form.waist) -}}
+            {{- form_row(form.chest) -}}
+            {{- form_row(form.shoulders) -}}
+            {{- form_row(form.flexedBiceps) -}}
+            {{- form_row(form.hips) -}}
+            {{- form_row(form.thigh) -}}
+            {{- form_row(form.calf) -}}
+        </div>
+
+        <div class="card-submit">
+            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        </div>
+
+        {{- form_end(form) -}}
+    </section>
+{%- endblock %}

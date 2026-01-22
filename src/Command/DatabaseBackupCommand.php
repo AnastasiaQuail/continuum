@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Command;
 
-use Continuum\Service\DatabaseDumper;
+use Continuum\Service\Database\DatabaseDumper;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

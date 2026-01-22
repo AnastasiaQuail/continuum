@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Admin;
 
-use Continuum\Service\DatabaseDumpCache;
+use Continuum\Service\Database\DatabaseDumpCache;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

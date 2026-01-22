@@ -120,7 +120,7 @@ export class TimezoneDetector {
         const formData = new FormData();
         formData.append('timezone', this.currentTimezone);
 
-        fetch('/user/timezone', {method: 'PATCH', body: formData})
+        fetch('/users/timezone', {method: 'PATCH', body: formData})
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Unknown error');

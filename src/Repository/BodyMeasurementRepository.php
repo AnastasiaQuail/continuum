@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Repository;
 
-use Continuum\Dto\Response\Health\LastBodyMeasurement;
+use Continuum\Dto\Response\Measurement\LastMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -70,9 +70,9 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
         return $this->findBy([], ['datetime' => 'ASC'], $limit);
     }
 
-    public function findOneLastWithNotNull(): LastBodyMeasurement
+    public function findOneLastWithNotNull(): LastMeasurement
     {
-        return new LastBodyMeasurement(
+        return new LastMeasurement(
             weight: $this->findLastFieldWithNotNull('weight')?->getWeight(),
             neck: $this->findLastFieldWithNotNull('neck')?->getNeck(),
             chest: $this->findLastFieldWithNotNull('chest')?->getChest(),

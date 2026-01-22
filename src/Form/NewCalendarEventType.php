@@ -6,6 +6,7 @@ namespace Continuum\Form;
 
 use Continuum\Dto\Request\Calendar\NewCalendarEvent;
 use Continuum\Enum\CalendarEventType;
+use Continuum\Form\Type\AbstractImmutableType;
 use DateTimeZone;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;

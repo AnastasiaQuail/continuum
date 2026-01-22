@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller;
 
-use Continuum\Service\CalendarProgressService;
+use Continuum\Service\Calendar\CalendarProgressService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

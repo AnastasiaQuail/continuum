@@ -7,7 +7,7 @@ namespace Continuum\Controller\Calendar;
 use Continuum\Entity\CalendarEvent;
 use Continuum\Entity\User;
 use Continuum\Security\Authorization\Voter\CalendarVoter;
-use Continuum\Service\CalendarEventService;
+use Continuum\Service\Calendar\CalendarEventService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

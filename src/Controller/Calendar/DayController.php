@@ -7,7 +7,7 @@ namespace Continuum\Controller\Calendar;
 use Continuum\Entity\User;
 use Continuum\Form\NewCalendarEventType;
 use Continuum\Security\Authorization\Voter\CalendarVoter;
-use Continuum\Service\CalendarEventService;
+use Continuum\Service\Calendar\CalendarEventService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

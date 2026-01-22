@@ -7,6 +7,7 @@ namespace Continuum\Form;
 use Continuum\Dto\Request\Reflection\EditMoodReflection;
 use Continuum\Entity\MoodReflection;
 use Continuum\Enum\MoodType;
+use Continuum\Form\Type\AbstractImmutableType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

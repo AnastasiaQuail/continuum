@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Twig;
 
-use Continuum\Service\DatabaseDumpCache;
+use Continuum\Service\Database\DatabaseDumpCache;
 use Twig\Attribute\AsTwigFunction;
 
 final readonly class HasAdminAlertsFunction
