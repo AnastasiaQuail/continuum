@@ -159,7 +159,7 @@
                                 {{- ux_icon('lucide:shield-user') -}}
                                 <span>Admin</span>
                                 {%- if has_admin_alerts() -%}
-                                    {{ ux_icon('lucide:triangle-alert', {class: 'nav-icon-alert'}) }}
+                                    <span class="nav-icon icon-danger">{{ ux_icon('lucide:triangle-alert') }}</span>
                                 {%- endif -%}
                             </a>
                         </li>

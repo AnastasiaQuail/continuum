@@ -532,24 +532,27 @@ textarea {
 
             .nav-item {
                 .nav-link {
+                    --nav-link-background-color: var(--body-background-color);
+
+                    position: relative;
                     display: flex;
                     gap: var(--nav-link-gap);
                     width: 100%;
                     padding: var(--nav-link-padding);
                     color: var(--color);
                     text-decoration: none;
-                    background: none;
                     border: 0;
                     border-radius: var(--border-radius);
+                    background-color: var(--nav-link-background-color);
                     transition: color .15s, background-color .15s;
 
                     &:hover {
-                        background-color: color-mix(in oklch, var(--color-gray) 5%, transparent);
+                        --nav-link-background-color: color-mix(in srgb, var(--color-gray) 5%, var(--body-background-color));
                     }
 
                     &.active {
+                        --nav-link-background-color: color-mix(in srgb, var(--link-color) 10%, var(--body-background-color));
                         color: var(--link-color);
-                        background-color: color-mix(in oklch, var(--link-color) 10%, transparent);
                     }
 
                     .dropdown-toggle-chevron {
@@ -557,9 +560,20 @@ textarea {
                         transition: transform .15s;
                     }
 
-                    .nav-icon-alert {
+                    .nav-icon {
+                        --icon-color: var(--color);
+
+                        display: inline-flex;
                         margin-left: auto;
-                        color: var(--color-red);
+                        color: var(--icon-color);
+
+                        &.icon-danger {
+                            --icon-color: var(--color-red);
+                        }
+
+                        &.icon-warning {
+                            --icon-color: var(--color-orange);
+                        }
                     }
                 }
 
@@ -621,6 +635,21 @@ textarea {
             .nav-link > span,
             .dropdown-toggle-chevron {
                 display: none;
+            }
+
+            .nav-icon {
+                position: absolute;
+                top: calc(var(--nav-link-padding) - calc(var(--font-size-small) / 2));
+                right: calc(var(--nav-link-padding) - calc(var(--font-size-small) / 2));
+                height: var(--font-size-small);
+                width: var(--font-size-small);
+                border-radius: 50%;
+                background-color: color-mix(in srgb, var(--icon-color) var(--transparent-color-tiny), var(--body-background-color));
+                border: calc(var(--border-width) * 2) solid var(--nav-link-background-color);
+
+                & > svg {
+                    display: none;
+                }
             }
 
             .nav-item.dropdown {
