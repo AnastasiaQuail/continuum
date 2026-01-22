@@ -18,8 +18,15 @@ export class SidebarToggler extends Storage {
      */
     onClick(id) {
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector(id).onclick = () => {
-                this.save(this.get() === 'collapsed' ? '' : 'collapsed');
+            document.querySelector(id).onclick = (event) => {
+                const type = getComputedStyle(event.currentTarget).getPropertyValue('--sidebar-toggler');
+
+                if ("'desktop'" === type || '"desktop"' === type) {
+                    this.save(this.get() === 'collapsed' ? '' : 'collapsed');
+                } else {
+                    const dataset = document.documentElement.dataset;
+                    dataset.sidebarView = dataset.sidebarView !== 'open' ? 'open' : '';
+                }
             };
         })
     }

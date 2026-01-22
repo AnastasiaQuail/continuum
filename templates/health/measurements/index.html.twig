@@ -59,7 +59,8 @@
 
             <h3 class="weight-change-title">Weight Change</h3>
             <div class="weight-change-result {{ result > 0 ? 'value-bad' }}{{ result < 0 ? 'value-good' }}">
-                <span>{{ result > 0 ? '+' ~ result : result }} kg</span>
+                <span>{{ result > 0 ? '+' ~ result : result }}</span>
+                <span>kg</span>
             </div>
             {%- if chartMeasurements is not empty -%}
                 <div class="weight-change-difference">

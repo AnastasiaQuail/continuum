@@ -32,7 +32,10 @@
                             <span>Continuum</span>
                         </a>
                     </div>
-                    <button id="sidebar-toggler" class="header-button">{{ ux_icon('lucide:menu') }}</button>
+                    <button id="sidebar-toggler" class="header-button">
+                        {{- ux_icon('lucide:menu', {class: 'icon-menu-open'}) -}}
+                        {{- ux_icon('lucide:x', {class: 'icon-menu-close'}) -}}
+                    </button>
                 {%- endif -%}
 
                 <div class="header-controls">
