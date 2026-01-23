@@ -17,13 +17,13 @@
     prev: {
         url: path('app_mood_reflections', {'month': prevMonth.format('Y-m')}),
         label: prevMonth.format('F'),
-        isGranted: prevMonth.format('Y') >= app_year_min,
+        isGranted: prevMonth.format('Y') >= app_year_min and is_granted('MOOD_REFLECTION_VIEW', prevMonth),
     },
     title: month.format('F'),
     next: {
         url: path('app_mood_reflections', {'month': nextMonth.format('Y-m')}),
         label: nextMonth.format('F'),
-        isGranted: is_granted('FUTURE_MONTH', nextMonth),
+        isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
     },
 } %}
 
@@ -67,13 +67,14 @@
                     {%- for dayNumber in 1..month.format('t') -%}
                         {%- set day = month.format('Y-m-') ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
                         {%- set mood = moods[day] is defined ? moods[day] : null -%}
+                        {%- set isGrantedDay = isGranted and current >= day -%}
 
-                        <{% if isGranted %}a{% else %}div{% endif %}
-                            {% if isGranted %}href="{{ path('app_mood_reflection_edit', {'day': day}) }}"{% endif %}
+                        <{% if isGrantedDay %}a{% else %}div{% endif %}
+                            {% if isGrantedDay %}href="{{ path('app_mood_reflection_edit', {'day': day}) }}"{% endif %}
                             class="day {{- day == current ? ' day-current' -}} {{- mood is not null ? ' day-past' }}"
                             {%- if mood is not null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
                             <span>{{ dayNumber }}</span>
-                        </{% if isGranted %}a{% else %}div{% endif %}>
+                        </{% if isGrantedDay %}a{% else %}div{% endif %}>
                     {%- endfor -%}
                 </div>
             </article>

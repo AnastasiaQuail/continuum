@@ -4,28 +4,37 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\WeeklyReflection;
 
+use Continuum\Entity\User;
 use Continuum\Form\EditWeeklyReflectionType;
-use Continuum\Security\Attribute\IsFutureMonthGranted;
 use Continuum\Security\Authorization\Voter\WeeklyReflectionVoter;
+use Continuum\Service\RequestValidator;
 use Continuum\Service\WeeklyReflectionService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class EditController extends AbstractController
 {
     public function __construct(
+        private readonly RequestValidator $requestValidator,
         private readonly WeeklyReflectionService $weeklyReflectionService,
     ) {}
 
-    #[Route(path: '/weekly-reflections/weeks/{week}', name: 'app_weekly_reflection_edit', methods: ['GET', 'POST'])]
-    #[IsFutureMonthGranted('week')]
+    #[Route(path: '/weekly-reflections/{week:date}', name: 'app_weekly_reflection_edit', methods: ['GET', 'POST'])]
     #[IsGranted(WeeklyReflectionVoter::EDIT)]
-    public function __invoke(Request $request, DateTimeImmutable $week): Response
+    public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {
+        $week = new DateTimeImmutable($date, $user->getTimezone())->setTime(0, 0);
+
+        if (null !== $error = $this->requestValidator->validateExistenceWeek($week, $user->getTimezone())) {
+            throw new BadRequestHttpException($error);
+        }
+
         $weeklyReflection = $this->weeklyReflectionService->findByWeek($week);
 
         $form = $this->createForm(EditWeeklyReflectionType::class, options: ['weeklyReflection' => $weeklyReflection]);

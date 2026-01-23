@@ -6,13 +6,14 @@ namespace Continuum\Controller\MoodReflection;
 
 use Continuum\Entity\User;
 use Continuum\Form\EditMoodReflectionType;
-use Continuum\Security\Attribute\IsFutureMonthGranted;
 use Continuum\Security\Authorization\Voter\MoodReflectionVoter;
 use Continuum\Service\MoodReflectionService;
+use Continuum\Service\RequestValidator;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -20,14 +21,20 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class EditController extends AbstractController
 {
     public function __construct(
+        private readonly RequestValidator $requestValidator,
         private readonly MoodReflectionService $moodReflectionService,
     ) {}
 
-    #[Route(path: '/mood-reflections/days/{day}', name: 'app_mood_reflection_edit', methods: ['GET', 'POST'])]
-    #[IsFutureMonthGranted('day')]
+    #[Route(path: '/mood-reflections/{day:date}', name: 'app_mood_reflection_edit', methods: ['GET', 'POST'])]
     #[IsGranted(MoodReflectionVoter::EDIT)]
-    public function __invoke(Request $request, #[CurrentUser] User $user, DateTimeImmutable $day): Response
+    public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {
+        $day = new DateTimeImmutable($date, $user->getTimezone())->setTime(0, 0);
+
+        if (null !== $error = $this->requestValidator->validateExistenceDay($day, $user->getTimezone())) {
+            throw new BadRequestHttpException($error);
+        }
+
         $moodReflection = $this->moodReflectionService->findMoodByDay($day);
 
         $form = $this->createForm(EditMoodReflectionType::class, options: ['moodReflection' => $moodReflection]);

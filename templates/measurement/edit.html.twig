@@ -15,7 +15,7 @@
     <section class="card">
         <h3 class="card-title">{{ measurement ? 'Edit measurement' : 'Add measurement' }}</h3>
 
-        {{- form_start(form, {method: 'POST', action: path('app_measurement_edit', {id: measurement ? measurement.id})}) -}}
+        {{- form_start(form, {method: 'POST'}) -}}
 
         {{ form_row(form.datetime) }}
 

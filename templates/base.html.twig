@@ -64,9 +64,9 @@
                                         </a>
                                     </li>
                                 {%- endif -%}
-                                {%- if is_granted('BODY_MEASUREMENT_EDIT') -%}
+                                {%- if is_granted('BODY_MEASUREMENT_CREATE') -%}
                                     <li class="dropdown-item">
-                                        <a class="dropdown-link" href="{{ path('app_measurement_edit') }}">
+                                        <a class="dropdown-link" href="{{ path('app_measurement_create') }}">
                                             {{ ux_icon('lucide:ruler') }}
                                             <span>Add measurement</span>
                                         </a>
@@ -138,7 +138,7 @@
                     </li>
                     {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
                         <li class="nav-item">
-                            <a class="nav-link {{ _route == 'app_measurements' or _route == 'app_measurement_edit' ? 'active' }}"
+                            <a class="nav-link {{ _route == 'app_measurements' or _route == 'app_measurement_create' or _route == 'app_measurement_edit' ? 'active' }}"
                                href="{{ path('app_measurements') }}">
                                 {{- ux_icon('lucide:ruler-dimension-line') -}}
                                 <span>Measurements</span>

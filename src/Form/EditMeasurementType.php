@@ -10,7 +10,6 @@ use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Form\Type\AbstractImmutableType;
 use Continuum\Form\Type\MeasurementType;
-use Continuum\Security\Authorization\Voter\FutureMonthVoter;
 use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Exception\LogicException;
@@ -47,12 +46,16 @@ final class EditMeasurementType extends AbstractImmutableType
                 'view_timezone' => $user->getTimezone()->getName(),
                 'input' => 'datetime_immutable',
                 'constraints' => [
-                    new Callback(function (DateTimeImmutable $datetime, ExecutionContextInterface $context): void {
-                        if (!$this->security->isGranted(FutureMonthVoter::ATTRIBUTE, $datetime)) {
-                            $context->buildViolation('You cannot manage measurements for future months.')
-                                ->addViolation();
+                    new Callback(
+                        function (DateTimeImmutable $datetime, ExecutionContextInterface $context) use ($user): void {
+                            $currentDate = new DateTimeImmutable('now', $user->getTimezone());
+
+                            if ($currentDate->format('Y-m-d') < $datetime->format('Y-m-d')) {
+                                $context->buildViolation('You cannot manage measurements for future days.')
+                                    ->addViolation();
+                            }
                         }
-                    }),
+                    ),
                 ],
             ])
             ->add('weight', MeasurementType::class, [

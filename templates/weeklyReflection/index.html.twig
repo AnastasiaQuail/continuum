@@ -23,7 +23,7 @@
     next: {
         url: path('app_weekly_reflections', {'month': nextMonth.format('Y-m')}),
         label: nextMonth.format('F'),
-        isGranted: is_granted('FUTURE_MONTH', nextMonth),
+        isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
     },
 } %}
 

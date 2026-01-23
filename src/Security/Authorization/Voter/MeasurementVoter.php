@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class MeasurementVoter extends Voter
 {
     public const string VIEW = 'BODY_MEASUREMENT_VIEW';
+    public const string CREATE = 'BODY_MEASUREMENT_CREATE';
     public const string EDIT = 'BODY_MEASUREMENT_EDIT';
 
     public function __construct(
@@ -23,7 +24,7 @@ final class MeasurementVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute || self::EDIT === $attribute;
+        return self::VIEW === $attribute || self::CREATE === $attribute || self::EDIT === $attribute;
     }
 
     protected function voteOnAttribute(
@@ -40,20 +41,9 @@ final class MeasurementVoter extends Voter
 
         return match ($attribute) {
             self::VIEW => true,
-            self::EDIT => $this->isEditGranted($user, $subject),
+            self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
+            self::EDIT => $subject instanceof BodyMeasurement
+                && $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
         };
-    }
-
-    private function isEditGranted(User $user, mixed $subject): bool
-    {
-        if ($subject === null) {
-            return $this->security->isGrantedForUser($user, UserRole::Admin->value);
-        }
-
-        if ($subject instanceof BodyMeasurement) {
-            return $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value);
-        }
-
-        return false;
     }
 }

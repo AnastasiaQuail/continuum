@@ -17,7 +17,6 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class IndexController extends AbstractController
 {
@@ -30,13 +29,16 @@ final class IndexController extends AbstractController
     ) {}
 
     #[Route(path: '/calendar', name: 'app_calendar', methods: ['GET'])]
-    #[IsGranted(CalendarVoter::VIEW)]
     public function __invoke(#[CurrentUser] User $user, #[MapQueryParameter] ?int $year = null): Response
     {
         $year ??= (int) new DateTimeImmutable('now', $user->getTimezone())->format('Y');
 
         if (null !== $error = $this->requestValidator->validateYear($year)) {
             throw new BadRequestHttpException($error);
+        }
+
+        if (!$this->isGranted(CalendarVoter::VIEW, $year)) {
+            throw $this->createAccessDeniedException();
         }
 
         $upcomingNotifications = $this->upcomingEventService->getUpcomingNotifications($user);

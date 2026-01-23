@@ -25,13 +25,13 @@
     prev: {
         url: path('app_measurements', {'month': prevMonth.format('Y-m')}),
         label: prevMonth.format('F'),
-        isGranted: prevMonth.format('Y') >= app_year_min,
+        isGranted: prevMonth.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prevMonth),
     },
     title: month.format('F'),
     next: {
         url: path('app_measurements', {'month': nextMonth.format('Y-m')}),
         label: nextMonth.format('F'),
-        isGranted: is_granted('FUTURE_MONTH', nextMonth),
+        isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
     },
 } %}
 
