@@ -63,6 +63,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->weight, 'kg'),
                 'min' => EditMeasurement::WEIGHT_MIN,
                 'max' => EditMeasurement::WEIGHT_MAX,
+                'postfix' => 'kg',
                 'attr' => [
                     'autofocus' => true,
                     'step' => 0.1,
@@ -73,6 +74,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->neck),
                 'min' => EditMeasurement::NECK_MIN,
                 'max' => EditMeasurement::NECK_MAX,
+                'postfix' => 'cm',
                 'required' => false,
             ])
             ->add('chest', MeasurementType::class, [
@@ -80,6 +82,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->chest),
                 'min' => EditMeasurement::CHEST_MIN,
                 'max' => EditMeasurement::CHEST_MAX,
+                'postfix' => 'cm',
                 'required' => false,
             ])
             ->add('shoulders', MeasurementType::class, [
@@ -87,6 +90,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->shoulders),
                 'min' => EditMeasurement::SHOULDERS_MIN,
                 'max' => EditMeasurement::SHOULDERS_MAX,
+                'postfix' => 'cm',
                 'required' => false,
             ])
             ->add('waist', MeasurementType::class, [
@@ -94,6 +98,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->waist),
                 'min' => EditMeasurement::WAIST_MIN,
                 'max' => EditMeasurement::WAIST_MAX,
+                'postfix' => 'cm',
                 'required' => false,
             ])
             ->add('flexedBiceps', MeasurementType::class, [
@@ -101,6 +106,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->flexedBiceps),
                 'min' => EditMeasurement::BICEPS_MIN,
                 'max' => EditMeasurement::BICEPS_MAX,
+                'postfix' => 'cm',
                 'required' => false,
             ])
             ->add('hips', MeasurementType::class, [
@@ -108,6 +114,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->hips),
                 'min' => EditMeasurement::HIPS_MIN,
                 'max' => EditMeasurement::HIPS_MAX,
+                'postfix' => 'cm',
                 'required' => false,
             ])
             ->add('thigh', MeasurementType::class, [
@@ -115,6 +122,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->thigh),
                 'min' => EditMeasurement::THIGH_MIN,
                 'max' => EditMeasurement::THIGH_MAX,
+                'postfix' => 'cm',
                 'required' => false,
             ])
             ->add('calf', MeasurementType::class, [
@@ -122,6 +130,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'help' => $this->getHelp($lastMeasurement?->calf),
                 'min' => EditMeasurement::CALF_MIN,
                 'max' => EditMeasurement::CALF_MAX,
+                'postfix' => 'cm',
                 'required' => false,
             ]);
     }

@@ -166,3 +166,65 @@ export class CalendarNotificationToggler extends Storage {
         })
     }
 }
+
+export class InputMasker {
+    apply() {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('input[data-mask="postfix"][data-postfix]').forEach(input => {
+                this.#maskPostfix(input);
+            })
+        });
+    }
+
+    /**
+     * @param {HTMLInputElement} input
+     */
+    #maskPostfix(input) {
+        const mask = this.#wrapInput(input);
+
+        this.#setPostfix(input, mask);
+
+        input.addEventListener('input', () => {
+            this.#setPostfix(input, mask);
+        });
+    }
+
+    /**
+     * @param {HTMLInputElement} input
+     * @return {HTMLDivElement}
+     */
+    #wrapInput(input) {
+        const wrap = document.createElement('div');
+        wrap.classList.add('form-control-number');
+
+        input.replaceWith(wrap);
+        wrap.appendChild(input);
+
+        const mask = document.createElement('div');
+        mask.classList.add('form-mask');
+        wrap.appendChild(mask);
+
+        return mask;
+    }
+
+    /**
+     * @param {HTMLInputElement} input
+     * @param {HTMLDivElement} mask
+     */
+    #setPostfix(input, mask) {
+        mask.innerHTML = '';
+
+        if (input.value === '') {
+            return;
+        }
+
+        const value = document.createElement('span');
+        value.innerText = input.value;
+        mask.appendChild(value);
+
+        const m = document.createElement('span');
+        m.classList.add('mask');
+        m.innerText = input.dataset.postfix;
+        mask.appendChild(m);
+    }
+}

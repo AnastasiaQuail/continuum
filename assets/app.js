@@ -8,6 +8,7 @@ new Services.SidebarToggler().onClick('#sidebar-toggler');
 new Services.Sidebar().applyTo('#sidebar');
 new Services.TimezoneDetector().detect('#body-messages');
 new Services.CalendarNotificationToggler().onClick('#calendar-notifications');
+new Services.InputMasker().apply();
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('footer-toolbar')?.addEventListener('click', () => {

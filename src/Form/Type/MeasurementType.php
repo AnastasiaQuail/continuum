@@ -28,6 +28,10 @@ final class MeasurementType extends NumberType
         if ($options['max'] !== null) {
             $view->vars['attr']['max'] = $options['max'];
         }
+        if ($options['postfix'] !== null) {
+            $view->vars['attr']['data-mask'] = 'postfix';
+            $view->vars['attr']['data-postfix'] = $options['postfix'];
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -37,8 +41,10 @@ final class MeasurementType extends NumberType
         $resolver->setDefault('html5', true);
         $resolver->setDefault('min', null);
         $resolver->setDefault('max', null);
+        $resolver->setDefault('postfix', null);
 
         $resolver->setAllowedTypes('min', ['null', 'int']);
         $resolver->setAllowedTypes('max', ['null', 'int']);
+        $resolver->setAllowedTypes('postfix', ['null', 'string']);
     }
 }
