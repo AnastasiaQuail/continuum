@@ -9,7 +9,7 @@
 {%- endblock -%}
 
 {% set monthName = month.format('F Y') %}
-{% set isCurrentMonth = monthName == user_date('now')|date('F Y') %}
+{% set isCurrentMonth = monthName == user_date()|date('F Y') %}
 
 {% block title %}Body measurements{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}body-measurements{% endblock %}
@@ -81,8 +81,8 @@
 {% block main -%}
     <section class="card card-body-measurements">
         {%- if measurements is empty -%}
-            <div class="body-measurement body-empty">
-                {{ ux_icon('lucide:frown') }}
+            <div class="body-measurement collection-empty">
+                {{- ux_icon('lucide:frown') -}}
                 <span>No measurements</span>
             </div>
         {%- else -%}

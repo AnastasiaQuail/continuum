@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% set date = measurement ? measurement.datetime.setTimezone(app.user.timezone) : user_date('now') %}
+{% set date = measurement ? measurement.datetime.setTimezone(app.user.timezone) : user_date() %}
 
 {% block title %}Body measurements | {{ date.format('j F Y') }}{% endblock %}
 {% block body_id %}body-measurement-edit{% endblock %}

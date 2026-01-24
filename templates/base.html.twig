@@ -58,7 +58,7 @@
                                 {%- if is_granted('MOOD_REFLECTION_EDIT') -%}
                                     <li class="dropdown-item">
                                         <a class="dropdown-link"
-                                           href="{{ path('app_mood_reflection_edit', {'day': user_date('now').format('Y-m-d')}) }}">
+                                           href="{{ path('app_mood_reflection_edit', {'day': user_date().format('Y-m-d')}) }}">
                                             {{- ux_icon('lucide:scan-face') -}}
                                             <span>Track mood</span>
                                         </a>
@@ -73,10 +73,12 @@
                                     </li>
                                 {%- endif -%}
                                 <li class="dropdown-item">
-                                    <a class="dropdown-link" href="#">
-                                        {{ ux_icon('lucide:biceps-flexed') }}
-                                        <span>Start training</span>
-                                    </a>
+                                    <form method="post" action="{{ path('app_workout_create') }}">
+                                        <button class="dropdown-link" type="submit">
+                                            {{ ux_icon('lucide:biceps-flexed') }}
+                                            <span>Start workout</span>
+                                        </button>
+                                    </form>
                                 </li>
                             </ul>
                         </div>
@@ -146,9 +148,10 @@
                         </li>
                     {%- endif -%}
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link {{ _route == 'app_workouts' ? 'active' }}"
+                           href="{{ path('app_workouts') }}">
                             {{- ux_icon('lucide:dumbbell') -}}
-                            <span>Exercises</span>
+                            <span>Workouts</span>
                         </a>
                     </li>
 
@@ -237,7 +240,7 @@
                 <div class="footer-datetime">
                     <span>Server: {{ 'now'|date('j F, H:i') }}</span>
                     {%- if app.user -%}
-                        <span>User: {{ user_date('now').format('j F, H:i') }}</span>
+                        <span>User: {{ user_date().format('j F, H:i') }}</span>
                     {%- endif -%}
                 </div>
 

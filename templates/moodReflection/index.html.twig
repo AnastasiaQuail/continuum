@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% set monthName = month.format('F Y') %}
-{% set isCurrentMonth = monthName == user_date('now')|date('F Y') %}
+{% set isCurrentMonth = monthName == user_date()|date('F Y') %}
 
 {% block title %}Mood tracker{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}mood-tracker{% endblock %}
@@ -54,7 +54,7 @@
     <section class="card card-calendar-mood">
         <div class="calendar">
             <article class="month">
-                {%- set current = user_date('now').format('Y-m-d') -%}
+                {%- set current = user_date().format('Y-m-d') -%}
                 {%- set firstWeekDay = month.format('N') -%}
 
                 <div class="month-days">

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% set currentDate = user_date('now') %}
+{% set currentDate = user_date() %}
 
 {% block title %}Calendar{{ year != currentDate.format('Y') ? ' | ' ~ year }}{% endblock %}
 {% block body_id %}calendar{% endblock %}

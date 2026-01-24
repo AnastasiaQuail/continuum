@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% set monthName = month.format('F Y') %}
+{% set isCurrentMonth = monthName == user_date()|date('F Y') %}
+
+{% block title %}Workouts{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
+{% block body_id %}workouts{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Workouts', url: path('app_workouts') },
+    { label: monthName },
+] %}
+
+{% set prevMonth = month.modify('-1 month') %}
+{% set nextMonth = month.modify('+1 month') %}
+{% set paginations = {
+    prev: {
+        url: path('app_workouts', {'month': prevMonth.format('Y-m')}),
+        label: prevMonth.format('F'),
+        isGranted: prevMonth.format('Y') >= app_year_min,
+    },
+    title: month.format('F'),
+    next: {
+        url: path('app_workouts', {'month': nextMonth.format('Y-m')}),
+        label: nextMonth.format('F'),
+        isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
+    },
+} %}
+
+{% block main -%}
+    <section class="card">
+        <div class="workouts">
+            {%- if workouts is empty -%}
+                <div class="workout collection-empty">
+                    {{- ux_icon('lucide:frown') -}}
+                    <span>No workouts</span>
+                </div>
+            {%- else -%}
+                {%- for workout in workouts -%}
+                    <div class="workout">
+                        <div class="workout-date">
+                            {%- set time = workout.date.setTimezone(app.user.timezone).format('j F H:i') -%}
+                            <a href="{{ path('app_workouts_view', {id: workout.id}) }}">{{ time }}</a>
+                        </div>
+                        <div class="workout-exercises">
+                            {%- if workout.workoutExercises.empty -%}
+                                <div class="exercise collection-empty">
+                                    {{- ux_icon('lucide:frown') -}}
+                                    <span>No exercises yet</span>
+                                </div>
+                            {%- else -%}
+                                {%- for workoutExercise in workout.workoutExercises -%}
+                                    <div class="exercise"
+                                         style="--exercise-color: var({{ '--color-' ~ workoutExercise.exercise.group.color.value }});">
+                                        <div class="exercise-description">
+                                            <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
+                                            <div class="exercise-duration">{{ random(range(10, 59)) }} min.</div>
+                                        </div>
+                                        <div class="exercise-sets">
+                                            {%- if workoutExercise.sets.empty -%}
+                                                <div class="exercise-set collection-empty">No reps yet</div>
+                                            {%- else -%}
+                                                {%- for exerciseSet in workoutExercise.sets -%}
+                                                    <div class="exercise-set {{ exerciseSet.isWarmup ? 'set-warmup' }}">
+                                                        {%- if exerciseSet.weight > 0 -%}
+                                                            <div class="exercise-set-weight">
+                                                                <span>{{ exerciseSet.weight }}</span>
+                                                                <span>kg</span>
+                                                            </div>
+                                                        {%- endif -%}
+                                                        <div class="exercise-set-reps">
+                                                            <span>{{ exerciseSet.reps }}</span>
+                                                            <span>x</span>
+                                                        </div>
+                                                    </div>
+                                                {%- endfor -%}
+                                            {%- endif -%}
+                                        </div>
+                                    </div>
+                                {%- endfor -%}
+                            {%- endif -%}
+                        </div>
+                    </div>
+                {%- endfor -%}
+            {%- endif -%}
+        </div>
+    </section>
+{%- endblock %}

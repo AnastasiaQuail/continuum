@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% set date = workout.date.setTimezone(app.user.timezone) %}
+
+{% block title %}Workouts | {{ date.format('j F Y') }}{% endblock %}
+{% block body_id %}workout-view{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Workouts', url: path('app_workouts') },
+    { label: date.format('F Y'), url: path('app_workouts', {month: date.format('Y-m')}) },
+    { label: date.format('j \\i\\n H:i') },
+] %}
+
+{% block main -%}
+    <section class="card">
+        <div>id: {{ workout.id }}</div>
+        <div>date: {{ date.format('Y-m-d H:i:s') }}</div>
+    </section>
+{%- endblock %}

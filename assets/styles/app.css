@@ -581,7 +581,9 @@ textarea {
                         font-size: var(--font-size-medium);
                         text-decoration: none;
                         color: var(--color);
+                        border: none;
                         border-radius: var(--border-radius);
+                        background-color: transparent;
                         transition: background-color .15s;
 
                         &:hover {
@@ -1391,6 +1393,16 @@ textarea {
     }
 }
 
+.collection-empty {
+    display: flex;
+    column-gap: calc(var(--gap-inline) / 2);
+    padding: var(--gap-block) var(--gap-inline);
+    color: color-mix(in oklch, var(--color) 40%, transparent);
+    border: var(--border-width) dashed color-mix(in oklch, var(--color) 20%, transparent);
+    border-radius: var(--border-radius);
+    user-select: none;
+}
+
 .progress {
     --progress: 0%;
     --progress-height: calc(var(--gap-block) / 2);
@@ -1914,8 +1926,8 @@ textarea {
         .week-title {
             font-size: var(--font-size-small);
 
-            > a,
-            > span {
+            & > a,
+            & > span {
                 display: inline-flex;
                 padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
                 text-decoration: none;
@@ -2073,6 +2085,7 @@ textarea {
 
         @media (width >= 576px) {
             order: 0;
+            margin-left: 0;
             font-size: var(--font-size-medium);
             white-space: nowrap;
         }
@@ -2212,16 +2225,6 @@ textarea {
             }
         }
     }
-
-    &.body-empty {
-        display: flex;
-        gap: calc(var(--gap-block) / 2);
-        padding: var(--gap-block) var(--gap-inline);
-        color: color-mix(in oklch, var(--color) 40%, transparent);
-        border: var(--border-width) dashed color-mix(in oklch, var(--color) 20%, transparent);
-        border-radius: var(--border-radius);
-        user-select: none;
-    }
 }
 
 @keyframes error_page_top {
@@ -2341,5 +2344,151 @@ textarea {
             border-radius: var(--body-border-radius);
             background-color: var(--background-color);
         }
+    }
+}
+
+.workouts {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--body-gap-block);
+}
+
+.workout {
+    animation: fader 1s ease-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
+
+    .workout-date {
+        & > a,
+        & > span {
+            display: inline-flex;
+            padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
+            font-size: var(--font-size-small);
+            text-decoration: none;
+
+            &:is(span),
+            &:is(a):not(:hover) {
+                color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+            }
+        }
+    }
+
+    .workout-exercises {
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--body-gap-block) / 8);
+    }
+}
+
+.exercise {
+    --exercise-color: var(--color);
+    --exercise-background-color-transparent: 5%;
+    --fade-offset: 2vh;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: calc(var(--gap-block) / 3) var(--gap-inline);
+    align-items: center;
+    padding: calc(var(--gap-block) / 2) var(--gap-inline);
+    border-radius: var(--border-radius);
+    background-color: color-mix(in oklch, var(--exercise-color) var(--exercise-background-color-transparent), transparent);
+    animation: fader 1s ease-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
+
+    .exercise-description {
+        display: flex;
+        flex-direction: column;
+
+        .exercise-name {
+            font-size: var(--font-size-medium);
+            color: var(--exercise-color);
+
+            [data-theme="dark"] & {
+                color: color-mix(in srgb, var(--exercise-color) var(--transparent-color-tiny), var(--color));
+            }
+
+            &::first-letter {
+                text-transform: uppercase;
+            }
+        }
+
+        .exercise-duration {
+            font-size: 0;
+            opacity: 0;
+            transition: all .3s ease-in;
+        }
+    }
+
+    &:hover {
+        .exercise-description {
+            .exercise-duration {
+                margin-top: calc(var(--gap-block) / 8);
+                font-size: calc(var(--font-size) / 2);
+                opacity: .4;
+                transition: all .15s ease-out;
+            }
+        }
+    }
+
+    .exercise-sets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: calc(var(--gap-inline) / 3);
+
+        .exercise-set {
+            display: inline-flex;
+            align-items: baseline;
+            padding: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 2);
+            border: var(--border-width) solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: color-mix(in oklch, var(--background-color) var(--transparent-color), transparent);
+
+            .exercise-set-weight,
+            .exercise-set-reps {
+                display: inline-flex;
+
+                & > span:last-child {
+                    font-size: calc(var(--font-size) / 2);
+                    opacity: .4;
+                }
+            }
+
+            .exercise-set-weight {
+                column-gap: calc(var(--gap-inline) / 6);
+                padding-right: calc(var(--gap-inline) / 3);
+                margin-right: calc(var(--gap-inline) / 3);
+                border-right: var(--border-width) solid var(--body-border-color);
+            }
+
+            .exercise-set-reps {
+                flex-direction: row-reverse;
+                align-items: baseline;
+                column-gap: calc(var(--gap-inline) / 8);
+            }
+
+            &.set-warmup {
+                .exercise-set-weight,
+                .exercise-set-reps {
+                    & > span:first-child {
+                        font-weight: var(--font-weight-light);
+                        opacity: .8;
+                    }
+                }
+            }
+
+            &.collection-empty {
+                font-size: var(--font-size-medium);
+                border-style: dashed;
+            }
+        }
+    }
+
+    &.collection-empty {
+        --exercise-background-color-transparent: 2%;
+
+        column-gap: calc(var(--gap-inline) / 2);
+        padding-block: calc(var(--gap-inline) / 1.5);
+        font-size: var(--font-size-medium);
     }
 }
