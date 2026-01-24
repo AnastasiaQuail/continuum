@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% set monthName = month.format('F Y') %}
-{% set isCurrentMonth = monthName == user_date()|date('F Y') %}
+{% set isCurrentMonth = monthName === user_date()|date('F Y') %}
 
 {% block title %}Mood tracker{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}mood-tracker{% endblock %}
@@ -71,8 +71,8 @@
 
                         <{% if isGrantedDay %}a{% else %}div{% endif %}
                             {% if isGrantedDay %}href="{{ path('app_mood_reflection_edit', {'day': day}) }}"{% endif %}
-                            class="day {{- day == current ? ' day-current' -}} {{- mood is not null ? ' day-past' }}"
-                            {%- if mood is not null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
+                            class="day {{- day === current ? ' day-current' -}} {{- mood !== null ? ' day-past' }}"
+                            {%- if mood !== null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
                             <span>{{ dayNumber }}</span>
                         </{% if isGrantedDay %}a{% else %}div{% endif %}>
                     {%- endfor -%}

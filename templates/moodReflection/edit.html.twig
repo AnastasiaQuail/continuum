@@ -23,20 +23,20 @@
                            data-general-type="{{ choice.data.color.value }}">
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
-                               {%- if form.type.vars.required %}required="required"{% endif %}
-                               {%- if choice.value == form.type.vars.value %}checked{% endif %}>
+                               {% if form.type.vars.required %}required="required"{% endif %}
+                               {% if choice.value === form.type.vars.value %}checked{% endif %}>
                         <span class="btn">
-                            {% if choice.value == 'terrible' %}
-                                {{ ux_icon('lucide:angry') }}
-                            {% elseif choice.value == 'bad' %}
-                                {{ ux_icon('lucide:frown') }}
-                            {% elseif choice.value == 'good' %}
-                                {{ ux_icon('lucide:smile') }}
-                            {% elseif choice.value == 'great' %}
-                                {{ ux_icon('lucide:laugh') }}
-                            {% else %}
-                                {{ ux_icon('lucide:meh') }}
-                            {% endif %}
+                            {%- if choice.value === 'terrible' -%}
+                                {{- ux_icon('lucide:angry') -}}
+                            {%- elseif choice.value === 'bad' -%}
+                                {{- ux_icon('lucide:frown') -}}
+                            {%- elseif choice.value === 'good' -%}
+                                {{- ux_icon('lucide:smile') -}}
+                            {%- elseif choice.value === 'great' -%}
+                                {{- ux_icon('lucide:laugh') -}}
+                            {%- else -%}
+                                {{- ux_icon('lucide:meh') -}}
+                            {%- endif -%}
                             <span>{{ choice.label }}</span>
                         </span>
                     </label>

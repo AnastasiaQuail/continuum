@@ -105,7 +105,7 @@
                 <ul class="navbar-nav">
                     {%- if is_granted('CALENDAR_VIEW') -%}
                         <li class="nav-item">
-                            <a class="nav-link {{ _route == 'app_calendar' or _route == 'app_calendar_day' ? 'active' }}"
+                            <a class="nav-link {{ _route === 'app_calendar' or _route === 'app_calendar_day' ? 'active' }}"
                                href="{{ path('app_calendar') }}">
                                 {{- ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) -}}
                                 <span>Calendar</span>
@@ -118,7 +118,7 @@
                     </li>
                     {%- if is_granted('MOOD_REFLECTION_VIEW') -%}
                         <li class="nav-item">
-                            <a class="nav-link {{ _route == 'app_mood_reflections' or _route == 'app_mood_reflection_edit' ? 'active' }}"
+                            <a class="nav-link {{ _route === 'app_mood_reflections' or _route === 'app_mood_reflection_edit' ? 'active' }}"
                                href="{{ path('app_mood_reflections') }}">
                                 {{- ux_icon('lucide:smile-plus') -}}
                                 <span>Mood tracker</span>
@@ -127,7 +127,7 @@
                     {%- endif -%}
                     {%- if is_granted('WEEKLY_REFLECTION_VIEW') -%}
                         <li class="nav-item">
-                            <a class="nav-link {{ _route == 'app_weekly_reflections' or _route == 'app_weekly_reflection_edit' ? 'active' }}"
+                            <a class="nav-link {{ _route === 'app_weekly_reflections' or _route === 'app_weekly_reflection_edit' ? 'active' }}"
                                href="{{ path('app_weekly_reflections') }}">
                                 {{- ux_icon('lucide:star') -}}
                                 <span>Week in review</span>
@@ -140,7 +140,7 @@
                     </li>
                     {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
                         <li class="nav-item">
-                            <a class="nav-link {{ _route == 'app_measurements' or _route == 'app_measurement_create' or _route == 'app_measurement_edit' ? 'active' }}"
+                            <a class="nav-link {{ _route === 'app_measurements' or _route === 'app_measurement_create' or _route === 'app_measurement_edit' ? 'active' }}"
                                href="{{ path('app_measurements') }}">
                                 {{- ux_icon('lucide:ruler-dimension-line') -}}
                                 <span>Measurements</span>
@@ -148,7 +148,7 @@
                         </li>
                     {%- endif -%}
                     <li class="nav-item">
-                        <a class="nav-link {{ _route == 'app_workouts' ? 'active' }}"
+                        <a class="nav-link {{ _route === 'app_workouts' ? 'active' }}"
                            href="{{ path('app_workouts') }}">
                             {{- ux_icon('lucide:dumbbell') -}}
                             <span>Workouts</span>
@@ -160,7 +160,7 @@
                             <hr class="nav-divider">
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ _route == 'app_admin_homepage' ? 'active' }}"
+                            <a class="nav-link {{ _route === 'app_admin_homepage' ? 'active' }}"
                                href="{{ path('app_admin_homepage') }}">
                                 {{- ux_icon('lucide:shield-user') -}}
                                 <span>Admin</span>

@@ -9,7 +9,7 @@
 {%- endblock -%}
 
 {% set monthName = month.format('F Y') %}
-{% set isCurrentMonth = monthName == user_date()|date('F Y') %}
+{% set isCurrentMonth = monthName === user_date()|date('F Y') %}
 
 {% block title %}Body measurements{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}body-measurements{% endblock %}
@@ -47,7 +47,7 @@
                 {%- set max = 0 -%}
 
                 {%- for chartMeasurement in chartMeasurements -%}
-                    {%- if not (loop.first and chartMeasurement.time == 0) -%}
+                    {%- if not (loop.first and chartMeasurement.time === 0) -%}
                         {%- if chartMeasurement.weight > max -%}
                             {%- set max = chartMeasurement.weight -%}
                         {%- elseif chartMeasurement.weight < min -%}

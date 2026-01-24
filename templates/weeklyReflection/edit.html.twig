@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% set monday = week.modify('-6 days') %}
-{% if monday.format('n') != week.format('n') %}
+{% if monday.format('n') !== week.format('n') %}
     {% set currentTitle = monday.format('j F') ~ ' - ' ~ week.format('j F') %}
 {% else %}
     {% set currentTitle = monday.format('j') ~ ' - ' ~ week.format('j F') %}

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% set monthName = month.format('F Y') %}
-{% set isCurrentMonth = monthName == user_date().format('F Y') %}
+{% set isCurrentMonth = monthName === user_date().format('F Y') %}
 
 {% block title %}Weekly reflection{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}weekly-reflection{% endblock %}
@@ -35,7 +35,7 @@
                     <div class="week-title">
                         {%- set monday = date(date).modify('-6 days') -%}
                         {%- set sunday = date(date) -%}
-                        {%- set isDifferentMonth = monday.format('n') != sunday.format('n') -%}
+                        {%- set isDifferentMonth = monday.format('n') !== sunday.format('n') -%}
                         {%- set time = monday.format(isDifferentMonth ? 'j F' : 'j') ~ ' - ' ~ sunday.format('j F') -%}
 
                         {%- if is_granted('WEEKLY_REFLECTION_EDIT') -%}
@@ -48,20 +48,20 @@
                         {% include 'weeklyReflection/_alert.html.twig' with {
                             type: 'joy',
                             isEmpty: reflection is null,
-                            text: reflection ? reflection.joy,
-                            isPrivate: reflection ? reflection.joyPrivate,
+                            text: reflection?.joy,
+                            isPrivate: reflection?.joyPrivate,
                         } %}
                         {% include 'weeklyReflection/_alert.html.twig' with {
                             type: 'difficulty',
                             isEmpty: reflection is null,
-                            text: reflection ? reflection.difficulty,
-                            isPrivate: reflection ? reflection.difficultyPrivate,
+                            text: reflection?.difficulty,
+                            isPrivate: reflection?.difficultyPrivate,
                         } %}
                         {% include 'weeklyReflection/_alert.html.twig' with {
                             type: 'achievement',
                             isEmpty: reflection is null,
-                            text: reflection ? reflection.achievement,
-                            isPrivate: reflection ? reflection.achievementPrivate,
+                            text: reflection?.achievement,
+                            isPrivate: reflection?.achievementPrivate,
                         } %}
                     </div>
                 </div>

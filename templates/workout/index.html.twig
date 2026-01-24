@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% set monthName = month.format('F Y') %}
-{% set isCurrentMonth = monthName == user_date()|date('F Y') %}
+{% set isCurrentMonth = monthName === user_date()|date('F Y') %}
 
 {% block title %}Workouts{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
 {% block body_id %}workouts{% endblock %}

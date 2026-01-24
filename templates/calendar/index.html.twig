@@ -62,15 +62,15 @@
 
                         {%- for dayNumber in 1..firstDay|date('t') -%}
                             {%- set day = month ~ '-' ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
-                            {%- set isWeekend = day|date('N') == 6 or day|date('N') == 7 -%}
+                            {%- set isWeekend = day|date('N') === 6 or day|date('N') === 7 -%}
 
                             {%- set dayEvent = events[day] is defined ? events[day].dayEvent : null -%}
                             {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
 
                             <{% if isGranted %}a{% else %}div{% endif %}
                                 {% if isGranted %}href="{{ path('app_calendar_day', {'day': day}) }}"{% endif %}
-                                class="day {{- day < current ? ' day-past' -}} {{- day == current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}} {{- isWeekend ? ' day-weekend' -}}"
-                                {%- if dayEvent is not null %}data-general-type="{{ dayEvent.type.value }}"{% endif -%}>
+                                class="day {{- day < current ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}} {{- isWeekend ? ' day-weekend' -}}"
+                                {%- if dayEvent !== null %}data-general-type="{{ dayEvent.type.value }}"{% endif -%}>
                                 <span>{{ dayNumber }}</span>
 
                                 {%- if hourEvents is not empty -%}
