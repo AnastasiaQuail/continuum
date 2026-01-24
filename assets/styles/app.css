@@ -883,7 +883,7 @@ textarea {
         }
 
         & > *:not(.card) {
-            padding-inline: var(--gap-inline);
+            padding-inline: var(--container-gap-inline);
         }
 
         .body-messages {
@@ -966,23 +966,24 @@ textarea {
 .breadcrumb {
     display: flex;
     flex-wrap: wrap;
+    gap: calc(var(--gap-inline) / 4) calc(var(--gap-inline) / 3);
     padding: 0;
     margin-top: calc(var(--body-gap-block) / 4);
     margin-bottom: var(--body-gap-block);
-    font-size: var(--font-size-medium);
+    font-size: var(--font-size-small);
     list-style: none;
+
+    @media (width >= 576px) {
+        font-size: var(--font-size-medium);
+    }
 
     .breadcrumb-item {
         cursor: default;
 
-        & + & {
-            padding-left: calc(var(--gap-inline) / 3);
-
-            &::before {
-                content: '/';
-                float: left;
-                padding-right: calc(var(--gap-inline) / 3);
-            }
+        & + &::before {
+            content: '/';
+            float: left;
+            padding-right: calc(var(--gap-inline) / 3);
         }
 
         & + &::before,
@@ -1445,19 +1446,29 @@ textarea {
 }
 
 .calendar-pagination {
+    position: relative;
     display: flex;
     align-items: center;
     gap: calc(var(--gap-inline) * .6);
     margin-bottom: calc(var(--body-gap-block) / 1.5);
+    justify-content: space-between;
+
+    @media (width >= 768px) {
+        justify-content: normal;
+    }
 
     .page-link {
         display: inline-flex;
-        padding: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 4);
-        font-size: var(--font-size-medium);
+        padding-block: calc(var(--gap-block) / 4);
+        font-size: var(--font-size-small);
         color: var(--color);
         text-decoration: none;
         opacity: .7;
         transition: color .15s, opacity .15s;
+
+        @media (width >= 576px) {
+            font-size: var(--font-size-medium);
+        }
 
         & > svg {
             --link-transform-rotate: ;
@@ -1482,8 +1493,23 @@ textarea {
     }
 
     h2 {
+        position: absolute;
+        inset: 0;
         margin-bottom: 0;
+        font-size: calc(var(--gap-block) / 2 + var(--font-size-small));
+        line-height: 1;
+        text-align: center;
         cursor: default;
+        z-index: -1;
+
+        @media (width >= 576px) {
+            font-size: calc(var(--gap-block) / 2 + var(--font-size-medium));
+        }
+
+        @media (width >= 768px) {
+            position: inherit;
+            font-size: revert;
+        }
     }
 }
 
@@ -1809,7 +1835,6 @@ textarea {
     gap: calc(var(--gap-inline) / 2);
     align-items: center;
     padding: calc(var(--gap-block) / 2) var(--gap-inline);
-    border: var(--border-width) solid color-mix(in oklch, var(--general-color) 20%, transparent);
     border-radius: var(--border-radius);
     background-color: color-mix(in oklch, var(--general-color) 10%, transparent);
 
@@ -1850,6 +1875,7 @@ textarea {
         grid-template-columns: repeat(var(--chart-columns), 1fr);
         gap: 1px;
         height: calc(var(--chart-bar-height) * 5 + var(--chart-padding) * 2);
+        pointer-events: none;
 
         .chart-day {
             position: relative;
@@ -1892,15 +1918,19 @@ textarea {
                 transition: height .15s, font-size .15s, transform .15s;
             }
 
-            &[data-general-type]:hover {
-                &:is(a) {
-                    cursor: pointer;
-                }
+            @media (width >= 768px) {
+                pointer-events: auto;
 
-                .chart-day-type {
-                    height: calc(var(--chart-bar-height) * 2);
-                    font-size: var(--font-size-small);
-                    transform: translateY(calc(var(--chart-bar-height) / 2 * -1));
+                &[data-general-type]:hover {
+                    &:is(a) {
+                        cursor: pointer;
+                    }
+
+                    .chart-day-type {
+                        height: calc(var(--chart-bar-height) * 2);
+                        font-size: var(--font-size-small);
+                        transform: translateY(calc(var(--chart-bar-height) / 2 * -1));
+                    }
                 }
             }
         }
@@ -1954,6 +1984,7 @@ textarea {
         grid-template-rows: auto 1fr;
         gap: calc(var(--gap-block) / 2);
         margin-bottom: 0;
+        border-width: 0;
         overflow: hidden;
         animation: fader 1s ease-out;
         animation-timeline: view();
@@ -2011,6 +2042,7 @@ textarea {
         &.alert-empty {
             --alert-background-color-transparent: 3%;
 
+            border-width: var(--border-width);
             border-style: dashed;
 
             .alert-body {
@@ -2135,7 +2167,7 @@ textarea {
 }
 
 .weight-chart {
-    min-height: 60px;
+    min-height: 70px;
 }
 
 .card-body-measurements {

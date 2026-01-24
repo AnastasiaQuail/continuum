@@ -8,7 +8,7 @@
 {% set breadcrumbs = [
     { label: 'Body measurements', url: path('app_measurements') },
     { label: date.format('F Y'), url: path('app_measurements', {'month': date.format('Y-m')}) },
-    { label: date.format('j \\i\\n H:i') },
+    { label: date.format('j \\a\\t H:i') },
 ] %}
 
 {% block main -%}
