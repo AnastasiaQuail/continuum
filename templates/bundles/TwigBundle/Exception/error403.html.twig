@@ -1,12 +1,4 @@
 {% extends 'error.html.twig' %}
 
-{% block main -%}
-    <h1 class="error-title">Sorry, you can’t go there</h1>
-    <p class="error-description">You don’t have permission to access this page.</p>
-    <nav>
-        <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
-            {{ ux_icon('lucide:house') }}
-            <span>Go Home</span>
-        </a>
-    </nav>
-{%- endblock %}
+{% set errorTitle = 'Sorry, you can’t go there' %}
+{% set errorDescription = 'You don’t have permission to access this page.' %}

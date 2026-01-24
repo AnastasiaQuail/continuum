@@ -1954,12 +1954,12 @@ textarea {
         }
 
         .week-title {
-            font-size: var(--font-size-small);
-
             & > a,
             & > span {
                 display: inline-flex;
                 padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
+                font-size: var(--font-size-small);
+                font-weight: var(--font-weight-light);
                 text-decoration: none;
                 transition: color .15s;
 
@@ -2187,6 +2187,7 @@ textarea {
             display: inline-flex;
             padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
             font-size: var(--font-size-small);
+            font-weight: var(--font-weight-light);
             text-decoration: none;
 
             &:is(span),
@@ -2282,8 +2283,6 @@ textarea {
 }
 
 #error .body {
-    perspective: 1px;
-
     .body-error-code {
         position: absolute;
         display: flex;
@@ -2296,7 +2295,6 @@ textarea {
         font-weight: 500;
         letter-spacing: min(-1vh, -1vw);
         color: var(--color-zinc);
-        transform: translateZ(-1px) scale(2);
         z-index: -1;
 
         &[data-code="403"],
@@ -2341,40 +2339,7 @@ textarea {
         }
 
         & > * {
-            animation: error_page_bottom calc(0.6s + sibling-index() * .1s) ease-out;
-        }
-    }
-
-    .body-error-exception {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        padding: calc(var(--body-gap-block) * 3) var(--body-gap-inline);
-        gap: calc(var(--body-gap-block) * 2);
-        word-break: break-word;
-        background-color: var(--body-background-color);
-        overflow-x: hidden;
-        z-index: 2;
-
-        .exception-base {
-            text-align: center;
-
-            .exception-message {
-                font-size: calc(var(--font-size) * 2);
-                text-align: center;
-                color: color-mix(in srgb, var(--color-red) 80%, var(--color));
-            }
-        }
-
-        .exception-trace {
-            max-width: min(calc(300px + 40vw), calc(100vw - calc(var(--container-gap-inline) * 2)));
-            padding: var(--container-gap-block) var(--container-gap-inline);
-            white-space: pre-line;
-            color: color-mix(in oklch, var(--color) 80%, transparent);
-            border: var(--border-width) solid var(--body-border-color);
-            border-radius: var(--body-border-radius);
-            background-color: var(--background-color);
+            animation: error_page_bottom calc(0.4s + sibling-index() * .1s) ease-out;
         }
     }
 }
@@ -2396,6 +2361,7 @@ textarea {
             display: inline-flex;
             padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
             font-size: var(--font-size-small);
+            font-weight: var(--font-weight-light);
             text-decoration: none;
 
             &:is(span),

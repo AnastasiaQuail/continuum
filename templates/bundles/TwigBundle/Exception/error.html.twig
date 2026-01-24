@@ -1,16 +1,12 @@
 {% extends 'error.html.twig' %}
 
-{% block main -%}
-    <h1 class="error-title">Oops… something happened.</h1>
-    <p class="error-description">This wasn’t supposed to happen, but we’re on it.</p>
-    <nav>
-        <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
-            {{ ux_icon('lucide:house') }}
-            <span>Go Home</span>
-        </a>
-        <button class="btn btn-secondary btn-transparent" data-button-action="retry">
-            {{ ux_icon('lucide:refresh-cw') }}
-            <span>Retry</span>
-        </button>
-    </nav>
+{% set errorTitle = 'Oops… something happened.' %}
+{% set errorDescription = 'This wasn’t supposed to happen, but we’re on it.' %}
+
+{% block errorButtons -%}
+    {{ parent() }}
+    <button class="btn btn-secondary btn-transparent" data-button-action="retry">
+        {{ ux_icon('lucide:refresh-cw') }}
+        <span>Retry</span>
+    </button>
 {%- endblock %}

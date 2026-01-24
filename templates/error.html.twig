@@ -14,19 +14,17 @@
         {%- endfor -%}
     </div>
     <div class="body-error-container">
-        {%- block main %}{% endblock -%}
+        <h1 class="error-title">{{ errorTitle }}</h1>
+        <p class="error-description">{{ errorDescription }}</p>
+        <nav>
+            {%- block errorButtons -%}
+                <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
+                    {{ ux_icon('lucide:house') }}
+                    <span>Go Home</span>
+                </a>
+            {%- endblock -%}
+        </nav>
     </div>
-    {%- if is_granted('ROLE_SUPER_ADMIN') -%}
-        <div class="body-error-exception">
-            <div class="exception-base">
-                <h2 class="exception-message">{{ exception.message }}</h2>
-                <div class="exception-class">{{ exception.class }}</div>
-            </div>
-            <div class="exception-trace">
-                {{- exception.file }}({{ exception.line }})<br><br>{{ exception.traceAsString|nl2br -}}
-            </div>
-        </div>
-    {%- endif -%}
 {%- endblock %}
 
 {% block footer %}{% endblock %}

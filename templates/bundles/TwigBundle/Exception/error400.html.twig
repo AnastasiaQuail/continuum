@@ -1,12 +1,4 @@
 {% extends 'error.html.twig' %}
 
-{% block main -%}
-    <h1 class="error-title">Hmm… that didn’t quite make sense.</h1>
-    <p class="error-description">The request looks a bit off. Let’s try that again.</p>
-    <nav>
-        <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
-            {{ ux_icon('lucide:house') }}
-            <span>Go Home</span>
-        </a>
-    </nav>
-{%- endblock %}
+{% set errorTitle = 'Hmm… that didn’t quite make sense.' %}
+{% set errorDescription = 'The request looks a bit off. Let’s try that again.' %}
