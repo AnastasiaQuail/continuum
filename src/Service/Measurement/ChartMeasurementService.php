@@ -16,6 +16,8 @@ final readonly class ChartMeasurementService
     ) {}
 
     /**
+     * @param list<BodyMeasurement> $measurements
+     *
      * @return non-empty-list<ChartMeasurement>
      */
     public function getChartMeasurements(User $user, DateTimeImmutable $month, array $measurements): array

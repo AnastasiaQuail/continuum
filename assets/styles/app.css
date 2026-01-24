@@ -1790,9 +1790,9 @@ textarea {
 
             & > strong {
                 display: inline-flex;
-                padding: .15rem .25rem;
+                padding: calc(var(--gap-inline) / 6) calc(var(--gap-inline) / 2);
                 color: var(--general-color);
-                border-radius: calc(var(--border-radius) / 2);
+                border-radius: calc(var(--border-radius) * 1.5);
                 background-color: color-mix(in srgb, var(--general-color) var(--notification-background-color-transparent), var(--background-color));
 
                 [data-theme="dark"] & {
@@ -1835,13 +1835,9 @@ textarea {
                     > strong {
                         --notification-background-color-transparent: 50%;
 
-                        padding: calc(var(--gap-block) / 2) calc(var(--gap-block) / 1.5);
+                        padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
                         border: calc(var(--border-width) * 2) solid var(--background-color);
                     }
-                }
-
-                & > strong {
-                    border-radius: calc(var(--border-radius) * 1.5);
                 }
 
                 & > span {
