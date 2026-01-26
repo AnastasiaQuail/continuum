@@ -25,21 +25,21 @@ final class WorkoutSet
     private int $orderIndex = 0;
 
     #[ORM\Column]
-    private bool $isWarmup = false;
-
-    #[ORM\Column]
     private DateTimeImmutable $performedAt;
 
     public function __construct(
         #[ORM\ManyToOne(inversedBy: 'sets')]
         #[ORM\JoinColumn(nullable: false)]
-        private readonly WorkoutExercise $WorkoutExercise,
+        private readonly WorkoutExercise $workoutExercise,
 
         #[ORM\Column]
-        private int $weight,
+        private readonly int $weight,
 
         #[ORM\Column]
-        private int $reps,
+        private readonly int $reps,
+
+        #[ORM\Column]
+        private readonly bool $isWarmup = false,
     ) {
         $this->id = Uuid::v7();
         $this->performedAt = new DateTimeImmutable();
@@ -52,7 +52,7 @@ final class WorkoutSet
 
     public function getWorkoutExercise(): WorkoutExercise
     {
-        return $this->WorkoutExercise;
+        return $this->workoutExercise;
     }
 
     public function getOrderIndex(): int
@@ -70,29 +70,14 @@ final class WorkoutSet
         return round($this->weight / 1000, 1);
     }
 
-    public function setWeight(int $weight): void
-    {
-        $this->weight = $weight;
-    }
-
     public function getReps(): int
     {
         return $this->reps;
     }
 
-    public function setReps(int $reps): void
-    {
-        $this->reps = $reps;
-    }
-
     public function isWarmup(): bool
     {
         return $this->isWarmup;
-    }
-
-    public function setIsWarmup(bool $isWarmup): void
-    {
-        $this->isWarmup = $isWarmup;
     }
 
     public function getPerformedAt(): DateTimeImmutable

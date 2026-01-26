@@ -13,6 +13,8 @@
 
 {% block main -%}
     <section class="card">
+        <h3 class="card-title">Edit workout exercises</h3>
+
         <div class="workout-exercises-edit">
             {%- for workoutExercise in workout.workoutExercises -%}
                 <div class="workout-exercise">
@@ -22,7 +24,7 @@
                         <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
                         <div class="exercise-controls">
                             <form method="post"
-                                  action="{{ path('app_workout_exercise_delete', {'workoutId': workout.id, 'id': workoutExercise.id}) }}"
+                                  action="{{ path('app_workout_exercise_delete', {'id': workoutExercise.id}) }}"
                                   onsubmit="return confirm('Delete?')">
                                 <input type="hidden" name="_method" value="DELETE">
                                 <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
@@ -31,45 +33,60 @@
                     </div>
 
                     <div class="workout-exercise-sets">
-                        {%- for exerciseSet in workoutExercise.sets -%}
+                        {%- for workoutSet in workoutExercise.sets -%}
                             <div class="workout-exercise-set workout-exercise-set-exists">
                                 <div class="workout-exercise-set-order">{{ ux_icon('lucide:menu') }}</div>
                                 <div class="workout-exercise-set-fields">
                                     <div class="workout-exercise-set-weight">
-                                        <span>{{ exerciseSet.weight }}</span>
+                                        <span>{{ workoutSet.weight }}</span>
                                         <span>kg</span>
                                     </div>
-                                    <div class="workout-exercise-set-reps">{{ exerciseSet.reps }}</div>
+                                    <div class="workout-exercise-set-reps">{{ workoutSet.reps }}</div>
                                 </div>
-                                <div class="workout-exercise-set-warmup {{ exerciseSet.isWarmup ? 'active' }}">
+                                <div class="workout-exercise-set-warmup {{ workoutSet.isWarmup ? 'active' }}">
                                     {{- ux_icon('lucide:battery-charging') -}}
                                 </div>
                                 <div class="workout-exercise-set-controls">
-                                    <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
+                                    <form method="post"
+                                          action="{{ path('app_workout_set_delete', {'id': workoutSet.id}) }}"
+                                          onsubmit="return confirm('Delete?')">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
+                                    </form>
                                 </div>
                             </div>
                         {%- endfor -%}
 
                         <div class="workout-exercise-set workout-exercise-set-new">
-                            <div class="workout-exercise-set-fields">
-                                <input class="form-control" type="number" id="weight" name="weight" value="0" min="0"
-                                       max="200" step="0.1"
-                                       data-mask="postfix" data-postfix="kg">
-                                <input class="form-control" type="number" id="reps" name="reps" value="1" min="1"
-                                       max="99" step="1">
-                            </div>
-                            <div class="workout-exercise-set-warmup form-control-choose-type-group">
-                                <label class="form-control-choose-type">
-                                    <input type="checkbox">
-                                    <span class="btn">
-                                        {{- ux_icon('lucide:battery-charging') -}}
-                                        <span>Is warmup</span>
-                                    </span>
-                                </label>
-                            </div>
-                            <div class="workout-exercise-set-controls">
-                                <button class="btn btn-primary btn-transparent">{{ ux_icon('lucide:plus') }}</button>
-                            </div>
+                            {%- set lastSet = workoutExercise.sets is not empty ? workoutExercise.sets|last : null -%}
+                            <form method="post"
+                                  action="{{ path('app_workout_set_create', {'id': workoutExercise.id}) }}">
+                                <label for="weight"></label>
+                                <label for="reps"></label>
+                                <div class="workout-exercise-set-fields">
+                                    <input class="form-control" type="number" id="weight" name="weight"
+                                           value="{{ lastSet?.weight ?? 0 }}" autocomplete="off"
+                                           {%- if loop.last -%}autofocus="autofocus"{%- endif -%}
+                                           min="0" max="199" step="0.1" required data-mask="postfix" data-postfix="kg">
+                                    <input class="form-control" type="number" id="reps" name="reps"
+                                           value="{{ lastSet?.reps ?? 1 }}" autocomplete="off"
+                                           min="1" max="99" step="1" required>
+                                </div>
+                                <div class="workout-exercise-set-warmup form-control-choose-type-group">
+                                    <label class="form-control-choose-type">
+                                        <input type="checkbox" name="warmup">
+                                        <span class="btn">
+                                            {{- ux_icon('lucide:battery-charging') -}}
+                                            <span>Is warmup</span>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="workout-exercise-set-controls">
+                                    <button class="btn btn-primary btn-transparent" type="submit">
+                                        {{- ux_icon('lucide:plus') -}}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

@@ -730,7 +730,7 @@ textarea {
                         gap: calc(var(--nav-link-gap) * .8);
                         padding: calc(var(--nav-link-padding) * .8);
                         font-size: var(--font-size-medium);
-                        opacity: .75;
+                        opacity: var(--transparent-color-tiny);
                     }
                 }
 
@@ -2395,10 +2395,17 @@ textarea {
             & > a,
             & > span {
                 display: inline-flex;
+                align-items: baseline;
+                gap: calc(var(--gap-inline) / 3);
                 padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
                 font-size: var(--font-size-small);
                 font-weight: var(--font-weight-light);
                 text-decoration: none;
+
+                & > *:last-child {
+                    font-size: var(--font-size-extra-small);
+                    opacity: var(--transparent-color);
+                }
 
                 &:is(span),
                 &:is(a):not(:hover) {
@@ -2643,6 +2650,10 @@ textarea {
                     flex: none;
                     width: 140px;
 
+                    label {
+                        display: none;
+                    }
+
                     & > * {
                         &:first-child {
                             flex: 1;
@@ -2697,7 +2708,7 @@ textarea {
 
                             & > span:nth-child(2) {
                                 font-weight: var(--font-weight-light);
-                                font-size: calc(var(--font-size-small) * 0.875);
+                                font-size: var(--font-size-extra-small);
                                 opacity: var(--transparent-color);
                             }
                         }
@@ -2714,6 +2725,12 @@ textarea {
                     &:not(:first-child) {
                         padding-top: calc(var(--gap-block) / 4);
                         border-top: var(--border-width) dashed var(--body-border-color);
+                    }
+
+                    & > form {
+                        display: flex;
+                        align-items: center;
+                        column-gap: calc(var(--gap-inline) / 4);
                     }
 
                     .workout-exercise-set-fields {

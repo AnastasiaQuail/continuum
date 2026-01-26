@@ -28,7 +28,7 @@ final class WorkoutExercise
     /**
      * @var Collection<int, WorkoutSet>
      */
-    #[ORM\OneToMany(targetEntity: WorkoutSet::class, mappedBy: 'WorkoutExercise', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: WorkoutSet::class, mappedBy: 'workoutExercise', orphanRemoval: true)]
     private Collection $sets;
 
     public function __construct(

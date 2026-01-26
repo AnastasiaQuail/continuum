@@ -40,7 +40,27 @@
                     <div class="workout">
                         <div class="workout-date">
                             {%- set time = workout.date.setTimezone(app.user.timezone).format('j F H:i') -%}
-                            <a href="{{ path('app_workouts_view', {id: workout.id}) }}">{{ time }}</a>
+
+                            {%- set start = date().timestamp -%}
+                            {%- set end = 0 -%}
+
+                            {%- for workoutExercise in workout.workoutExercises -%}
+                                {%- for exerciseSet in workoutExercise.sets -%}
+                                    {%- if start > exerciseSet.performedAt.timestamp -%}
+                                        {%- set start = exerciseSet.performedAt.timestamp -%}
+                                    {%- endif -%}
+                                    {%- if end < exerciseSet.performedAt.timestamp -%}
+                                        {%- set end = exerciseSet.performedAt.timestamp -%}
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            {%- endfor -%}
+
+                            {%- set minutes = ((end - start) / 60)|round -%}
+
+                            <a href="{{ path('app_workouts_view', {id: workout.id}) }}">
+                                <span>{{ time }}</span>
+                                <span>( {{ minutes }} min )</span>
+                            </a>
                         </div>
                         <div class="workout-exercises">
                             {%- if workout.workoutExercises.empty -%}
@@ -54,7 +74,17 @@
                                          style="--exercise-color: var({{ '--color-' ~ workoutExercise.exercise.group.color.value }});">
                                         <div class="workout-exercise-description">
                                             <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
-                                            <div class="workout-exercise-duration">{{ random(range(10, 59)) }}min.
+                                            <div class="workout-exercise-duration">
+                                                {%- set minutes = 0 -%}
+
+                                                {%- if workoutExercise.sets is not empty -%}
+                                                    {%- set start = (workoutExercise.sets|first).performedAt.timestamp -%}
+                                                    {%- set end = (workoutExercise.sets|last).performedAt.timestamp -%}
+
+                                                    {%- set minutes = ((end - start) / 60)|round -%}
+                                                {%- endif -%}
+
+                                                {{- minutes }} min.
                                             </div>
                                         </div>
                                         <div class="workout-exercise-sets">

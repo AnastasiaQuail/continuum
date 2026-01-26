@@ -23,6 +23,7 @@
         "symfony/monolog-bundle": "^4.0.1",
         "symfony/runtime": "^8.0.1",
         "symfony/security-bundle": "^8.0.0",
+        "symfony/serializer": "8.0.*",
         "symfony/twig-bundle": "^8.0.3",
         "symfony/uid": "^8.0.0",
         "symfony/ux-icons": "^2.32.0",
