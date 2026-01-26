@@ -20,7 +20,6 @@
                 <div class="workout-exercise">
                     <div class="exercise"
                          style="--exercise-color: var({{ '--color-' ~ workoutExercise.exercise.group.color.value }});">
-                        <div class="exercise-order">{{ ux_icon('lucide:menu') }}</div>
                         <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
                         <div class="exercise-controls">
                             <form method="post"
@@ -35,7 +34,6 @@
                     <div class="workout-exercise-sets">
                         {%- for workoutSet in workoutExercise.sets -%}
                             <div class="workout-exercise-set workout-exercise-set-exists">
-                                <div class="workout-exercise-set-order">{{ ux_icon('lucide:menu') }}</div>
                                 <div class="workout-exercise-set-fields">
                                     <div class="workout-exercise-set-weight">
                                         <span>{{ workoutSet.weight }}</span>

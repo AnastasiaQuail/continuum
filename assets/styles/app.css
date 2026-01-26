@@ -2555,17 +2555,11 @@ textarea {
 
             display: flex;
             align-items: center;
-            padding-inline: calc(var(--gap-inline) / 3) calc(var(--gap-inline) / 1.5);
+            gap: calc(var(--gap-inline) / 2);
+            padding: calc(var(--gap-block) / 4) var(--gap-inline);
             font-size: var(--font-size-medium);
             border-radius: var(--border-radius);
             background-color: color-mix(in oklch, var(--exercise-color) var(--exercise-background-color-transparent), transparent);
-
-            .exercise-order {
-                display: flex;
-                padding: calc(var(--gap-block) / 1.5) calc(var(--gap-inline) / 1.5);
-                color: color-mix(in srgb, var(--color) 20%, var(--color-inverse));
-                cursor: pointer;
-            }
 
             .exercise-name {
                 flex: 1;
@@ -2583,7 +2577,6 @@ textarea {
             .exercise-controls {
                 display: flex;
                 align-items: center;
-                margin-left: calc(var(--gap-inline) / 2);
             }
         }
 
@@ -2628,31 +2621,19 @@ textarea {
         .workout-exercise-sets {
             display: flex;
             flex-direction: column;
-            row-gap: calc(var(--gap-block) / 4);
+            row-gap: calc(var(--gap-block) / 3);
             padding-inline: var(--gap-inline);
 
             .workout-exercise-set {
                 display: flex;
                 align-items: center;
-                column-gap: calc(var(--gap-inline) / 4);
-
-                .workout-exercise-set-order {
-                    display: flex;
-                    padding: var(--control-padding-block) calc(var(--control-padding-inline) / 1.5);
-                    font-size: var(--font-size-small);
-                    color: color-mix(in srgb, var(--color) 20%, var(--color-inverse));
-                    cursor: pointer;
-                }
+                column-gap: calc(var(--gap-inline) / 2);
 
                 .workout-exercise-set-fields {
                     position: relative;
                     display: flex;
                     flex: none;
                     width: 140px;
-
-                    label {
-                        display: none;
-                    }
 
                     & > * {
                         &:first-child {
@@ -2723,14 +2704,19 @@ textarea {
 
                 &.workout-exercise-set-new {
                     &:not(:first-child) {
-                        padding-top: calc(var(--gap-block) / 4);
+                        padding-top: calc(var(--gap-block) / 3);
                         border-top: var(--border-width) dashed var(--body-border-color);
                     }
 
                     & > form {
                         display: flex;
                         align-items: center;
-                        column-gap: calc(var(--gap-inline) / 4);
+                        column-gap: calc(var(--gap-inline) / 3);
+                        width: 100%;
+
+                        & > label {
+                            display: none;
+                        }
                     }
 
                     .workout-exercise-set-fields {
