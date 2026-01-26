@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Continuum\Service;
+namespace Continuum\Service\Workout;
 
 use Continuum\Entity\User;
 use Continuum\Entity\Workout;

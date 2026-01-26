@@ -20,7 +20,7 @@
             <span>Go home</span>
         </a>
     {%- else -%}
-        <form action="{{ path('app_login') }}" method="post">
+        <form method="post" action="{{ path('app_login') }}">
             <div>
                 <label for="username" hidden>Email</label>
                 <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control"

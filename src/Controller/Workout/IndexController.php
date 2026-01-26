@@ -6,7 +6,7 @@ namespace Continuum\Controller\Workout;
 
 use Continuum\Entity\User;
 use Continuum\Service\RequestValidator;
-use Continuum\Service\WorkoutService;
+use Continuum\Service\Workout\WorkoutService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

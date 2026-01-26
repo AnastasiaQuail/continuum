@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Workout;
 
-use Continuum\Service\WorkoutService;
+use Continuum\Service\Workout\WorkoutService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

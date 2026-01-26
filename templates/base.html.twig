@@ -148,7 +148,7 @@
                         </li>
                     {%- endif -%}
                     <li class="nav-item">
-                        <a class="nav-link {{ _route === 'app_workouts' ? 'active' }}"
+                        <a class="nav-link {{ _route === 'app_workouts' or _route === 'app_workouts_view' ? 'active' }}"
                            href="{{ path('app_workouts') }}">
                             {{- ux_icon('lucide:dumbbell') -}}
                             <span>Workouts</span>

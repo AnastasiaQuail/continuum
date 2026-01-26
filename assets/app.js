@@ -10,6 +10,17 @@ new Services.TimezoneDetector().detect('#body-messages');
 new Services.CalendarNotificationToggler().onClick('#calendar-notifications');
 new Services.InputMasker().apply();
 
+/**
+ * @param {HTMLElement} element
+ * @return {boolean}
+ */
+window.submitBy = function (element) {
+    element.closest('form').submit();
+    element.disabled = true;
+
+    return false;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('footer-toolbar')?.addEventListener('click', () => {
         const link = document.querySelector('body > .sf-toolbar .sf-toolbar-block-request > a');

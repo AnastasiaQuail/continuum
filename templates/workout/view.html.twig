@@ -21,7 +21,12 @@
                         <div class="exercise-order">{{ ux_icon('lucide:menu') }}</div>
                         <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
                         <div class="exercise-controls">
-                            <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
+                            <form method="post"
+                                  action="{{ path('app_workout_exercise_delete', {'workoutId': workout.id, 'id': workoutExercise.id}) }}"
+                                  onsubmit="return confirm('Delete?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
+                            </form>
                         </div>
                     </div>
 
@@ -72,18 +77,19 @@
 
             <div class="workout-exercise workout-exercise-new">
                 <div class="exercise">
-                    <div class="exercise-title">Start new exercise:</div>
-                    <div class="exercise-name">
-                        <select class="form-control" id="test-select" required>
-                            <option value="" disabled selected hidden>Choose exercise...</option>
-                            <option value="1" data-color="purple">Example exercise</option>
-                            <option value="2" data-color="sky">Example exercise 2</option>
-                            <option value="3" data-color="green">Example exercise 3</option>
-                        </select>
-                    </div>
-                    <div class="exercise-controls">
-                        <button class="btn btn-primary btn-transparent">{{ ux_icon('lucide:plus') }}</button>
-                    </div>
+                    <form method="post" action="{{ path('app_workout_exercise_create', {'id': workout.id}) }}">
+                        <label class="exercise-title" for="exercise_id">Start new exercise:</label>
+                        <div class="exercise-name">
+                            <select class="form-control" id="exercise_id" name="exercise" required
+                                    onchange="return submitBy(this);">
+                                <option value="" disabled selected hidden>Choose exercise...</option>
+                                {%- for exercise in exercises -%}
+                                    <option value="{{ exercise.id }}">{{ exercise.name|capitalize }}</option>
+                                {%- endfor -%}
+                            </select>
+                        </div>
+                        <div class="exercise-controls">{{ ux_icon('lucide:loader-circle') }}</div>
+                    </form>
                 </div>
             </div>
         </div>
