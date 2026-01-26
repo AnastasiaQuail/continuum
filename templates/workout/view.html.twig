@@ -13,7 +13,79 @@
 
 {% block main -%}
     <section class="card">
-        <div>id: {{ workout.id }}</div>
-        <div>date: {{ date.format('Y-m-d H:i:s') }}</div>
+        <div class="workout-exercises-edit">
+            {%- for workoutExercise in workout.workoutExercises -%}
+                <div class="workout-exercise">
+                    <div class="exercise"
+                         style="--exercise-color: var({{ '--color-' ~ workoutExercise.exercise.group.color.value }});">
+                        <div class="exercise-order">{{ ux_icon('lucide:menu') }}</div>
+                        <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
+                        <div class="exercise-controls">
+                            <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
+                        </div>
+                    </div>
+
+                    <div class="workout-exercise-sets">
+                        {%- for exerciseSet in workoutExercise.sets -%}
+                            <div class="workout-exercise-set workout-exercise-set-exists">
+                                <div class="workout-exercise-set-order">{{ ux_icon('lucide:menu') }}</div>
+                                <div class="workout-exercise-set-fields">
+                                    <div class="workout-exercise-set-weight">
+                                        <span>{{ exerciseSet.weight }}</span>
+                                        <span>kg</span>
+                                    </div>
+                                    <div class="workout-exercise-set-reps">{{ exerciseSet.reps }}</div>
+                                </div>
+                                <div class="workout-exercise-set-warmup {{ exerciseSet.isWarmup ? 'active' }}">
+                                    {{- ux_icon('lucide:battery-charging') -}}
+                                </div>
+                                <div class="workout-exercise-set-controls">
+                                    <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
+                                </div>
+                            </div>
+                        {%- endfor -%}
+
+                        <div class="workout-exercise-set workout-exercise-set-new">
+                            <div class="workout-exercise-set-fields">
+                                <input class="form-control" type="number" id="weight" name="weight" value="0" min="0"
+                                       max="200" step="0.1"
+                                       data-mask="postfix" data-postfix="kg">
+                                <input class="form-control" type="number" id="reps" name="reps" value="1" min="1"
+                                       max="99" step="1">
+                            </div>
+                            <div class="workout-exercise-set-warmup form-control-choose-type-group">
+                                <label class="form-control-choose-type">
+                                    <input type="checkbox">
+                                    <span class="btn">
+                                        {{- ux_icon('lucide:battery-charging') -}}
+                                        <span>Is warmup</span>
+                                    </span>
+                                </label>
+                            </div>
+                            <div class="workout-exercise-set-controls">
+                                <button class="btn btn-primary btn-transparent">{{ ux_icon('lucide:plus') }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {%- endfor -%}
+
+            <div class="workout-exercise workout-exercise-new">
+                <div class="exercise">
+                    <div class="exercise-title">Start new exercise:</div>
+                    <div class="exercise-name">
+                        <select class="form-control" id="test-select" required>
+                            <option value="" disabled selected hidden>Choose exercise...</option>
+                            <option value="1" data-color="purple">Example exercise</option>
+                            <option value="2" data-color="sky">Example exercise 2</option>
+                            <option value="3" data-color="green">Example exercise 3</option>
+                        </select>
+                    </div>
+                    <div class="exercise-controls">
+                        <button class="btn btn-primary btn-transparent">{{ ux_icon('lucide:plus') }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 {%- endblock %}

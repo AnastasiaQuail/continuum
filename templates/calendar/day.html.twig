@@ -44,9 +44,9 @@
 
         <div class="mb-3">
             {{- form_label(form.type) -}}
-            <div class="form-control-radio-type-group">
+            <div class="form-control-choose-type-group">
                 {%- for choice in form.type.vars.choices -%}
-                    <label class="form-control-radio-type" data-general-type="{{ choice.value }}">
+                    <label class="form-control-choose-type" data-general-type="{{ choice.value }}">
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
                                {%- if form.type.vars.required %}required="required"{% endif %}

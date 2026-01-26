@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<Workout>
@@ -18,6 +19,23 @@ final class WorkoutRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Workout::class);
+    }
+
+    public function findOneById(Uuid $id): ?Workout
+    {
+        return $this->createQueryBuilder('w')
+            ->andWhere('w.id = :id')
+            ->setParameter('id', $id)
+            ->leftJoin('w.workoutExercises', 'we')
+            ->addSelect('we')
+            ->addOrderBy('we.orderIndex', 'ASC')
+            ->leftJoin('we.exercise', 'e')
+            ->addSelect('e')
+            ->leftJoin('we.sets', 'ws')
+            ->addSelect('ws')
+            ->addOrderBy('ws.orderIndex', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     /**

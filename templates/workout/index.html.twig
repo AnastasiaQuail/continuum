@@ -44,31 +44,33 @@
                         </div>
                         <div class="workout-exercises">
                             {%- if workout.workoutExercises.empty -%}
-                                <div class="exercise collection-empty">
+                                <div class="workout-exercise collection-empty">
                                     {{- ux_icon('lucide:frown') -}}
                                     <span>No exercises yet</span>
                                 </div>
                             {%- else -%}
                                 {%- for workoutExercise in workout.workoutExercises -%}
-                                    <div class="exercise"
+                                    <div class="workout-exercise"
                                          style="--exercise-color: var({{ '--color-' ~ workoutExercise.exercise.group.color.value }});">
-                                        <div class="exercise-description">
+                                        <div class="workout-exercise-description">
                                             <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
-                                            <div class="exercise-duration">{{ random(range(10, 59)) }} min.</div>
+                                            <div class="workout-exercise-duration">{{ random(range(10, 59)) }}min.
+                                            </div>
                                         </div>
-                                        <div class="exercise-sets">
+                                        <div class="workout-exercise-sets">
                                             {%- if workoutExercise.sets.empty -%}
-                                                <div class="exercise-set collection-empty">No reps yet</div>
+                                                <div class="workout-exercise-set collection-empty">No reps yet</div>
                                             {%- else -%}
                                                 {%- for exerciseSet in workoutExercise.sets -%}
-                                                    <div class="exercise-set {{ exerciseSet.isWarmup ? 'set-warmup' }}">
+                                                    <div
+                                                        class="workout-exercise-set {{ exerciseSet.isWarmup ? 'set-warmup' }}">
                                                         {%- if exerciseSet.weight > 0 -%}
-                                                            <div class="exercise-set-weight">
+                                                            <div class="workout-exercise-set-weight">
                                                                 <span>{{ exerciseSet.weight }}</span>
                                                                 <span>kg</span>
                                                             </div>
                                                         {%- endif -%}
-                                                        <div class="exercise-set-reps">
+                                                        <div class="workout-exercise-set-reps">
                                                             <span>{{ exerciseSet.reps }}</span>
                                                             <span>x</span>
                                                         </div>

@@ -8,6 +8,8 @@ use Continuum\Entity\User;
 use Continuum\Entity\Workout;
 use Continuum\Repository\WorkoutRepository;
 use DateTimeImmutable;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Uid\Uuid;
 
 final readonly class WorkoutService
 {
@@ -22,6 +24,11 @@ final readonly class WorkoutService
         $this->repository->create($workout);
 
         return $workout;
+    }
+
+    public function getById(Uuid $id): Workout
+    {
+        return $this->repository->findOneById($id) ?? throw new NotFoundHttpException('Workout not found');
     }
 
     /**
