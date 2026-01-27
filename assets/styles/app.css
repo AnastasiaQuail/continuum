@@ -2438,6 +2438,11 @@ textarea {
                 .workout-exercise-description {
                     display: flex;
                     flex-direction: column;
+                    width: 100%;
+
+                    @media (width >= 576px) {
+                        width: auto;
+                    }
 
                     .exercise-name {
                         font-size: var(--font-size-medium);
