@@ -875,7 +875,7 @@ textarea {
             padding-left: 0;
         }
 
-        & > *:not(.card):not(.row) {
+        & > *:not(.card):not(.row):not(.body-messages) {
             padding-inline: var(--container-gap-inline);
         }
 
@@ -883,12 +883,11 @@ textarea {
             --row-column-gap: var(--body-gap-inline);
         }
 
-        .body-messages {
+        & > .body-messages {
             display: none;
             flex-direction: column;
             gap: calc(var(--gap-block) / 2);
             margin-bottom: var(--body-gap-block);
-            padding-inline: 0;
 
             &:has(*) {
                 display: flex;
@@ -896,6 +895,7 @@ textarea {
 
             .alert {
                 margin-bottom: 0;
+                padding-inline: var(--container-gap-inline);
                 font-size: var(--font-size-medium);
                 border-radius: var(--body-border-radius);
             }
