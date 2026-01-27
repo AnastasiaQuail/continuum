@@ -156,11 +156,6 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->lastVisitedAt;
     }
 
-    public function visited(): void
-    {
-        $this->lastVisitedAt = new DateTimeImmutable();
-    }
-
     public function getTimezone(): DateTimeZone
     {
         return new DateTimeZone($this->timezone);

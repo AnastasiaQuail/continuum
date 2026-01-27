@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Continuum\EventSubscriber;
 
 use Continuum\Entity\User;
+use Continuum\Repository\UserRepository;
 use DateTimeImmutable;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -15,7 +15,7 @@ final readonly class LastVisitListener
 {
     public function __construct(
         private Security $security,
-        private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository,
     ) {}
 
     #[AsEventListener]
@@ -32,9 +32,7 @@ final readonly class LastVisitListener
         }
 
         if ($user->getLastVisitedAt()->modify('+5 minutes') < new DateTimeImmutable()) {
-            $user->visited();
-
-            $this->entityManager->flush();
+            $this->userRepository->updateLastVisitedAt($user);
         }
     }
 }

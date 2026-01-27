@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Continuum\Repository;
 
 use Continuum\Entity\User;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -31,6 +33,26 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         }
 
         $user->setPassword($newHashedPassword);
+
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
+    }
+
+    public function updateLastVisitedAt(User $user): void
+    {
+        $this->createQueryBuilder('u')
+            ->update()
+            ->andWhere('u.id = :id')
+            ->set('u.lastVisitedAt', ':datetime')
+            ->setParameter('id', $user->getId())
+            ->setParameter(':datetime', new DateTimeImmutable())
+            ->getQuery()
+            ->execute();
+    }
+
+    public function updateTimezone(User $user, DateTimeZone $timeZone): void
+    {
+        $user->setTimezone($timeZone);
 
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
