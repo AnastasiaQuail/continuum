@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}Continuum{% endblock %}</title>
     <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
-
     <script>
         Object.keys(localStorage)
             .filter(key => key.startsWith('continuum-ls-'))
@@ -67,7 +66,7 @@
                                 {%- if is_granted('BODY_MEASUREMENT_CREATE') -%}
                                     <li class="dropdown-item">
                                         <a class="dropdown-link" href="{{ path('app_measurement_create') }}">
-                                            {{ ux_icon('lucide:ruler') }}
+                                            {{- ux_icon('lucide:ruler') -}}
                                             <span>Add measurement</span>
                                         </a>
                                     </li>
@@ -75,7 +74,7 @@
                                 <li class="dropdown-item">
                                     <form method="post" action="{{ path('app_workout_create') }}">
                                         <button class="dropdown-link" type="submit">
-                                            {{ ux_icon('lucide:biceps-flexed') }}
+                                            {{- ux_icon('lucide:biceps-flexed') -}}
                                             <span>Start workout</span>
                                         </button>
                                     </form>
@@ -216,7 +215,7 @@
                         <nav class="calendar-pagination">
                             {%- if paginations.prev.isGranted -%}
                                 <a class="page-link page-link-prev" href="{{ paginations.prev.url }}">
-                                    {{ ux_icon('lucide:chevron-right') }}
+                                    {{- ux_icon('lucide:chevron-right') -}}
                                     <span>{{ paginations.prev.label }}</span>
                                 </a>
                             {%- endif -%}
@@ -243,17 +242,14 @@
                         <span>User: {{ user_date().format('j F, H:i') }}</span>
                     {%- endif -%}
                 </div>
-
                 <div class="footer-controls">
-                    {% if app.debug %}
-                        <div class="footer-toolbar">
-                            <div id="footer-toolbar">{{ ux_icon('lucide:app-window') }}</div>
+                    {%- if app.debug -%}
+                        <div class="footer-toolbar" id="footer-toolbar">
+                            {{- ux_icon('lucide:database') -}}
+                            <span>0</span>
                         </div>
-                    {% endif %}
-
-                    <div class="footer-bird">
-                        <div id="footer-bird">{{ ux_icon('lucide:bird') }}</div>
-                    </div>
+                    {%- endif -%}
+                    <div class="footer-bird" id="footer-bird">{{ ux_icon('lucide:bird') }}</div>
                 </div>
             </footer>
         {%- endblock -%}

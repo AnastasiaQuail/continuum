@@ -19,16 +19,28 @@ window.submitBy = function (element) {
     element.disabled = true;
 
     return false;
-}
+};
 
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('footer-toolbar')?.addEventListener('click', () => {
-        const link = document.querySelector('body > .sf-toolbar .sf-toolbar-block-request > a');
+    const toolbar = document.getElementById('footer-toolbar');
+    const sfToolbar = document.querySelector('body > .sf-toolbar');
 
-        if (link) {
-            window.open(link.href, '_blank');
+    if (toolbar && sfToolbar) {
+        const buildToolbar = function () {
+            const sfDatabase = sfToolbar.querySelector('.sf-toolbar-block-db');
+
+            toolbar.querySelector('span').innerText = sfDatabase.querySelector('.sf-toolbar-status').innerText.trim();
+            toolbar.onclick = () => {
+                window.open(sfDatabase.querySelector('a').href, '_blank');
+            };
         }
-    })
+
+        if (!sfToolbar.querySelector('.sf-toolbar-block-db')) {
+            new MutationObserver(() => buildToolbar()).observe(sfToolbar, {childList: true});
+        } else {
+            buildToolbar();
+        }
+    }
 
     document.getElementById('footer-bird').onclick = () => {
         const data = document.documentElement.dataset;

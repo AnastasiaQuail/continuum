@@ -41,12 +41,12 @@
                         <div class="workout-date">
                             {%- set time = workout.date.setTimezone(app.user.timezone).format('j F H:i') -%}
 
-                            {%- set start = date().timestamp -%}
+                            {%- set start = 0 -%}
                             {%- set end = 0 -%}
 
                             {%- for workoutExercise in workout.workoutExercises -%}
                                 {%- for exerciseSet in workoutExercise.sets -%}
-                                    {%- if start > exerciseSet.performedAt.timestamp -%}
+                                    {%- if start === 0 or start > exerciseSet.performedAt.timestamp -%}
                                         {%- set start = exerciseSet.performedAt.timestamp -%}
                                     {%- endif -%}
                                     {%- if end < exerciseSet.performedAt.timestamp -%}

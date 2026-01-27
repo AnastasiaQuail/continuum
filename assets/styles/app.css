@@ -906,10 +906,13 @@ textarea {
     }
 
     .footer-container {
+        --footer-color: color-mix(in oklch, var(--color) 25%, transparent);
+
         display: flex;
         align-items: center;
         padding: var(--body-gap-block) var(--body-gap-inline);
         font-size: var(--font-size-small);
+        color: var(--footer-color);
 
         @media (width >= 768px) {
             padding-left: 0;
@@ -919,12 +922,11 @@ textarea {
             display: flex;
             padding-inline: var(--gap-inline);
             cursor: default;
-            opacity: .25;
 
             & > span + span {
                 margin-left: calc(var(--gap-inline) / 2);
                 padding-left: calc(var(--gap-inline) / 2);
-                border-left: var(--border-width) solid color-mix(in oklch, var(--color) 50%, transparent);
+                border-left: var(--border-width) solid color-mix(in oklch, var(--footer-color) 50%, transparent);
             }
         }
 
@@ -939,22 +941,20 @@ textarea {
         .footer-bird {
             display: flex;
             gap: calc(var(--gap-inline) / 4);
-            transform: scaleX(-1);
+            transition: color .15s;
 
-            & > div {
-                opacity: .25;
-                transition: color .15s, opacity .3s;
-
-                &:hover {
-                    color: var(--link-color);
-                    cursor: pointer;
-                    opacity: 1;
-                }
-
-                &:active {
-                    transform: translateY(-1px);
-                }
+            &:hover {
+                color: var(--link-color);
+                cursor: pointer;
             }
+
+            &:active {
+                transform: translateY(-1px);
+            }
+        }
+
+        .footer-bird {
+            transform: scaleX(-1);
         }
     }
 }
