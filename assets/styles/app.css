@@ -2451,10 +2451,6 @@ textarea {
                         [data-theme="dark"] & {
                             color: color-mix(in srgb, var(--exercise-color) var(--transparent-color-tiny), var(--color));
                         }
-
-                        &::first-letter {
-                            text-transform: uppercase;
-                        }
                     }
 
                     .workout-exercise-duration {

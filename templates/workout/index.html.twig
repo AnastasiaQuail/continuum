@@ -73,7 +73,9 @@
                                     <div class="workout-exercise"
                                          style="--exercise-color: var({{ '--color-' ~ workoutExercise.exercise.group.color.value }});">
                                         <div class="workout-exercise-description">
-                                            <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
+                                            <div class="exercise-name">
+                                                {{- workoutExercise.exercise.name|capitalize -}}
+                                            </div>
                                             <div class="workout-exercise-duration">
                                                 {%- set minutes = 0 -%}
 
