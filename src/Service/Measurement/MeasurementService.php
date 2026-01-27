@@ -23,9 +23,35 @@ final readonly class MeasurementService
     /**
      * @return list<BodyMeasurement>
      */
-    public function getByMonths(User $user, DateTimeImmutable $fromMonth, ?DateTimeImmutable $toMonth = null): array
+    public function getByMonth(User $user, DateTimeImmutable $month): array
     {
-        return $this->repository->findByRange($fromMonth, $toMonth ?? $fromMonth, $user->getTimezone());
+        $from = new DateTimeImmutable(
+            sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m')),
+            $user->getTimezone()
+        );
+        $to = new DateTimeImmutable(
+            sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
+            $user->getTimezone()
+        );
+
+        return $this->repository->findByRange($from, $to);
+    }
+
+    /**
+     * @return list<BodyMeasurement>
+     */
+    public function getByRange(User $user, DateTimeImmutable $fromDay, DateTimeImmutable $toDay): array
+    {
+        $from = new DateTimeImmutable(
+            sprintf('%d-%d-%d 00:00:00', $fromDay->format('Y'), $fromDay->format('m'), $fromDay->format('t')),
+            $user->getTimezone()
+        );
+        $to = new DateTimeImmutable(
+            sprintf('%d-%d-%d 23:59:59', $toDay->format('Y'), $toDay->format('m'), $toDay->format('t')),
+            $user->getTimezone()
+        );
+
+        return $this->repository->findByRange($from, $to);
     }
 
     public function getLastMeasurement(): LastMeasurement

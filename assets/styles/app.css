@@ -1352,7 +1352,7 @@ textarea {
     border-radius: var(--border-radius);
     background-color: color-mix(in oklch, var(--alert-color) var(--alert-background-color-transparent), transparent);
 
-    [data-theme="dark"] {
+    [data-theme="dark"] & {
         color: color-mix(in srgb, var(--alert-color) var(--transparent-color-tiny), var(--color));
     }
 
@@ -1399,6 +1399,27 @@ textarea {
     border: var(--body-border-width) solid var(--body-border-color);
     border-radius: var(--body-border-radius);
     background-color: var(--background-color);
+
+    &.card-panel {
+        display: grid;
+        grid-template-rows: auto 1fr;
+
+        .card-panel-body {
+            min-height: 70px;
+
+            @media (width >= 576px) {
+                min-height: 90px;
+            }
+
+            @media (width >= 768px) {
+                min-height: 80px;
+            }
+
+            @media (width >= 992px) {
+                min-height: 100px;
+            }
+        }
+    }
 
     .card-title {
         display: flex;
@@ -1504,6 +1525,66 @@ textarea {
         white-space: nowrap;
         user-select: none;
         opacity: .5;
+    }
+}
+
+.calendar-heatmap-workout-container {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: calc(var(--gap-inline) / 2);
+    height: 100%;
+
+    .calendar-heatmap-workout {
+        display: grid;
+        grid-template-rows: repeat(7, 1fr);
+        grid-auto-columns: auto;
+        grid-auto-flow: column;
+        direction: rtl;
+        gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 8);
+        transform: rotateX(180deg);
+
+        .calendar-workout-day {
+            --workout-color-day: color-mix(in oklch, var(--color) 20%, transparent);
+            --workout-row: 1;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(var(--font-size) / 4);
+            color: var(--workout-color-day);
+            border-radius: calc(var(--border-radius) / 4);
+            background-color: color-mix(in oklch, var(--workout-color-day) 15%, transparent);
+            transform: rotateX(180deg);
+
+            [data-theme="dark"] & {
+                color: color-mix(in srgb, var(--workout-color-day) var(--transparent-color-tiny), var(--color));
+            }
+
+            &:first-child {
+                grid-row: span 1 / calc(9 - var(--workout-row));
+            }
+
+            &.done {
+                --workout-color-day: var(--color-green);
+            }
+        }
+    }
+
+    .calendar-heatmap-week {
+        display: grid;
+        grid-template-rows: repeat(7, 1fr);
+        row-gap: calc(var(--gap-block) / 8);
+
+        .calendar-heatmap-week-day {
+            display: flex;
+            align-items: center;
+            font-size: var(--font-size-extra-small);
+            opacity: .2;
+
+            &:nth-of-type(even) {
+                opacity: 0;
+            }
+        }
     }
 }
 
@@ -2224,24 +2305,7 @@ textarea {
     }
 }
 
-.chart-measurement {
-    min-height: 70px;
-
-    @media (width >= 768px) {
-        min-height: 80px;
-    }
-
-    @media (width >= 992px) {
-        min-height: 90px;
-    }
-
-    &:not([data-chart]) {
-        border: var(--border-width) dashed var(--body-border-color);
-        border-radius: var(--border-radius);
-    }
-}
-
-.chart-measurement-weight {
+.chart-weight-change {
     min-height: 70px;
 
     &:not([data-chart]) {

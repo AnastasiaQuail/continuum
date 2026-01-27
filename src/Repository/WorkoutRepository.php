@@ -41,17 +41,8 @@ final class WorkoutRepository extends ServiceEntityRepository
     /**
      * @return list<Workout>
      */
-    public function findByMonth(DateTimeImmutable $month, DateTimeZone $timeZone): array
+    public function findByRange(DateTimeImmutable $from, DateTimeImmutable $to): array
     {
-        $from = new DateTimeImmutable(
-            sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m')),
-            $timeZone
-        );
-        $to = new DateTimeImmutable(
-            sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
-            $timeZone
-        );
-
         return $this->createQueryBuilder('w')
             ->andWhere('w.date BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))

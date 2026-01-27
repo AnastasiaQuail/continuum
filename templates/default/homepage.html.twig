@@ -10,6 +10,8 @@
 
 {% block body_id %}homepage{% endblock %}
 
+{% set showMonths = (showDays / 30)|round %}
+
 {% block showcase -%}
     <section class="card">
         <h4 class="card-title card-title-justify">
@@ -27,7 +29,7 @@
 
 {% block main -%}
     <div class="row row-sm-2">
-        <section class="card">
+        <section class="card card-panel">
             <h3 class="card-title card-title-justify">
                 {%- set result = 0 -%}
                 {%- if chartMeasurements -%}
@@ -40,11 +42,45 @@
                         <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
                     </span>
                 {%- endif -%}
-                <span class="card-title-info">last 2 months</span>
+                <span class="card-title-info">last {{ showMonths }} months</span>
             </h3>
 
-            <div class="chart-measurement" {% if chartMeasurements %}data-chart="measurement-weight" data-days="90"
-                 data-symbols="hide" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+            <div class="card-panel-body chart-weight-change"
+                 {% if chartMeasurements %}data-chart="weight-change" data-days="{{ showDays }}" data-symbols="hide"
+                 data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+        </section>
+
+        <section class="card card-panel">
+            <h3 class="card-title card-title-justify">
+                <span>Workouts</span>
+                <span class="card-title-info">last {{ showMonths }} months</span>
+            </h3>
+
+            <div class="card-panel-body calendar-heatmap-workout-container">
+                <div class="calendar-heatmap-week">
+                    {%- for dayName in ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] -%}
+                        <div class="calendar-heatmap-week-day">{{ dayName|capitalize }}</div>
+                    {%- endfor -%}
+                </div>
+                <div class="calendar-heatmap-workout">
+                    {%- set dates = [] -%}
+                    {%- for workout in workouts -%}
+                        {%- set dates = dates|merge([workout.date.format('Y-m-d')]) -%}
+                    {%- endfor -%}
+
+                    {%- set weekDay = user_date().format('N') -%}
+                    {%- set date = user_date('+1 day') -%}
+
+                    {%- for day in 1..((showDays / 7)|round * 7 + weekDay) -%}
+                        {%- set date = date.modify('-1 day') -%}
+
+                        <div class="calendar-workout-day {{ date.format('Y-m-d') in dates ? 'done' }}"
+                             {% if loop.first %}style="--workout-row: {{ weekDay }};"{% endif %}>
+                            {{- date.format('j') -}}
+                        </div>
+                    {%- endfor -%}
+                </div>
+            </div>
         </section>
     </div>
 {%- endblock %}

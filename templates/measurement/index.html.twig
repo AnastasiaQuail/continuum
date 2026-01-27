@@ -70,7 +70,7 @@
             {%- endif -%}
         </div>
 
-        <div class="chart-measurement-weight" {% if chartMeasurements %}data-chart="measurement-weight"
+        <div class="chart-weight-change" {% if chartMeasurements %}data-chart="weight-change"
              data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
     </section>
 {%- endblock %}

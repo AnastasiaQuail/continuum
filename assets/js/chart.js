@@ -203,7 +203,7 @@ function initMeasurementWeightChart(element, data) {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-chart]').forEach((element) => {
-        if (element.dataset.chart === 'measurement-weight') {
+        if (element.dataset.chart === 'weight-change') {
             initMeasurementWeightChart(element, JSON.parse(element.dataset.values));
         }
     })

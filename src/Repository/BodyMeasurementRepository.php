@@ -24,17 +24,8 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
     /**
      * @return list<BodyMeasurement>
      */
-    public function findByRange(DateTimeImmutable $fromMonth, DateTimeImmutable $toMonth, DateTimeZone $timeZone): array
+    public function findByRange(DateTimeImmutable $from, DateTimeImmutable $to): array
     {
-        $from = new DateTimeImmutable(
-            sprintf('%d-%d-01 00:00:00', $fromMonth->format('Y'), $fromMonth->format('m')),
-            $timeZone
-        );
-        $to = new DateTimeImmutable(
-            sprintf('%d-%d-%d 23:59:59', $toMonth->format('Y'), $toMonth->format('m'), $toMonth->format('t')),
-            $timeZone
-        );
-
         return $this->createQueryBuilder('bm')
             ->andWhere('bm.datetime BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))

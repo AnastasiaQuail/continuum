@@ -40,7 +40,7 @@ final class IndexController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $measurements = $this->measurementService->getByMonths($user, $month);
+        $measurements = $this->measurementService->getByMonth($user, $month);
         $chartMeasurements = $this->chartMeasurementService->getChartMeasurements($user, $month, $measurements);
 
         return $this->render('measurement/index.html.twig', [
