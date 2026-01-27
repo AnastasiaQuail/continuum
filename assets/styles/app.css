@@ -194,21 +194,6 @@
     box-sizing: border-box;
 }
 
-@media (width >= 576px) {
-}
-
-@media (width >= 768px) {
-}
-
-@media (width >= 992px) {
-}
-
-@media (width >= 1200px) {
-}
-
-@media (width >= 1400px) {
-}
-
 body {
     display: grid;
     grid-template-rows: auto 1fr;
@@ -250,21 +235,6 @@ body {
 
     [data-egg-bird="3"] & {
         transform: scaleY(-1);
-    }
-
-    @media (width >= 576px) {
-    }
-
-    @media (width >= 768px) {
-    }
-
-    @media (width >= 992px) {
-    }
-
-    @media (width >= 1200px) {
-    }
-
-    @media (width >= 1400px) {
     }
 }
 
@@ -336,6 +306,29 @@ textarea {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+.row {
+    --row-columns: 1;
+    --row-column-gap: calc(var(--gap-inline) / 2);
+
+    display: grid;
+    grid-template-columns: repeat(var(--row-columns), 1fr);
+    column-gap: var(--row-column-gap);
+
+    &.row-2 {
+        --row-columns: 2;
+    }
+
+    @media (width >= 576px) {
+        &.row-sm-2 {
+            --row-columns: 2;
+        }
+
+        &.row-sm-3 {
+            --row-columns: 3;
+        }
     }
 }
 
@@ -882,8 +875,12 @@ textarea {
             padding-left: 0;
         }
 
-        & > *:not(.card) {
+        & > *:not(.card):not(.row) {
             padding-inline: var(--container-gap-inline);
+        }
+
+        & > .row {
+            --row-column-gap: var(--body-gap-inline);
         }
 
         .body-messages {
@@ -998,29 +995,6 @@ textarea {
             &:not(:hover, :focus-visible) {
                 color: inherit;
             }
-        }
-    }
-}
-
-.form-row {
-    --form-row-columns: 1;
-
-    display: grid;
-    grid-template-columns: repeat(var(--form-row-columns), 1fr);
-    gap: var(--gap-block) calc(var(--gap-inline) / 2);
-    margin-bottom: var(--gap-block);
-
-    & > * {
-        margin-bottom: 0;
-    }
-
-    &.form-row-2 {
-        --form-row-columns: 2;
-    }
-
-    &.form-row-sm-3 {
-        @media (width >= 576px) {
-            --form-row-columns: 3;
         }
     }
 }
@@ -1427,7 +1401,54 @@ textarea {
     background-color: var(--background-color);
 
     .card-title {
-        margin-bottom: var(--container-gap-block);
+        display: flex;
+        margin-bottom: calc(var(--container-gap-block) / 1.25);
+        column-gap: calc(var(--container-gap-inline) / 2);
+        align-items: baseline;
+        line-height: 1;
+
+        &.card-title-justify {
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title-label {
+            --label-color: var(--color);
+
+            display: inline-flex;
+            column-gap: calc(var(--gap-inline) / 4);
+            padding: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 3);
+            margin-right: auto;
+            width: fit-content;
+            font-size: calc(1em * 0.75);
+            font-weight: var(--font-weight-bold-extra);
+            word-spacing: -4px;
+            white-space: nowrap;
+            color: var(--label-color);
+            border-radius: var(--border-radius);
+            background-color: color-mix(in oklch, var(--label-color) 10%, transparent);
+
+            @media (width >= 992px) {
+                font-size: calc(1em * 0.875);
+            }
+
+            &.value-good {
+                --label-color: var(--color-green);
+            }
+
+            &.value-bad {
+                --label-color: var(--color-red);
+            }
+        }
+
+        .card-title-info {
+            display: inline-flex;
+            align-items: center;
+            column-gap: calc(var(--gap-inline) / 4);
+            font-size: var(--font-size-extra-small);
+            font-weight: var(--font-weight-light);
+            opacity: var(--transparent-color);
+        }
     }
 
     .card-submit {
@@ -2203,8 +2224,30 @@ textarea {
     }
 }
 
-.weight-chart {
+.chart-measurement {
     min-height: 70px;
+
+    @media (width >= 768px) {
+        min-height: 80px;
+    }
+
+    @media (width >= 992px) {
+        min-height: 90px;
+    }
+
+    &:not([data-chart]) {
+        border: var(--border-width) dashed var(--body-border-color);
+        border-radius: var(--border-radius);
+    }
+}
+
+.chart-measurement-weight {
+    min-height: 70px;
+
+    &:not([data-chart]) {
+        border: var(--border-width) dashed var(--body-border-color);
+        border-radius: var(--border-radius);
+    }
 }
 
 .card-body-measurements {

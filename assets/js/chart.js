@@ -109,14 +109,18 @@ class DimensionCalculator {
  * @param {HTMLElement} element
  * @param {Array<{type: string, prev_time: number, time: number, fat: number}>} data
  */
-function initChart(element, data) {
+function initMeasurementWeightChart(element, data) {
     const redColor = getHexColorByCssProperty('--color-red');
     const greenColor = getHexColorByCssProperty('--color-green');
 
     const myChart = echarts.init(element);
 
     const calculator = new DimensionCalculator();
-    const xAxis = calculator.getExpandedBoundaries(0, getSecondsInCurrentMonth(), 0.05);
+    const xAxis = calculator.getExpandedBoundaries(
+        0,
+        element.dataset.days ? element.dataset.days * 86400 : getSecondsInCurrentMonth(),
+        0.02
+    );
     const yAxis = calculator.getBoundariesByValues(data.map(item => item.fat), 0.1);
 
     myChart.setOption({
@@ -165,8 +169,16 @@ function initChart(element, data) {
                 type: 'line',
                 data: data.map(item => [item.time, item.fat]),
                 smooth: true,
-                // showSymbol: false,
+                showSymbol: element.dataset.symbols !== 'hide',
                 // itemStyle: {color: greenColor},
+                areaStyle: {
+                    opacity: 0.1,
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        {offset: 0, color: greenColor},
+                        {offset: 0.3, color: greenColor},
+                        {offset: 1, color: 'transparent'}
+                    ])
+                },
             },
         ]
     });
@@ -191,8 +203,8 @@ function initChart(element, data) {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-chart]').forEach((element) => {
-        if (element.dataset.chart === 'weight-month') {
-            initChart(element, JSON.parse(element.dataset.values));
+        if (element.dataset.chart === 'measurement-weight') {
+            initMeasurementWeightChart(element, JSON.parse(element.dataset.values));
         }
     })
 });

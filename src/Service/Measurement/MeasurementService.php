@@ -23,9 +23,9 @@ final readonly class MeasurementService
     /**
      * @return list<BodyMeasurement>
      */
-    public function getByMonth(User $user, DateTimeImmutable $date): array
+    public function getByMonths(User $user, DateTimeImmutable $fromMonth, ?DateTimeImmutable $toMonth = null): array
     {
-        return $this->repository->findByMonth($date, $user->getTimezone());
+        return $this->repository->findByRange($fromMonth, $toMonth ?? $fromMonth, $user->getTimezone());
     }
 
     public function getLastMeasurement(): LastMeasurement

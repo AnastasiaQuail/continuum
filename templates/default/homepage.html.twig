@@ -1,9 +1,21 @@
 {% extends 'base.html.twig' %}
 
+{%- block javascripts -%}
+    {{ parent() }}
+    {% if chartMeasurements %}
+        <script src="{{ asset('js/echarts.min.js') }}"></script>
+        <script src="{{ asset('js/chart.js') }}"></script>
+    {%- endif -%}
+{%- endblock -%}
+
 {% block body_id %}homepage{% endblock %}
 
 {% block showcase -%}
     <section class="card">
+        <h4 class="card-title card-title-justify">
+            <span>The Wait</span>
+            <span class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</span>
+        </h4>
         <div class="progress-group">
             <div class="progress" style="--progress: {{ calendarProgress }}%;">
                 <div class="progress-bar"></div>
@@ -11,4 +23,28 @@
             <div class="progress-text">{{ calendarProgress }}%</div>
         </div>
     </section>
+{%- endblock %}
+
+{% block main -%}
+    <div class="row row-sm-2">
+        <section class="card">
+            <h3 class="card-title card-title-justify">
+                {%- set result = 0 -%}
+                {%- if chartMeasurements -%}
+                    {%- set result = ((chartMeasurements|last).weight - (chartMeasurements|first).weight)|round(1) -%}
+                {%- endif -%}
+
+                <span>Body fat</span>
+                {%- if result > 0 -%}
+                    <span class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
+                        <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
+                    </span>
+                {%- endif -%}
+                <span class="card-title-info">last 2 months</span>
+            </h3>
+
+            <div class="chart-measurement" {% if chartMeasurements %}data-chart="measurement-weight" data-days="90"
+                 data-symbols="hide" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+        </section>
+    </div>
 {%- endblock %}

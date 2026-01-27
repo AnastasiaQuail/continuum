@@ -24,14 +24,14 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
     /**
      * @return list<BodyMeasurement>
      */
-    public function findByMonth(DateTimeImmutable $month, DateTimeZone $timeZone): array
+    public function findByRange(DateTimeImmutable $fromMonth, DateTimeImmutable $toMonth, DateTimeZone $timeZone): array
     {
         $from = new DateTimeImmutable(
-            sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m')),
+            sprintf('%d-%d-01 00:00:00', $fromMonth->format('Y'), $fromMonth->format('m')),
             $timeZone
         );
         $to = new DateTimeImmutable(
-            sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
+            sprintf('%d-%d-%d 23:59:59', $toMonth->format('Y'), $toMonth->format('m'), $toMonth->format('t')),
             $timeZone
         );
 
