@@ -110,9 +110,6 @@ class DimensionCalculator {
  * @param {Array<{type: string, prev_time: number, time: number, fat: number}>} data
  */
 function initMeasurementWeightChart(element, data) {
-    const redColor = getHexColorByCssProperty('--color-red');
-    const greenColor = getHexColorByCssProperty('--color-green');
-
     const myChart = echarts.init(element);
 
     const calculator = new DimensionCalculator();
@@ -123,8 +120,10 @@ function initMeasurementWeightChart(element, data) {
     );
     const yAxis = calculator.getBoundariesByValues(data.map(item => item.fat), 0.1);
 
+    const redColor = getHexColorByCssProperty('--color-red');
+    const greenColor = getHexColorByCssProperty('--color-green');
+
     myChart.setOption({
-        // animation: false,
         animationDuration: 200,
         grid: {left: 4, bottom: 4, top: 4, right: 4},
         xAxis: {
@@ -164,23 +163,108 @@ function initMeasurementWeightChart(element, data) {
                 };
             }),
         },
-        series: [
-            {
-                type: 'line',
-                data: data.map(item => [item.time, item.fat]),
-                smooth: true,
-                showSymbol: element.dataset.symbols !== 'hide',
-                // itemStyle: {color: greenColor},
-                areaStyle: {
-                    opacity: 0.1,
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                        {offset: 0, color: greenColor},
-                        {offset: 0.3, color: greenColor},
-                        {offset: 1, color: 'transparent'}
-                    ])
-                },
+        series: [{
+            type: 'line',
+            data: data.map(item => [item.time, item.fat]),
+            smooth: true,
+            showSymbol: element.dataset.symbols !== 'hide',
+            symbol: 'circle',
+            areaStyle: {
+                opacity: 0.1,
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    {offset: 0, color: greenColor},
+                    {offset: 0.3, color: greenColor},
+                    {offset: 1, color: 'transparent'}
+                ])
             },
-        ]
+        }]
+    });
+
+    window.addEventListener('resize', () => {
+        myChart.resize();
+    });
+
+    document.addEventListener('app:theme:changed', () => {
+        myChart.setOption({
+            yAxis: {
+                axisLabel: {color: getHexColorByCssProperty('--color')},
+                splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}},
+            }
+        });
+    });
+
+    document.addEventListener('app:sidebar:changed', () => {
+        myChart.resize();
+    });
+}
+
+/**
+ * @param {HTMLElement} element
+ * @param {Array<{type: string, color: string, prev_time: number, time: number}>} data
+ */
+function initMoodReflectionsChart(element, data) {
+    const myChart = echarts.init(element);
+
+    const calculator = new DimensionCalculator();
+    const xAxis = calculator.getExpandedBoundaries(
+        data[0].time,
+        element.dataset.days ? element.dataset.days * 86400 : getSecondsInCurrentMonth(),
+        0.01
+    );
+
+    let values = [];
+    for (const value of data) {
+        values[value.color] = {color: value.color, value: value.type};
+    }
+
+    myChart.setOption({
+        animationDuration: 200,
+        grid: {left: 4, bottom: 4, top: 4, right: 4},
+        xAxis: {
+            min: xAxis.min,
+            max: xAxis.max,
+            axisLine: false,
+            axisLabel: false,
+            splitLine: {show: false},
+        },
+        yAxis: {
+            min: 1,
+            max: 5,
+            interval: 1,
+            axisLine: false,
+            axisLabel: false,
+            splitLine: {
+                show: true,
+                lineStyle: {
+                    color: getHexColorByCssProperty('--color'),
+                    opacity: 0.04,
+                }
+            },
+        },
+        visualMap: {
+            show: false,
+            pieces: Object.values(values).map(value => {
+                return {
+                    gt: value.value - 0.95,
+                    lte: value.value + 0.05,
+                    color: getHexColorByCssProperty('--color-' + value.color)
+                }
+            }),
+        },
+        series: [{
+            type: 'line',
+            data: data.map(item => [item.time, item.type]),
+            smooth: true,
+            symbol: 'circle',
+            areaStyle: {
+                opacity: 0.1,
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                    {offset: 0, color: getHexColorByCssProperty('--color-green')},
+                    {offset: 0.3, color: getHexColorByCssProperty('--color-green')},
+                    {offset: 1, color: 'transparent'}
+                ])
+            },
+        }]
     });
 
     window.addEventListener('resize', () => {
@@ -205,6 +289,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-chart]').forEach((element) => {
         if (element.dataset.chart === 'weight-change') {
             initMeasurementWeightChart(element, JSON.parse(element.dataset.values));
+        } else if (element.dataset.chart === 'mood-reflections') {
+            initMoodReflectionsChart(element, JSON.parse(element.dataset.values));
         }
     })
 });

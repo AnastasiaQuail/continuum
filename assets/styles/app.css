@@ -1401,6 +1401,7 @@ textarea {
     border: var(--body-border-width) solid var(--body-border-color);
     border-radius: var(--body-border-radius);
     background-color: var(--background-color);
+    overflow-x: hidden;
 
     &.card-panel {
         display: grid;
@@ -1493,7 +1494,7 @@ textarea {
                     z-index: 2;
                 }
 
-                & > .card-dropdown-menu {
+                & > .dropdown-menu {
                     position: absolute;
                     top: 100%;
                     right: calc(var(--cti-gap-inline) * -1);
@@ -1511,7 +1512,7 @@ textarea {
                     opacity: 0;
                     transform: translateY(-100vw);
 
-                    .card-dropdown-item {
+                    .dropdown-item {
                         display: flex;
                         width: 100%;
                         justify-content: right;
@@ -1527,7 +1528,7 @@ textarea {
                     }
                 }
 
-                &:hover > .card-dropdown-menu {
+                &:hover > .dropdown-menu {
                     opacity: 1;
                     transform: translateY(0);
                 }
@@ -2364,7 +2365,7 @@ textarea {
     }
 }
 
-.chart-weight-change {
+.chart-panel {
     min-height: 70px;
 
     &:not([data-chart]) {

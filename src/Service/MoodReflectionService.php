@@ -21,14 +21,16 @@ final readonly class MoodReflectionService
     /**
      * @return non-empty-array<string, MoodReflection>
      */
-    public function getPreviousDays(): array
+    public function getPreviousDays(?int $days = null): array
     {
+        $days ??= $this->trendDuration;
+
         $moods = [];
-        for ($day = $this->trendDuration - 1; $day >= 0; $day--) {
+        for ($day = $days - 1; $day >= 0; $day--) {
             $moods[new DateTimeImmutable(sprintf('-%d days', $day))->format('Y-m-d')] = null;
         }
 
-        foreach ($this->repository->findPreviousDays($this->trendDuration) as $mood) {
+        foreach ($this->repository->findPreviousDays($days) as $mood) {
             $moods[$mood->getDate()->format('Y-m-d')] = $mood;
         }
 
