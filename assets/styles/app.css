@@ -1592,7 +1592,7 @@ textarea {
     position: relative;
     display: flex;
     align-items: center;
-    gap: calc(var(--gap-inline) * .6);
+    gap: var(--gap-inline);
     margin-bottom: calc(var(--body-gap-block) / 1.5);
     justify-content: space-between;
 
@@ -1608,10 +1608,6 @@ textarea {
         text-decoration: none;
         opacity: .7;
         transition: color .15s, opacity .15s;
-
-        @media (width >= 576px) {
-            font-size: var(--font-size-medium);
-        }
 
         & > svg {
             --link-transform-rotate: ;

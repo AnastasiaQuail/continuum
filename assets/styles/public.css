@@ -18,11 +18,13 @@
 }
 
 #login {
-    form {
-        width: 350px;
-        display: flex;
-        flex-direction: column;
-        gap: var(--gap-block);
+    .body-container {
+        form {
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: var(--gap-block);
+        }
     }
 
     .form-control {
