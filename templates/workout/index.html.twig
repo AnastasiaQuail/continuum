@@ -83,7 +83,7 @@
                                                     {%- set start = (workoutExercise.sets|first).performedAt.timestamp -%}
                                                     {%- set end = (workoutExercise.sets|last).performedAt.timestamp -%}
 
-                                                    {%- set minutes = ((end - start) / 60)|round -%}
+                                                    {%- set minutes = ((end - start) / 60)|round + 1 -%}
                                                 {%- endif -%}
 
                                                 {{- minutes }} min.

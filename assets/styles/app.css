@@ -1401,11 +1401,11 @@ textarea {
     border: var(--body-border-width) solid var(--body-border-color);
     border-radius: var(--body-border-radius);
     background-color: var(--background-color);
-    overflow-x: hidden;
 
     &.card-panel {
         display: grid;
         grid-template-rows: auto 1fr;
+        overflow-x: hidden;
 
         .card-panel-body {
             min-height: 70px;
@@ -1483,6 +1483,7 @@ textarea {
             font-size: var(--cti-font-size);
             font-weight: var(--cti-font-weight);
             color: var(--cti-color);
+            cursor: default;
 
             &.card-title-dropdown {
                 position: relative;
