@@ -10,8 +10,6 @@
 
 {% block body_id %}homepage{% endblock %}
 
-{% set showMonths = (showDays / 30)|round %}
-
 {% block showcase -%}
     <section class="card">
         <h4 class="card-title card-title-justify">
@@ -32,31 +30,65 @@
 
     <div class="row row-sm-2">
         <section class="card card-panel">
-            <h3 class="card-title card-title-justify">
+            <div class="card-title card-title-justify">
                 {%- set result = 0 -%}
                 {%- if chartMeasurements -%}
                     {%- set result = ((chartMeasurements|last).weight - (chartMeasurements|first).weight)|round(1) -%}
                 {%- endif -%}
 
-                <span>Body fat</span>
+                <h3>Body fat</h3>
                 {%- if result !== 0 -%}
                     <span class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
                         <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
                     </span>
                 {%- endif -%}
-                <span class="card-title-info">last {{ showMonths }} months</span>
-            </h3>
+
+                <div class="card-title-info card-title-dropdown">
+                    <span>last {{ (measurementDays / 30)|round }} months</span>
+                    <ul class="card-dropdown-menu">
+                        <li>
+                            <a class="card-dropdown-item"
+                               href="{{ path('app_homepage', {'measurement': 1}) }}">1 month</a>
+                        </li>
+                        <li>
+                            <a class="card-dropdown-item"
+                               href="{{ path('app_homepage') }}">2 months</a>
+                        </li>
+                        <li>
+                            <a class="card-dropdown-item"
+                               href="{{ path('app_homepage', {'measurement': 3}) }}">3 months</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
             <div class="card-panel-body chart-weight-change"
-                 {% if chartMeasurements %}data-chart="weight-change" data-days="{{ showDays }}" data-symbols="hide"
-                 data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+                 {% if chartMeasurements %}data-chart="weight-change" data-days="{{ measurementDays }}"
+                 data-symbols="hide" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
         </section>
 
         <section class="card card-panel">
-            <h3 class="card-title card-title-justify">
-                <span>Workouts</span>
-                <span class="card-title-info">last {{ showMonths }} months</span>
-            </h3>
+            <div class="card-title card-title-justify">
+                <h3>Workouts</h3>
+
+                <div class="card-title-info card-title-dropdown">
+                    <span>last {{ (workoutDays / 30)|round }} months</span>
+                    <ul class="card-dropdown-menu">
+                        <li>
+                            <a class="card-dropdown-item"
+                               href="{{ path('app_homepage', {'workout': 1}) }}">1 month</a>
+                        </li>
+                        <li>
+                            <a class="card-dropdown-item"
+                               href="{{ path('app_homepage') }}">2 months</a>
+                        </li>
+                        <li>
+                            <a class="card-dropdown-item"
+                               href="{{ path('app_homepage', {'workout': 3}) }}">3 months</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
 
             <div class="card-panel-body calendar-heatmap-workout-container">
                 <div class="calendar-heatmap-week">
@@ -73,7 +105,7 @@
                     {%- set weekDay = user_date().format('N') -%}
                     {%- set date = user_date('+1 day') -%}
 
-                    {%- for day in 1..((showDays / 7)|round * 7 + weekDay) -%}
+                    {%- for day in 1..workoutDays -%}
                         {%- set date = date.modify('-1 day') -%}
 
                         <div class="calendar-workout-day {{ date.format('Y-m-d') in dates ? 'done' }}"

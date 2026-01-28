@@ -1394,6 +1394,8 @@ textarea {
 }
 
 .card {
+    --card-background-color: var(--background-color);
+
     padding: var(--container-gap-block) var(--container-gap-inline);
     margin-bottom: var(--body-gap-block);
     border: var(--body-border-width) solid var(--body-border-color);
@@ -1433,6 +1435,11 @@ textarea {
             justify-content: space-between;
         }
 
+        & > h2, & > h3, & > h4 {
+            margin-bottom: 0;
+            line-height: 1;
+        }
+
         .card-title-label {
             --label-color: var(--color);
 
@@ -1463,12 +1470,68 @@ textarea {
         }
 
         .card-title-info {
+            --cti-gap-block: calc(var(--gap-block) / 4);
+            --cti-gap-inline: calc(var(--gap-inline) / 4);
+            --cti-font-size: var(--font-size-extra-small);
+            --cti-font-weight: var(--font-weight-light);
+            --cti-color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
+
             display: inline-flex;
             align-items: center;
-            column-gap: calc(var(--gap-inline) / 4);
-            font-size: var(--font-size-extra-small);
-            font-weight: var(--font-weight-light);
-            opacity: var(--transparent-color);
+            column-gap: var(--cti-gap-inline);
+            font-size: var(--cti-font-size);
+            font-weight: var(--cti-font-weight);
+            color: var(--cti-color);
+
+            &.card-title-dropdown {
+                position: relative;
+
+                & > span {
+                    padding-block: var(--cti-gap-block);
+                    background-color: var(--card-background-color);
+                    cursor: default;
+                    z-index: 2;
+                }
+
+                & > .card-dropdown-menu {
+                    position: absolute;
+                    top: 100%;
+                    right: calc(var(--cti-gap-inline) * -1);
+                    display: flex;
+                    flex-direction: column;
+                    min-width: calc(100% + var(--cti-gap-inline) * 2);
+                    margin: 0;
+                    padding: var(--cti-gap-block) var(--cti-gap-inline);
+                    list-style: none;
+                    border-bottom-left-radius: calc(var(--border-radius) / 2);
+                    border-bottom-right-radius: calc(var(--border-radius) / 2);
+                    background-color: color-mix(in srgb, var(--card-background-color) var(--transparent-color), transparent);
+                    backdrop-filter: blur(2px);
+                    z-index: 1;
+                    opacity: 0;
+                    transform: translateY(-100vw);
+
+                    .card-dropdown-item {
+                        display: flex;
+                        width: 100%;
+                        justify-content: right;
+                        padding-block: var(--cti-gap-block);
+                        font-size: var(--cti-font-size);
+                        font-weight: var(--cti-font-weight);
+                        text-decoration: none;
+                        transition: color .15s;
+
+                        &:not(:hover) {
+                            color: var(--cti-color);
+                        }
+                    }
+                }
+
+                &:hover > .card-dropdown-menu {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
         }
     }
 
