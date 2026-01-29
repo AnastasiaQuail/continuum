@@ -1470,9 +1470,10 @@ textarea {
             }
         }
 
-        .card-title-info {
+        .card-title-info,
+        .card-title-dropdown {
             --cti-gap-block: calc(var(--gap-block) / 4);
-            --cti-gap-inline: calc(var(--gap-inline) / 4);
+            --cti-gap-inline: calc(var(--gap-inline) / 2.5);
             --cti-font-size: var(--font-size-extra-small);
             --cti-font-weight: var(--font-weight-light);
             --cti-color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
@@ -1484,55 +1485,57 @@ textarea {
             font-weight: var(--cti-font-weight);
             color: var(--cti-color);
             cursor: default;
+        }
 
-            &.card-title-dropdown {
-                position: relative;
+        .card-title-dropdown {
+            position: relative;
 
-                & > span {
-                    padding-block: var(--cti-gap-block);
-                    background-color: var(--card-background-color);
-                    cursor: default;
-                    z-index: 2;
+            & > span {
+                display: flex;
+                padding: var(--cti-gap-block) var(--cti-gap-inline);
+                column-gap: calc(var(--cti-gap-inline) / 4);
+                background-color: color-mix(in oklch, var(--color) 3%, transparent);
+                border-radius: calc(var(--border-radius) / 2);
+                z-index: 2;
+
+                & > svg {
+                    transform: rotate(90deg);
+                    margin-right: calc(var(--cti-gap-inline) / 2.5 * -1);
                 }
+            }
 
-                & > .dropdown-menu {
-                    position: absolute;
-                    top: 100%;
-                    right: calc(var(--cti-gap-inline) * -1);
+            & > .dropdown-menu {
+                position: absolute;
+                top: calc(var(--cti-gap-block) * -1.5);
+                right: calc(var(--cti-gap-inline) * -1);
+                min-width: calc(100% + var(--cti-gap-inline) * 2);
+                margin: 0;
+                padding: calc(var(--cti-gap-block) * 1.5) var(--cti-gap-inline);
+                padding-top: calc(var(--cti-font-size) + var(--cti-gap-block) * 4.5);
+                list-style: none;
+                border-radius: calc(var(--border-radius) / 2);
+                background-color: color-mix(in oklch, var(--color) 2%, transparent);
+                backdrop-filter: blur(2px);
+                z-index: 1;
+                opacity: 0;
+                transform: translateY(-100vw);
+
+                .dropdown-item {
                     display: flex;
-                    flex-direction: column;
-                    min-width: calc(100% + var(--cti-gap-inline) * 2);
-                    margin: 0;
+                    justify-content: center;
                     padding: var(--cti-gap-block) var(--cti-gap-inline);
-                    list-style: none;
-                    border-bottom-left-radius: calc(var(--border-radius) / 2);
-                    border-bottom-right-radius: calc(var(--border-radius) / 2);
-                    background-color: color-mix(in srgb, var(--card-background-color) var(--transparent-color), transparent);
-                    backdrop-filter: blur(2px);
-                    z-index: 1;
-                    opacity: 0;
-                    transform: translateY(-100vw);
+                    text-decoration: none;
+                    transition: color .15s;
 
-                    .dropdown-item {
-                        display: flex;
-                        width: 100%;
-                        justify-content: right;
-                        padding-block: var(--cti-gap-block);
-                        font-size: var(--cti-font-size);
-                        font-weight: var(--cti-font-weight);
-                        text-decoration: none;
-                        transition: color .15s;
-
-                        &:not(:hover) {
-                            color: var(--cti-color);
-                        }
+                    &:not(:hover) {
+                        color: var(--cti-color);
                     }
                 }
+            }
 
-                &:hover > .dropdown-menu {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+            &:hover > .dropdown-menu {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     }
@@ -1631,6 +1634,26 @@ textarea {
 
             &.done {
                 --workout-color-day: var(--color-green);
+
+                font-size: 0;
+                color: transparent;
+            }
+
+            .calendar-workout-exercises {
+                position: absolute;
+                display: flex;
+                flex-direction: row-reverse;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                gap: 1px;
+
+                & > span {
+                    width: 3px;
+                    aspect-ratio: 1;
+                    border-radius: 50%;
+                    background-color: var(--general-color);
+                }
             }
         }
     }

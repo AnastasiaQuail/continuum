@@ -64,18 +64,25 @@
                 <div class="calendar-heatmap-workout">
                     {%- set dates = [] -%}
                     {%- for workout in workouts -%}
-                        {%- set dates = dates|merge([workout.date.format('Y-m-d')]) -%}
+                        {%- set dates = dates|merge({(workout.date.format('Y-m-d')): workout}) -%}
                     {%- endfor -%}
 
                     {%- set weekDay = user_date().format('N') -%}
                     {%- set date = user_date('+1 day') -%}
 
-                    {%- for day in 1..workoutDays -%}
+                    {%- for workoutDay in 1..workoutDays -%}
                         {%- set date = date.modify('-1 day') -%}
+                        {%- set day = date.format('Y-m-d') -%}
+                        {%- set workout = dates[day] is defined ? dates[day] : null -%}
 
-                        <div class="calendar-workout-day {{ date.format('Y-m-d') in dates ? 'done' }}"
+                        <div class="calendar-workout-day {{ workout !== null ? 'done' }}"
                              {% if loop.first %}style="--workout-row: {{ weekDay }};"{% endif %}>
-                            {{- date.format('j') -}}
+                            <div>{{- date.format('j') -}}</div>
+                            <div class="calendar-workout-exercises">
+                                {%- for workoutExercise in workout?.workoutExercises -%}
+                                    <span data-general-type="{{ workoutExercise.exercise.group.color.value }}"></span>
+                                {%- endfor -%}
+                            </div>
                         </div>
                     {%- endfor -%}
                 </div>
@@ -96,12 +103,15 @@
 {%- endblock %}
 
 {% macro card_title_dropdown(days, query) -%}
-    <div class="card-title-info card-title-dropdown">
-        <span>last {{ (days / 30)|round }} months</span>
+    <div class="card-title-dropdown">
+        {%- set months = (days / 30)|round -%}
+        <span>{{ months }} {{ months > 1 ? 'months' : 'month' }} {{ ux_icon('lucide:chevron-right') }}</span>
         <ul class="dropdown-menu">
             {%- for month in 1..3 -%}
                 <li>
-                    <a class="dropdown-item" href="{{ path('app_homepage', {(query): month}) }}">{{ month }} month</a>
+                    <a class="dropdown-item" href="{{ path('app_homepage', {(query): month}) }}">
+                        {{- month }} {{ month > 1 ? 'months' : 'month' -}}
+                    </a>
                 </li>
             {%- endfor -%}
         </ul>
