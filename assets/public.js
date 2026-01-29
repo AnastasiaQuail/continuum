@@ -2,7 +2,7 @@ import './styles/app.css';
 import './styles/public.css';
 import ThemeToggler from './js/theme-toggler.js';
 
-new ThemeToggler().onClick('#theme-toggler');
+new ThemeToggler('#theme-toggler');
 
 document.addEventListener('DOMContentLoaded', () => {
     (function () {

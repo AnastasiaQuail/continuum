@@ -1,17 +1,20 @@
 export class Storage {
     #key;
+    #dataKey;
 
     /**
      * @param {string} key
+     * @param {boolean} useDefault
      */
-    constructor(key) {
-        this.#key = key;
+    constructor(key, useDefault = false) {
+        this.#key = 'continuum-ls-' + key;
+        this.#dataKey = key;
 
         const value = this.get()
 
         if (value !== null) {
             this.set(value);
-        } else {
+        } else if (useDefault) {
             this.save(this.getDefault());
         }
 
@@ -26,7 +29,8 @@ export class Storage {
      * @param {string} value
      */
     set(value) {
-        console.warn('You must implement this function.');
+        document.documentElement.setAttribute('data-' + this.#dataKey, value);
+        document.dispatchEvent(new CustomEvent('app:root-data:' + this.#dataKey));
     }
 
     /**
@@ -47,8 +51,36 @@ export class Storage {
      * @param {string} value
      */
     save(value) {
-        localStorage.setItem(this.#key, value);
+        if (value === '') {
+            localStorage.removeItem(this.#key);
+        } else {
+            localStorage.setItem(this.#key, value);
+        }
 
         this.set(value);
+    }
+}
+
+export class ToggleStorage extends Storage {
+    /**
+     * @param {string} key
+     * @param {string} id
+     * @param {boolean} useDefault
+     */
+    constructor(key, id, useDefault = false) {
+        super(key, useDefault);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelector(id)?.addEventListener('click', (event) => {
+                this.onClick(event);
+            })
+        })
+    }
+
+    /**
+     * @param {Event} event
+     */
+    onClick(event) {
+        this.save(this.get() === 'collapsed' ? '' : 'collapsed');
     }
 }

@@ -2,12 +2,12 @@ import './styles/app.css';
 import ThemeToggler from './js/theme-toggler.js';
 import * as Services from './js/services.js';
 
-new ThemeToggler().onClick('#theme-toggler');
+new ThemeToggler('#theme-toggler');
 
-new Services.SidebarToggler().onClick('#sidebar-toggler');
+new Services.SidebarToggler('#sidebar-toggler');
 new Services.Sidebar().applyTo('#sidebar');
 new Services.TimezoneDetector().detect('#body-messages');
-new Services.CalendarUpcomingEventsToggler().onClick('#calendar-upcoming-events');
+new Services.CalendarUpcomingEventsToggler('#calendar-upcoming-events');
 new Services.InputMasker().apply();
 
 /**

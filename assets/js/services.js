@@ -1,34 +1,22 @@
-import {Storage} from './components.js';
+import {ToggleStorage} from './components.js';
 
-export class SidebarToggler extends Storage {
-    constructor() {
-        super('continuum-ls-sidebar');
+export class SidebarToggler extends ToggleStorage {
+    constructor(id) {
+        super('sidebar', id);
     }
 
     /**
-     * @param {string} value
+     * @param {Event} event
      */
-    set(value) {
-        document.documentElement.dataset.sidebar = value;
-        document.dispatchEvent(new CustomEvent('app:sidebar:changed'));
-    }
+    onClick(event) {
+        const type = getComputedStyle(event.currentTarget).getPropertyValue('--sidebar-toggler');
 
-    /**
-     * @param {string} id
-     */
-    onClick(id) {
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector(id).onclick = (event) => {
-                const type = getComputedStyle(event.currentTarget).getPropertyValue('--sidebar-toggler');
-
-                if ("'desktop'" === type || '"desktop"' === type) {
-                    this.save(this.get() === 'collapsed' ? '' : 'collapsed');
-                } else {
-                    const dataset = document.documentElement.dataset;
-                    dataset.sidebarView = dataset.sidebarView !== 'open' ? 'open' : '';
-                }
-            };
-        })
+        if ("'desktop'" === type || '"desktop"' === type) {
+            super.onClick(event);
+        } else {
+            const dataset = document.documentElement.dataset;
+            dataset.sidebarView = dataset.sidebarView !== 'open' ? 'open' : '';
+        }
     }
 }
 
@@ -143,27 +131,9 @@ export class TimezoneDetector {
     }
 }
 
-export class CalendarUpcomingEventsToggler extends Storage {
-    constructor() {
-        super('continuum-ls-calendar-upcoming');
-    }
-
-    /**
-     * @param {string} value
-     */
-    set(value) {
-        document.documentElement.dataset.calendarUpcoming = value;
-    }
-
-    /**
-     * @param {string} id
-     */
-    onClick(id) {
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector(id)?.addEventListener('click', () => {
-                this.save(this.get() === 'open' ? '' : 'open');
-            })
-        })
+export class CalendarUpcomingEventsToggler extends ToggleStorage {
+    constructor(id) {
+        super('calendar-upcoming', id);
     }
 }
 

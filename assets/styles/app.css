@@ -2020,7 +2020,7 @@ textarea {
     user-select: none;
     transition: padding-block .15s;
 
-    :root:not([data-calendar-upcoming="open"]) & {
+    [data-calendar-upcoming="collapsed"] & {
         padding-block: calc(var(--container-gap-block) / 2);
 
         .upcoming-events-body {

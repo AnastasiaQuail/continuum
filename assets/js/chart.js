@@ -184,7 +184,7 @@ function initMeasurementWeightChart(element, data) {
         myChart.resize();
     });
 
-    document.addEventListener('app:theme:changed', () => {
+    document.addEventListener('app:root-data:theme', () => {
         myChart.setOption({
             yAxis: {
                 axisLabel: {color: getHexColorByCssProperty('--color')},
@@ -193,7 +193,7 @@ function initMeasurementWeightChart(element, data) {
         });
     });
 
-    document.addEventListener('app:sidebar:changed', () => {
+    document.addEventListener('app:root-data:sidebar', () => {
         myChart.resize();
     });
 }
@@ -271,7 +271,7 @@ function initMoodReflectionsChart(element, data) {
         myChart.resize();
     });
 
-    document.addEventListener('app:theme:changed', () => {
+    document.addEventListener('app:root-data:theme', () => {
         myChart.setOption({
             yAxis: {
                 axisLabel: {color: getHexColorByCssProperty('--color')},
@@ -280,7 +280,7 @@ function initMoodReflectionsChart(element, data) {
         });
     });
 
-    document.addEventListener('app:sidebar:changed', () => {
+    document.addEventListener('app:root-data:sidebar', () => {
         myChart.resize();
     });
 }

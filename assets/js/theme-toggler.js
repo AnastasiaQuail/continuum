@@ -1,16 +1,8 @@
-import {Storage} from './components.js';
+import {ToggleStorage} from './components.js';
 
-export default class extends Storage {
-    constructor() {
-        super('continuum-ls-theme');
-    }
-
-    /**
-     * @param {string} value
-     */
-    set(value) {
-        document.documentElement.dataset.theme = value;
-        document.dispatchEvent(new CustomEvent('app:theme:changed'));
+export default class extends ToggleStorage {
+    constructor(id) {
+        super('theme', id, true);
     }
 
     /**
@@ -21,13 +13,9 @@ export default class extends Storage {
     }
 
     /**
-     * @param {string} id
+     * @param {Event} event
      */
-    onClick(id) {
-        document.addEventListener('DOMContentLoaded', () => {
-            document.querySelector(id).onclick = () => {
-                this.save(this.get() === 'light' ? 'dark' : 'light');
-            };
-        })
+    onClick(event) {
+        this.save(this.get() === 'light' ? 'dark' : 'light');
     }
 }
