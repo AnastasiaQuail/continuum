@@ -54,11 +54,11 @@ final readonly class WorkoutService
     public function getByRange(User $user, DateTimeImmutable $fromDay, DateTimeImmutable $toDay): array
     {
         $from = new DateTimeImmutable(
-            sprintf('%d-%d-%d 00:00:00', $fromDay->format('Y'), $fromDay->format('m'), $fromDay->format('t')),
+            sprintf('%d-%d-%d 00:00:00', $fromDay->format('Y'), $fromDay->format('m'), $fromDay->format('d')),
             $user->getTimezone()
         );
         $to = new DateTimeImmutable(
-            sprintf('%d-%d-%d 23:59:59', $toDay->format('Y'), $toDay->format('m'), $toDay->format('t')),
+            sprintf('%d-%d-%d 23:59:59', $toDay->format('Y'), $toDay->format('m'), $toDay->format('d')),
             $user->getTimezone()
         );
 
