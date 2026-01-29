@@ -21,6 +21,13 @@
             <div class="progress-text">{{ calendarProgress }}%</div>
         </div>
     </section>
+
+    <div class="row row-sm-2">
+        <section class="card">
+            <h4 class="card-title">Upcoming</h4>
+            {{- include('calendar/_ucoming_events.html.twig') -}}
+        </section>
+    </div>
 {%- endblock %}
 
 {% block main -%}
