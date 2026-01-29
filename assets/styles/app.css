@@ -1476,7 +1476,8 @@ textarea {
             --cti-gap-inline: calc(var(--gap-inline) / 2.5);
             --cti-font-size: var(--font-size-extra-small);
             --cti-font-weight: var(--font-weight-light);
-            --cti-color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
+            --cti-color-transparent: var(--transparent-color);
+            --cti-color: color-mix(in oklch, var(--color) var(--cti-color-transparent), transparent);
 
             display: inline-flex;
             align-items: center;
@@ -1485,6 +1486,7 @@ textarea {
             font-weight: var(--cti-font-weight);
             color: var(--cti-color);
             cursor: default;
+            transition: color .15s;
         }
 
         .card-title-dropdown {
@@ -1513,9 +1515,9 @@ textarea {
                 padding: calc(var(--cti-gap-block) * 1.5) var(--cti-gap-inline);
                 padding-top: calc(var(--cti-font-size) + var(--cti-gap-block) * 4.5);
                 list-style: none;
-                border-radius: calc(var(--border-radius) / 2);
+                border-radius: var(--border-radius);
                 background-color: color-mix(in oklch, var(--color) 2%, transparent);
-                backdrop-filter: blur(2px);
+                backdrop-filter: blur(3px);
                 z-index: 1;
                 opacity: 0;
                 transform: translateY(-100vw);
@@ -1528,14 +1530,18 @@ textarea {
                     transition: color .15s;
 
                     &:not(:hover) {
-                        color: var(--cti-color);
+                        color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
                     }
                 }
             }
 
-            &:hover > .dropdown-menu {
-                opacity: 1;
-                transform: translateY(0);
+            &:hover {
+                --cti-color-transparent: 100%;
+
+                & > .dropdown-menu {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
             }
         }
     }
