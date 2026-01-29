@@ -6,6 +6,7 @@ namespace Continuum\Controller;
 
 use Continuum\Entity\User;
 use Continuum\Service\Calendar\CalendarProgressService;
+use Continuum\Service\Calendar\UpcomingEventService;
 use Continuum\Service\ChartMoodReflectionService;
 use Continuum\Service\Measurement\ChartMeasurementService;
 use Continuum\Service\Measurement\MeasurementService;
@@ -22,6 +23,7 @@ final class HomepageController extends AbstractController
 {
     public function __construct(
         private readonly CalendarProgressService $calendarProgressService,
+        private readonly UpcomingEventService $upcomingEventService,
         private readonly MeasurementService $measurementService,
         private readonly ChartMeasurementService $chartMeasurementService,
         private readonly WorkoutService $workoutService,
@@ -37,6 +39,8 @@ final class HomepageController extends AbstractController
         #[MapQueryParameter('mood', options: ['min_range' => 1])] int $moodReflectionMonths = 3,
     ): Response {
         $date = new DateTimeImmutable('now', $user->getTimezone())->setTime(0, 0);
+
+        $upcomingEvents = $this->upcomingEventService->getEvents($user);
 
         $measurementDays = 30 * $measurementMonths;
         $prevMeasurementDate = $date->modify(sprintf('-%d days', $measurementDays));
@@ -61,6 +65,7 @@ final class HomepageController extends AbstractController
 
         return $this->render('default/homepage.html.twig', [
             'calendarProgress' => $this->calendarProgressService->getCurrentProgress(),
+            'upcomingEvents' => $upcomingEvents,
             'measurementDays' => $measurementDays,
             'chartMeasurements' => $chartMeasurements,
             'workoutDays' => $workoutDays,

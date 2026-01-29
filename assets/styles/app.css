@@ -1974,39 +1974,35 @@ textarea {
     }
 }
 
-.calendar-upcoming-notifications {
+.upcoming-events-body {
+    position: relative;
     display: flex;
-    cursor: pointer;
-    user-select: none;
-    transition: padding-block .15s;
+    flex-direction: column;
+    width: 100%;
+    gap: calc(var(--gap-block) / 3);
 
-    .notifications-body {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        gap: calc(var(--gap-block) / 3);
-        padding-right: var(--container-gap-inline);
+    .upcoming-event-text {
+        --ue-background-color-transparent: 10%;
 
-        .notification-text {
-            --notification-background-color-transparent: 10%;
+        font-size: var(--font-size-small);
 
-            font-size: var(--font-size-small);
+        & > strong {
+            display: inline-flex;
+            padding: calc(var(--gap-inline) / 6) calc(var(--gap-inline) / 2);
+            color: var(--general-color);
+            border-radius: calc(var(--border-radius) * 1.5);
+            background-color: color-mix(in srgb, var(--general-color) var(--ue-background-color-transparent), var(--background-color));
 
-            & > strong {
-                display: inline-flex;
-                padding: calc(var(--gap-inline) / 6) calc(var(--gap-inline) / 2);
-                color: var(--general-color);
-                border-radius: calc(var(--border-radius) * 1.5);
-                background-color: color-mix(in srgb, var(--general-color) var(--notification-background-color-transparent), var(--background-color));
-
-                [data-theme="dark"] & {
-                    color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
-                }
+            [data-theme="dark"] & {
+                color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
             }
         }
+    }
 
-        .notifications-arrow {
+    &.collapsable {
+        padding-right: var(--container-gap-inline);
+
+        .upcoming-event-arrow {
             position: absolute;
             top: 0;
             right: 0;
@@ -2016,15 +2012,22 @@ textarea {
             transition: transform .15s;
         }
     }
+}
 
-    :root:not([data-calendar-notifications="open"]) & {
+.calendar-upcoming-events {
+    display: flex;
+    cursor: pointer;
+    user-select: none;
+    transition: padding-block .15s;
+
+    :root:not([data-calendar-upcoming="open"]) & {
         padding-block: calc(var(--container-gap-block) / 2);
 
-        .notifications-body {
+        .upcoming-events-body {
             flex-direction: row;
             align-items: center;
 
-            .notification-text {
+            .upcoming-event-text {
                 --margin-offset: calc(var(--gap-block) / 3 * -1);
 
                 transition: margin .15s;
@@ -2038,7 +2041,7 @@ textarea {
                     font-size: 0;
 
                     > strong {
-                        --notification-background-color-transparent: 50%;
+                        --ue-background-color-transparent: 50%;
 
                         padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
                         border: calc(var(--border-width) * 2) solid var(--background-color);
@@ -2050,7 +2053,7 @@ textarea {
                 }
             }
 
-            .notifications-arrow {
+            .upcoming-event-arrow {
                 top: calc(50% - calc(var(--font-size) / 2));
                 transform: rotate(0);
                 transition: top .15s, transform .15s;

@@ -1,0 +1,12 @@
+<div class="upcoming-events-body {{ collapsable ?? false ? 'collapsable' }}">
+    {%- for upcomingEvents in upcomingEvents -%}
+        <div class="upcoming-event-text" data-general-type="{{ upcomingEvents.type.value }}">
+            <strong>{{ upcomingEvents.title }}</strong>
+            <span>- {{ upcomingEvents.text -}}</span>
+        </div>
+    {%- endfor -%}
+
+    {%- if collapsable ?? false -%}
+        <div class="upcoming-event-arrow">{{ ux_icon('lucide:chevron-right') }}</div>
+    {%- endif -%}
+</div>

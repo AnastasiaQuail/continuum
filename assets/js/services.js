@@ -143,16 +143,16 @@ export class TimezoneDetector {
     }
 }
 
-export class CalendarNotificationToggler extends Storage {
+export class CalendarUpcomingEventsToggler extends Storage {
     constructor() {
-        super('continuum-ls-calendar-notifications');
+        super('continuum-ls-calendar-upcoming');
     }
 
     /**
      * @param {string} value
      */
     set(value) {
-        document.documentElement.dataset.calendarNotifications = value;
+        document.documentElement.dataset.calendarUpcoming = value;
     }
 
     /**

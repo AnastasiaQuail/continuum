@@ -41,13 +41,13 @@ final class IndexController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $upcomingNotifications = $this->upcomingEventService->getUpcomingNotifications($user);
+        $upcomingEvents = $this->upcomingEventService->getEvents($user);
         $events = $this->calendarEventService->getByYear($user, $year);
 
         return $this->render('calendar/index.html.twig', [
             'year' => $year,
             'startDay' => new DateTimeImmutable($this->startDate, $user->getTimezone()),
-            'upcomingNotifications' => $upcomingNotifications,
+            'upcomingEvents' => $upcomingEvents,
             'events' => $events,
         ]);
     }

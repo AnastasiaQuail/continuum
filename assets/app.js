@@ -7,7 +7,7 @@ new ThemeToggler().onClick('#theme-toggler');
 new Services.SidebarToggler().onClick('#sidebar-toggler');
 new Services.Sidebar().applyTo('#sidebar');
 new Services.TimezoneDetector().detect('#body-messages');
-new Services.CalendarNotificationToggler().onClick('#calendar-notifications');
+new Services.CalendarUpcomingEventsToggler().onClick('#calendar-upcoming-events');
 new Services.InputMasker().apply();
 
 /**

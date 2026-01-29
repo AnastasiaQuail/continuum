@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class CalendarVoter extends Voter
 {
     public const string VIEW = 'CALENDAR_VIEW';
-    public const string UPCOMING = 'CALENDAR_UPCOMING_NOTIFICATIONS';
+    public const string UPCOMING = 'CALENDAR_UPCOMING_EVENTS';
     public const string EDIT = 'CALENDAR_EDIT';
     public const string EVENT_DELETE = 'CALENDAR_EVENT_DELETE';
 

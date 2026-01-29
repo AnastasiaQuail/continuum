@@ -6,7 +6,7 @@ namespace Continuum\Dto\Response\Calendar;
 
 use Continuum\Enum\CalendarEventType;
 
-final readonly class UpcomingNotification
+final readonly class UpcomingEvent
 {
     public function __construct(
         public CalendarEventType $type,

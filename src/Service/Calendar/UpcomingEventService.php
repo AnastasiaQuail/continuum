@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Service\Calendar;
 
-use Continuum\Dto\Response\Calendar\UpcomingNotification;
+use Continuum\Dto\Response\Calendar\UpcomingEvent;
 use Continuum\Entity\CalendarEvent;
 use Continuum\Entity\User;
 use DateTimeImmutable;
@@ -13,17 +13,17 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final readonly class UpcomingEventService
 {
     public function __construct(
-        #[Autowire(param: 'app.calendar.upcoming_notification.days')]
-        private int $upcomingNotificationDays,
+        #[Autowire(param: 'app.calendar.upcoming_events.days')]
+        private int $upcomingEventsDays,
         private CalendarEventService $calendarEventService,
     ) {}
 
     /**
-     * @return list<UpcomingNotification>
+     * @return list<UpcomingEvent>
      */
-    public function getUpcomingNotifications(User $user): array
+    public function getEvents(User $user): array
     {
-        $events = $this->calendarEventService->getByNextDays($user, $this->upcomingNotificationDays);
+        $events = $this->calendarEventService->getByNextDays($user, $this->upcomingEventsDays);
 
         /** @var array<string, CalendarEvent> $dayEvents */
         $dayEvents = [];
@@ -46,13 +46,13 @@ final readonly class UpcomingEventService
         $data = [...$hourEvents, ...$dayEvents];
         usort($data, static fn (CalendarEvent $a, CalendarEvent $b) => $a->getDatetime() <=> $b->getDatetime());
 
-        $notifications = [];
+        $upcomingEvents = [];
 
         foreach ($data as $event) {
             $text = $this->getUpcomingText($user, $event);
 
             if ($text !== null) {
-                $notifications[] = new UpcomingNotification(
+                $upcomingEvents[] = new UpcomingEvent(
                     type: $event->getType(),
                     title: $event->getTitle(),
                     text: $text,
@@ -60,7 +60,7 @@ final readonly class UpcomingEventService
             }
         }
 
-        return $notifications;
+        return $upcomingEvents;
     }
 
     /**
