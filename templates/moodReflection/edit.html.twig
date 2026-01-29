@@ -13,7 +13,7 @@
     <section class="card">
         <h3 class="card-title">Mood of the day</h3>
 
-        {{- form_start(form, {method: 'POST', action: path('app_mood_reflection_edit', {'day': day.format('Y-m-d')})}) -}}
+        {{- form_start(form) -}}
 
         <div class="mb-3">
             {{- form_label(form.type) -}}

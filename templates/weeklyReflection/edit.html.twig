@@ -20,7 +20,7 @@
     <section class="card">
         <h3 class="card-title">Week reflection</h3>
 
-        {{- form_start(form, {method: 'POST', action: path('app_weekly_reflection_edit', {'week': week.format('Y-m-d')})}) -}}
+        {{- form_start(form) -}}
 
         <div class="weekly-reflection weekly-reflection-form">
             {%- embed 'weeklyReflection/_alert.html.twig' with {type: 'joy'} -%}
