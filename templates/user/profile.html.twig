@@ -8,7 +8,6 @@
 ] %}
 
 {% block main -%}
-
     <section class="card">
         <div class="form-plain">
             <label class="form-label">{{ ux_icon('lucide:user') }} Status</label>
@@ -26,7 +25,7 @@
             <label class="form-label">{{ ux_icon('lucide:key-round') }} Password</label>
             <div class="form-field">
                 <span>**********</span>
-                <a href="#" class="btn btn-sm btn-primary btn-link">Edit</a>
+                <a href="{{ path('app_profile_password') }}" class="btn btn-sm btn-primary btn-link">Edit</a>
             </div>
 
             <hr>
