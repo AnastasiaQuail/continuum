@@ -17,7 +17,7 @@ final readonly class RequestValidator
 
     public function validateYear(int $year): ?string
     {
-        $errors = $this->validator->validate($year, [new Year()]);
+        $errors = $this->validator->validate($year, new Year());
 
         if ($errors->count() > 0) {
             return $errors->get(0)->getMessage();

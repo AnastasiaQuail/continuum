@@ -4,29 +4,34 @@ declare(strict_types=1);
 
 namespace Continuum\Service;
 
+use Continuum\Dto\Request\User\EditLocation;
+use Continuum\Entity\Location;
 use Continuum\Entity\User;
-use DateTimeImmutable;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Continuum\Repository\UserRepository;
+use DateTimeZone;
 
 final readonly class UserService
 {
     public function __construct(
-        #[Autowire(env: 'APP_USER_BIRTH_DATE')]
-        private string $userBirthDate,
-        #[Autowire(env: 'int:APP_USER_HEIGHT')]
-        private int $userHeight,
+        private UserRepository $repository,
     ) {}
 
-    public function getAge(User $user): int
+    public function updateTimezone(User $user, DateTimeZone $timezone): void
     {
-        $birthday = new DateTimeImmutable($this->userBirthDate, $user->getTimezone())->setTime(0, 0);
-        $now = new DateTimeImmutable('now', $user->getTimezone());
+        $user->setTimezone($timezone);
 
-        return $birthday->diff($now)->y;
+        $this->repository->save($user);
     }
 
-    public function getHeight(): int
+    public function updateLocation(User $user, EditLocation $dto): void
     {
-        return $this->userHeight;
+        $user->setLocation(
+            new Location(
+                latitude: (string) $dto->latitude,
+                longitude: (string) $dto->longitude,
+            )
+        );
+
+        $this->repository->save($user);
     }
 }

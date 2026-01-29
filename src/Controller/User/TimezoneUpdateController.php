@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Controller\User;
 
 use Continuum\Entity\User;
-use Continuum\Repository\UserRepository;
+use Continuum\Service\UserService;
 use DateInvalidTimeZoneException;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 final class TimezoneUpdateController extends AbstractController
 {
     public function __construct(
-        private readonly UserRepository $userRepository,
+        private readonly UserService $userService,
     ) {}
 
     #[Route(path: '/users/timezone', name: 'app_user_timezone_update', methods: ['PATCH'])]
@@ -30,7 +30,7 @@ final class TimezoneUpdateController extends AbstractController
             throw new BadRequestHttpException('Invalid timezone provided', $e);
         }
 
-        $this->userRepository->updateTimezone($user, $timezone);
+        $this->userService->updateTimezone($user, $timezone);
 
         return $this->json([
             'new_timezone' => $user->getTimezone()->getName(),

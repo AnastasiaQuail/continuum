@@ -9,14 +9,14 @@ use Continuum\Dto\Response\Measurement\LastMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Repository\BodyMeasurementRepository;
-use Continuum\Service\UserService;
+use Continuum\Service\GodUserService;
 use DateTimeImmutable;
 use DateTimeZone;
 
 final readonly class MeasurementService
 {
     public function __construct(
-        private UserService $userService,
+        private GodUserService $userService,
         private BodyMeasurementRepository $repository,
     ) {}
 

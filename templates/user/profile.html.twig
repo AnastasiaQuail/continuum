@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+{% block body_id %}profile{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Profile' },
+] %}
+
+{% block main -%}
+
+    <section class="card">
+        <div class="form-plain">
+            <label class="form-label">{{ ux_icon('lucide:user') }} Status</label>
+            <div class="form-field">
+                <span class="badge" data-general-type="{{ app.user.status.color.value }}">
+                    {{- app.user.status.name -}}
+                </span>
+            </div>
+
+            <label class="form-label">{{ ux_icon('lucide:mail') }} Email</label>
+            <div class="form-field">
+                <strong>{{ app.user.userIdentifier|email_secure }}</strong>
+            </div>
+
+            <label class="form-label">{{ ux_icon('lucide:key-round') }} Password</label>
+            <div class="form-field">
+                <span>**********</span>
+                <a href="#" class="btn btn-sm btn-primary btn-link">Edit</a>
+            </div>
+
+            <hr>
+
+            <label class="form-label">{{ ux_icon('lucide:clock') }} Timezone</label>
+            <div class="form-field">{{ app.user.timezone.name }}</div>
+
+            <label class="form-label">{{ ux_icon('lucide:map-pin') }} Location</label>
+            <div class="form-field">
+                <span>{{ app.user.location.latitude ~ ' : ' ~ app.user.location.longitude }}</span>
+                <a href="{{ path('app_profile_location') }}" class="btn btn-sm btn-primary btn-link">Edit</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="text-footer">Created: {{ app.user.createdAt.format('Y F j, H:i') }}</div>
+{%- endblock %}

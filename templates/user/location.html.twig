@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Location{% endblock %}
+{% block body_id %}profile-location{% endblock %}
+
+{%- block javascripts -%}
+    {{ parent() }}
+    <script src="{{ asset('js/profile.js') }}"></script>
+{%- endblock -%}
+
+{% set breadcrumbs = [
+    { label: 'Profile', url: path('app_profile') },
+    { label: 'Location' },
+] %}
+
+{% block main -%}
+    <section class="card">
+        <h4>Edit location</h4>
+
+        {{- form_start(form, {method: 'POST', action: path('app_profile_location')}) -}}
+
+        <div class="row row-sm-2 row-md-3">
+            {{- form_row(form.latitude) -}}
+            {{- form_row(form.longitude) -}}
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-sm btn-primary btn-link" id="location-detector"
+                    data-input-latitude="latitude" data-input-longitude="longitude">
+                {{ ux_icon('lucide:locate') }}
+                <span>Detect current location</span>
+            </button>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-outline">Save</button>
+
+        {{- form_end(form) -}}
+    </section>
+{%- endblock %}

@@ -54,6 +54,9 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 64)]
     private string $timezone;
 
+    #[ORM\Embedded(class: Location::class, columnPrefix: false)]
+    private Location $location;
+
     public function __construct(
         /**
          * @var non-empty-string
@@ -66,6 +69,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->updatedAt = new DateTimeImmutable();
         $this->lastVisitedAt = new DateTimeImmutable();
         $this->timezone = date_default_timezone_get();
+        $this->location = new Location('0.0', '0.0');
     }
 
     /**
@@ -164,5 +168,15 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTimezone(DateTimeZone $timezone): void
     {
         $this->timezone = $timezone->getName();
+    }
+
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(Location $location): void
+    {
+        $this->location = $location;
     }
 }

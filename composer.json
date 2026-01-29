@@ -87,7 +87,7 @@
         ],
         "migration": "@php bin/console make:migration --formatted",
         "migration:migrate": "@php bin/console doctrine:migrations:migrate",
-        "migration:rollback": "@migrations:migrate prev",
+        "migration:rollback": "@migration:migrate prev",
         "icons": "@php bin/console ux:icons:lock",
         "backup": "@php bin/console app:db:backup"
     },
