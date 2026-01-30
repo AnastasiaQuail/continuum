@@ -27,9 +27,13 @@
                 <span>**********</span>
                 <a href="{{ path('app_profile_password') }}" class="btn btn-sm btn-primary btn-link">Edit</a>
             </div>
+        </div>
+    </section>
 
-            <hr>
+    <h3>Geoposition</h3>
 
+    <section class="card">
+        <div class="form-plain">
             <label class="form-label">{{ ux_icon('lucide:clock') }} Timezone</label>
             <div class="form-field">{{ app.user.timezone.name }}</div>
 

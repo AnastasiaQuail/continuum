@@ -1085,7 +1085,7 @@ textarea {
 .form-plain {
     display: grid;
     grid-template-columns: auto 1fr;
-    gap: calc(var(--container-gap-block) / 2) var(--container-gap-block);
+    gap: calc(var(--container-gap-block) / 2) var(--container-gap-inline);
 
     & > * {
         display: flex;
@@ -1290,7 +1290,7 @@ textarea {
     padding: var(--control-padding-block) var(--control-padding-inline);
     font-size: inherit;
     font-weight: inherit;
-    line-height: 1.25;
+    line-height: 1;
     color: var(--btn-color);
     text-align: center;
     text-decoration: none;
