@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit exercise{% endblock %}
+{% block body_id %}exercise-edit{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Workouts', url: path('app_workouts') },
+    { label: 'Exercises', url: path('app_exercises') },
+    { label: exercise ? 'Edit' : 'Create' },
+] %}
+
+{% block main -%}
+    <section class="card">
+        <h3>{{ exercise ? 'Edit exercise' : 'Create exercise' }}</h3>
+
+        {{- form_start(form) -}}
+
+        <div class="mb-3">
+            {{- form_label(form.group) -}}
+            <div class="form-control-choose-type-group">
+                {%- for choice in form.group.vars.choices -%}
+                    <label class="form-control-choose-type"
+                           data-general-type="{{ choice.data.color.value }}">
+                        <input type="radio" name="group" id="{{ form.group.vars.id }}_{{ choice.value }}"
+                               value="{{ choice.value }}"
+                               {% if form.group.vars.required %}required="required"{% endif %}
+                            {% if choice.value === form.group.vars.value %}checked{% endif %}>
+                        <span class="btn">{{ choice.label }}</span>
+                    </label>
+                {%- endfor -%}
+            </div>
+            {{- form_errors(form.group) -}}
+            {%- do form.group.setRendered -%}
+        </div>
+
+        {{- form_row(form.name) -}}
+
+        <div class="card-submit">
+            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        </div>
+
+        {{- form_end(form) -}}
+    </section>
+{%- endblock %}

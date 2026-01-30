@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Service\Workout;
 
+use Continuum\Dto\Request\Workout\EditExercise;
 use Continuum\Entity\Exercise;
 use Continuum\Repository\ExerciseRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,5 +27,27 @@ final readonly class ExerciseService
     public function getById(Uuid $id): Exercise
     {
         return $this->repository->findOneById($id) ?? throw new NotFoundHttpException('Exercise not found');
+    }
+
+    public function create(EditExercise $dto): Exercise
+    {
+        $exercise = new Exercise(
+            name: $dto->name,
+            group: $dto->group,
+        );
+
+        $this->repository->save($exercise);
+
+        return $exercise;
+    }
+
+    public function update(Exercise $exercise, EditExercise $dto): Exercise
+    {
+        $exercise->setName($dto->name);
+        $exercise->setGroup($dto->group);
+
+        $this->repository->save($exercise);
+
+        return $exercise;
     }
 }

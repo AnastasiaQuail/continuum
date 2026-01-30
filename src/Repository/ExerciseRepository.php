@@ -31,4 +31,10 @@ final class ExerciseRepository extends ServiceEntityRepository
     {
         return $this->findBy([], ['group' => 'ASC']);
     }
+
+    public function save(Exercise $exercise): void
+    {
+        $this->getEntityManager()->persist($exercise);
+        $this->getEntityManager()->flush();
+    }
 }
