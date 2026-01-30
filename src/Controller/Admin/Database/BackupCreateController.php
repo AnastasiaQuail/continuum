@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Continuum\Controller\Admin\Backup;
+namespace Continuum\Controller\Admin\Database;
 
 use Continuum\Service\Database\DatabaseDumper;
 use RuntimeException;

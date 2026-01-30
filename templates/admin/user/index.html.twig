@@ -1,0 +1,37 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Users{% endblock %}
+{% block body_id %}admin-users{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Admin', url: path('app_admin_homepage') },
+    { label: 'Users' },
+] %}
+
+{% block main -%}
+    <section class="card">
+        <div class="users">
+            {%- for user in users -%}
+                <div class="user" data-general-type="{{ user.status.color.value }}">
+                    <a href="#{{ user.id }}" class="user-identifier">
+                        <div class="badge">{{ user.status.name }}</div>
+                        <div class="user-email">{{ user.userIdentifier }}</div>
+                    </a>
+
+                    <div class="user-roles">
+                        {%- for role in user.roles -%}
+                            <span class="badge">{{ role|slice(5) }}</span>
+                        {%- endfor -%}
+                    </div>
+
+                    <div class="user-geo">
+                        <div>{{ user.timezone.name }}</div>
+                        <div class="user-location">({{ user.location.latitude }}:{{ user.location.longitude }})</div>
+                    </div>
+
+                    <div class="user-last-visited">{{ user.lastVisitedAt.format('j F Y, H:i') }}</div>
+                </div>
+            {%- endfor -%}
+        </div>
+    </section>
+{%- endblock %}

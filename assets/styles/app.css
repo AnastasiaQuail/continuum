@@ -47,6 +47,7 @@
 
     --sidebar-width: 190px;
     --sidebar-collapsed-width: 40px;
+    --sidebar-gap-block: calc(var(--body-gap-inline) * 2);
 
     --gap-block: var(--gap-inline);
     --gap-inline: 1rem;
@@ -77,6 +78,7 @@
     }
 
     @media (width >= 768px) {
+        --sidebar-gap-block: var(--body-gap-inline);
         --body-gap-block: calc(var(--gap-block) * 1.5);
         --body-gap-inline: calc(var(--gap-inline) * 1);
         --container-gap-block: calc(var(--gap-inline) * 1.25);
@@ -640,8 +642,6 @@ textarea {
 }
 
 .sidebar {
-    --sidebar-gap-block: calc(var(--body-gap-inline) * 2);
-
     position: fixed;
     top: calc(var(--container-gap-block) + var(--header-height));
     bottom: 0;
@@ -779,8 +779,6 @@ textarea {
     }
 
     @media (width >= 768px) {
-        --sidebar-gap-block: var(--body-gap-inline);
-
         position: relative;
         top: 0;
         display: grid;
@@ -883,9 +881,15 @@ textarea {
 
     .body-container {
         padding: var(--body-gap-block) var(--body-gap-inline);
+        width: 100vw;
 
         @media (width >= 768px) {
             padding-left: 0;
+            width: calc(100vw - var(--sidebar-width) - var(--sidebar-gap-block) * 2);
+
+            [data-sidebar="collapsed"] & {
+                --sidebar-width: var(--sidebar-collapsed-width);
+            }
         }
 
         & > *:not(.card):not(.row):not(.body-messages) {
@@ -3093,6 +3097,107 @@ textarea {
                 font-size: var(--font-size-extra-small);
                 font-weight: var(--font-weight-light);
                 opacity: var(--transparent-color);
+            }
+        }
+    }
+}
+
+.users {
+    display: flex;
+    flex-direction: column;
+    gap: calc(var(--container-gap-block) / 2);
+
+    .user {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: calc(var(--container-gap-inline) / 1.5);
+        padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
+        border-radius: var(--border-radius);
+        background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
+
+        @media (width >= 576px) {
+            flex-direction: row;
+            align-items: center;
+        }
+
+        @media (width >= 992px) {
+            flex-wrap: nowrap;
+        }
+
+        .user-identifier {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--gap-inline) / 2);
+            width: 100%;
+            text-decoration: none;
+
+            &:not(:hover) {
+                color: var(--color);
+            }
+
+            @media (width >= 576px) {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            @media (width >= 992px) {
+                width: auto;
+            }
+
+            .user-email {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                padding-block: calc(var(--gap-block) / 8);
+            }
+        }
+
+        .user-roles {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
+
+            @media (width >= 992px) {
+                width: auto;
+                justify-content: center;
+            }
+
+            .badge {
+                --general-color: var(--color);
+
+                font-size: var(--font-size-extra-small);
+                background-color: color-mix(in oklch, var(--general-color) 5%, transparent);
+            }
+        }
+
+        .user-geo {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
+            padding-inline: calc(var(--gap-inline) / 8);
+            font-size: var(--font-size-medium);
+
+            @media (width >= 576px) {
+                justify-content: center;
+            }
+
+            .user-location {
+                font-size: var(--font-size-extra-small);
+                color: color-mix(in oklch, var(--color) 40%, transparent);
+            }
+        }
+
+        .user-last-visited {
+            padding-inline: calc(var(--gap-inline) / 8);
+            font-size: var(--font-size-small);
+            opacity: var(--transparent-color-tiny);
+
+            @media (width >= 576px) {
+                text-align: right;
             }
         }
     }

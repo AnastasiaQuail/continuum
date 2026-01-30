@@ -16,6 +16,14 @@ final readonly class UserService
         private UserRepository $repository,
     ) {}
 
+    /**
+     * @return list<User>
+     */
+    public function getAll(): array
+    {
+        return $this->repository->findOrdered();
+    }
+
     public function updateTimezone(User $user, DateTimeZone $timezone): void
     {
         $user->setTimezone($timezone);

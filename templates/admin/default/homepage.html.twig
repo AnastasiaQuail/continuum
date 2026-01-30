@@ -1,6 +1,11 @@
 {% extends 'admin.html.twig' %}
 
+{% block title %}Admin homepage{% endblock %}
 {% block body_id %}admin-homepage{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Admin' },
+] %}
 
 {% block main -%}
     <section class="card">

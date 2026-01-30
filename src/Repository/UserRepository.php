@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Repository;
 
+use Continuum\Entity\Exercise;
 use Continuum\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -46,6 +47,14 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
             ->setParameter(':datetime', new DateTimeImmutable())
             ->getQuery()
             ->execute();
+    }
+
+    /**
+     * @return list<User>
+     */
+    public function findOrdered(): array
+    {
+        return $this->findBy([], ['createdAt' => 'ASC']);
     }
 
     public function save(User $user): void
