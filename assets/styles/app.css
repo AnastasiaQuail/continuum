@@ -3052,9 +3052,9 @@ textarea {
 
     .exercise {
         display: flex;
-        width: 100%;
         align-items: center;
-        column-gap: calc(var(--gap-inline) / 2);
+        width: 100%;
+        gap: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 2);
         padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
         text-decoration: none;
         color: var(--color);
@@ -3067,9 +3067,33 @@ textarea {
         }
 
         .badge {
-            width: 90px;
-            font-size: var(--font-size-medium);
+            width: 75px;
+            flex: none;
+            font-size: var(--font-size-small);
             border-radius: calc(var(--border-radius) / 2);
+
+            @media (width >= 576px) {
+                width: 90px;
+                font-size: var(--font-size-medium);
+            }
+        }
+
+        .exercise-name {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
+            font-size: var(--font-size-medium);
+
+            @media (width >= 576px) {
+                font-size: var(--font-size);
+            }
+
+            .exercise-usages {
+                font-size: var(--font-size-extra-small);
+                font-weight: var(--font-weight-light);
+                opacity: var(--transparent-color);
+            }
         }
     }
 }

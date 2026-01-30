@@ -32,6 +32,27 @@ final class ExerciseRepository extends ServiceEntityRepository
         return $this->findBy([], ['group' => 'ASC']);
     }
 
+    /**
+     * @return array<string, int>
+     */
+    public function findWorkoutExerciseCountIndexedById(): array
+    {
+        /** @var array<string, array{id: Uuid, count: int}> $data */
+        $data = $this->createQueryBuilder('e')
+            ->select('e.id')
+            ->addSelect('COUNT(we.id) AS count')
+            ->leftJoin('e.workoutExercises', 'we')
+            ->groupBy('e.id')
+            ->indexBy('e', 'e.id')
+            ->getQuery()
+            ->execute();
+
+        return array_map(
+            static fn (array $row): int => $row['count'],
+            $data
+        );
+    }
+
     public function save(Exercise $exercise): void
     {
         $this->getEntityManager()->persist($exercise);

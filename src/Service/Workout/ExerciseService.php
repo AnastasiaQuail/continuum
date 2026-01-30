@@ -24,6 +24,14 @@ final readonly class ExerciseService
         return $this->repository->findOrdered();
     }
 
+    /**
+     * @return array<string, int>
+     */
+    public function getWorkoutExerciseCountIndexedById(): array
+    {
+        return $this->repository->findWorkoutExerciseCountIndexedById();
+    }
+
     public function getById(Uuid $id): Exercise
     {
         return $this->repository->findOneById($id) ?? throw new NotFoundHttpException('Exercise not found');

@@ -18,9 +18,11 @@ final class IndexController extends AbstractController
     #[Route(path: '/exercises', name: 'app_exercises', methods: ['GET'])]
     public function __invoke(): Response {
         $exercises = $this->exerciseService->getAll();
+        $exerciseCountMap = $this->exerciseService->getWorkoutExerciseCountIndexedById();
 
         return $this->render('workout/exercises/index.html.twig', [
             'exercises' => $exercises,
+            'exerciseCountMap' => $exerciseCountMap,
         ]);
     }
 }

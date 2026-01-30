@@ -9,13 +9,23 @@
 ] %}
 
 {% block main -%}
+    <div class="mb-3">
+        <a href="{{ path('app_exercise_create') }}" class="btn btn-primary btn-transparent">
+            {{ ux_icon('lucide:plus') }}
+            <span>Create exercise</span>
+        </a>
+    </div>
+
     <section class="card">
         <div class="exercises">
             {%- for exercise in exercises -%}
                 <a href="{{ path('app_exercise_edit', {'id': exercise.id}) }}" class="exercise"
                    data-general-type="{{ exercise.group.color.value }}">
                     <div class="badge">{{ exercise.group.name }}</div>
-                    <div>{{ exercise.name|capitalize }}</div>
+                    <div class="exercise-name">
+                        <span>{{ exercise.name|capitalize }}</span>
+                        <span class="exercise-usages">({{ exerciseCountMap[exercise.id] }} workouts)</span>
+                    </div>
                 </a>
             {%- endfor -%}
         </div>
