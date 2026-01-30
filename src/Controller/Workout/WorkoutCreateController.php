@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Workout;
 
+use Continuum\Security\Authorization\Voter\WorkoutVoter;
 use Continuum\Service\Workout\WorkoutService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class WorkoutCreateController extends AbstractController
 {
@@ -16,6 +18,7 @@ final class WorkoutCreateController extends AbstractController
     ) {}
 
     #[Route(path: '/workouts', name: 'app_workout_create', methods: ['POST'])]
+    #[IsGranted(WorkoutVoter::CREATE)]
     public function __invoke(): Response
     {
         $workout = $this->workoutService->create();

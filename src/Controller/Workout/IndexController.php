@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Controller\Workout;
 
 use Continuum\Entity\User;
+use Continuum\Security\Authorization\Voter\WorkoutVoter;
 use Continuum\Service\RequestValidator;
 use Continuum\Service\Workout\WorkoutService;
 use DateTimeImmutable;
@@ -31,6 +32,10 @@ final class IndexController extends AbstractController
 
         if (null !== $error = $this->requestValidator->validateExistenceMonth($month, $user->getTimezone())) {
             throw new BadRequestHttpException($error);
+        }
+
+        if (!$this->isGranted(WorkoutVoter::VIEW, $month)) {
+            throw $this->createAccessDeniedException();
         }
 
         $workouts = $this->workoutService->getByMonth($user, $month);

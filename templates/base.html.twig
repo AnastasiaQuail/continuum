@@ -71,14 +71,16 @@
                                         </a>
                                     </li>
                                 {%- endif -%}
-                                <li class="dropdown-item">
-                                    <form method="post" action="{{ path('app_workout_create') }}">
-                                        <button class="dropdown-link" type="submit">
-                                            {{- ux_icon('lucide:biceps-flexed') -}}
-                                            <span>Start workout</span>
-                                        </button>
-                                    </form>
-                                </li>
+                                {%- if is_granted('WORKOUT_CREATE') -%}
+                                    <li class="dropdown-item">
+                                        <form method="post" action="{{ path('app_workout_create') }}">
+                                            <button class="dropdown-link" type="submit">
+                                                {{- ux_icon('lucide:biceps-flexed') -}}
+                                                <span>Start workout</span>
+                                            </button>
+                                        </form>
+                                    </li>
+                                {%- endif -%}
                             </ul>
                         </div>
                         <div class="header-divider"></div>
@@ -146,13 +148,15 @@
                             </a>
                         </li>
                     {%- endif -%}
-                    <li class="nav-item">
-                        <a class="nav-link {{ _route === 'app_workouts' or _route === 'app_workouts_view' ? 'active' }}"
-                           href="{{ path('app_workouts') }}">
-                            {{- ux_icon('lucide:dumbbell') -}}
-                            <span>Workouts</span>
-                        </a>
-                    </li>
+                    {%- if is_granted('WORKOUT_VIEW') -%}
+                        <li class="nav-item">
+                            <a class="nav-link {{ _route === 'app_workouts' or _route === 'app_workouts_view' ? 'active' }}"
+                               href="{{ path('app_workouts') }}">
+                                {{- ux_icon('lucide:dumbbell') -}}
+                                <span>Workouts</span>
+                            </a>
+                        </li>
+                    {%- endif -%}
 
                     <li>
                         <hr class="nav-divider">

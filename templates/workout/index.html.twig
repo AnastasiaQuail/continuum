@@ -17,7 +17,7 @@
     prev: {
         url: path('app_workouts', {'month': prevMonth.format('Y-m')}),
         label: prevMonth.format('F'),
-        isGranted: prevMonth.format('Y') >= app_year_min,
+        isGranted: prevMonth.format('Y') >= app_year_min and is_granted('WORKOUT_VIEW', prevMonth),
     },
     title: month.format('F'),
     next: {
@@ -57,10 +57,17 @@
 
                             {%- set minutes = ((end - start) / 60)|round -%}
 
-                            <a href="{{ path('app_workouts_view', {id: workout.id}) }}">
-                                <span>{{ time }}</span>
-                                <span>( {{ minutes }} min )</span>
-                            </a>
+                            {%- if is_granted('WORKOUT_EDIT', workout) -%}
+                                <a href="{{ path('app_workouts_view', {id: workout.id}) }}">
+                                    <span>{{ time }}</span>
+                                    <span>( {{ minutes }} min )</span>
+                                </a>
+                            {%- else -%}
+                                <div>
+                                    <span>{{ time }}</span>
+                                    <span>( {{ minutes }} min )</span>
+                                </div>
+                            {%- endif -%}
                         </div>
                         <div class="workout-exercises">
                             {%- if workout.workoutExercises.empty -%}

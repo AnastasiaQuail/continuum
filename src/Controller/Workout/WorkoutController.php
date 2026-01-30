@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Workout;
 
+use Continuum\Security\Authorization\Voter\WorkoutVoter;
 use Continuum\Service\Workout\ExerciseService;
 use Continuum\Service\Workout\WorkoutService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,6 +23,11 @@ final class WorkoutController extends AbstractController
     public function __invoke(Uuid $id): Response
     {
         $workout = $this->workoutService->getById($id);
+
+        if (!$this->isGranted(WorkoutVoter::VIEW, $workout)) {
+            throw $this->createAccessDeniedException();
+        }
+
         $exercises = $this->exerciseService->getAll();
 
         return $this->render('workout/view.html.twig', [

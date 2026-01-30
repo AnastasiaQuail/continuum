@@ -27,7 +27,8 @@
                         <form method="post" action="{{ path('app_calendar_event_delete', {'id': event.id}) }}"
                               onsubmit="return confirm('Delete?')">
                             <input type="hidden" name="_method" value="DELETE">
-                            <button class="btn btn-sm btn-transparent btn-danger">{{ ux_icon('lucide:trash') }}</button>
+                            <button class="btn btn-sm btn-transparent btn-danger"
+                                    type="submit">{{ ux_icon('lucide:trash') }}</button>
                         </form>
                     {% endif %}
                 </div>

@@ -23,10 +23,41 @@
     </section>
 
     <div class="row row-sm-2">
-        <section class="card">
-            <h4 class="card-title">Upcoming</h4>
-            {{- include('calendar/_ucoming_events.html.twig') -}}
-        </section>
+        {%- if is_granted('CALENDAR_UPCOMING_EVENTS') -%}
+            <section class="card">
+                <h4 class="card-title">Upcoming</h4>
+                {{- include('calendar/_ucoming_events.html.twig') -}}
+            </section>
+
+            <section class="card card-coming">
+                <style>
+                    .card-coming {
+                        position: relative;
+
+                        &:after {
+                            content: 'Coming soon';
+                            position: absolute;
+                            inset: 0;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            font-size: calc(var(--font-size) * 1.25);
+                            font-weight: var(--font-weight-light);
+                            color: color-mix(in srgb, var(--color-orange) var(--transparent-color), transparent);
+                            text-shadow: 0 0 10px color-mix(in oklch, var(--color-orange) var(--transparent-color), transparent);
+                            backdrop-filter: blur(3px);
+                            pointer-events: none;
+                            transition: opacity 1s ease-out;
+                        }
+
+                        &:hover:after {
+                            opacity: 0;
+                            transition: opacity .15s ease-in;
+                        }
+                    }
+                </style>
+            </section>
+        {%- endif -%}
     </div>
 {%- endblock %}
 
@@ -34,79 +65,86 @@
     <h2>Dashboards</h2>
 
     <div class="row row-sm-2">
+        {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
+            <section class="card card-panel">
+                <div class="card-title card-title-justify">
+                    {%- set result = 0 -%}
+                    {%- if chartMeasurements -%}
+                        {%- set result = ((chartMeasurements|last).weight - (chartMeasurements|first).weight)|round(1) -%}
+                    {%- endif -%}
+
+                    <h3>Body fat</h3>
+                    {%- if result !== 0 -%}
+                        <span class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
+                            <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
+                        </span>
+                    {%- endif -%}
+
+                    {{- _self.card_title_dropdown(measurementDays, 'measurement') -}}
+                </div>
+
+                <div class="card-panel-body chart-panel"
+                     {% if chartMeasurements %}data-chart="weight-change" data-days="{{ measurementDays }}"
+                     data-symbols="hide" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+            </section>
+        {%- endif -%}
+
+        {%- if is_granted('WORKOUT_VIEW') -%}
+            <section class="card card-panel">
+                <div class="card-title card-title-justify">
+                    <h3>Workouts</h3>
+                    {{- _self.card_title_dropdown(workoutDays, 'workout') -}}
+                </div>
+
+                <div class="card-panel-body calendar-heatmap-workout-container">
+                    <div class="calendar-heatmap-week">
+                        {%- for dayName in ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] -%}
+                            <div class="calendar-heatmap-week-day">{{ dayName|capitalize }}</div>
+                        {%- endfor -%}
+                    </div>
+                    <div class="calendar-heatmap-workout">
+                        {%- set dates = [] -%}
+                        {%- for workout in workouts -%}
+                            {%- set dates = dates|merge({(workout.date.format('Y-m-d')): workout}) -%}
+                        {%- endfor -%}
+
+                        {%- set weekDay = user_date().format('N') -%}
+                        {%- set date = user_date('+1 day') -%}
+
+                        {%- for workoutDay in 1..workoutDays -%}
+                            {%- set date = date.modify('-1 day') -%}
+                            {%- set day = date.format('Y-m-d') -%}
+                            {%- set workout = dates[day] is defined ? dates[day] : null -%}
+
+                            <div class="calendar-workout-day {{ workout !== null ? 'done' }}"
+                                 {% if loop.first %}style="--workout-row: {{ weekDay }};"{% endif %}>
+                                <div>{{- date.format('j') -}}</div>
+                                <div class="calendar-workout-exercises">
+                                    {%- for workoutExercise in workout?.workoutExercises -%}
+                                        <span
+                                            data-general-type="{{ workoutExercise.exercise.group.color.value }}"></span>
+                                    {%- endfor -%}
+                                </div>
+                            </div>
+                        {%- endfor -%}
+                    </div>
+                </div>
+            </section>
+        {%- endif -%}
+    </div>
+
+    {%- if is_granted('MOOD_REFLECTION_VIEW') -%}
         <section class="card card-panel">
             <div class="card-title card-title-justify">
-                {%- set result = 0 -%}
-                {%- if chartMeasurements -%}
-                    {%- set result = ((chartMeasurements|last).weight - (chartMeasurements|first).weight)|round(1) -%}
-                {%- endif -%}
-
-                <h3>Body fat</h3>
-                {%- if result !== 0 -%}
-                    <span class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
-                        <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
-                    </span>
-                {%- endif -%}
-
-                {{- _self.card_title_dropdown(measurementDays, 'measurement') -}}
+                <h3>Mood trend</h3>
+                {{- _self.card_title_dropdown(moodReflectionDays, 'mood') -}}
             </div>
 
             <div class="card-panel-body chart-panel"
-                 {% if chartMeasurements %}data-chart="weight-change" data-days="{{ measurementDays }}"
-                 data-symbols="hide" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+                 {% if chartMoodReflections %}data-chart="mood-reflections" data-days="{{ moodReflectionDays }}"
+                 data-values="{{ chartMoodReflections|json_encode }}"{% endif %}></div>
         </section>
-
-        <section class="card card-panel">
-            <div class="card-title card-title-justify">
-                <h3>Workouts</h3>
-                {{- _self.card_title_dropdown(workoutDays, 'workout') -}}
-            </div>
-
-            <div class="card-panel-body calendar-heatmap-workout-container">
-                <div class="calendar-heatmap-week">
-                    {%- for dayName in ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] -%}
-                        <div class="calendar-heatmap-week-day">{{ dayName|capitalize }}</div>
-                    {%- endfor -%}
-                </div>
-                <div class="calendar-heatmap-workout">
-                    {%- set dates = [] -%}
-                    {%- for workout in workouts -%}
-                        {%- set dates = dates|merge({(workout.date.format('Y-m-d')): workout}) -%}
-                    {%- endfor -%}
-
-                    {%- set weekDay = user_date().format('N') -%}
-                    {%- set date = user_date('+1 day') -%}
-
-                    {%- for workoutDay in 1..workoutDays -%}
-                        {%- set date = date.modify('-1 day') -%}
-                        {%- set day = date.format('Y-m-d') -%}
-                        {%- set workout = dates[day] is defined ? dates[day] : null -%}
-
-                        <div class="calendar-workout-day {{ workout !== null ? 'done' }}"
-                             {% if loop.first %}style="--workout-row: {{ weekDay }};"{% endif %}>
-                            <div>{{- date.format('j') -}}</div>
-                            <div class="calendar-workout-exercises">
-                                {%- for workoutExercise in workout?.workoutExercises -%}
-                                    <span data-general-type="{{ workoutExercise.exercise.group.color.value }}"></span>
-                                {%- endfor -%}
-                            </div>
-                        </div>
-                    {%- endfor -%}
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <section class="card card-panel">
-        <div class="card-title card-title-justify">
-            <h3>Mood trend</h3>
-            {{- _self.card_title_dropdown(moodReflectionDays, 'mood') -}}
-        </div>
-
-        <div class="card-panel-body chart-panel"
-             {% if chartMoodReflections %}data-chart="mood-reflections" data-days="{{ moodReflectionDays }}"
-             data-values="{{ chartMoodReflections|json_encode }}"{% endif %}></div>
-    </section>
+    {%- endif -%}
 {%- endblock %}
 
 {% macro card_title_dropdown(days, query) -%}

@@ -608,14 +608,21 @@ textarea {
 
             &:hover {
                 .header-button {
-                    color: var(--link-color);
-                    background-color: color-mix(in oklch, var(--link-color) 10%, transparent);
                     cursor: default;
                 }
 
-                .dropdown-menu {
+                .dropdown-menu:not(:empty) {
                     top: 100%;
                     opacity: 1;
+                }
+            }
+
+            &:has(.dropdown-menu:empty) {
+                .header-button {
+                    color: var(--color);
+                    background-color: transparent;
+                    cursor: not-allowed;
+                    opacity: .2;
                 }
             }
         }
@@ -2650,7 +2657,7 @@ textarea {
 
         .workout-date {
             & > a,
-            & > span {
+            & > div {
                 display: inline-flex;
                 align-items: baseline;
                 gap: calc(var(--gap-inline) / 3);
@@ -2664,7 +2671,7 @@ textarea {
                     opacity: var(--transparent-color);
                 }
 
-                &:is(span),
+                &:is(div),
                 &:is(a):not(:hover) {
                     color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
                 }

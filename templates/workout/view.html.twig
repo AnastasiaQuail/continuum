@@ -21,14 +21,17 @@
                     <div class="exercise"
                          style="--exercise-color: var({{ '--color-' ~ workoutExercise.exercise.group.color.value }});">
                         <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
-                        <div class="exercise-controls">
-                            <form method="post"
-                                  action="{{ path('app_workout_exercise_delete', {'id': workoutExercise.id}) }}"
-                                  onsubmit="return confirm('Delete?')">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
-                            </form>
-                        </div>
+                        {%- if is_granted('WORKOUT_EXERCISE_DELETE', workoutExercise) -%}
+                            <div class="exercise-controls">
+                                <form method="post"
+                                      action="{{ path('app_workout_exercise_delete', {'id': workoutExercise.id}) }}"
+                                      onsubmit="return confirm('Delete?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button class="btn btn-danger btn-link"
+                                            type="submit">{{ ux_icon('lucide:trash') }}</button>
+                                </form>
+                            </div>
+                        {%- endif -%}
                     </div>
 
                     <div class="workout-exercise-sets">
@@ -44,69 +47,77 @@
                                 <div class="workout-exercise-set-warmup {{ workoutSet.isWarmup ? 'active' }}">
                                     {{- ux_icon('lucide:battery-charging') -}}
                                 </div>
-                                <div class="workout-exercise-set-controls">
-                                    <form method="post"
-                                          action="{{ path('app_workout_set_delete', {'id': workoutSet.id}) }}"
-                                          onsubmit="return confirm('Delete?')">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button class="btn btn-danger btn-link">{{ ux_icon('lucide:trash') }}</button>
-                                    </form>
-                                </div>
+                                {%- if is_granted('WORKOUT_SET_DELETE', workoutSet) -%}
+                                    <div class="workout-exercise-set-controls">
+                                        <form method="post"
+                                              action="{{ path('app_workout_set_delete', {'id': workoutSet.id}) }}"
+                                              onsubmit="return confirm('Delete?')">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button class="btn btn-danger btn-link"
+                                                    type="submit">{{ ux_icon('lucide:trash') }}</button>
+                                        </form>
+                                    </div>
+                                {%- endif -%}
                             </div>
                         {%- endfor -%}
 
-                        <div class="workout-exercise-set workout-exercise-set-new">
-                            {%- set lastSet = workoutExercise.sets is not empty ? workoutExercise.sets|last : null -%}
-                            <form method="post"
-                                  action="{{ path('app_workout_set_create', {'id': workoutExercise.id}) }}">
-                                <label for="weight"></label>
-                                <label for="reps"></label>
-                                <div class="workout-exercise-set-fields">
-                                    <input class="form-control" type="number" id="weight" name="weight"
-                                           value="{{ lastSet?.weight ?? 0 }}" autocomplete="off"
-                                           {%- if loop.last -%}autofocus="autofocus"{%- endif -%}
-                                           min="0" max="199" step="0.1" required data-mask="postfix" data-postfix="kg">
-                                    <input class="form-control" type="number" id="reps" name="reps"
-                                           value="{{ lastSet?.reps ?? 1 }}" autocomplete="off"
-                                           min="1" max="99" step="1" required>
-                                </div>
-                                <div class="workout-exercise-set-warmup form-control-choose-type-group">
-                                    <label class="form-control-choose-type">
-                                        <input type="checkbox" name="warmup">
-                                        <span class="btn">
+                        {%- if is_granted('WORKOUT_SET_CREATE', workoutExercise) -%}
+                            <div class="workout-exercise-set workout-exercise-set-new">
+                                {%- set lastSet = workoutExercise.sets is not empty ? workoutExercise.sets|last : null -%}
+                                <form method="post"
+                                      action="{{ path('app_workout_set_create', {'id': workoutExercise.id}) }}">
+                                    <label for="weight"></label>
+                                    <label for="reps"></label>
+                                    <div class="workout-exercise-set-fields">
+                                        <input class="form-control" type="number" id="weight" name="weight"
+                                               value="{{ lastSet?.weight ?? 0 }}" autocomplete="off"
+                                               {%- if loop.last -%}autofocus="autofocus"{%- endif -%}
+                                               min="0" max="199" step="0.1" required data-mask="postfix"
+                                               data-postfix="kg">
+                                        <input class="form-control" type="number" id="reps" name="reps"
+                                               value="{{ lastSet?.reps ?? 1 }}" autocomplete="off"
+                                               min="1" max="99" step="1" required>
+                                    </div>
+                                    <div class="workout-exercise-set-warmup form-control-choose-type-group">
+                                        <label class="form-control-choose-type">
+                                            <input type="checkbox" name="warmup">
+                                            <span class="btn">
                                             {{- ux_icon('lucide:battery-charging') -}}
                                             <span>Is warmup</span>
                                         </span>
-                                    </label>
-                                </div>
-                                <div class="workout-exercise-set-controls">
-                                    <button class="btn btn-primary btn-transparent" type="submit">
-                                        {{- ux_icon('lucide:plus') -}}
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                                        </label>
+                                    </div>
+                                    <div class="workout-exercise-set-controls">
+                                        <button class="btn btn-primary btn-transparent" type="submit">
+                                            {{- ux_icon('lucide:plus') -}}
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        {%- endif -%}
                     </div>
                 </div>
             {%- endfor -%}
 
-            <div class="workout-exercise workout-exercise-new">
-                <div class="exercise">
-                    <form method="post" action="{{ path('app_workout_exercise_create', {'id': workout.id}) }}">
-                        <label class="exercise-title" for="exercise_id">Start new exercise:</label>
-                        <div class="exercise-name">
-                            <select class="form-control" id="exercise_id" name="exercise" required
-                                    onchange="return submitBy(this);">
-                                <option value="" disabled selected hidden>Choose exercise...</option>
-                                {%- for exercise in exercises -%}
-                                    <option value="{{ exercise.id }}">{{ exercise.name|capitalize }}</option>
-                                {%- endfor -%}
-                            </select>
-                        </div>
-                        <div class="exercise-controls">{{ ux_icon('lucide:loader-circle') }}</div>
-                    </form>
+            {%- if is_granted('WORKOUT_EXERCISE_CREATE', workout) -%}
+                <div class="workout-exercise workout-exercise-new">
+                    <div class="exercise">
+                        <form method="post" action="{{ path('app_workout_exercise_create', {'id': workout.id}) }}">
+                            <label class="exercise-title" for="exercise_id">Start new exercise:</label>
+                            <div class="exercise-name">
+                                <select class="form-control" id="exercise_id" name="exercise" required
+                                        onchange="return submitBy(this);">
+                                    <option value="" disabled selected hidden>Choose exercise...</option>
+                                    {%- for exercise in exercises -%}
+                                        <option value="{{ exercise.id }}">{{ exercise.name|capitalize }}</option>
+                                    {%- endfor -%}
+                                </select>
+                            </div>
+                            <div class="exercise-controls">{{ ux_icon('lucide:loader-circle') }}</div>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            {%- endif -%}
         </div>
     </section>
 {%- endblock %}
