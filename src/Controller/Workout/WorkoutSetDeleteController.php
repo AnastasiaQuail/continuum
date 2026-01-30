@@ -18,7 +18,7 @@ final class WorkoutSetDeleteController extends AbstractController
         private readonly WorkoutSetService $workoutSetService,
     ) {}
 
-    #[Route(path: '/workouts/sets/{id}', name: 'app_workout_set_delete', methods: ['DELETE'])]
+    #[Route(path: '/workouts/exercises/sets/{id}', name: 'app_workout_set_delete', methods: ['DELETE'])]
     #[IsGranted(WorkoutVoter::SET_DELETE, 'workoutSet')]
     public function __invoke(WorkoutSet $workoutSet): Response
     {

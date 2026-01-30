@@ -20,7 +20,7 @@ final class WorkoutSetCreateController extends AbstractController
         private readonly WorkoutSetService $workoutSetService,
     ) {}
 
-    #[Route(path: '/workouts/exercises/{id}', name: 'app_workout_set_create', methods: ['POST'])]
+    #[Route(path: '/workouts/exercises/{id}/sets', name: 'app_workout_set_create', methods: ['POST'])]
     #[IsGranted(WorkoutVoter::SET_CREATE, 'workoutExercise')]
     public function __invoke(WorkoutExercise $workoutExercise, #[MapRequestPayload] NewWorkoutSet $dto): Response
     {

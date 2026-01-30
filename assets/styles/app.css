@@ -1023,6 +1023,10 @@ textarea {
     vertical-align: baseline;
     border-radius: var(--border-radius);
     background-color: color-mix(in oklch, var(--general-color) 20%, transparent);
+
+    [data-theme="dark"] & {
+        color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
+    }
 }
 
 .form-label {
@@ -3038,5 +3042,34 @@ textarea {
     }
     to {
         transform: rotate(360deg);
+    }
+}
+
+.exercises {
+    display: flex;
+    flex-direction: column;
+    row-gap: calc(var(--container-gap-block) / 4);
+
+    .exercise {
+        display: flex;
+        width: 100%;
+        align-items: center;
+        column-gap: calc(var(--gap-inline) / 2);
+        padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
+        text-decoration: none;
+        color: var(--color);
+        border-radius: var(--border-radius);
+        background-color: color-mix(in oklch, var(--general-color) 5%, transparent);
+        transition: background-color .15s;
+
+        &:hover {
+            background-color: color-mix(in oklch, var(--general-color) 10%, transparent);
+        }
+
+        .badge {
+            width: 90px;
+            font-size: var(--font-size-medium);
+            border-radius: calc(var(--border-radius) / 2);
+        }
     }
 }
