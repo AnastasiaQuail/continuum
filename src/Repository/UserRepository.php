@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Continuum\Repository;
 
-use Continuum\Entity\Exercise;
 use Continuum\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -61,5 +61,17 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     {
         $this->getEntityManager()->persist($user);
         $this->getEntityManager()->flush();
+    }
+
+    public function saveRoles(User $user, string ...$roles): void
+    {
+        $this->createQueryBuilder('u')
+            ->update()
+            ->set('u.roles', ':roles')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $user->getId())
+            ->setParameter(':roles', $roles, Types::JSON)
+            ->getQuery()
+            ->execute();
     }
 }

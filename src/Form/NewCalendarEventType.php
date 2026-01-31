@@ -8,6 +8,7 @@ use Continuum\Dto\Request\Calendar\NewCalendarEvent;
 use Continuum\Enum\CalendarEventType;
 use Continuum\Form\Type\AbstractImmutableType;
 use DateTimeZone;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,7 +24,8 @@ final class NewCalendarEventType extends AbstractImmutableType
             ->add('title', null, [
                 'attr' => ['autofocus' => true],
             ])
-            ->add('type', null, [
+            ->add('type', EnumType::class, [
+                'class' => CalendarEventType::class,
                 'data' => CalendarEventType::Blue,
             ])
             ->add('time', TimeType::class, [

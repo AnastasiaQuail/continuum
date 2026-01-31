@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit user{% endblock %}
+{% block body_id %}admin-user-edit{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Admin', url: path('app_admin_homepage') },
+    { label: 'Users', url: path('app_admin_users') },
+    { label: user.userIdentifier },
+] %}
+
+{% block main -%}
+    <section class="card">
+        <h3 class="card-title">Edit user</h3>
+
+        {{- form_start(form) -}}
+
+        <div class="mb-3">
+            {{- form_label(form.status) -}}
+            <div class="form-control-choose-type-group">
+                {%- for choice in form.status.vars.choices -%}
+                    <label class="form-control-choose-type"
+                           data-general-type="{{ choice.data.color.value }}">
+                        <input type="radio" name="status" id="{{ form.status.vars.id }}_{{ choice.value }}"
+                               value="{{ choice.value }}"
+                               {% if form.status.vars.required %}required="required"{% endif %}
+                            {% if choice.value === form.status.vars.value %}checked{% endif %}>
+                        <span class="btn">{{ choice.label }}</span>
+                    </label>
+                {%- endfor -%}
+            </div>
+            {{- form_errors(form.status) -}}
+            {%- do form.status.setRendered -%}
+        </div>
+
+        {{- form_row(form.roles) -}}
+
+        <div class="card-submit">
+            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        </div>
+
+        {{- form_end(form) -}}
+    </section>
+{%- endblock %}

@@ -6,6 +6,7 @@ namespace Continuum\Command;
 
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
+use Continuum\Security\User\UserStatus;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -35,13 +36,16 @@ final readonly class UserCreateCommand
         ?UserRole $role = null,
     ): int {
         $user = new User($email);
-        $user->activate();
         $user->setPassword(
             $this->passwordHasher->hashPassword($user, $password)
         );
 
         if (null !== $role) {
             $user->addRole($role);
+
+            if ($role === UserRole::SuperAdmin) {
+                $user->setStatus(UserStatus::Active);
+            }
         }
 
         $this->entityManager->persist($user);

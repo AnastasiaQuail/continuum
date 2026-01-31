@@ -20,11 +20,11 @@
         {%- block importmap %}{{ importmap('app') }}{% endblock -%}
     {%- endblock -%}
 </head>
-<body id="{% block body_id %}{% endblock %}">
+<body id="{% block body_id %}{% endblock %}" class="{% if sidebarShow|default !== 'hide' %}has-sidebar{% endif %}">
     {%- block header -%}
         <header class="header">
             <nav class="header-container">
-                {%- block sidebar_controls -%}
+                {%- if sidebarShow|default !== 'hide' -%}
                     <div class="header-logo">
                         <a class="header-logo-link" href="{{ path('app_homepage') }}">
                             {{- ux_icon('hugeicons:infinity-02') -}}
@@ -35,7 +35,7 @@
                         {{- ux_icon('lucide:menu', {class: 'icon-menu-open'}) -}}
                         {{- ux_icon('lucide:x', {class: 'icon-menu-close'}) -}}
                     </button>
-                {%- endblock -%}
+                {%- endif -%}
 
                 <div class="header-controls">
                     {%- block header_events -%}

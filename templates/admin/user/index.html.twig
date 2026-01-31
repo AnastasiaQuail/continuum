@@ -13,7 +13,7 @@
         <div class="users">
             {%- for user in users -%}
                 <div class="user" data-general-type="{{ user.status.color.value }}">
-                    <a href="#{{ user.id }}" class="user-identifier">
+                    <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class=" user-identifier">
                         <div class="badge">{{ user.status.name }}</div>
                         <div class="user-email">{{ user.userIdentifier }}</div>
                     </a>

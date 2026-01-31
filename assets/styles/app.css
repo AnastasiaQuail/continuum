@@ -344,12 +344,12 @@ textarea {
     position: relative;
     display: flex;
     align-items: center;
-    padding: var(--container-gap-block) var(--body-gap-inline) 0;
+    padding: var(--body-gap-inline) var(--body-gap-inline) 0;
     background-color: var(--body-background-color);
     z-index: 100;
 
     @media (width >= 768px) {
-        padding-left: calc(var(--sidebar-width) + var(--body-gap-inline) + var(--body-gap-inline));
+        padding: var(--container-gap-block) var(--body-gap-inline) 0 calc(var(--sidebar-width) + var(--body-gap-inline) + var(--body-gap-inline));
     }
 
     &:after {
@@ -884,8 +884,10 @@ textarea {
         width: 100vw;
 
         @media (width >= 768px) {
-            padding-left: 0;
-            width: calc(100vw - var(--sidebar-width) - var(--sidebar-gap-block) * 2);
+            body.has-sidebar & {
+                padding-left: 0;
+                width: calc(100vw - var(--sidebar-width) - var(--sidebar-gap-block) * 2);
+            }
 
             [data-sidebar="collapsed"] & {
                 --sidebar-width: var(--sidebar-collapsed-width);

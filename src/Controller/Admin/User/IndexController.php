@@ -15,7 +15,7 @@ final class IndexController extends AbstractController
         private readonly UserService $userService,
     ) {}
 
-    #[Route(path: '/admin/users', name: 'app_admin_users')]
+    #[Route(path: '/admin/users', name: 'app_admin_users', methods: ['GET'])]
     public function __invoke(): Response
     {
         $users = $this->userService->getAll();

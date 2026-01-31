@@ -8,6 +8,7 @@ use Continuum\Dto\Request\Workout\EditExercise;
 use Continuum\Entity\Exercise;
 use Continuum\Enum\ExerciseGroup;
 use Continuum\Form\Type\AbstractImmutableType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,7 +23,8 @@ final class EditExerciseType extends AbstractImmutableType
         $exercise = $options['exercise'];
 
         $builder->setDataMapper($this)
-            ->add('group', null, [
+            ->add('group', EnumType::class, [
+                'class' => ExerciseGroup::class,
                 'data' => $exercise?->getGroup(),
             ])
             ->add('name', TextType::class, [

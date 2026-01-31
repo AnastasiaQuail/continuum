@@ -8,6 +8,7 @@ use Continuum\Dto\Request\Reflection\EditMoodReflection;
 use Continuum\Entity\MoodReflection;
 use Continuum\Enum\MoodType;
 use Continuum\Form\Type\AbstractImmutableType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,7 +22,8 @@ final class EditMoodReflectionType extends AbstractImmutableType
         $moodReflection = $options['moodReflection'];
 
         $builder->setDataMapper($this)
-            ->add('type', null, [
+            ->add('type', EnumType::class, [
+                'class' => MoodType::class,
                 'data' => $moodReflection?->getType() ?? MoodType::Okay,
             ])
             ->add('text', null, [

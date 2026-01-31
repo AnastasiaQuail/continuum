@@ -15,7 +15,7 @@ final class HomepageController extends AbstractController
         private readonly DatabaseDumpCache $databaseDumpCache,
     ) {}
 
-    #[Route(path: '/admin', name: 'app_admin_homepage')]
+    #[Route(path: '/admin', name: 'app_admin_homepage', methods: ['GET'])]
     public function __invoke(): Response
     {
         return $this->render('admin/default/homepage.html.twig', [

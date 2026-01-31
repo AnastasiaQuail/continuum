@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Service;
 
+use Continuum\Dto\Request\Admin\User\EditUser;
 use Continuum\Dto\Request\User\EditLocation;
 use Continuum\Entity\Location;
 use Continuum\Entity\User;
@@ -41,5 +42,15 @@ final readonly class UserService
         );
 
         $this->repository->save($user);
+    }
+
+    public function update(User $user, EditUser $dto): User
+    {
+        $user->setStatus($dto->status);
+
+        $this->repository->save($user);
+        $this->repository->saveRoles($user, ...$dto->roles);
+
+        return $user;
     }
 }

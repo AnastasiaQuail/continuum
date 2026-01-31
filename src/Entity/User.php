@@ -11,6 +11,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
@@ -19,7 +20,7 @@ use Symfony\Component\Uid\Uuid;
 #[ORM\Table(name: '`users`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_USERS_EMAIL', fields: ['email'])]
 #[ORM\HasLifecycleCallbacks]
-final class User implements UserInterface, PasswordAuthenticatedUserInterface
+final class User implements UserInterface, PasswordAuthenticatedUserInterface, EquatableInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -83,6 +84,49 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $data;
     }
 
+    /**
+     * @see \Symfony\Component\Security\Http\Firewall\ContextListener
+     */
+    public function isEqualTo(UserInterface $user): bool
+    {
+        if (!$user instanceof self) {
+            return false;
+        }
+
+        $otherPassword = $user->getPassword();
+        $password = $this->getPassword();
+
+        if (
+            $otherPassword !== $password
+            && (
+                8 !== strlen($password)
+                || hash('crc32c', $otherPassword) !== $password
+            )
+        ) {
+            return false;
+        }
+
+        $otherRoles = $user->getRoles();
+        $roles = $this->getRoles();
+
+        if (
+            count($otherRoles) !== count($roles)
+            || count($otherRoles) !== count(array_intersect($otherRoles, $roles))
+        ) {
+            return false;
+        }
+
+        if ($this->getUserIdentifier() !== $user->getUserIdentifier()) {
+            return false;
+        }
+
+        if ($this->getStatus() !== $user->getStatus()) {
+            return false;
+        }
+
+        return true;
+    }
+
     public function getId(): Uuid
     {
         return $this->id;
@@ -117,9 +161,19 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->status;
     }
 
-    public function activate(): void
+    public function setStatus(UserStatus $status): void
     {
-        $this->status = UserStatus::Active;
+        $this->status = $status;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === UserStatus::Active;
+    }
+
+    public function isDisabled(): bool
+    {
+        return $this->status === UserStatus::Disabled;
     }
 
     /**
@@ -137,6 +191,14 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function addRole(UserRole $role): void
     {
         $this->roles[] = $role->value;
+    }
+
+    /**
+     * @param non-empty-string ...$roles
+     */
+    public function setRoles(string ...$roles): void
+    {
+        $this->roles = $roles;
     }
 
     public function getCreatedAt(): DateTimeImmutable
