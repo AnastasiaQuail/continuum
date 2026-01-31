@@ -69,7 +69,12 @@ final readonly class UpcomingEventService
     private function getUpcomingText(User $user, CalendarEvent $event): ?string
     {
         $currentDate = new DateTimeImmutable('now', $user->getTimezone());
-        $eventDate = $event->getDatetime()->setTimezone($user->getTimezone());
+
+        if ($event->isAllDay()) {
+            $eventDate = new DateTimeImmutable($event->getDatetime()->format('Y-m-d H:i:s'), $user->getTimezone());
+        } else {
+            $eventDate = $event->getDatetime()->setTimezone($user->getTimezone());
+        }
 
         if ($eventDate < $currentDate) {
             if (

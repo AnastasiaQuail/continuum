@@ -3149,10 +3149,11 @@ textarea {
             }
 
             .user-email {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
                 padding-block: calc(var(--gap-block) / 8);
+                font-weight: var(--font-weight-bold);
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
         }
 
