@@ -50,7 +50,8 @@
                     {%- if not (loop.first and chartMeasurement.time === 0) -%}
                         {%- if chartMeasurement.weight > max -%}
                             {%- set max = chartMeasurement.weight -%}
-                        {%- elseif chartMeasurement.weight < min -%}
+                        {%- endif -%}
+                        {%- if chartMeasurement.weight < min -%}
                             {%- set min = chartMeasurement.weight -%}
                         {%- endif -%}
                     {%- endif -%}
@@ -65,13 +66,13 @@
             {%- if chartMeasurements is not empty -%}
                 <div class="weight-change-difference">
                     <span>{{ ux_icon('lucide:trending-up-down') }}</span>
-                    <span>{{ min }} - {{ max }} kg</span>
+                    <span>{% if min !== max %}{{ min }} - {% endif %}{{ max }} kg</span>
                 </div>
             {%- endif -%}
         </div>
 
         <div class="chart-panel" {% if chartMeasurements %}data-chart="weight-change"
-             data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+             data-date="{{ month.format('Y-m-d') }}" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
     </section>
 {%- endblock %}
 

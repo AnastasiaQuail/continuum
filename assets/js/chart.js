@@ -15,10 +15,11 @@ function getHexColorByCssProperty(property) {
 }
 
 /**
+ * @param {string} dateValue
  * @return {number}
  */
-function getSecondsInCurrentMonth() {
-    const date = new Date();
+function getSecondsInMonth(dateValue) {
+    const date = new Date(dateValue);
     const start = new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0);
     const startNext = new Date(date.getFullYear(), date.getMonth() + 1, 1, 0, 0, 0);
 
@@ -49,6 +50,10 @@ class DimensionCalculator {
      * @return {{min: number, max: number}}
      */
     getExpandedBoundaries(min, max, coefficient) {
+        if (min === max) {
+            min *= 0.95;
+        }
+
         const diff = +(max - min).toFixed(1);
         const additionalDiff = +(diff * coefficient).toFixed(1);
 
@@ -115,7 +120,7 @@ function initMeasurementWeightChart(element, data) {
     const calculator = new DimensionCalculator();
     const xAxis = calculator.getExpandedBoundaries(
         0,
-        element.dataset.days ? element.dataset.days * 86400 : getSecondsInCurrentMonth(),
+        element.dataset.days ? element.dataset.days * 86400 : getSecondsInMonth(element.dataset.date),
         0.02
     );
     const yAxis = calculator.getBoundariesByValues(data.map(item => item.fat), 0.1);
@@ -208,7 +213,7 @@ function initMoodReflectionsChart(element, data) {
     const calculator = new DimensionCalculator();
     const xAxis = calculator.getExpandedBoundaries(
         data[0].time,
-        element.dataset.days ? element.dataset.days * 86400 : getSecondsInCurrentMonth(),
+        element.dataset.days * 86400,
         0.01
     );
 
