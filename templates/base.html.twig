@@ -183,6 +183,13 @@
                                 {%- endif -%}
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ _route === 'app_admin_users' or _route === 'app_admin_user_edit' ? 'active' }}"
+                               href="{{ path('app_admin_users') }}">
+                                {{- ux_icon('lucide:users') -}}
+                                <span>Users</span>
+                            </a>
+                        </li>
                     {%- endif -%}
                 </ul>
             </nav>
