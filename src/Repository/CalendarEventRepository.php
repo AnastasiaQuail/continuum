@@ -41,7 +41,7 @@ final class CalendarEventRepository extends ServiceEntityRepository
     {
         return $this->findBetweenDates(
             new DateTimeImmutable('now', $timeZone)->setTime(0, 0),
-            new DateTimeImmutable(sprintf('+%d days', $days), $timeZone),
+            new DateTimeImmutable(sprintf('+%d days', $days - 1), $timeZone)->setTime(23, 59, 59),
         );
     }
 

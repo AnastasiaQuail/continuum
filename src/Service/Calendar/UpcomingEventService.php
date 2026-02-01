@@ -21,10 +21,29 @@ final readonly class UpcomingEventService
     /**
      * @return list<UpcomingEvent>
      */
-    public function getEvents(User $user): array
+    public function getClosestEvents(User $user): array
     {
-        $events = $this->calendarEventService->getByNextDays($user, $this->upcomingEventsDays);
+        return $this->getEvents($user, days: 2);
+    }
 
+    /**
+     * @return list<UpcomingEvent>
+     */
+    public function getEvents(User $user, ?int $days = null): array
+    {
+        $events = $this->calendarEventService->getByNextDays($user, $days ?? $this->upcomingEventsDays);
+        $data = $this->getUniqueEvents($events);
+
+        return $this->getUpcomingEvents($user, $data);
+    }
+
+    /**
+     * @param list<CalendarEvent> $events
+     *
+     * @return list<CalendarEvent>
+     */
+    private function getUniqueEvents(array $events): array
+    {
         /** @var array<string, CalendarEvent> $dayEvents */
         $dayEvents = [];
         /** @var array<string, CalendarEvent> $hourEvents */
@@ -46,12 +65,20 @@ final readonly class UpcomingEventService
         $data = [...$hourEvents, ...$dayEvents];
         usort($data, static fn (CalendarEvent $a, CalendarEvent $b) => $a->getDatetime() <=> $b->getDatetime());
 
+        return $data;
+    }
+
+    /**
+     * @param list<CalendarEvent> $events
+     *
+     * @return list<UpcomingEvent>
+     */
+    private function getUpcomingEvents(User $user, array $events): array
+    {
         $upcomingEvents = [];
 
-        foreach ($data as $event) {
-            $text = $this->getUpcomingText($user, $event);
-
-            if ($text !== null) {
+        foreach ($events as $event) {
+            if (null !== $text = $this->getUpcomingText($user, $event)) {
                 $upcomingEvents[] = new UpcomingEvent(
                     type: $event->getType(),
                     title: $event->getTitle(),

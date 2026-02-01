@@ -40,7 +40,7 @@ final class HomepageController extends AbstractController
     ): Response {
         $date = new DateTimeImmutable('now', $user->getTimezone())->setTime(0, 0);
 
-        $upcomingEvents = $this->upcomingEventService->getEvents($user);
+        $upcomingEvents = $this->upcomingEventService->getClosestEvents($user);
 
         $measurementDays = 30 * $measurementMonths;
         $prevMeasurementDate = $date->modify(sprintf('-%d days', $measurementDays));
