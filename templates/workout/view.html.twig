@@ -63,7 +63,7 @@
 
                         {%- if is_granted('WORKOUT_SET_CREATE', workoutExercise) -%}
                             <div class="workout-exercise-set workout-exercise-set-new">
-                                {%- set lastSet = workoutExercise.sets is not empty ? workoutExercise.sets|last : null -%}
+                                {%- set lastSet = workoutExercise.sets|last -%}
                                 <form method="post"
                                       action="{{ path('app_workout_set_create', {'id': workoutExercise.id}) }}">
                                     <label for="weight"></label>

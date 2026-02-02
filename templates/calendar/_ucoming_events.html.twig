@@ -1,4 +1,4 @@
-<div class="upcoming-events-body {{ collapsable ?? false ? 'collapsable' }}">
+<div class="upcoming-events-body {{ (collapsable ?? false) ? 'collapsable' }}">
     {%- for upcomingEvents in upcomingEvents -%}
         <div class="upcoming-event-text" data-general-type="{{ upcomingEvents.type.value }}">
             <strong>{{ upcomingEvents.title }}</strong>
