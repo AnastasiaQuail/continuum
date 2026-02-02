@@ -212,7 +212,7 @@ function initMoodReflectionsChart(element, data) {
 
     const calculator = new DimensionCalculator();
     const xAxis = calculator.getExpandedBoundaries(
-        data[0].time,
+        0,
         element.dataset.days * 86400,
         0.01
     );
