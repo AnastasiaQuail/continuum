@@ -37,7 +37,24 @@
     {%- endif -%}
 
     <section class="card">
-        <h2 class="card-title">Add new event</h2>
+        <div class="card-title card-title-controls">
+            <h2>Add new event</h2>
+
+            {%- set prevDay = day.modify('-1 day') -%}
+            {%- set nextDay = day.modify('+1 day') -%}
+            {{ include('default/_pagination.html.twig', {
+                'prev': {
+                    url: path('app_calendar_day', {'day': prevDay.format('Y-m-d')}),
+                    label: prevDay.format('j F'),
+                    isGranted: prevDay.format('Y') > app_year_min,
+                },
+                'next': {
+                    url: path('app_calendar_day', {'day': nextDay.format('Y-m-d')}),
+                    label: nextDay.format('j F'),
+                    isGranted: nextDay.format('Y') < app_year_max,
+                }
+            }) }}
+        </div>
 
         {{- form_start(form) -}}
 
