@@ -8,14 +8,14 @@
     { label: 'Exercises' },
 ] %}
 
-{% block main -%}
-    <div class="mb-3">
-        <a href="{{ path('app_exercise_create') }}" class="btn btn-primary btn-transparent">
-            {{ ux_icon('lucide:plus') }}
-            <span>Create exercise</span>
-        </a>
-    </div>
+{% block page_links -%}
+    <a class="btn btn-primary btn-outline" href="{{ path('app_exercise_create') }}">
+        {{ ux_icon('lucide:plus') }}
+        <span>Create exercise</span>
+    </a>
+{%- endblock %}
 
+{% block main -%}
     <section class="card">
         <div class="exercises">
             {%- for exercise in exercises -%}

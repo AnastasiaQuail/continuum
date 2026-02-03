@@ -1,31 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% set monthName = month.format('F Y') %}
-{% set isCurrentMonth = monthName === user_date()|date('F Y') %}
-
-{% block title %}Mood tracker{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
-{% block body_id %}mood-tracker{% endblock %}
+{% block title %}Mood reflection{% endblock %}
+{% block body_id %}mood-reflection{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Mood tracker', url: path('app_mood_reflections') },
-    { label: monthName },
+    { label: 'Reflection' },
 ] %}
-
-{% set prevMonth = month.modify('-1 month') %}
-{% set nextMonth = month.modify('+1 month') %}
-{% set paginations = {
-    prev: {
-        url: path('app_mood_reflections', {'month': prevMonth.format('Y-m')}),
-        label: prevMonth.format('F'),
-        isGranted: prevMonth.format('Y') >= app_year_min and is_granted('MOOD_REFLECTION_VIEW', prevMonth),
-    },
-    title: month.format('F'),
-    next: {
-        url: path('app_mood_reflections', {'month': nextMonth.format('Y-m')}),
-        label: nextMonth.format('F'),
-        isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
-    },
-} %}
 
 {% set isGranted = is_granted('MOOD_REFLECTION_EDIT') %}
 
@@ -52,6 +32,25 @@
 
 {% block main -%}
     <section class="card card-calendar-mood">
+        <div class="card-title card-title-controls">
+            <h2>{{ month.format('F Y') }}</h2>
+
+            {% set prevMonth = month.modify('-1 month') %}
+            {% set nextMonth = month.modify('+1 month') %}
+            {{ include('default/_pagination.html.twig', {
+                'prev': {
+                    url: path('app_mood_reflections', {'month': prevMonth.format('Y-m')}),
+                    label: prevMonth.format('F'),
+                    isGranted: prevMonth.format('Y') >= app_year_min and is_granted('MOOD_REFLECTION_VIEW', prevMonth),
+                },
+                'next': {
+                    url: path('app_mood_reflections', {'month': nextMonth.format('Y-m')}),
+                    label: nextMonth.format('F'),
+                    isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
+                }
+            }) }}
+        </div>
+
         <div class="calendar">
             <article class="month">
                 {%- set current = user_date().format('Y-m-d') -%}

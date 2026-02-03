@@ -1,28 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% set currentDate = user_date() %}
-
-{% block title %}Calendar{{ year != currentDate.format('Y') ? ' | ' ~ year }}{% endblock %}
+{% block title %}Calendar{% endblock %}
 {% block body_id %}calendar{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Calendar', url: path('app_calendar') },
-    { label: year },
+    { label: 'Calendar' },
 ] %}
-
-{% set paginations = {
-    prev: {
-        url: path('app_calendar', {'year': year - 1}),
-        label: year - 1,
-        isGranted: year > app_year_min,
-    },
-    title: year,
-    next: {
-        url: path('app_calendar', {'year': year + 1}),
-        label: year + 1,
-        isGranted: year < app_year_max,
-    },
-} %}
 
 {% block showcase -%}
     {%- if upcomingEvents is not empty and is_granted('CALENDAR_UPCOMING_EVENTS') -%}
@@ -34,8 +17,25 @@
 
 {% block main -%}
     <section class="card card-calendar">
+        <div class="card-title card-title-controls">
+            <h2>{{ year }}</h2>
+
+            {{ include('default/_pagination.html.twig', {
+                'prev': {
+                    url: path('app_calendar', {'year': year - 1}),
+                    label: year - 1,
+                    isGranted: year > app_year_min,
+                },
+                'next': {
+                    url: path('app_calendar', {'year': year + 1}),
+                    label: year + 1,
+                    isGranted: year < app_year_max,
+                }
+            }) }}
+        </div>
+
         <div class="calendar">
-            {%- set current = currentDate.format('Y-m-d') -%}
+            {%- set current = user_date().format('Y-m-d') -%}
             {%- set isGranted = is_granted('CALENDAR_EDIT') -%}
 
             {%- for monthNumber in 1..12 -%}

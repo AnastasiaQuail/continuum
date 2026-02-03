@@ -2,18 +2,18 @@
 
 {% set date = measurement ? measurement.datetime.setTimezone(app.user.timezone) : user_date() %}
 
-{% block title %}Body measurements | {{ date.format('j F Y') }}{% endblock %}
+{% block title %}Measurement on {{ date.format('j F Y') }}{% endblock %}
+{% block page_title %}{{ date.format('j F Y, H:i') }}{% endblock %}
 {% block body_id %}body-measurement-edit{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Body measurements', url: path('app_measurements') },
-    { label: date.format('F Y'), url: path('app_measurements', {'month': date.format('Y-m')}) },
-    { label: date.format('j \\a\\t H:i') },
+    { label: 'Body measurements', url: path('app_measurements', {'month': date.format('Y-m')}) },
+    { label: measurement ? 'Edit' : 'Add' },
 ] %}
 
 {% block main -%}
     <section class="card">
-        <h3 class="card-title">{{ measurement ? 'Edit measurement' : 'Add measurement' }}</h3>
+        <h2 class="card-title">{{ measurement ? 'Edit measurement' : 'Add measurement' }}</h2>
 
         {{- form_start(form) -}}
 

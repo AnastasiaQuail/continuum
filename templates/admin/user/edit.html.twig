@@ -6,12 +6,12 @@
 {% set breadcrumbs = [
     { label: 'Admin', url: path('app_admin_homepage') },
     { label: 'Users', url: path('app_admin_users') },
-    { label: user.userIdentifier },
+    { label: 'Edit' },
 ] %}
 
 {% block main -%}
     <section class="card">
-        <h3 class="card-title">Edit user</h3>
+        <h2 class="card-title">{{ user.userIdentifier }}</h2>
 
         {{- form_start(form) -}}
 

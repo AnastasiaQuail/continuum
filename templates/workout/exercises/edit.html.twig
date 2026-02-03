@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit exercise{% endblock %}
+{% block title %}{{ exercise ? 'Edit exercise' : 'Create exercise' }}{% endblock %}
 {% block body_id %}exercise-edit{% endblock %}
 
 {% set breadcrumbs = [
@@ -11,8 +11,6 @@
 
 {% block main -%}
     <section class="card">
-        <h3>{{ exercise ? 'Edit exercise' : 'Create exercise' }}</h3>
-
         {{- form_start(form) -}}
 
         <div class="mb-3">

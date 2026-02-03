@@ -8,34 +8,23 @@
     {%- endif -%}
 {%- endblock -%}
 
-{% set monthName = month.format('F Y') %}
-{% set isCurrentMonth = monthName === user_date()|date('F Y') %}
-
-{% block title %}Body measurements{{ not isCurrentMonth ? ' | ' ~ monthName }}{% endblock %}
+{% block title %}Body measurements{% endblock %}
 {% block body_id %}body-measurements{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Body measurements', url: path('app_measurements') },
-    { label: monthName },
+    { label: 'Measurements' },
 ] %}
 
-{% set prevMonth = month.modify('-1 month') %}
-{% set nextMonth = month.modify('+1 month') %}
-{% set paginations = {
-    prev: {
-        url: path('app_measurements', {'month': prevMonth.format('Y-m')}),
-        label: prevMonth.format('F'),
-        isGranted: prevMonth.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prevMonth),
-    },
-    title: month.format('F'),
-    next: {
-        url: path('app_measurements', {'month': nextMonth.format('Y-m')}),
-        label: nextMonth.format('F'),
-        isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
-    },
-} %}
+{% block page_links -%}
+    {%- if is_granted('BODY_MEASUREMENT_CREATE') -%}
+        <a class="btn btn-primary btn-outline" href="{{ path('app_measurement_create') }}">
+            {{ ux_icon('lucide:plus') }}
+            <span>Measure</span>
+        </a>
+    {%- endif -%}
+{%- endblock %}
 
-{% block showcase -%}
+{% block main -%}
     <section class="card card-weight-result">
         <div class="weight-change">
             {%- set result = 0 -%}
@@ -58,7 +47,7 @@
                 {%- endfor -%}
             {%- endif -%}
 
-            <h3 class="weight-change-title">Weight Change</h3>
+            <h2 class="weight-change-title">Weight Change</h2>
             <div class="weight-change-result {{ result > 0 ? 'value-bad' }}{{ result < 0 ? 'value-good' }}">
                 <span>{{ result > 0 ? '+' ~ result : result }}</span>
                 <span>kg</span>
@@ -74,44 +63,63 @@
         <div class="chart-panel" {% if chartMeasurements %}data-chart="weight-change"
              data-date="{{ month.format('Y-m-d') }}" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
     </section>
-{%- endblock %}
 
-{% block main -%}
-    <section class="card card-body-measurements">
-        {%- if measurements is empty -%}
-            <div class="body-measurement collection-empty">
-                {{- ux_icon('lucide:frown') -}}
-                <span>No measurements</span>
-            </div>
-        {%- else -%}
-            {%- for measurement in measurements -%}
-                <div class="body-measurement">
-                    <div class="measurement-date">
-                        {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
-                        {%- if is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
-                            <a href="{{ path('app_measurement_edit', {'id': measurement.id}) }}">{{ time }}</a>
-                        {%- else -%}
-                            <span>{{ time }}</span>
-                        {%- endif -%}
-                    </div>
-                    <div class="measurement-values">
-                        <div class="measurement-values-fat">
-                            {{ _self.measurent_value(measurement.fatDeurenberg, 'Deurenberg', '%') -}}
-                            {{ _self.measurent_value(measurement.fatUsNavy, 'US Navy', '%') -}}
-                        </div>
-                        {{- _self.measurent_value(measurement.weight, 'Weight', 'kg') -}}
-                        {{- _self.measurent_value(measurement.neck, 'Neck') -}}
-                        {{- _self.measurent_value(measurement.waist, 'Waist') -}}
-                        {{- _self.measurent_value(measurement.chest, 'Chest') -}}
-                        {{- _self.measurent_value(measurement.shoulders, 'Shoulders') -}}
-                        {{- _self.measurent_value(measurement.flexedBiceps, 'Biceps') -}}
-                        {{- _self.measurent_value(measurement.hips, 'Hips') -}}
-                        {{- _self.measurent_value(measurement.thigh, 'Thigh') -}}
-                        {{- _self.measurent_value(measurement.calf, 'Calf') -}}
-                    </div>
+    <section class="card">
+        <div class="card-title card-title-controls">
+            <h2>{{ month.format('F Y') }}</h2>
+
+            {% set prevMonth = month.modify('-1 month') %}
+            {% set nextMonth = month.modify('+1 month') %}
+            {{ include('default/_pagination.html.twig', {
+                'prev': {
+                    url: path('app_measurements', {'month': prevMonth.format('Y-m')}),
+                    label: prevMonth.format('F'),
+                    isGranted: prevMonth.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prevMonth),
+                },
+                'next': {
+                    url: path('app_measurements', {'month': nextMonth.format('Y-m')}),
+                    label: nextMonth.format('F'),
+                    isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
+                }
+            }) }}
+        </div>
+
+        <div class="card-body-measurements">
+            {%- if measurements is empty -%}
+                <div class="body-measurement collection-empty">
+                    {{- ux_icon('lucide:frown') -}}
+                    <span>No measurements</span>
                 </div>
-            {%- endfor -%}
-        {%- endif -%}
+            {%- else -%}
+                {%- for measurement in measurements -%}
+                    <div class="body-measurement">
+                        <div class="measurement-date">
+                            {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
+                            {%- if is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
+                                <a href="{{ path('app_measurement_edit', {'id': measurement.id}) }}">{{ time }}</a>
+                            {%- else -%}
+                                <span>{{ time }}</span>
+                            {%- endif -%}
+                        </div>
+                        <div class="measurement-values">
+                            <div class="measurement-values-fat">
+                                {{ _self.measurent_value(measurement.fatDeurenberg, 'Deurenberg', '%') -}}
+                                {{ _self.measurent_value(measurement.fatUsNavy, 'US Navy', '%') -}}
+                            </div>
+                            {{- _self.measurent_value(measurement.weight, 'Weight', 'kg') -}}
+                            {{- _self.measurent_value(measurement.neck, 'Neck') -}}
+                            {{- _self.measurent_value(measurement.waist, 'Waist') -}}
+                            {{- _self.measurent_value(measurement.chest, 'Chest') -}}
+                            {{- _self.measurent_value(measurement.shoulders, 'Shoulders') -}}
+                            {{- _self.measurent_value(measurement.flexedBiceps, 'Biceps') -}}
+                            {{- _self.measurent_value(measurement.hips, 'Hips') -}}
+                            {{- _self.measurent_value(measurement.thigh, 'Thigh') -}}
+                            {{- _self.measurent_value(measurement.calf, 'Calf') -}}
+                        </div>
+                    </div>
+                {%- endfor -%}
+            {%- endif -%}
+        </div>
     </section>
 {%- endblock %}
 

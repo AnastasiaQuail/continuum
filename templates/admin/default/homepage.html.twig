@@ -1,6 +1,6 @@
 {% extends 'admin.html.twig' %}
 
-{% block title %}Admin homepage{% endblock %}
+{% block title %}Admin Dashboard{% endblock %}
 {% block body_id %}admin-homepage{% endblock %}
 
 {% set breadcrumbs = [
@@ -9,6 +9,8 @@
 
 {% block main -%}
     <section class="card">
+        <h2>Database backups</h2>
+
         {%-if not hasDBBackup -%}
             <div class="alert alert-danger alert-inline">
                 <span>More one day from last backup!</span>
@@ -30,7 +32,7 @@
     </section>
 
     <section class="card">
-        <h3>Error pages</h3>
+        <h2>Error pages</h2>
         <div>
             <a class="btn btn-transparent btn-warning" href="{{ path('_preview_error', {'code': 400}) }}">400</a>
             <a class="btn btn-transparent btn-warning" href="{{ path('_preview_error', {'code': 401}) }}">401</a>

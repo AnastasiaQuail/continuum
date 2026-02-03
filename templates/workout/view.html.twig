@@ -2,18 +2,18 @@
 
 {% set date = workout.date.setTimezone(app.user.timezone) %}
 
-{% block title %}Workouts | {{ date.format('j F Y') }}{% endblock %}
+{% block title %}Workout on {{ date.format('j F Y') }}{% endblock %}
+{% block page_title %}{{ date.format('j F Y, H:i') }}{% endblock %}
 {% block body_id %}workout-view{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Workouts', url: path('app_workouts') },
-    { label: date.format('F Y'), url: path('app_workouts', {month: date.format('Y-m')}) },
-    { label: date.format('j \\a\\t H:i') },
+    { label: 'Workouts', url: path('app_workouts', {month: date.format('Y-m')}) },
+    { label: 'Edit' },
 ] %}
 
 {% block main -%}
     <section class="card">
-        <h3 class="card-title">Edit workout exercises</h3>
+        <h2 class="card-title">Workout exercises</h2>
 
         <div class="workout-exercises-edit">
             {%- for workoutExercise in workout.workoutExercises -%}

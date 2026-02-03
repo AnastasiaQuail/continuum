@@ -1,18 +1,18 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Calendar | {{ day.format('j F Y') }}{% endblock %}
+{% block title %}Events on {{ day.format('j F Y') }}{% endblock %}
+{% block page_title %}{{ day.format('j F Y') }}{% endblock %}
 {% block body_id %}calendar-date{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Calendar', url: path('app_calendar') },
-    { label: day.format('Y'), url: path('app_calendar', {'year': day.format('Y')}) },
-    { label: day.format('j F') },
+    { label: 'Calendar', url: path('app_calendar', {'year': day.format('Y')}) },
+    { label: 'Edit' },
 ] %}
 
 {% block main -%}
     {%- if events is not empty -%}
         <section class="card">
-            <h3 class="card-title">Events</h3>
+            <h2 class="card-title">Events of the day</h2>
 
             {%- for event in events -%}
                 {%- set eventDate = event.datetime.setTimezone(app.user.timezone) -%}
@@ -37,7 +37,7 @@
     {%- endif -%}
 
     <section class="card">
-        <h3 class="card-title">Create new event</h3>
+        <h2 class="card-title">Add new event</h2>
 
         {{- form_start(form) -}}
 

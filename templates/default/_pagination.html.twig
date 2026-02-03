@@ -1,0 +1,15 @@
+<nav class="calendar-pagination">
+    <{% if prev.isGranted -%}a{% else %}span{% endif %}
+        class="page-link page-link-prev {% if not prev.isGranted -%}page-link-disabled{% endif %}"
+        {% if prev.isGranted -%}href="{{ prev.url }}"{% endif %}>
+        {{- ux_icon('lucide:chevron-right') -}}
+        <span>{{ prev.label }}</span>
+    </{% if prev.isGranted %}a{% else %}span{% endif %}>
+
+    <{% if next.isGranted -%}a{% else %}span{% endif %}
+        class="page-link page-link-next {% if not next.isGranted -%}page-link-disabled{% endif %}"
+        {% if next.isGranted -%}href="{{ next.url }}"{% endif %}>
+        <span>{{ next.label }}</span>
+        {{- ux_icon('lucide:chevron-right') -}}
+    </{% if next.isGranted %}a{% else %}span{% endif %}>
+</nav>

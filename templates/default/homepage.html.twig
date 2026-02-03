@@ -6,14 +6,16 @@
     <script src="{{ asset('js/chart.js') }}"></script>
 {%- endblock -%}
 
+{% block title %}Continuum Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
 {% block body_id %}homepage{% endblock %}
 
 {% block showcase -%}
     <section class="card">
-        <h4 class="card-title card-title-justify">
+        <h2 class="card-title card-title-showcase">
             <span>The Wait</span>
             <span class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</span>
-        </h4>
+        </h2>
         <div class="progress-group">
             <div class="progress" style="--progress: {{ calendarProgress }}%;">
                 <div class="progress-bar"></div>
@@ -25,7 +27,7 @@
     <div class="row row-sm-2">
         {%- if is_granted('CALENDAR_UPCOMING_EVENTS') -%}
             <section class="card">
-                <h4 class="card-title">Upcoming</h4>
+                <h2 class="card-title card-title-showcase">Upcoming</h2>
                 {{- include('calendar/_ucoming_events.html.twig') -}}
             </section>
 
@@ -62,18 +64,16 @@
 {%- endblock %}
 
 {% block main -%}
-    <h2>Dashboards</h2>
-
     <div class="row row-sm-2">
         {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
             <section class="card card-panel">
-                <div class="card-title card-title-justify">
+                <div class="card-title card-title-controls">
                     {%- set result = 0 -%}
                     {%- if chartMeasurements -%}
                         {%- set result = ((chartMeasurements|last).weight - (chartMeasurements|first).weight)|round(1) -%}
                     {%- endif -%}
 
-                    <h3>Body fat</h3>
+                    <h2>Body fat</h2>
                     {%- if result !== 0 -%}
                         <span class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
                             <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
@@ -91,8 +91,8 @@
 
         {%- if is_granted('WORKOUT_VIEW') -%}
             <section class="card card-panel">
-                <div class="card-title card-title-justify">
-                    <h3>Workouts</h3>
+                <div class="card-title card-title-controls">
+                    <h2>Workouts</h2>
                     {{- _self.card_title_dropdown(workoutDays, 'workout') -}}
                 </div>
 
@@ -135,8 +135,8 @@
 
     {%- if is_granted('MOOD_REFLECTION_VIEW') -%}
         <section class="card card-panel">
-            <div class="card-title card-title-justify">
-                <h3>Mood trend</h3>
+            <div class="card-title card-title-controls">
+                <h2>Mood trend</h2>
                 {{- _self.card_title_dropdown(moodReflectionDays, 'mood') -}}
             </div>
 

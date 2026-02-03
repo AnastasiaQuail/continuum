@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mood tracker | {{ day.format('j F Y') }}{% endblock %}
-{% block body_id %}mood-tracker-day{% endblock %}
+{% block title %}Mood on {{ day.format('j F Y') }}{% endblock %}
+{% block page_title %}{{ day.format('j F Y') }}{% endblock %}
+{% block body_id %}mood-reflection-day{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Mood tracker', url: path('app_mood_reflections') },
-    { label: day.format('F Y'), url: path('app_mood_reflections', {'month': day.format('Y-m')}) },
-    { label: day.format('j') },
+    { label: 'Mood reflection', url: path('app_mood_reflections', {'month': day.format('Y-m')}) },
+    { label: 'Edit' },
 ] %}
 
 {% block main -%}
     <section class="card">
-        <h3 class="card-title">Mood of the day</h3>
+        <h2 class="card-title">Mood of the day</h2>
 
         {{- form_start(form) -}}
 
@@ -24,7 +24,7 @@
                         <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
                                value="{{ choice.value }}"
                                {% if form.type.vars.required %}required="required"{% endif %}
-                               {% if choice.value === form.type.vars.value %}checked{% endif %}>
+                            {% if choice.value === form.type.vars.value %}checked{% endif %}>
                         <span class="btn">
                             {%- if choice.value === 'terrible' -%}
                                 {{- ux_icon('lucide:angry') -}}

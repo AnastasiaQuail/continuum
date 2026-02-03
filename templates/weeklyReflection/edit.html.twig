@@ -7,18 +7,18 @@
     {% set currentTitle = monday.format('j') ~ ' - ' ~ week.format('j F') %}
 {% endif %}
 
-{% block title %}Weekly reflection | {{ currentTitle }}{% endblock %}
+{% block title %}Reflection on {{ currentTitle }}{% endblock %}
+{% block page_title %}{{ currentTitle }}{% endblock %}
 {% block body_id %}weekly-reflection-edit{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Weekly reflection', url: path('app_weekly_reflections') },
-    { label: week.format('F Y'), url: path('app_weekly_reflections', {'month': week.format('Y-m')}) },
-    { label: currentTitle },
+    { label: 'Weekly reflection', url: path('app_weekly_reflections', {'month': week.format('Y-m')}) },
+    { label: 'Edit' },
 ] %}
 
 {% block main -%}
     <section class="card">
-        <h3 class="card-title">Week reflection</h3>
+        <h2 class="card-title">What happened this week?</h2>
 
         {{- form_start(form) -}}
 
