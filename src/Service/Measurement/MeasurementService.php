@@ -70,7 +70,7 @@ final readonly class MeasurementService
     {
         if ($measurement === null) {
             $measurement = new BodyMeasurement(
-                age: $this->userService->getAge($user),
+                age: $this->userService->getAge($user, $dto->datetime),
                 height: $this->userService->getHeight(),
             );
         }

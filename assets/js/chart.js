@@ -32,7 +32,7 @@ class DimensionCalculator {
      * @return {number}
      */
     #getMin(...values) {
-        return +Math.min(...values).toFixed(1);
+        return Math.floor(Math.min(...values) * 10) / 10;
     }
 
     /**
@@ -40,7 +40,7 @@ class DimensionCalculator {
      * @return {number}
      */
     #getMax(...values) {
-        return +Math.max(...values).toFixed(1);
+        return Math.ceil(Math.max(...values) * 10) / 10;
     }
 
     /**

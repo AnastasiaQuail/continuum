@@ -17,12 +17,12 @@ final readonly class GodUserService
         private int $userHeight,
     ) {}
 
-    public function getAge(User $user): int
+    public function getAge(User $user, DateTimeImmutable $datetime): int
     {
         $birthday = new DateTimeImmutable($this->userBirthDate, $user->getTimezone())->setTime(0, 0);
-        $now = new DateTimeImmutable('now', $user->getTimezone());
+        $date = $datetime->setTimezone($user->getTimezone());
 
-        return $birthday->diff($now)->y;
+        return $birthday->diff($date)->y;
     }
 
     public function getHeight(): int
