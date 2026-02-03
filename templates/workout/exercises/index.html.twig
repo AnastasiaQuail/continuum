@@ -9,24 +9,28 @@
 ] %}
 
 {% block page_links -%}
-    <a class="btn btn-primary btn-outline" href="{{ path('app_exercise_create') }}">
-        {{ ux_icon('lucide:plus') }}
-        <span>Create exercise</span>
-    </a>
+    {%- if is_granted('EXERCISE_CREATE') -%}
+        <a class="btn btn-primary btn-outline" href="{{ path('app_exercise_create') }}">
+            {{ ux_icon('lucide:plus') }}
+            <span>Create exercise</span>
+        </a>
+    {%- endif -%}
 {%- endblock %}
 
 {% block main -%}
     <section class="card">
         <div class="exercises">
             {%- for exercise in exercises -%}
-                <a href="{{ path('app_exercise_edit', {'id': exercise.id}) }}" class="exercise"
-                   data-general-type="{{ exercise.group.color.value }}">
+                {%- set isGranted = is_granted('EXERCISE_EDIT', exercise) -%}
+                <{% if isGranted %}a{% else %}span{% endif %}
+                    {% if isGranted %}href="{{ path('app_exercise_edit', {'id': exercise.id}) }}"{% endif %}
+                    class="exercise" data-general-type="{{ exercise.group.color.value }}">
                     <div class="badge">{{ exercise.group.name }}</div>
                     <div class="exercise-name">
                         <span>{{ exercise.name|capitalize }}</span>
                         <span class="exercise-usages">({{ exerciseCountMap[exercise.id] }} workouts)</span>
                     </div>
-                </a>
+                </{% if isGranted %}a{% else %}span{% endif %}>
             {%- endfor -%}
         </div>
     </section>

@@ -16,7 +16,9 @@
             </button>
         </form>
     {%- endif -%}
-    <a class="btn btn-primary btn-action" href="{{ path('app_exercises') }}">Exercises</a>
+    {%- if is_granted('EXERCISE_VIEW') -%}
+        <a class="btn btn-primary btn-action" href="{{ path('app_exercises') }}">Exercises</a>
+    {%- endif -%}
 {%- endblock %}
 
 {% block main -%}

@@ -6,11 +6,13 @@ namespace Continuum\Controller\Workout\Exercise;
 
 use Continuum\Entity\Exercise;
 use Continuum\Form\EditExerciseType;
+use Continuum\Security\Authorization\Voter\ExerciseVoter;
 use Continuum\Service\Workout\ExerciseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class EditController extends AbstractController
 {
@@ -19,6 +21,7 @@ final class EditController extends AbstractController
     ) {}
 
     #[Route(path: '/exercises/{id}', name: 'app_exercise_edit', methods: ['GET', 'POST'])]
+    #[IsGranted(ExerciseVoter::EDIT, 'exercise')]
     public function __invoke(Request $request, Exercise $exercise): Response
     {
         $form = $this->createForm(EditExerciseType::class, options: ['exercise' => $exercise]);

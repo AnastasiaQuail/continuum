@@ -3129,7 +3129,7 @@ textarea {
         background-color: color-mix(in oklch, var(--general-color) 5%, transparent);
         transition: background-color .15s;
 
-        &:hover {
+        &:is(a):hover {
             background-color: color-mix(in oklch, var(--general-color) 10%, transparent);
         }
 
