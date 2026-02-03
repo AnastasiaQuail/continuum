@@ -4,7 +4,6 @@
 {% block body_id %}admin-users{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Admin', url: path('app_admin_homepage') },
     { label: 'Users' },
 ] %}
 
@@ -12,11 +11,14 @@
     <section class="card">
         <div class="users">
             {%- for user in users -%}
+                {%- set isGranted = is_granted('ADMIN_USER_EDIT', user) -%}
                 <div class="user" data-general-type="{{ user.status.color.value }}">
-                    <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class=" user-identifier">
+                    <{% if isGranted %}a{% else %}div{% endif %}
+                        {% if isGranted %}href="{{ path('app_admin_user_edit', {'id': user.id}) }}"{% endif %}
+                        class=" user-identifier">
                         <div class="badge">{{ user.status.name }}</div>
                         <div class="user-email">{{ user.userIdentifier }}</div>
-                    </a>
+                    </{% if isGranted %}a{% else %}div{% endif %}>
 
                     <div class="user-roles">
                         {%- for role in user.roles -%}

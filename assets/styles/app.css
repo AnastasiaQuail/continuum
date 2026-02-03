@@ -1388,12 +1388,14 @@ textarea {
     }
 
     &.btn-xs {
+        gap: calc(var(--control-padding-inline) / 3);
         padding: calc(var(--control-padding-block) / 3) calc(var(--control-padding-inline) / 3);
         font-size: var(--font-size-small);
         border-radius: calc(var(--border-radius) * 0.5);
     }
 
     &.btn-sm {
+        gap: calc(var(--control-padding-inline) / 2);
         padding: calc(var(--control-padding-block) / 3 * 2) calc(var(--control-padding-inline) / 3 * 2);
         font-size: var(--font-size-medium);
         border-radius: calc(var(--border-radius) * 0.8);
@@ -3263,6 +3265,27 @@ textarea {
             @media (width >= 576px) {
                 text-align: right;
             }
+        }
+    }
+}
+
+.backups {
+    display: flex;
+    flex-direction: column-reverse;
+
+    .backup {
+        & + & {
+            padding-bottom: calc(var(--container-gap-block) / 2);
+            margin-bottom: calc(var(--container-gap-block) / 2);
+            border-bottom: var(--border-width) solid color-mix(in oklch, var(--border-color) 40%, transparent);
+        }
+
+        .backup-information {
+            display: flex;
+            gap: calc(var(--container-gap-inline) / 2);
+            margin-top: calc(var(--container-gap-inline) / 8);
+            font-size: var(--font-size-extra-small);
+            opacity: var(--transparent-color);
         }
     }
 }

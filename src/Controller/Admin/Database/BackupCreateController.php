@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Admin\Database;
 
+use Continuum\Security\Authorization\Voter\Admin\BackupVoter;
 use Continuum\Service\Database\DatabaseDumper;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class BackupCreateController extends AbstractController
 {
@@ -17,6 +19,7 @@ final class BackupCreateController extends AbstractController
     ) {}
 
     #[Route(path: '/admin/database/backup', name: 'app_admin_database_backup_create', methods: ['POST'])]
+    #[IsGranted(BackupVoter::CREATE)]
     public function __invoke(): Response
     {
         try {
@@ -24,7 +27,7 @@ final class BackupCreateController extends AbstractController
         } catch (RuntimeException $e) {
             $this->addFlash('danger', $e->getMessage());
 
-            return $this->redirectToRoute('app_admin_homepage');
+            return $this->redirectToRoute('app_admin_backups');
         }
 
         $this->addFlash(
@@ -36,6 +39,6 @@ final class BackupCreateController extends AbstractController
             )
         );
 
-        return $this->redirectToRoute('app_admin_homepage');
+        return $this->redirectToRoute('app_admin_backups');
     }
 }

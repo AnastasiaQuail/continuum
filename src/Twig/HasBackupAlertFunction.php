@@ -7,13 +7,13 @@ namespace Continuum\Twig;
 use Continuum\Service\Database\DatabaseDumpCache;
 use Twig\Attribute\AsTwigFunction;
 
-final readonly class HasAdminAlertsFunction
+final readonly class HasBackupAlertFunction
 {
     public function __construct(
         private DatabaseDumpCache $databaseDumpCache,
     ) {}
 
-    #[AsTwigFunction('has_admin_alerts')]
+    #[AsTwigFunction('has_backup_alert')]
     public function __invoke(): bool
     {
         return false === $this->databaseDumpCache->has();

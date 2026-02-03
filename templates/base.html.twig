@@ -173,23 +173,27 @@
                         <li>
                             <hr class="nav-divider">
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_admin_homepage' ? 'active' }}"
-                               href="{{ path('app_admin_homepage') }}">
-                                {{- ux_icon('lucide:shield-user') -}}
-                                <span>Admin</span>
-                                {%- if has_admin_alerts() -%}
-                                    <span class="nav-icon icon-danger">{{ ux_icon('lucide:triangle-alert') }}</span>
-                                {%- endif -%}
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_admin_users' or _route === 'app_admin_user_edit' ? 'active' }}"
-                               href="{{ path('app_admin_users') }}">
-                                {{- ux_icon('lucide:users') -}}
-                                <span>Users</span>
-                            </a>
-                        </li>
+                        {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
+                            <li class="nav-item">
+                                <a class="nav-link {{ _route === 'app_admin_backups' ? 'active' }}"
+                                   href="{{ path('app_admin_backups') }}">
+                                    {{- ux_icon('lucide:database-backup') -}}
+                                    <span>Backups</span>
+                                    {%- if has_backup_alert() -%}
+                                        <span class="nav-icon icon-danger">{{ ux_icon('lucide:triangle-alert') }}</span>
+                                    {%- endif -%}
+                                </a>
+                            </li>
+                        {%- endif -%}
+                        {%- if is_granted('ADMIN_USER_VIEW') -%}
+                            <li class="nav-item">
+                                <a class="nav-link {{ _route === 'app_admin_users' or _route === 'app_admin_user_edit' ? 'active' }}"
+                                   href="{{ path('app_admin_users') }}">
+                                    {{- ux_icon('lucide:users') -}}
+                                    <span>Users</span>
+                                </a>
+                            </li>
+                        {%- endif -%}
                     {%- endif -%}
                 </ul>
             </nav>

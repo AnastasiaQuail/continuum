@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace Continuum\Service\Database;
 
+use Continuum\Dto\Response\Admin\Database\BackupFile;
+use DateTime;
+use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 
 final readonly class DatabaseDumper
@@ -21,6 +25,27 @@ final readonly class DatabaseDumper
         private LoggerInterface $logger,
         private DatabaseDumpCache $cache,
     ) {}
+
+    /**
+     * @return list<BackupFile>
+     */
+    public function getBackups(): array
+    {
+        $backups = [];
+        $finder = new Finder()->files()->sortByModifiedTime()
+            ->in($this->backupDir)
+            ->name('*.sql');
+
+        foreach ($finder as $file) {
+            $backups[] = new BackupFile(
+                name: $file->getFilename(),
+                size: $file->getSize(),
+                date: new DateTimeImmutable(sprintf('@%d', $file->getMTime())),
+            );
+        }
+
+        return $backups;
+    }
 
     /**
      * @throws RuntimeException

@@ -4,6 +4,8 @@
 {% block body_id %}login{% endblock %}
 
 {% block flash_messages %}
+    {{- parent() -}}
+
     {%- if app.user -%}
         <div class="alert alert-secondary">
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>

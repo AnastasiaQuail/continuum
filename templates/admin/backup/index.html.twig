@@ -1,0 +1,46 @@
+{% extends 'admin.html.twig' %}
+
+{% block title %}Database backups{% endblock %}
+{% block body_id %}admin-backups{% endblock %}
+
+{% set breadcrumbs = [
+    { label: 'Backups' },
+] %}
+
+{% block flash_messages -%}
+    {{- parent() -}}
+
+    {%- if not hasDBBackup -%}
+        <div class="alert alert-danger alert-inline">
+            {{ ux_icon('lucide:triangle-alert') }}
+            <span>More one day from last backup!</span>
+        </div>
+    {%- endif -%}
+{%- endblock %}
+
+{% block page_links -%}
+    {%- if is_granted('ADMIN_BACKUP_CREATE') -%}
+        <form method="post" action="{{ path('app_admin_database_backup_create') }}">
+            <button class="btn btn-primary btn-outline">
+                {{- ux_icon('lucide:plus') -}}
+                <span>Create Backup</span>
+            </button>
+        </form>
+    {%- endif -%}
+{%- endblock %}
+
+{% block main -%}
+    <section class="card">
+        <div class="backups">
+            {%- for backup in backups -%}
+                <div class="backup">
+                    <div>{{ backup.date.setTimezone(app.user.timezone).format('j F Y, H:i') }}</div>
+                    <div class="backup-information">
+                        <div>{{ (backup.size / 1024 / 1024)|number_format(2, '.', ' ') }} MB</div>
+                        <div>{{ backup.name }}</div>
+                    </div>
+                </div>
+            {%- endfor -%}
+        </div>
+    </section>
+{%- endblock %}
