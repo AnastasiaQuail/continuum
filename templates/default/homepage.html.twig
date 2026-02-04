@@ -10,6 +10,8 @@
 {% block page_title %}Dashboard{% endblock %}
 {% block body_id %}homepage{% endblock %}
 
+{% set currentDate = user_date() %}
+
 {% block showcase -%}
     <section class="card">
         <h2 class="card-title card-title-showcase">
@@ -17,11 +19,24 @@
             <span class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</span>
         </h2>
         <div class="progress-group">
-            <div class="progress" style="--progress: {{ calendarProgress }}%;">
+            {%- set progressPercent = progress.currentProgress -%}
+            <div class="progress" style="--progress: {{ progressPercent }}%;">
                 <div class="progress-bar"></div>
             </div>
-            <div class="progress-text">{{ calendarProgress }}%</div>
+            <div class="progress-text">{{ progressPercent }}%</div>
         </div>
+
+        {%- if +currentDate.format('j') === 1 -%}
+            <div class="progress-description">
+                <strong>{{ progress.pastMonths }}</strong> out of
+                <strong>{{ progress.totalMonths }}</strong> months have passed ⚡️
+            </div>
+        {%- elseif +currentDate.format('N') === 1 -%}
+            <div class="progress-description">
+                <strong>{{ progress.pastWeeks }}</strong> out of
+                <strong>{{ progress.totalWeeks }}</strong> weeks have passed 💪
+            </div>
+        {%- endif -%}
     </section>
 
     <div class="row row-sm-2">
@@ -121,8 +136,8 @@
                             {%- set dates = dates|merge({(workout.date.format('Y-m-d')): workout}) -%}
                         {%- endfor -%}
 
-                        {%- set weekDay = user_date().format('N') -%}
-                        {%- set date = user_date('+1 day') -%}
+                        {%- set weekDay = currentDate.format('N') -%}
+                        {%- set date = currentDate.modify('+1 day') -%}
 
                         {%- for workoutDay in 1..workoutDays -%}
                             {%- set date = date.modify('-1 day') -%}

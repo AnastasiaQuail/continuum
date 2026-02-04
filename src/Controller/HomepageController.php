@@ -42,6 +42,8 @@ final class HomepageController extends AbstractController
     ): Response {
         $date = new DateTimeImmutable('now', $user->getTimezone())->setTime(0, 0);
 
+        $progress = $this->calendarProgressService->getProgress($user);
+
         $upcomingEvents = $this->upcomingEventService->getClosestEvents($user);
         $todayEvents = $this->holidayService->getTodayHolidays($user);
 
@@ -67,7 +69,7 @@ final class HomepageController extends AbstractController
         );
 
         return $this->render('default/homepage.html.twig', [
-            'calendarProgress' => $this->calendarProgressService->getCurrentProgress(),
+            'progress' => $progress,
             'upcomingEvents' => $upcomingEvents,
             'todayEvents' => $todayEvents,
             'measurementDays' => $measurementDays,

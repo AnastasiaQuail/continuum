@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Continuum\Service\Calendar;
 
+use Continuum\Dto\Response\Calendar\CalendarProgress;
+use Continuum\Entity\User;
 use DateTimeImmutable;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -16,15 +18,15 @@ final readonly class CalendarProgressService
         private string $endDate,
     ) {}
 
-    public function getCurrentProgress(): float
+    public function getProgress(User $user): CalendarProgress
     {
-        $start = new DateTimeImmutable($this->startDate);
-        $end = new DateTimeImmutable($this->endDate);
-        $current = new DateTimeImmutable();
+        $start = new DateTimeImmutable($this->startDate, $user->getTimezone());
+        $end = new DateTimeImmutable($this->endDate, $user->getTimezone());
+        $current = new DateTimeImmutable('now', $user->getTimezone());
 
-        $totalDays = $start->diff($end)->days;
-        $pastDays = $start->diff($current)->days;
-
-        return floor($pastDays / $totalDays * 1000) / 10;
+        return new CalendarProgress(
+            past: $start->diff($current),
+            total: $start->diff($end),
+        );
     }
 }

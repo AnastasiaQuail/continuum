@@ -1320,7 +1320,7 @@ textarea {
 .form-text {
     margin-top: calc(var(--gap-block) / 4);
     font-size: var(--font-size-small);
-    color: color-mix(in oklch, var(--color) 50%, transparent);
+    color: color-mix(in oklch, var(--color) 40%, transparent);
 }
 
 .invalid-feedback {
@@ -1833,6 +1833,12 @@ textarea {
         user-select: none;
         opacity: .5;
     }
+}
+
+.progress-description {
+    margin-top: calc(var(--gap-block) / 2);
+    font-size: var(--font-size-small);
+    color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
 }
 
 .calendar-heatmap-workout-container {
