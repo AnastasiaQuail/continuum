@@ -27,7 +27,20 @@
     <div class="row row-sm-2">
         {%- if is_granted('CALENDAR_UPCOMING_EVENTS') -%}
             <section class="card">
-                <h2 class="card-title card-title-showcase">Upcoming</h2>
+                <div class="card-title card-title-controls">
+                    <h2 class="card-title-showcase">Upcoming</h2>
+
+                    {%- if todayEvents is not empty -%}
+                        <div class="card-title-info card-today-events">
+                            <div class="today-events" style="--te-count: {{ todayEvents|length }};">
+                                {%- for todayEvent in todayEvents -%}
+                                    <div class="today-event">{{ todayEvent }}</div>
+                                {%- endfor -%}
+                            </div>
+                        </div>
+                    {%- endif -%}
+                </div>
+
                 {{- include('calendar/_ucoming_events.html.twig') -}}
             </section>
 

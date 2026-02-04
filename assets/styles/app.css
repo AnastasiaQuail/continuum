@@ -1530,6 +1530,18 @@ textarea {
     }
 }
 
+@property --te-counter {
+    syntax: "<integer>";
+    initial-value: 0;
+    inherits: false;
+}
+
+@keyframes te_slider {
+    to {
+        --te-counter: calc(var(--te-count) - 1);
+    }
+}
+
 .card {
     --card-background-color: var(--background-color);
 
@@ -1588,6 +1600,25 @@ textarea {
             font-weight: var(--font-weight-light);
             color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
             cursor: default;
+
+            &.card-today-events {
+                --te-gap: calc(var(--gap-block) / 8);
+                --te-height: calc(var(--font-size-extra-small) + var(--te-gap) * 2);
+
+                height: var(--te-height);
+                align-items: normal;
+                overflow: hidden;
+
+                & > .today-events {
+                    text-align: right;
+                    transform: translateY(calc(-1 * var(--te-height) * var(--te-counter)));
+                    animation: te_slider calc(var(--te-count) * 2s + 1s) linear infinite;
+
+                    .today-event {
+                        padding-block: var(--te-gap);
+                    }
+                }
+            }
         }
 
         &.card-title-controls {
