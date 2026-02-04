@@ -159,7 +159,7 @@
                     {%- endif -%}
 
                     <li>
-                        <hr class="nav-divider">
+                        <span class="nav-title-divider">Settings</span>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ _route === 'app_profile' or _route === 'app_profile_location' or _route === 'app_profile_password' ? 'active' }}"
@@ -168,32 +168,26 @@
                             <span>Profile</span>
                         </a>
                     </li>
-
-                    {%- if is_granted('ROLE_ADMIN') -%}
-                        <li>
-                            <hr class="nav-divider">
+                    {%- if is_granted('ADMIN_USER_VIEW') -%}
+                        <li class="nav-item">
+                            <a class="nav-link {{ _route === 'app_admin_users' or _route === 'app_admin_user_edit' ? 'active' }}"
+                               href="{{ path('app_admin_users') }}">
+                                {{- ux_icon('lucide:users') -}}
+                                <span>Users</span>
+                            </a>
                         </li>
-                        {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
-                            <li class="nav-item">
-                                <a class="nav-link {{ _route === 'app_admin_backups' ? 'active' }}"
-                                   href="{{ path('app_admin_backups') }}">
-                                    {{- ux_icon('lucide:database-backup') -}}
-                                    <span>Backups</span>
-                                    {%- if has_backup_alert() -%}
-                                        <span class="nav-icon icon-danger">{{ ux_icon('lucide:triangle-alert') }}</span>
-                                    {%- endif -%}
-                                </a>
-                            </li>
-                        {%- endif -%}
-                        {%- if is_granted('ADMIN_USER_VIEW') -%}
-                            <li class="nav-item">
-                                <a class="nav-link {{ _route === 'app_admin_users' or _route === 'app_admin_user_edit' ? 'active' }}"
-                                   href="{{ path('app_admin_users') }}">
-                                    {{- ux_icon('lucide:users') -}}
-                                    <span>Users</span>
-                                </a>
-                            </li>
-                        {%- endif -%}
+                    {%- endif -%}
+                    {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
+                        <li class="nav-item">
+                            <a class="nav-link {{ _route === 'app_admin_backups' ? 'active' }}"
+                               href="{{ path('app_admin_backups') }}">
+                                {{- ux_icon('lucide:database-backup') -}}
+                                <span>Backups</span>
+                                {%- if has_backup_alert() -%}
+                                    <span class="nav-icon icon-danger">{{ ux_icon('lucide:triangle-alert') }}</span>
+                                {%- endif -%}
+                            </a>
+                        </li>
                     {%- endif -%}
                 </ul>
             </nav>
