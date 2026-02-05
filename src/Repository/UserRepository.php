@@ -12,6 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<User>
@@ -47,6 +48,11 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
             ->setParameter(':datetime', new DateTimeImmutable())
             ->getQuery()
             ->execute();
+    }
+
+    public function findOneById(Uuid $id): ?User
+    {
+        return $this->find($id);
     }
 
     /**

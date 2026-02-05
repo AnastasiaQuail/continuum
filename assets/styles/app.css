@@ -356,6 +356,10 @@ textarea {
     }
 
     @media (width >= 768px) {
+        &.row-md-2 {
+            --row-columns: 2;
+        }
+
         &.row-md-3 {
             --row-columns: 3;
         }
@@ -1581,7 +1585,7 @@ textarea {
             --font-size-coefficient: calc(var(--h-font-size-coefficient) / 3);
         }
 
-        &.card-title-showcase {
+        &.card-title-showcase:is(h2), &.card-title-showcase h2 {
             --font-size-coefficient: calc(var(--h-font-size-coefficient) / 6);
         }
 
@@ -1832,6 +1836,118 @@ textarea {
     margin-top: calc(var(--gap-block) / 2);
     font-size: var(--font-size-small);
     color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
+}
+
+.card-couple {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
+
+    .couple-partner {
+        --cp-gap: calc(var(--gap-inline) / 2);
+        --cp-font-size: calc(var(--font-size) * 1.125);
+
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        row-gap: calc(var(--cp-gap) / 2);
+        font-size: var(--cp-font-size);
+
+        @media (width >= 576px) {
+            --cp-gap: calc(var(--gap-inline) / 1.5);
+            --cp-font-size: calc(var(--font-size) * 1.25);
+        }
+
+        @media (width >= 768px) {
+            --cp-gap: calc(var(--gap-inline) / 2);
+            --cp-font-size: var(--font-size);
+        }
+
+        @media (width >= 992px) {
+            --cp-gap: calc(var(--gap-inline) / 1.25);
+            --cp-font-size: calc(var(--font-size) * 1.25);
+        }
+
+        @media (width >= 1200px) {
+            --cp-font-size: calc(var(--font-size) * 1.375);
+        }
+
+        &:last-child {
+            justify-content: flex-end;
+        }
+
+        .couple-weather {
+            display: flex;
+            align-items: center;
+            gap: calc(var(--cp-gap) / 2);
+
+            .couple-temperature,
+            .couple-temperature-type {
+                font-size: calc(var(--cp-font-size) * 0.75);
+                opacity: var(--transparent-color-tiny);
+            }
+
+            .couple-temperature-type {
+                margin-left: calc(var(--cp-gap) / 3 * -1);
+                font-weight: var(--font-weight-light);
+            }
+        }
+    }
+
+    .couple-distance {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        width: 100%;
+        font-size: var(--font-size-extra-small);
+
+        @media (width >= 576px) {
+            font-size: var(--font-size-small);
+        }
+
+        @media (width >= 768px) {
+            font-size: var(--font-size-extra-small);
+        }
+
+        @media (width >= 992px) {
+            font-size: var(--font-size-small);
+        }
+
+        &:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            border-top: var(--border-width) dashed var(--border-color);
+        }
+
+        .couple-line {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            svg {
+                color: var(--border-color);
+                background-color: var(--background-color);
+
+                &:first-child {
+                    rotate: 180deg;
+                }
+            }
+        }
+
+        .couple-distance-value {
+            padding-inline: calc(var(--gap-inline) / 2);
+            background-color: var(--background-color);
+            color: color-mix(in oklch, var(--color) 40%, transparent);
+            z-index: 0;
+        }
+    }
 }
 
 .calendar-heatmap-workout-container {

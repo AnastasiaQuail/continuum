@@ -10,12 +10,19 @@ use Continuum\Entity\Location;
 use Continuum\Entity\User;
 use Continuum\Repository\UserRepository;
 use DateTimeZone;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Uid\Uuid;
 
 final readonly class UserService
 {
     public function __construct(
         private UserRepository $repository,
     ) {}
+
+    public function get(Uuid $id): User
+    {
+        return $this->repository->findOneById($id) ?? throw new NotFoundHttpException('User not found');
+    }
 
     /**
      * @return list<User>

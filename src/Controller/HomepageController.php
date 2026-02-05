@@ -8,6 +8,7 @@ use Continuum\Entity\User;
 use Continuum\Service\Calendar\CalendarProgressService;
 use Continuum\Service\Calendar\UpcomingEventService;
 use Continuum\Service\ChartMoodReflectionService;
+use Continuum\Service\CoupleService;
 use Continuum\Service\HolidayService;
 use Continuum\Service\Measurement\ChartMeasurementService;
 use Continuum\Service\Measurement\MeasurementService;
@@ -24,6 +25,7 @@ final class HomepageController extends AbstractController
 {
     public function __construct(
         private readonly CalendarProgressService $calendarProgressService,
+        private readonly CoupleService $coupleService,
         private readonly UpcomingEventService $upcomingEventService,
         private readonly HolidayService $holidayService,
         private readonly MeasurementService $measurementService,
@@ -43,6 +45,7 @@ final class HomepageController extends AbstractController
         $date = new DateTimeImmutable('now', $user->getTimezone())->setTime(0, 0);
 
         $progress = $this->calendarProgressService->getProgress($user);
+        $couple = $this->coupleService->getInformation($user);
 
         $upcomingEvents = $this->upcomingEventService->getClosestEvents($user);
         $todayEvents = $this->holidayService->getTodayHolidays($user);
@@ -70,6 +73,7 @@ final class HomepageController extends AbstractController
 
         return $this->render('default/homepage.html.twig', [
             'progress' => $progress,
+            'couple' => $couple,
             'upcomingEvents' => $upcomingEvents,
             'todayEvents' => $todayEvents,
             'measurementDays' => $measurementDays,

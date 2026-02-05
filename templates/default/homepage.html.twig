@@ -14,10 +14,10 @@
 
 {% block showcase -%}
     <section class="card">
-        <h2 class="card-title card-title-showcase">
-            <span>The Wait</span>
-            <span class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</span>
-        </h2>
+        <div class="card-title card-title-showcase">
+            <h2>The Wait</h2>
+            <div class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</div>
+        </div>
         <div class="progress-group">
             {%- set progressPercent = progress.currentProgress -%}
             <div class="progress" style="--progress: {{ progressPercent }}%;">
@@ -39,11 +39,42 @@
         {%- endif -%}
     </section>
 
-    <div class="row row-sm-2">
+    <div class="row row-md-2">
+        <section class="card card-coming">
+            <div class="card-title card-title-showcase card-title-controls">
+                <h2>Love story</h2>
+                <span class="card-title-info">{{ couple.togetherString }}</span>
+            </div>
+            <div class="card-couple">
+                <div class="couple-partner">
+                    <div>{{ couple.time.format('H:i') }}</div>
+                    <div class="couple-weather">
+                        <span>{{ couple.weather.code.toEmoji }}</span>
+                        <span class="couple-temperature">{{ couple.weather.temperature }}</span>
+                        <span class="couple-temperature-type">°C</span>
+                    </div>
+                </div>
+                <div class="couple-distance">
+                    <div class="couple-line">
+                        {{- ux_icon('lucide:chevron-right') }}{{ ux_icon('lucide:chevron-right') -}}
+                    </div>
+                    <span class="couple-distance-value">{{ couple.distance|round }} <small>km</small></span>
+                </div>
+                <div class="couple-partner">
+                    <div>{{ couple.partnerTime.format('H:i') }}</div>
+                    <div class="couple-weather">
+                        <span>{{ couple.partnerWeather.code.toEmoji }}</span>
+                        <span class="couple-temperature">{{ couple.partnerWeather.temperature }}</span>
+                        <span class="couple-temperature-type">°C</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         {%- if is_granted('CALENDAR_UPCOMING_EVENTS') -%}
             <section class="card">
-                <div class="card-title card-title-controls">
-                    <h2 class="card-title-showcase">Upcoming</h2>
+                <div class="card-title card-title-showcase card-title-controls">
+                    <h2>Upcoming</h2>
 
                     {%- if todayEvents is not empty -%}
                         <div class="card-title-info card-today-events">
@@ -57,35 +88,6 @@
                 </div>
 
                 {{- include('calendar/_upcoming_events.html.twig') -}}
-            </section>
-
-            <section class="card card-coming">
-                <style>
-                    .card-coming {
-                        position: relative;
-
-                        &:after {
-                            content: 'Coming soon';
-                            position: absolute;
-                            inset: 0;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                            font-size: calc(var(--font-size) * 1.25);
-                            font-weight: var(--font-weight-light);
-                            color: color-mix(in srgb, var(--color-orange) var(--transparent-color), transparent);
-                            text-shadow: 0 0 10px color-mix(in oklch, var(--color-orange) var(--transparent-color), transparent);
-                            backdrop-filter: blur(3px);
-                            pointer-events: none;
-                            transition: opacity 1s ease-out;
-                        }
-
-                        &:hover:after {
-                            opacity: 0;
-                            transition: opacity .15s ease-in;
-                        }
-                    }
-                </style>
             </section>
         {%- endif -%}
     </div>
