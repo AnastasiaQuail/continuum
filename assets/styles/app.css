@@ -1774,10 +1774,35 @@ textarea {
                 }
             }
         }
+
+        &.card-title-shine {
+            --s-color: var(--color-pink);
+
+            padding-bottom: calc(var(--gap-block) / 4);
+            margin-bottom: calc(var(--container-gap-block) - var(--gap-block) / 4);
+            background: linear-gradient(90deg, var(--s-color) 0%, var(--color) 25%, var(--color) 75%, var(--s-color) 100%);
+            background-size: 200% 100%;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 5s linear infinite;
+
+            [data-theme="dark"] & {
+                --s-color: color-mix(in srgb, var(--color-pink) 40%, var(--color));
+            }
+        }
     }
 
     .card-submit {
         margin-top: var(--container-gap-block);
+    }
+}
+
+@keyframes shine {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
     }
 }
 
