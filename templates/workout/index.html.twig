@@ -52,8 +52,6 @@
                 {%- for workout in workouts -%}
                     <div class="workout">
                         <div class="workout-date">
-                            {%- set time = workout.date.setTimezone(app.user.timezone).format('j F H:i') -%}
-
                             {%- set start = 0 -%}
                             {%- set end = 0 -%}
 
@@ -68,19 +66,15 @@
                                 {%- endfor -%}
                             {%- endfor -%}
 
+                            {%- set isGranted = is_granted('WORKOUT_EDIT', workout) -%}
+                            {%- set time = workout.date.setTimezone(app.user.timezone).format('j F H:i') -%}
                             {%- set minutes = ((end - start) / 60)|round -%}
 
-                            {%- if is_granted('WORKOUT_EDIT', workout) -%}
-                                <a href="{{ path('app_workouts_view', {id: workout.id}) }}">
-                                    <span>{{ time }}</span>
-                                    <span>( {{ minutes }} min )</span>
-                                </a>
-                            {%- else -%}
-                                <div>
-                                    <span>{{ time }}</span>
-                                    <span>( {{ minutes }} min )</span>
-                                </div>
-                            {%- endif -%}
+                            <{% if isGranted %}a{% else %}div{% endif %}
+                                {% if isGranted %}href="{{ path('app_workouts_view', {id: workout.id}) }}"{% endif %}>
+                                <span>{{ time }}</span>
+                                <span>( {{ minutes }} min )</span>
+                            </{% if isGranted %}a{% else %}div{% endif %}>
                         </div>
                         <div class="workout-exercises">
                             {%- if workout.workoutExercises.empty -%}
@@ -106,7 +100,7 @@
                                                     {%- set minutes = ((end - start) / 60)|round + 1 -%}
                                                 {%- endif -%}
 
-                                                {{- minutes }} min.
+                                                {{- minutes ~ ' min.' -}}
                                             </div>
                                         </div>
                                         <div class="workout-exercise-sets">

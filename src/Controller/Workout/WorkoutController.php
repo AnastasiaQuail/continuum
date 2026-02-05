@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Workout;
 
+use Continuum\Enum\ExerciseGroup;
 use Continuum\Security\Authorization\Voter\WorkoutVoter;
 use Continuum\Service\Workout\ExerciseService;
 use Continuum\Service\Workout\WorkoutService;
@@ -32,6 +33,7 @@ final class WorkoutController extends AbstractController
 
         return $this->render('workout/view.html.twig', [
             'workout' => $workout,
+            'exerciseGroups' => ExerciseGroup::cases(),
             'exercises' => $exercises,
         ]);
     }

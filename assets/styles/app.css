@@ -1251,7 +1251,6 @@ textarea {
         }
 
         & .btn {
-            --btn-general-color: var(--general-color);
             --btn-border-color-transparent: 0%;
             --btn-background-color-transparent: var(--transparent-color);
         }
@@ -1344,7 +1343,7 @@ textarea {
 }
 
 .btn {
-    --btn-general-color: var(--color);
+    --btn-general-color: var(--general-color);
     --btn-color: var(--color-light);
     --btn-border-color: var(--btn-general-color);
     --btn-border-color-transparent: 0%;
@@ -2925,12 +2924,12 @@ textarea {
         }
 
         .exercise {
-            --exercise-color: var(--color);
+            --exercise-color: var(--general-color);
             --exercise-background-color-transparent: 5%;
 
             display: flex;
             align-items: center;
-            gap: calc(var(--gap-inline) / 2);
+            column-gap: calc(var(--gap-inline) / 2);
             padding: calc(var(--gap-block) / 4) var(--gap-inline);
             font-size: var(--font-size-medium);
             border-radius: var(--border-radius);
@@ -2962,9 +2961,10 @@ textarea {
             }
 
             .exercise {
-                --exercise-background-color-transparent: 2%;
-
-                padding: var(--gap-block) var(--gap-inline);
+                flex-direction: column;
+                align-items: flex-start;
+                row-gap: calc(var(--gap-block) / 3);
+                padding-block: var(--gap-block);
                 font-size: var(--font-size);
 
                 .exercise-title {
@@ -2974,19 +2974,58 @@ textarea {
                     opacity: var(--transparent-color);
                 }
 
-                & > form {
+                .exercise-tabs {
                     display: flex;
                     flex-wrap: wrap;
+                    gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 8);
+
+                    .btn {
+                        font-size: var(--font-size-extra-small);
+
+                        &:not(.active):not(:hover) {
+                            --btn-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
+                        }
+
+                        &.active {
+                            --btn-color: var(--general-color);
+                            --btn-background-color-transparent: 5%;
+                        }
+
+                        @media (width >= 576px) {
+                            font-size: var(--font-size-small);
+                        }
+
+                        @media (width >= 768px) {
+                            font-size: var(--font-size-medium);
+                        }
+                    }
+                }
+
+                .exercise-tab-contents {
                     width: 100%;
 
-                    .exercise-controls {
+                    .exercise-content {
                         display: none;
-                        animation: load_spinner 1s infinite linear;
-                    }
 
-                    &:has(select:disabled) {
-                        .exercise-controls {
+                        &.active {
                             display: flex;
+                        }
+
+                        & > form {
+                            display: flex;
+                            column-gap: calc(var(--gap-inline) / 2);
+                            width: 100%;
+
+                            .exercise-controls {
+                                display: none;
+                                animation: load_spinner 1s infinite linear;
+                            }
+
+                            &:has(select:disabled) {
+                                .exercise-controls {
+                                    display: flex;
+                                }
+                            }
                         }
                     }
                 }
@@ -3108,12 +3147,12 @@ textarea {
                         opacity: 1;
 
                         .btn {
-                            --btn-color: color-mix(in srgb, var(--general-color) var(--transparent-color), var(--color-inverse));
+                            --btn-color: color-mix(in srgb, var(--general-color) 20%, var(--color-inverse));
                             --btn-border-color-transparent: 0%;
                             --btn-background-color-transparent: 0%;
 
                             &:hover {
-                                --btn-color: var(--general-color);
+                                --btn-color: color-mix(in srgb, var(--general-color) 40%, var(--color-inverse));
                                 --btn-border-color-transparent: 0%;
                                 --btn-background-color-transparent: 3%;
                             }
@@ -3129,7 +3168,7 @@ textarea {
                         }
 
                         :has(input[type]:checked) .btn {
-                            --btn-color: var(--link-color);
+                            --btn-color: color-mix(in srgb, var(--general-color) var(--transparent-color), var(--color-inverse));
                         }
                     }
 

@@ -18,8 +18,7 @@
         <div class="workout-exercises-edit">
             {%- for workoutExercise in workout.workoutExercises -%}
                 <div class="workout-exercise">
-                    <div class="exercise"
-                         style="--exercise-color: var({{ '--color-' ~ workoutExercise.exercise.group.color.value }});">
+                    <div class="exercise" data-general-type="{{ workoutExercise.exercise.group.color.value }}">
                         <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
                         {%- if is_granted('WORKOUT_EXERCISE_DELETE', workoutExercise) -%}
                             <div class="exercise-controls">
@@ -101,20 +100,47 @@
 
             {%- if is_granted('WORKOUT_EXERCISE_CREATE', workout) -%}
                 <div class="workout-exercise workout-exercise-new">
-                    <div class="exercise">
-                        <form method="post" action="{{ path('app_workout_exercise_create', {'id': workout.id}) }}">
-                            <label class="exercise-title" for="exercise_id">Start new exercise:</label>
-                            <div class="exercise-name">
-                                <select class="form-control" id="exercise_id" name="exercise" required
-                                        onchange="return submitBy(this);">
-                                    <option value="" disabled selected hidden>Choose exercise...</option>
-                                    {%- for exercise in exercises -%}
-                                        <option value="{{ exercise.id }}">{{ exercise.name|capitalize }}</option>
-                                    {%- endfor -%}
-                                </select>
-                            </div>
-                            <div class="exercise-controls">{{ ux_icon('lucide:loader-circle') }}</div>
-                        </form>
+                    {%- if workout.workoutExercises is not empty -%}
+                        {%- set firstGroup = (workout.workoutExercises|last).exercise.group -%}
+                    {%- else -%}
+                        {%- set firstGroup = exerciseGroups|first -%}
+                    {%- endif -%}
+
+                    <div class="exercise" data-general-type="{{ firstGroup.color.value }}" data-tabs>
+                        <label class="exercise-title" for="exercise_id">Start new exercise:</label>
+
+                        <div class="exercise-tabs">
+                            {%- for exerciseGroup in exerciseGroups -%}
+                                <button class="btn btn-link {{- exerciseGroup === firstGroup ? ' active' }}"
+                                        data-general-type="{{ exerciseGroup.color.value }}"
+                                        data-tab-id="{{ exerciseGroup.value }}">
+                                    {{- exerciseGroup.name -}}
+                                </button>
+                            {%- endfor -%}
+                        </div>
+
+                        <div class="exercise-tab-contents">
+                            {%- for exerciseGroup in exerciseGroups -%}
+                                <div class="exercise-content {{- exerciseGroup === firstGroup ? ' active' }}"
+                                     data-tab-content-id="{{ exerciseGroup.value }}">
+                                    <form method="post"
+                                          action="{{ path('app_workout_exercise_create', {'id': workout.id}) }}">
+                                        <select class="form-control" id="exercise_id" name="exercise" required
+                                                onchange="return submitBy(this);">
+                                            <option value="" disabled selected hidden>Choose exercise...</option>
+                                            {%- for exercise in exercises -%}
+                                                {%- if exerciseGroup === exercise.group -%}
+                                                    <option value="{{ exercise.id }}">
+                                                        {{- exercise.name|capitalize -}}
+                                                    </option>
+                                                {%- endif -%}
+                                            {%- endfor -%}
+                                        </select>
+                                        <div class="exercise-controls">{{ ux_icon('lucide:loader-circle') }}</div>
+                                    </form>
+                                </div>
+                            {%- endfor -%}
+                        </div>
                     </div>
                 </div>
             {%- endif -%}

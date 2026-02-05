@@ -198,3 +198,60 @@ export class InputMasker {
         mask.appendChild(m);
     }
 }
+
+export class TabToggler {
+    apply() {
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('[data-tabs]').forEach(element => {
+                this.#activate(element);
+            })
+        });
+    }
+
+    /**
+     * @param {HTMLElement} element
+     */
+    #activate(element) {
+        /** @type {NodeListOf<HTMLElement>} */
+        const tabs = element.querySelectorAll('[data-tab-id]');
+        /** @type {NodeListOf<HTMLElement>} */
+        const tabContents = element.querySelectorAll('[data-tab-content-id]');
+
+        tabs.forEach(tab => {
+            tab.onclick = () => {
+                element.dataset.generalType = tab.dataset.generalType;
+
+                this.#showTab(tab, tabs);
+                this.#showContent(tab, tabContents);
+            }
+        });
+    }
+
+    /**
+     * @param {HTMLElement} tabClicked
+     * @param {NodeListOf<HTMLElement>} tabs
+     */
+    #showTab(tabClicked, tabs) {
+        tabs.forEach(tab => {
+            tab.classList.remove('active');
+
+            if (tabClicked.dataset.tabId === tab.dataset.tabId) {
+                tab.classList.add('active');
+            }
+        })
+    }
+
+    /**
+     * @param {HTMLElement} tabClicked
+     * @param {NodeListOf<HTMLElement>} tabContents
+     */
+    #showContent(tabClicked, tabContents) {
+        tabContents.forEach(tabContent => {
+            tabContent.classList.remove('active');
+
+            if (tabClicked.dataset.tabId === tabContent.dataset.tabContentId) {
+                tabContent.classList.add('active');
+            }
+        })
+    }
+}
