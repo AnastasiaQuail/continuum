@@ -93,6 +93,20 @@
                                     </div>
                                 </form>
                             </div>
+
+                            {%- set exerciseId = workoutExercise.exercise.id -%}
+                            {%- if prevWorkoutExercises[exerciseId] is defined -%}
+                                <div class="workout-exercise-set workout-exercise-set-prev">
+                                    {%- for prevSet in prevWorkoutExercises[exerciseId].sets -%}
+                                        <div class="workout-exercise-prev">
+                                            {%- if prevSet.weight > 0 -%}
+                                                <span>{{ prevSet.weight }}<small>kg</small></span>
+                                            {%- endif -%}
+                                            <span><small>x</small>{{ prevSet.reps }}</span>
+                                        </div>
+                                    {%- endfor -%}
+                                </div>
+                            {%- endif -%}
                         {%- endif -%}
                     </div>
                 </div>

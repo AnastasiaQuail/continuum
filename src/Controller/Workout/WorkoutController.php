@@ -7,6 +7,7 @@ namespace Continuum\Controller\Workout;
 use Continuum\Enum\ExerciseGroup;
 use Continuum\Security\Authorization\Voter\WorkoutVoter;
 use Continuum\Service\Workout\ExerciseService;
+use Continuum\Service\Workout\WorkoutExerciseService;
 use Continuum\Service\Workout\WorkoutService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,6 +18,7 @@ final class WorkoutController extends AbstractController
 {
     public function __construct(
         private readonly WorkoutService $workoutService,
+        private readonly WorkoutExerciseService $workoutExerciseService,
         private readonly ExerciseService $exerciseService,
     ) {}
 
@@ -29,10 +31,12 @@ final class WorkoutController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $prevWorkoutExercises = $this->workoutExerciseService->getPrevExerciseMap($workout);
         $exercises = $this->exerciseService->getAll();
 
         return $this->render('workout/view.html.twig', [
             'workout' => $workout,
+            'prevWorkoutExercises' => $prevWorkoutExercises,
             'exerciseGroups' => ExerciseGroup::cases(),
             'exercises' => $exercises,
         ]);

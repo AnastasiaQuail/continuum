@@ -78,13 +78,12 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
 
     private function findLastFieldWithNotNull(string $field): ?BodyMeasurement
     {
-        $query = $this->createQueryBuilder('bm')
+        return $this->createQueryBuilder('bm')
             ->andWhere(sprintf('bm.%s IS NOT NULL', $field))
             ->orderBy('bm.datetime', 'DESC')
             ->setMaxResults(1)
-            ->getQuery();
-
-        return $query->getOneOrNullResult();
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function save(BodyMeasurement $measurement): void

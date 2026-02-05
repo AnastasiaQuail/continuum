@@ -3111,6 +3111,9 @@ textarea {
                 }
 
                 &.workout-exercise-set-new {
+                    flex-direction: column;
+                    align-items: start;
+
                     &:not(:first-child) {
                         padding-top: calc(var(--gap-block) / 3);
                         border-top: var(--border-width) dashed var(--body-border-color);
@@ -3168,6 +3171,34 @@ textarea {
 
                     .workout-exercise-set-controls {
                         padding-left: calc(var(--gap-inline) / 2);
+                    }
+                }
+
+                &.workout-exercise-set-prev {
+                    flex-wrap: wrap;
+                    gap: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 1.5);
+                    padding-top: calc(var(--gap-block) / 3);
+                    border-top: var(--border-width) dashed var(--body-border-color);
+                    font-size: var(--font-size-small);
+
+                    .workout-exercise-prev {
+                        display: flex;
+                        flex-wrap: nowrap;
+                        white-space: nowrap;
+                        column-gap: calc(var(--gap-inline) / 6);
+                        opacity: 40%;
+
+                        small {
+                            font-size: calc(var(--font-size-extra-small) * 0.5);
+                            font-weight: var(--font-weight-light);
+                            opacity: var(--transparent-color);
+                        }
+
+                        & > span:last-child {
+                            small {
+                                font-size: var(--font-size-extra-small);
+                            }
+                        }
                     }
                 }
             }

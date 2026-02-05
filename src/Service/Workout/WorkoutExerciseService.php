@@ -31,4 +31,17 @@ final readonly class WorkoutExerciseService
     {
         $this->repository->delete($workoutExercise);
     }
+
+    /**
+     * @return array<string, WorkoutExercise>
+     */
+    public function getPrevExerciseMap(Workout $workout): array
+    {
+        $workoutExercises = [];
+        foreach ($this->repository->findPrevByWorkout($workout) as $workoutExercise) {
+            $workoutExercises[(string) $workoutExercise->getExercise()->getId()] = $workoutExercise;
+        }
+
+        return $workoutExercises;
+    }
 }
