@@ -960,12 +960,6 @@ textarea {
             display: flex;
             padding-inline: var(--gap-inline);
             cursor: default;
-
-            & > span + span {
-                margin-left: calc(var(--gap-inline) / 2);
-                padding-left: calc(var(--gap-inline) / 2);
-                border-left: var(--border-width) solid color-mix(in oklch, var(--footer-color) 50%, transparent);
-            }
         }
 
         .footer-controls {

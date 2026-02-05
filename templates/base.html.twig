@@ -243,14 +243,9 @@
 
         {%- block footer -%}
             <footer class="footer-container">
-                <div class="footer-datetime">
-                    <span>Server: {{ 'now'|date('j F, H:i') }}</span>
-                    {%- if app.user -%}
-                        <span>User: {{ user_date().format('j F, H:i') }}</span>
-                    {%- endif -%}
-                </div>
+                <div class="footer-datetime">{{ user_date().format('j F, H:i') }}</div>
                 <div class="footer-controls">
-                    {%- if app.debug -%}
+                    {%- if app.debug and is_granted('ROLE_SUPER_ADMIN') -%}
                         <div class="footer-toolbar" id="footer-toolbar">
                             {{- ux_icon('lucide:database') -}}
                             <span>0</span>
