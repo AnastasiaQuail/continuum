@@ -3,9 +3,7 @@
 {% block title %}Log in{% endblock %}
 {% block body_id %}login{% endblock %}
 
-{% block flash_messages %}
-    {{- parent() -}}
-
+{% block main -%}
     {%- if app.user -%}
         <div class="alert alert-secondary">
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
@@ -13,14 +11,14 @@
     {%- elseif error -%}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {%- endif -%}
-{% endblock %}
 
-{% block main -%}
     {%- if app.user -%}
-        <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
-            {{ ux_icon('lucide:house') }}
-            <span>Go home</span>
-        </a>
+        <div>
+            <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
+                {{ ux_icon('lucide:house') }}
+                <span>Go home</span>
+            </a>
+        </div>
     {%- else -%}
         <form method="post" action="{{ path('app_login') }}">
             <div>

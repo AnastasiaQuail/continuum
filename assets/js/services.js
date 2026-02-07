@@ -73,6 +73,8 @@ export class TimezoneDetector {
         alert.classList.add('alert');
         alert.classList.add('alert-warning');
         alert.classList.add('alert-inline');
+        alert.classList.add('alert-dismissible');
+        alert.classList.add('hidden');
 
         const mismatchText = document.createElement('strong');
         mismatchText.innerText = 'Time zone mismatch!';
@@ -128,6 +130,28 @@ export class TimezoneDetector {
                 alert.classList.add('alert-danger');
                 alert.innerText = 'Something went wrong! Reload the page and try again.';
             });
+    }
+}
+
+export class FlashMessages {
+    /**
+     * @param {string} id
+     */
+    show(id) {
+        document.addEventListener('DOMContentLoaded', () => {
+            const alerts = [...document.querySelectorAll(id + ' .alert')];
+
+            alerts.forEach((alert, i) => {
+                setTimeout(() => alert.classList.remove('hidden'), i * 300);
+            });
+
+            alerts.filter(alert => alert.classList.contains('alert-dismissible')).forEach((alert, i) => {
+                setTimeout(() => {
+                    alert.classList.add('hide');
+                    setTimeout(() => alert.remove(), 2000);
+                }, 2000 * i + 4000);
+            });
+        });
     }
 }
 

@@ -7,17 +7,6 @@
     { label: 'Backups' },
 ] %}
 
-{% block flash_messages -%}
-    {{- parent() -}}
-
-    {%- if not hasDBBackup -%}
-        <div class="alert alert-danger alert-inline">
-            {{ ux_icon('lucide:triangle-alert') }}
-            <span>More one day from last backup!</span>
-        </div>
-    {%- endif -%}
-{%- endblock %}
-
 {% block page_links -%}
     {%- if is_granted('ADMIN_BACKUP_CREATE') -%}
         <form method="post" action="{{ path('app_admin_database_backup_create') }}">
@@ -30,6 +19,13 @@
 {%- endblock %}
 
 {% block main -%}
+    {%- if not hasDBBackup -%}
+        <div class="alert alert-danger alert-inline">
+            {{ ux_icon('lucide:triangle-alert') }}
+            <span>More one day from last backup!</span>
+        </div>
+    {%- endif -%}
+
     <section class="card">
         <div class="backups">
             {%- for backup in backups -%}

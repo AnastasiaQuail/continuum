@@ -45,6 +45,7 @@
 
     --link-color: var(--color-blue);
 
+    --header-gap-top: var(--body-gap-inline);
     --header-height: 40px;
 
     --sidebar-width: 190px;
@@ -82,6 +83,7 @@
 
     @media (width >= 768px) {
         --h-font-size-coefficient: 0.5;
+        --header-gap-top: var(--container-gap-block);
         --sidebar-gap-block: var(--body-gap-inline);
         --body-gap-block: calc(var(--gap-block) * 1.5);
         --body-gap-inline: calc(var(--gap-inline) * 1);
@@ -370,12 +372,12 @@ textarea {
     position: relative;
     display: flex;
     align-items: center;
-    padding: var(--body-gap-inline) var(--body-gap-inline) 0;
+    padding: var(--header-gap-top) var(--body-gap-inline) 0;
     background-color: var(--body-background-color);
     z-index: 100;
 
     @media (width >= 768px) {
-        padding: var(--container-gap-block) var(--body-gap-inline) 0 calc(var(--sidebar-width) + var(--body-gap-inline) + var(--body-gap-inline));
+        padding-left: calc(var(--sidebar-width) + var(--body-gap-inline) + var(--body-gap-inline));
     }
 
     &:after {
@@ -920,8 +922,9 @@ textarea {
             }
         }
 
-        & > *:not(.card):not(.row):not(.body-messages) {
+        & > *:not(.card):not(.row) {
             padding-inline: var(--container-gap-inline);
+            border-radius: var(--body-border-radius);
         }
 
         & > .row {
@@ -929,10 +932,42 @@ textarea {
         }
 
         & > .body-messages {
+            position: fixed;
+            top: calc(var(--header-gap-top) * 2 + var(--header-height));
+            right: var(--body-gap-inline);
             display: none;
             flex-direction: column;
-            gap: calc(var(--gap-block) / 2);
-            margin-bottom: var(--body-gap-block);
+            row-gap: calc(var(--gap-block) / 2);
+            padding: 0;
+            width: 80vw;
+            z-index: 101;
+
+            @media (width < 768px) {
+                [data-sidebar-view="open"] & {
+                    z-index: 49;
+                }
+            }
+
+            @media (width >= 576px) {
+                width: 60vw;
+            }
+
+            @media (width >= 768px) {
+                top: calc(var(--header-gap-top) * 1.5 + var(--header-height));
+                width: 40vw;
+            }
+
+            @media (width >= 992px) {
+                width: 35vw;
+            }
+
+            @media (width >= 1200px) {
+                width: 30vw;
+            }
+
+            @media (width >= 1400px) {
+                width: 25vw;
+            }
 
             &:has(*) {
                 display: flex;
@@ -943,6 +978,18 @@ textarea {
                 padding-inline: var(--container-gap-inline);
                 font-size: var(--font-size-medium);
                 border-radius: var(--body-border-radius);
+                transition: opacity .5s ease, transform .5s ease;
+                box-shadow: 0 1px 5px 0 color-mix(in oklch, var(--alert-color) 20%, transparent);
+
+                &.hidden {
+                    opacity: 0;
+                    transform: translateY(-50%);
+                }
+
+                &.hide {
+                    opacity: 0;
+                    transition: opacity 2s ease-in;
+                }
             }
         }
     }
@@ -1484,7 +1531,7 @@ textarea {
     color: var(--alert-color);
     border: var(--border-width) solid color-mix(in oklch, var(--alert-color) 20%, transparent);
     border-radius: var(--border-radius);
-    background-color: color-mix(in oklch, var(--alert-color) var(--alert-background-color-transparent), transparent);
+    background-color: color-mix(in srgb, var(--alert-color) var(--alert-background-color-transparent), var(--background-color));
 
     [data-theme="dark"] & {
         color: color-mix(in srgb, var(--alert-color) var(--transparent-color-tiny), var(--color));
@@ -1523,7 +1570,7 @@ textarea {
         display: flex;
         flex-wrap: wrap;
         align-items: center;
-        gap: calc(var(--gap-block) / 2);
+        gap: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 2);
     }
 }
 
