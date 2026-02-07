@@ -63,27 +63,31 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
 
     public function findOneLastWithNotNull(): LastMeasurement
     {
-        return new LastMeasurement(
-            weight: $this->findLastFieldWithNotNull('weight')?->getWeight(),
-            neck: $this->findLastFieldWithNotNull('neck')?->getNeck(),
-            chest: $this->findLastFieldWithNotNull('chest')?->getChest(),
-            shoulders: $this->findLastFieldWithNotNull('shoulders')?->getShoulders(),
-            waist: $this->findLastFieldWithNotNull('waist')?->getWaist(),
-            flexedBiceps: $this->findLastFieldWithNotNull('flexedBiceps')?->getFlexedBiceps(),
-            hips: $this->findLastFieldWithNotNull('hips')?->getHips(),
-            thigh: $this->findLastFieldWithNotNull('thigh')?->getThigh(),
-            calf: $this->findLastFieldWithNotNull('calf')?->getCalf(),
-        );
-    }
+        $sql = <<<SQL
+SELECT
+    (SELECT weight FROM body_measurements ORDER BY datetime DESC LIMIT 1),
+    (SELECT neck FROM body_measurements WHERE neck IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+    (SELECT chest FROM body_measurements WHERE chest IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+    (SELECT shoulders FROM body_measurements WHERE shoulders IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+    (SELECT waist FROM body_measurements WHERE waist IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+    (SELECT flexed_biceps FROM body_measurements WHERE flexed_biceps IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+    (SELECT hips FROM body_measurements WHERE hips IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+    (SELECT thigh FROM body_measurements WHERE thigh IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+    (SELECT calf FROM body_measurements WHERE calf IS NOT NULL ORDER BY datetime DESC LIMIT 1)
+FROM body_measurements
+LIMIT 1
+SQL;
 
-    private function findLastFieldWithNotNull(string $field): ?BodyMeasurement
-    {
-        return $this->createQueryBuilder('bm')
-            ->andWhere(sprintf('bm.%s IS NOT NULL', $field))
-            ->orderBy('bm.datetime', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
+        /** @var array<string, int> $row */
+        $row = $this->getEntityManager()->getConnection()
+            ->executeQuery($sql)
+            ->fetchAssociative();
+
+        foreach ($row as $field => $value) {
+            $row[$field] = round($value / ($field === 'weight' ? 1000 : 10), 1);
+        }
+
+        return new LastMeasurement(...array_values($row));
     }
 
     public function save(BodyMeasurement $measurement): void
