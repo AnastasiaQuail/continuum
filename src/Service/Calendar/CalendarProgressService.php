@@ -12,9 +12,9 @@ use Symfony\Component\DependencyInjection\Attribute\Autowire;
 final readonly class CalendarProgressService
 {
     public function __construct(
-        #[Autowire(env: 'string:APP_DATE_START')]
+        #[Autowire(env: 'string:CALENDAR_DATE_START')]
         private string $startDate,
-        #[Autowire(env: 'string:APP_DATE_END')]
+        #[Autowire(env: 'string:CALENDAR_DATE_END')]
         private string $endDate,
     ) {}
 

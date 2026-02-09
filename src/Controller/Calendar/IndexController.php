@@ -22,7 +22,7 @@ final class IndexController extends AbstractController
 {
     public function __construct(
         private readonly RequestValidator $requestValidator,
-        #[Autowire(env: 'string:APP_DATE_START')]
+        #[Autowire(env: 'string:CALENDAR_DATE_START')]
         private readonly string $startDate,
         private readonly UpcomingEventService $upcomingEventService,
         private readonly CalendarEventService $calendarEventService,

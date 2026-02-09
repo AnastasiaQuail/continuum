@@ -17,31 +17,31 @@ final readonly class CoupleService
     public function __construct(
         #[Autowire(env: 'APP_USER_ID')]
         private string $userId,
-        #[Autowire(env: 'APP_USER_PARTNER_ID')]
-        private string $userPartnerId,
+        #[Autowire(env: 'APP_PARTNER_USER_ID')]
+        private string $partnerUserId,
         private UserService $userService,
         private WeatherService $weatherService,
         #[Autowire(env: 'APP_PARTNER_DATE_START')]
         private string $startDate,
     ) {}
 
-    public function getInformation(User $user): CoupleInformation
+    public function getInformation(User $currentUser): CoupleInformation
     {
-        $firstUser = $this->userService->get(Uuid::fromString($this->userId));
-        $partnerUser = $this->userService->get(Uuid::fromString($this->userPartnerId));
+        $user = $this->userService->get(Uuid::fromString($this->userId));
+        $partnerUser = $this->userService->get(Uuid::fromString($this->partnerUserId));
 
-        $userWeather = $this->weatherService->getWeather($firstUser->getLocation());
+        $userWeather = $this->weatherService->getWeather($user->getLocation());
         $partnerUserWeather = $this->weatherService->getWeather($partnerUser->getLocation());
 
-        $startDate = new DateTimeImmutable($this->startDate, $user->getTimezone());
-        $currentDate = new DateTimeImmutable('now', $user->getTimezone());
+        $startDate = new DateTimeImmutable($this->startDate, $currentUser->getTimezone());
+        $currentDate = new DateTimeImmutable('now', $currentUser->getTimezone());
 
         return new CoupleInformation(
             weather: $userWeather,
-            time: new DateTimeImmutable('now', $firstUser->getTimezone()),
+            time: new DateTimeImmutable('now', $user->getTimezone()),
             partnerWeather: $partnerUserWeather,
             partnerTime: new DateTimeImmutable('now', $partnerUser->getTimezone()),
-            distance: $this->getDistance($firstUser->getLocation(), $partnerUser->getLocation()),
+            distance: $this->getDistance($user->getLocation(), $partnerUser->getLocation()),
             together: $startDate->diff($currentDate),
         );
     }
