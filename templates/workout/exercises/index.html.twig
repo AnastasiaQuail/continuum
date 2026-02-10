@@ -28,7 +28,7 @@
                     <div class="badge">{{ exercise.group.name }}</div>
                     <div class="exercise-name">
                         <span>{{ exercise.name|capitalize }}</span>
-                        <span class="exercise-usages">({{ exerciseCountMap[exercise.id] }} workouts)</span>
+                        <span class="exercise-usages">({{ exerciseCountMap[exercise.id.toString] }} workouts)</span>
                     </div>
                 </{% if isGranted %}a{% else %}span{% endif %}>
             {%- endfor -%}
