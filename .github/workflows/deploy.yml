@@ -30,4 +30,4 @@ jobs:
                     APP_REMOTE_USER: ${{ secrets.DEPLOY_REMOTE_USER }}
                 with:
                     dep: deploy
-                    #private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+                    private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
