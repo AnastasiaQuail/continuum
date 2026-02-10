@@ -94,7 +94,7 @@
                                 </form>
                             </div>
 
-                            {%- set exerciseId = workoutExercise.exercise.id -%}
+                            {%- set exerciseId = workoutExercise.exercise.id.toString -%}
                             {%- if prevWorkoutExercises[exerciseId] is defined -%}
                                 <div class="workout-exercise-set workout-exercise-set-prev">
                                     {%- for prevSet in prevWorkoutExercises[exerciseId].sets -%}
