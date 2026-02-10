@@ -31,4 +31,3 @@ jobs:
                 with:
                     dep: deploy
                     private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-
