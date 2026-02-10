@@ -783,9 +783,7 @@ textarea {
 
             .nav-title-divider {
                 display: block;
-                margin-top: var(--gap-block);
-                margin-bottom: calc(var(--gap-block) / 4);
-                padding-inline: var(--nav-link-padding);
+                padding: var(--gap-block) var(--nav-link-padding) calc(var(--gap-block) / 4);
                 font-size: var(--font-size-small);
                 font-weight: var(--font-weight-light);
                 text-overflow: ellipsis;
@@ -3353,7 +3351,7 @@ textarea {
                         }
 
                         :has(input[type]:checked) .btn {
-                            --btn-color: color-mix(in srgb, var(--general-color) var(--transparent-color), var(--color-inverse));
+                            --btn-color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color-inverse));
                         }
                     }
 
