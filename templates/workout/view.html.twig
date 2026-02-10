@@ -20,17 +20,19 @@
                 <div class="workout-exercise">
                     <div class="exercise" data-general-type="{{ workoutExercise.exercise.group.color.value }}">
                         <div class="exercise-name">{{ workoutExercise.exercise.name }}</div>
-                        {%- if is_granted('WORKOUT_EXERCISE_DELETE', workoutExercise) -%}
-                            <div class="exercise-controls">
-                                <form method="post"
-                                      action="{{ path('app_workout_exercise_delete', {'id': workoutExercise.id}) }}"
-                                      onsubmit="return confirm('Delete?')">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button class="btn btn-danger btn-link"
-                                            type="submit">{{ ux_icon('lucide:trash') }}</button>
-                                </form>
-                            </div>
-                        {%- endif -%}
+                        <div class="exercise-controls">
+                            <form method="post"
+                                  action="{{ path('app_workout_exercise_delete', {'id': workoutExercise.id}) }}"
+                                  onsubmit="return confirm('Delete?')">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button
+                                    class="btn btn-danger btn-link"
+                                    {% if is_granted('WORKOUT_EXERCISE_DELETE', workoutExercise) %}type="submit"
+                                    {% else %}disabled{% endif %}>
+                                    {{- ux_icon('lucide:trash') -}}
+                                </button>
+                            </form>
+                        </div>
                     </div>
 
                     <div class="workout-exercise-sets">
@@ -46,17 +48,19 @@
                                 <div class="workout-exercise-set-warmup {{ workoutSet.isWarmup ? 'active' }}">
                                     {{- ux_icon('lucide:battery-charging') -}}
                                 </div>
-                                {%- if is_granted('WORKOUT_SET_DELETE', workoutSet) -%}
-                                    <div class="workout-exercise-set-controls">
-                                        <form method="post"
-                                              action="{{ path('app_workout_set_delete', {'id': workoutSet.id}) }}"
-                                              onsubmit="return confirm('Delete?')">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button class="btn btn-danger btn-link"
-                                                    type="submit">{{ ux_icon('lucide:trash') }}</button>
-                                        </form>
-                                    </div>
-                                {%- endif -%}
+                                <div class="workout-exercise-set-controls">
+                                    <form method="post"
+                                          action="{{ path('app_workout_set_delete', {'id': workoutSet.id}) }}"
+                                          onsubmit="return confirm('Delete?')">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button
+                                            class="btn btn-danger btn-link"
+                                            {% if is_granted('WORKOUT_SET_DELETE', workoutSet) %}type="submit"
+                                            {% else %}disabled{% endif %}>
+                                            {{- ux_icon('lucide:trash') -}}
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         {%- endfor -%}
 

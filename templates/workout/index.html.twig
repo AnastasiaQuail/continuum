@@ -8,16 +8,19 @@
 ] %}
 
 {% block page_links -%}
-    {%- if is_granted('WORKOUT_CREATE') -%}
-        <form method="post" action="{{ path('app_workout_create') }}">
-            <button class="btn btn-primary btn-outline" type="submit">
-                {{- ux_icon('lucide:biceps-flexed') -}}
-                <span>Start workout</span>
-            </button>
-        </form>
-    {%- endif -%}
+    <form method="post" action="{{ path('app_workout_create') }}">
+        <button
+            class="btn btn-primary btn-outline"
+            {% if is_granted('WORKOUT_CREATE') %}type="submit" {% else %}disabled{% endif %}>
+            {{- ux_icon('lucide:biceps-flexed') -}}
+            <span>Start workout</span>
+        </button>
+    </form>
+
     {%- if is_granted('EXERCISE_VIEW') -%}
         <a class="btn btn-primary btn-action" href="{{ path('app_exercises') }}">Exercises</a>
+    {%- else -%}
+        <button class="btn btn-primary btn-action" disabled>Exercises</button>
     {%- endif -%}
 {%- endblock %}
 
@@ -81,16 +84,17 @@
                                 <div class="workout-exercise collection-empty">
                                     {{- ux_icon('lucide:frown') -}}
                                     <span>No exercises yet</span>
-
-                                    {%- if is_granted('WORKOUT_DELETE', workout) -%}
-                                        <form method="post"
-                                              action="{{ path('app_workout_delete', {'id': workout.id}) }}"
-                                              onsubmit="return confirm('Delete?')">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button class="btn btn-danger btn-sm btn-link"
-                                                    type="submit">{{ ux_icon('lucide:trash') }}</button>
-                                        </form>
-                                    {%- endif -%}
+                                    <form method="post"
+                                          action="{{ path('app_workout_delete', {'id': workout.id}) }}"
+                                          onsubmit="return confirm('Delete?')">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button
+                                            class="btn btn-danger btn-sm btn-link"
+                                            {% if is_granted('WORKOUT_DELETE', workout) %}type="submit"
+                                            {% else %}disabled{% endif %}>
+                                            {{- ux_icon('lucide:trash') -}}
+                                        </button>
+                                    </form>
                                 </div>
                             {%- else -%}
                                 {%- for workoutExercise in workout.workoutExercises -%}

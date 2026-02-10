@@ -8,14 +8,14 @@
 ] %}
 
 {% block page_links -%}
-    {%- if is_granted('ADMIN_BACKUP_CREATE') -%}
-        <form method="post" action="{{ path('app_admin_database_backup_create') }}">
-            <button class="btn btn-primary btn-outline">
-                {{- ux_icon('lucide:plus') -}}
-                <span>Create Backup</span>
-            </button>
-        </form>
-    {%- endif -%}
+    <form method="post" action="{{ path('app_admin_database_backup_create') }}">
+        <button
+            class="btn btn-primary btn-outline"
+            {% if is_granted('ADMIN_BACKUP_CREATE') %}type="submit" {% else %}disabled{% endif %}>
+            {{- ux_icon('lucide:plus') -}}
+            <span>Create Backup</span>
+        </button>
+    </form>
 {%- endblock %}
 
 {% block main -%}

@@ -23,14 +23,15 @@
                         <span> at {{ eventDate.format('H:i') }}</span>
                     {%- endif -%}
 
-                    {% if is_granted('CALENDAR_EVENT_DELETE') %}
-                        <form method="post" action="{{ path('app_calendar_event_delete', {'id': event.id}) }}"
-                              onsubmit="return confirm('Delete?')">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button class="btn btn-sm btn-transparent btn-danger"
-                                    type="submit">{{ ux_icon('lucide:trash') }}</button>
-                        </form>
-                    {% endif %}
+                    <form method="post" action="{{ path('app_calendar_event_delete', {'id': event.id}) }}"
+                          onsubmit="return confirm('Delete?')">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button
+                            class="btn btn-sm btn-transparent btn-danger"
+                            {% if is_granted('CALENDAR_EVENT_DELETE') %}type="submit" {% else %}disabled{% endif %}>
+                            {{- ux_icon('lucide:trash') -}}
+                        </button>
+                    </form>
                 </div>
             {%- endfor -%}
         </section>

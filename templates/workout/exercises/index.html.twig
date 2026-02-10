@@ -9,12 +9,13 @@
 ] %}
 
 {% block page_links -%}
-    {%- if is_granted('EXERCISE_CREATE') -%}
-        <a class="btn btn-primary btn-outline" href="{{ path('app_exercise_create') }}">
-            {{ ux_icon('lucide:plus') }}
-            <span>Create exercise</span>
-        </a>
-    {%- endif -%}
+    {%- set isGranted = is_granted('EXERCISE_CREATE') -%}
+    <{% if isGranted %}a{% else %}button{% endif %}
+        {% if isGranted %} href="{{ path('app_exercise_create') }}"{% else %} disabled{% endif %}
+        class="btn btn-primary btn-outline">
+        {{ ux_icon('lucide:plus') }}
+        <span>Create exercise</span>
+    </{% if isGranted %}a{% else %}button{% endif %}>
 {%- endblock %}
 
 {% block main -%}
