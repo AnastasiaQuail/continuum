@@ -81,6 +81,16 @@
                                 <div class="workout-exercise collection-empty">
                                     {{- ux_icon('lucide:frown') -}}
                                     <span>No exercises yet</span>
+
+                                    {%- if is_granted('WORKOUT_DELETE', workout) -%}
+                                        <form method="post"
+                                              action="{{ path('app_workout_delete', {'id': workout.id}) }}"
+                                              onsubmit="return confirm('Delete?')">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button class="btn btn-danger btn-sm btn-link"
+                                                    type="submit">{{ ux_icon('lucide:trash') }}</button>
+                                        </form>
+                                    {%- endif -%}
                                 </div>
                             {%- else -%}
                                 {%- for workoutExercise in workout.workoutExercises -%}

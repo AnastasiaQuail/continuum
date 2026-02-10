@@ -20,6 +20,7 @@ final class WorkoutVoter extends Voter
     public const string VIEW = 'WORKOUT_VIEW';
     public const string CREATE = 'WORKOUT_CREATE';
     public const string EDIT = 'WORKOUT_EDIT';
+    public const string DELETE = 'WORKOUT_DELETE';
     public const string EXERCISE_CREATE = 'WORKOUT_EXERCISE_CREATE';
     public const string EXERCISE_DELETE = 'WORKOUT_EXERCISE_DELETE';
     public const string SET_CREATE = 'WORKOUT_SET_CREATE';
@@ -31,7 +32,7 @@ final class WorkoutVoter extends Voter
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute || self::CREATE === $attribute || self::EDIT === $attribute
+        return self::VIEW === $attribute || self::CREATE === $attribute || self::EDIT === $attribute || self::DELETE === $attribute
             || self::EXERCISE_CREATE === $attribute || self::EXERCISE_DELETE === $attribute
             || self::SET_CREATE === $attribute || self::SET_DELETE === $attribute;
     }
@@ -56,6 +57,7 @@ final class WorkoutVoter extends Voter
             self::EDIT,
             self::EXERCISE_CREATE,
             self::SET_CREATE,
+            self::DELETE,
             self::EXERCISE_DELETE,
             self::SET_DELETE => (
                     $this->editWorkout($user, $attribute, $subject)
@@ -73,6 +75,7 @@ final class WorkoutVoter extends Voter
 
         return match ($attribute) {
             self::EDIT,
+            self::DELETE,
             self::EXERCISE_CREATE => $subject instanceof Workout && $this->isCurrentDay($subject),
             self::EXERCISE_DELETE,
             self::SET_CREATE => $subject instanceof WorkoutExercise && $this->isCurrentDay($subject->getWorkout()),

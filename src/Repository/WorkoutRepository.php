@@ -65,4 +65,10 @@ final class WorkoutRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($workout);
         $this->getEntityManager()->flush();
     }
+
+    public function delete(Workout $workout): void
+    {
+        $this->getEntityManager()->remove($workout);
+        $this->getEntityManager()->flush();
+    }
 }

@@ -8,6 +8,7 @@ use Continuum\Entity\User;
 use Continuum\Entity\Workout;
 use Continuum\Repository\WorkoutRepository;
 use DateTimeImmutable;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
 
@@ -63,5 +64,14 @@ final readonly class WorkoutService
         );
 
         return $this->repository->findByRange($from, $to);
+    }
+
+    public function delete(Workout $workout): void
+    {
+        if (!$workout->getWorkoutExercises()->isEmpty()) {
+            throw new BadRequestHttpException('Workout has exercises');
+        }
+
+        $this->repository->delete($workout);
     }
 }
