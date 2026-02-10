@@ -29,6 +29,6 @@ jobs:
                     APP_HOSTNAME: ${{ secrets.DEPLOY_HOSTNAME }}
                     APP_REMOTE_USER: ${{ secrets.DEPLOY_REMOTE_USER }}
                 with:
-                    dep: deploy
+                    dep: deploy -vvv
                     private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-                    #deployer-version: 7.5.12
+                    deployer-version: 7.5.12
