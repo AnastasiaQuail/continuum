@@ -733,6 +733,11 @@ textarea {
                         color: var(--link-color);
                     }
 
+                    &:is([disabled]) {
+                        opacity: .4;
+                        pointer-events: none;
+                    }
+
                     .dropdown-toggle-chevron {
                         margin-left: auto;
                         transition: transform .15s;
@@ -1425,7 +1430,7 @@ textarea {
     }
 
     &:disabled {
-        opacity: .5;
+        opacity: .4;
         pointer-events: none;
     }
 

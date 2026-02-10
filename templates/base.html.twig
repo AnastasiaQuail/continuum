@@ -100,93 +100,94 @@
     {%- endblock -%}
 
     {%- block sidebar -%}
-        {%- set _route = app.current_route -%}
         <aside id="sidebar" class="sidebar">
             <nav class="navbar">
                 <ul class="navbar-nav">
-                    {%- if is_granted('CALENDAR_VIEW') -%}
-                        <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_calendar' or _route === 'app_calendar_day' ? 'active' }}"
-                               href="{{ path('app_calendar') }}">
-                                {{- ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) -}}
-                                <span>Calendar</span>
-                            </a>
-                        </li>
-                    {%- endif -%}
+                    <li class="nav-item">
+                        {{- _self.sidebar_link(
+                            'app_calendar',
+                            ['app_calendar_day'],
+                            ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}),
+                            'Calendar',
+                            is_granted('CALENDAR_VIEW'),
+                        ) -}}
+                    </li>
 
                     <li>
                         <span class="nav-title-divider">Reflection</span>
                     </li>
-                    {%- if is_granted('MOOD_REFLECTION_VIEW') -%}
-                        <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_mood_reflections' or _route === 'app_mood_reflection_edit' ? 'active' }}"
-                               href="{{ path('app_mood_reflections') }}">
-                                {{- ux_icon('lucide:smile-plus') -}}
-                                <span>Mood tracker</span>
-                            </a>
-                        </li>
-                    {%- endif -%}
-                    {%- if is_granted('WEEKLY_REFLECTION_VIEW') -%}
-                        <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_weekly_reflections' or _route === 'app_weekly_reflection_edit' ? 'active' }}"
-                               href="{{ path('app_weekly_reflections') }}">
-                                {{- ux_icon('lucide:star') -}}
-                                <span>Week in review</span>
-                            </a>
-                        </li>
-                    {%- endif -%}
+                    <li class="nav-item">
+                        {{- _self.sidebar_link(
+                            'app_mood_reflections',
+                            ['app_mood_reflection_edit'],
+                            ux_icon('lucide:smile-plus'),
+                            'Mood tracker',
+                            is_granted('MOOD_REFLECTION_VIEW'),
+                        ) -}}
+                    </li>
+                    <li class="nav-item">
+                        {{- _self.sidebar_link(
+                            'app_weekly_reflections',
+                            ['app_weekly_reflection_edit'],
+                            ux_icon('lucide:star'),
+                            'Week in review',
+                            is_granted('WEEKLY_REFLECTION_VIEW'),
+                        ) -}}
+                    </li>
 
                     <li>
                         <span class="nav-title-divider">Health</span>
                     </li>
-                    {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
-                        <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_measurements' or _route === 'app_measurement_create' or _route === 'app_measurement_edit' ? 'active' }}"
-                               href="{{ path('app_measurements') }}">
-                                {{- ux_icon('lucide:ruler-dimension-line') -}}
-                                <span>Measurements</span>
-                            </a>
-                        </li>
-                    {%- endif -%}
-                    {%- if is_granted('WORKOUT_VIEW') -%}
-                        <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_workouts' or _route === 'app_workouts_view' ? 'active' }}"
-                               href="{{ path('app_workouts') }}">
-                                {{- ux_icon('lucide:dumbbell') -}}
-                                <span>Workouts</span>
-                            </a>
-                        </li>
-                    {%- endif -%}
+                    <li class="nav-item">
+                        {{- _self.sidebar_link(
+                            'app_measurements',
+                            ['app_measurement_create', 'app_measurement_edit'],
+                            ux_icon('lucide:ruler-dimension-line'),
+                            'Measurements',
+                            is_granted('BODY_MEASUREMENT_VIEW'),
+                        ) -}}
+                    </li>
+                    <li class="nav-item">
+                        {{- _self.sidebar_link(
+                            'app_workouts',
+                            ['app_workouts_view'],
+                            ux_icon('lucide:dumbbell'),
+                            'Workouts',
+                            is_granted('WORKOUT_VIEW'),
+                        ) -}}
+                    </li>
 
                     <li>
                         <span class="nav-title-divider">Settings</span>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ _route === 'app_profile' or _route === 'app_profile_location' or _route === 'app_profile_password' ? 'active' }}"
-                           href="{{ path('app_profile') }}">
-                            {{- ux_icon('lucide:user') -}}
-                            <span>Profile</span>
-                        </a>
+                        {{- _self.sidebar_link(
+                            'app_profile',
+                            ['app_profile_location', 'app_profile_password'],
+                            ux_icon('lucide:user'),
+                            'Profile',
+                        ) -}}
                     </li>
                     {%- if is_granted('ADMIN_USER_VIEW') -%}
                         <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_admin_users' or _route === 'app_admin_user_edit' ? 'active' }}"
-                               href="{{ path('app_admin_users') }}">
-                                {{- ux_icon('lucide:users') -}}
-                                <span>Users</span>
-                            </a>
+                            {{- _self.sidebar_link(
+                                'app_admin_users',
+                                ['app_admin_user_edit'],
+                                ux_icon('lucide:users'),
+                                'Users',
+                            ) -}}
                         </li>
                     {%- endif -%}
                     {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
                         <li class="nav-item">
-                            <a class="nav-link {{ _route === 'app_admin_backups' ? 'active' }}"
-                               href="{{ path('app_admin_backups') }}">
-                                {{- ux_icon('lucide:database-backup') -}}
-                                <span>Backups</span>
-                                {%- if has_backup_alert() -%}
-                                    <span class="nav-icon icon-danger">{{ ux_icon('lucide:triangle-alert') }}</span>
-                                {%- endif -%}
-                            </a>
+                            {{- _self.sidebar_link(
+                                'app_admin_backups',
+                                [],
+                                ux_icon('lucide:database-backup'),
+                                'Backups',
+                                true,
+                                has_backup_alert(),
+                            ) -}}
                         </li>
                     {%- endif -%}
                 </ul>
@@ -257,3 +258,22 @@
     </div>
 </body>
 </html>
+
+{%- macro sidebar_link(path, relatedPaths, icon, name, isGranted = true, hasAlert = false) -%}
+    {%- set isActive = false -%}
+    {%- for relatedPath in [path, ...relatedPaths] -%}
+        {%- if app.current_route === relatedPath -%}
+            {%- set isActive = true -%}
+        {%- endif -%}
+    {%- endfor -%}
+
+    <{% if isGranted %}a{% else %}button{% endif %}
+        {% if isGranted %} href="{{ path(path) }}"{% else %} disabled{% endif %}
+        class="nav-link {{ isActive ? 'active' }}">
+        {{- icon|raw -}}
+        <span>{{ name }}</span>
+        {%- if hasAlert -%}
+            <span class="nav-icon icon-danger">{{ ux_icon('lucide:triangle-alert') }}</span>
+        {%- endif -%}
+    </{% if isGranted %}a{% else %}button{% endif %}>
+{%- endmacro -%}
