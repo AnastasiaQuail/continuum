@@ -31,5 +31,3 @@ jobs:
                 with:
                     dep: deploy
                     private-key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
-                    deployer-version: 7.5.12
-                    verbosity: -vvv
