@@ -23,6 +23,7 @@
         "symfony/framework-bundle": "^8.0.5",
         "symfony/http-client": "^8.0.5",
         "symfony/monolog-bundle": "^4.0.1",
+        "symfony/process": "^8.0.5",
         "symfony/runtime": "^8.0.1",
         "symfony/security-bundle": "^8.0.4",
         "symfony/serializer": "8.0.*",
