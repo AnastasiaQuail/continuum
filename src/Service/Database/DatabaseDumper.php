@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Continuum\Service\Database;
 
 use Continuum\Dto\Response\Admin\Database\BackupFile;
-use DateTime;
+use Continuum\Dto\Response\Admin\Database\DatabaseCredentials;
 use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
+use SensitiveParameter;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 final readonly class DatabaseDumper
@@ -18,9 +21,10 @@ final readonly class DatabaseDumper
     public const string CACHE_KEY = 'app.db.backup_last_file';
 
     public function __construct(
+        #[SensitiveParameter]
         #[Autowire(env: 'DATABASE_URL')]
         private string $databaseUrl,
-        #[Autowire('%kernel.project_dir%/data/backups')]
+        #[Autowire('%kernel.project_dir%/var/backups')]
         private string $backupDir,
         private LoggerInterface $logger,
         private DatabaseDumpCache $cache,
@@ -31,12 +35,15 @@ final readonly class DatabaseDumper
      */
     public function getBackups(): array
     {
-        $backups = [];
-        $finder = new Finder()->files()->sortByModifiedTime()
-            ->in($this->backupDir)
-            ->name('*.sql');
+        try {
+            $finder = new Finder()->files()->sortByModifiedTime()->in($this->backupDir);
+        } catch (DirectoryNotFoundException) {
+            return [];
+        }
 
-        foreach ($finder as $file) {
+        $backups = [];
+
+        foreach ($finder->name('*.sql') as $file) {
             $backups[] = new BackupFile(
                 name: $file->getFilename(),
                 size: $file->getSize(),
@@ -57,6 +64,10 @@ final readonly class DatabaseDumper
         } catch (RuntimeException $exception) {
             $this->logger->error($exception->getMessage());
 
+            if ($exception instanceof ProcessFailedException) {
+                throw new RuntimeException('Backup failed');
+            }
+
             throw $exception;
         }
 
@@ -72,52 +83,33 @@ final readonly class DatabaseDumper
      */
     private function doBackup(): string
     {
-        $parts = parse_url($this->databaseUrl);
-
-        if (!is_array($parts)) {
-            throw new RuntimeException('Invalid database url');
-        }
-
-        ['user' => $user, 'pass' => $password, 'host' => $host, 'port' => $port, 'path' => $dbName] = $parts;
-        $dbName = ltrim($dbName ?? '', '/');
-
-        if (!$user || !$dbName) {
-            throw new RuntimeException('Invalid database url components');
-        }
-
         if (!is_dir($this->backupDir) && !mkdir($this->backupDir, 0755, true) && !is_dir($this->backupDir)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $this->backupDir));
         }
 
-        $backupPath = sprintf('%s/%s_%s.sql', $this->backupDir, $dbName, date('Y-m-d_H-i-s'));
+        $db = $this->getCredentials();
+        $backupPath = sprintf('%s/%s_%s.sql', $this->backupDir, $db->name, date('Y-m-d_H-i-s'));
 
-        $process = new Process(
-            command: [
-                'pg_dump',
-                '--format=plain',
-                '-h',
-                $host,
-                '-p',
-                (string) $port,
-                '-U',
-                $user,
-                '-f',
-                $backupPath,
-                $dbName,
-            ],
-            env: ['PGPASSWORD' => $password],
-            timeout: 300,
-        );
+        $this->logger->info('Running dump backup');
 
-        $this->logger->notice('Running pg_dump…');
+        $command = [
+            'pg_dump',
+            '--format=plain',
+            '-h',
+            $db->host,
+            '-p',
+            $db->port,
+            '-U',
+            $db->user,
+            '-f',
+            $backupPath,
+            $db->name,
+        ];
 
-        $process->run();
-
-        if (!$process->isSuccessful()) {
-            $this->logger->error($process->getErrorOutput());
-
-            throw new RuntimeException('Backup failed');
-        }
+        new Process($command)
+            ->setEnv(['PGPASSWORD' => $db->password])
+            ->setTimeout(300)
+            ->mustRun();
 
         if (!file_exists($backupPath)) {
             throw new RuntimeException('Backup file was not created');
@@ -134,12 +126,90 @@ final readonly class DatabaseDumper
         return $backupPath;
     }
 
+    /**
+     * @throws RuntimeException
+     */
+    public function makeRestore(string $backupFile): void
+    {
+        try {
+            $this->doRestore($backupFile);
+        } catch (RuntimeException $exception) {
+            $this->logger->error($exception->getMessage());
+
+            if ($exception instanceof ProcessFailedException) {
+                throw new RuntimeException('Backup failed');
+            }
+
+            throw $exception;
+        }
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    private function doRestore(string $backupFile): void
+    {
+        $db = $this->getCredentials();
+        $backupPath = sprintf('%s/%s', $this->backupDir, $backupFile);
+
+        if (!file_exists($backupPath)) {
+            throw new RuntimeException('Backup file was not exists');
+        }
+
+        $this->logger->info('Running drop database');
+
+        new Process(['dropdb', '--force', '-h', $db->host, '-p', $db->port, '-U', $db->user, $db->name])
+            ->setEnv(['PGPASSWORD' => $db->password])
+            ->setTimeout(150)
+            ->mustRun();
+
+        $this->logger->info('Running create database');
+
+        new Process(['createdb', '-h', $db->host, '-p', $db->port, '-U', $db->user, $db->name])
+            ->setEnv(['PGPASSWORD' => $db->password])
+            ->setTimeout(150)
+            ->mustRun();
+
+        $this->logger->info('Running restore backup');
+
+        new Process(['psql', '-h', $db->host, '-p', $db->port, '-U', $db->user, '-f', $backupPath, '-d', $db->name])
+            ->setEnv(['PGPASSWORD' => $db->password])
+            ->setTimeout(300)
+            ->mustRun();
+
+        $this->logger->notice('Backup restored');
+    }
+
+    private function getCredentials(): DatabaseCredentials
+    {
+        $parts = parse_url($this->databaseUrl);
+
+        if (!is_array($parts)) {
+            throw new RuntimeException('Invalid database url');
+        }
+
+        ['user' => $user, 'pass' => $password, 'host' => $host, 'port' => $port, 'path' => $dbName] = $parts;
+        $dbName = ltrim($dbName ?? '', '/');
+
+        if (!$user || !$dbName) {
+            throw new RuntimeException('Invalid database url components');
+        }
+
+        return new DatabaseCredentials(
+            user: $user,
+            password: $password,
+            host: $host,
+            port: (int) $port,
+            name: $dbName,
+        );
+    }
+
     private function clearLegacyDumps(): void
     {
         $removedFiles = 0;
 
         foreach (glob($this->backupDir . '/*.sql') as $file) {
-            if (filemtime($file) < strtotime('-14 days')) {
+            if (filemtime($file) < strtotime('-7 days')) {
                 unlink($file);
                 $removedFiles++;
             }

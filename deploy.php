@@ -28,6 +28,8 @@ set('deploy_paths', [
     '.env.local.php',
     'composer.json',
 ]);
+add('shared_dirs', ['var/backups']);
+add('writable_dirs', ['var/backups']);
 
 task('deploy:assets:compile', static function (): void {
     run('cd {{release_path}} && {{bin/console}} asset-map:compile {{console_options}}');
