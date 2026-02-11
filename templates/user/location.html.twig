@@ -24,9 +24,23 @@
             {{- form_row(form.longitude) -}}
         </div>
 
+        <div class="alert alert-danger" style="display: none;" id="alert-error">
+            <div class="alert-title">
+                {{ ux_icon('lucide:triangle-alert') }}
+                <strong>Location blocked by browser.</strong>
+            </div>
+            <div>
+                <small>
+                    To determine your location you can use
+                    <a href="https://iplocation.io/my-location#g_latitude" target="_blank">this site</a>
+                    or <a href="https://www.woosmap.com/where-am-i-find-my-location" target="_blank">this</a>
+                </small>
+            </div>
+        </div>
+
         <div class="mb-3">
             <button class="btn btn-sm btn-primary btn-link" id="location-detector"
-                    data-input-latitude="latitude" data-input-longitude="longitude">
+                    data-input-latitude="latitude" data-input-longitude="longitude" data-error="alert-error">
                 {{ ux_icon('lucide:locate') }}
                 <span>Detect current location</span>
             </button>

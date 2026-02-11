@@ -1545,6 +1545,14 @@ textarea {
         font-weight: var(--font-weight-bold);
     }
 
+    .alert-title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 3);
+        margin-bottom: calc(var(--gap-block) / 2);
+    }
+
     &.alert-primary {
         --alert-color: var(--color-blue);
     }
@@ -2573,7 +2581,6 @@ textarea {
 
         display: grid;
         grid-template-rows: auto 1fr;
-        gap: calc(var(--gap-block) / 2);
         margin-bottom: 0;
         border-width: 0;
         overflow: hidden;
@@ -2582,9 +2589,6 @@ textarea {
         animation-range: entry 0% cover 20%;
 
         .alert-title {
-            display: flex;
-            align-items: center;
-            gap: calc(var(--gap-inline) / 4);
             padding-top: 2px;
             font-size: var(--font-size-small);
             cursor: default;
