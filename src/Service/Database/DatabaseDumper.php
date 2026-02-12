@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use SensitiveParameter;
+use SplFileInfo;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
@@ -18,8 +19,6 @@ use Symfony\Component\Process\Process;
 
 final readonly class DatabaseDumper
 {
-    public const string CACHE_KEY = 'app.db.backup_last_file';
-
     public function __construct(
         #[SensitiveParameter]
         #[Autowire(env: 'DATABASE_URL')]
@@ -30,20 +29,27 @@ final readonly class DatabaseDumper
         private DatabaseDumpCache $cache,
     ) {}
 
+    private function getFinder(): Finder
+    {
+        return new Finder()->files()->sortByModifiedTime()
+            ->in($this->backupDir)
+            ->name('*.sql');
+    }
+
     /**
      * @return list<BackupFile>
      */
     public function getBackups(): array
     {
         try {
-            $finder = new Finder()->files()->sortByModifiedTime()->in($this->backupDir);
+            $finder = $this->getFinder();
         } catch (DirectoryNotFoundException) {
             return [];
         }
 
         $backups = [];
 
-        foreach ($finder->name('*.sql') as $file) {
+        foreach ($finder as $file) {
             $backups[] = new BackupFile(
                 name: $file->getFilename(),
                 size: $file->getSize(),
@@ -52,6 +58,43 @@ final readonly class DatabaseDumper
         }
 
         return $backups;
+    }
+
+    public function hasRelevantBackup(): bool
+    {
+        $lastBackupTime = $this->cache->get();
+
+        if (null === $lastBackupTime) {
+            $this->cache->save($lastBackupTime = $this->getLastBackupTime());
+        }
+
+        return $lastBackupTime > new DateTimeImmutable('-1 day');
+    }
+
+    private function getLastBackupTime(): ?DateTimeImmutable
+    {
+        try {
+            $finder = $this->getFinder()->sortByModifiedTime();
+        } catch (DirectoryNotFoundException) {
+            return null;
+        }
+
+        $file = $finder->getIterator()->current();
+
+        if (!$file instanceof SplFileInfo) {
+            return null;
+        }
+
+        $time = $file->getCTime();
+        if (false === $time) {
+            $time = $file->getMTime();
+        }
+
+        if (false === $time) {
+            throw new RuntimeException('Unable to retrieve last backup time');
+        }
+
+        return DateTimeImmutable::createFromTimestamp($time);
     }
 
     /**
@@ -71,7 +114,7 @@ final readonly class DatabaseDumper
             throw $exception;
         }
 
-        $this->cache->save($backupPath);
+        $this->cache->save(new DateTimeImmutable('now'));
 
         $this->clearLegacyDumps();
 

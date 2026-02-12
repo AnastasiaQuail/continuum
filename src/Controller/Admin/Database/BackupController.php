@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Continuum\Controller\Admin\Database;
 
 use Continuum\Security\Authorization\Voter\Admin\BackupVoter;
-use Continuum\Service\Database\DatabaseDumpCache;
 use Continuum\Service\Database\DatabaseDumper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +14,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class BackupController extends AbstractController
 {
     public function __construct(
-        private readonly DatabaseDumpCache $databaseDumpCache,
         private readonly DatabaseDumper $databaseDumper,
     ) {}
 
@@ -26,7 +24,7 @@ final class BackupController extends AbstractController
         $backups = $this->databaseDumper->getBackups();
 
         return $this->render('admin/backup/index.html.twig', [
-            'hasDBBackup' => $this->databaseDumpCache->has(),
+            'hasRelevantBackup' => $this->databaseDumper->hasRelevantBackup(),
             'backups' => $backups,
         ]);
     }

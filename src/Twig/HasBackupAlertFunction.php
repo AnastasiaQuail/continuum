@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Continuum\Twig;
 
-use Continuum\Service\Database\DatabaseDumpCache;
+use Continuum\Service\Database\DatabaseDumper;
 use Twig\Attribute\AsTwigFunction;
 
 final readonly class HasBackupAlertFunction
 {
     public function __construct(
-        private DatabaseDumpCache $databaseDumpCache,
+        private DatabaseDumper $databaseDumper,
     ) {}
 
     #[AsTwigFunction('has_backup_alert')]
     public function __invoke(): bool
     {
-        return false === $this->databaseDumpCache->has();
+        return false === $this->databaseDumper->hasRelevantBackup();
     }
 }

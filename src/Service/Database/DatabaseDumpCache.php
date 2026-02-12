@@ -15,17 +15,23 @@ final readonly class DatabaseDumpCache
         private CacheItemPoolInterface $cache,
     ) {}
 
-    public function save(string $backupPath): void
+    public function save(DateTimeImmutable $lastBackupTime): void
     {
         $item = $this->cache->getItem(self::KEY);
-        $item->set($backupPath);
-        $item->expiresAt(new DateTimeImmutable('+1 day'));
+        $item->set($lastBackupTime->getTimestamp());
+        $item->expiresAt(new DateTimeImmutable('+8 hours'));
 
         $this->cache->save($item);
     }
 
-    public function has(): bool
+    public function get(): ?DateTimeImmutable
     {
-        return $this->cache->hasItem(self::KEY);
+        $item = $this->cache->getItem(self::KEY);
+
+        if (null === $time = $item->get()) {
+            return null;
+        }
+
+        return DateTimeImmutable::createFromTimestamp($time);
     }
 }

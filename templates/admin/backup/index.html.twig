@@ -19,7 +19,7 @@
 {%- endblock %}
 
 {% block main -%}
-    {%- if not hasDBBackup -%}
+    {%- if not hasRelevantBackup -%}
         <div class="alert alert-danger alert-inline">
             {{ ux_icon('lucide:triangle-alert') }}
             <span>More one day from last backup!</span>
