@@ -1,10 +1,8 @@
 {
     "name": "anastasiaquail/continuum",
-    "type": "project",
-    "license": "MIT",
     "description": "",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
+    "license": "MIT",
+    "type": "project",
     "require": {
         "php": ">=8.5",
         "ext-ctype": "*",
@@ -13,7 +11,7 @@
         "doctrine/doctrine-bundle": "^3.2.2",
         "doctrine/doctrine-migrations-bundle": "^4.0.0",
         "doctrine/orm": "^3.6.2",
-        "symfony/apache-pack": "*",
+        "symfony/apache-pack": "^1.0.1",
         "symfony/asset": "^8.0.4",
         "symfony/asset-mapper": "^8.0.4",
         "symfony/console": "^8.0.4",
@@ -26,7 +24,7 @@
         "symfony/process": "^8.0.5",
         "symfony/runtime": "^8.0.1",
         "symfony/security-bundle": "^8.0.4",
-        "symfony/serializer": "8.0.*",
+        "symfony/serializer": "~8.0.5",
         "symfony/twig-bundle": "^8.0.4",
         "symfony/uid": "^8.0.4",
         "symfony/ux-icons": "^2.32.0",
@@ -37,35 +35,24 @@
     "require-dev": {
         "dama/doctrine-test-bundle": "^8.6.0",
         "doctrine/doctrine-fixtures-bundle": "^4.3.1",
-        "phpunit/phpunit": "^12.5.8",
+        "phpunit/phpunit": "^12.5.11",
         "symfony/browser-kit": "^8.0.4",
         "symfony/css-selector": "^8.0.0",
         "symfony/debug-bundle": "^8.0.0",
-        "symfony/maker-bundle": "^1.65.1",
+        "symfony/maker-bundle": "^1.66.0",
         "symfony/web-profiler-bundle": "^8.0.4"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
-        "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*",
-        "symfony/polyfill-php74": "*",
-        "symfony/polyfill-php80": "*",
-        "symfony/polyfill-php81": "*",
-        "symfony/polyfill-php82": "*",
-        "symfony/polyfill-php83": "*",
         "symfony/polyfill-php84": "*",
         "symfony/polyfill-php85": "*"
     },
-    "config": {
-        "allow-plugins": {
-            "php-http/discovery": true,
-            "symfony/flex": true,
-            "symfony/runtime": true
-        },
-        "bump-after-update": true,
-        "sort-packages": true
+    "conflict": {
+        "symfony/symfony": "*"
     },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Continuum\\": "src/"
@@ -76,32 +63,60 @@
             "Continuum\\Tests\\": "tests/"
         }
     },
-    "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "importmap:install": "symfony-cmd"
+    "config": {
+        "allow-plugins": {
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
         },
+        "bump-after-update": true,
+        "sort-packages": true
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "docker": true,
+            "require": "8.0.*"
+        }
+    },
+    "scripts": {
         "post-install-cmd": [
             "@auto-scripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
         ],
+        "post-autoload-dump": [
+            "@install-tools"
+        ],
+        "auto-scripts": {
+            "cache:clear": "symfony-cmd",
+            "assets:install %PUBLIC_DIR%": "symfony-cmd",
+            "importmap:install": "symfony-cmd"
+        },
+        "icons": "@php bin/console ux:icons:lock",
+        "install-tools": "@composer --working-dir=tools install",
         "migration": "@php bin/console make:migration --formatted",
         "migration:migrate": "@php bin/console doctrine:migrations:migrate",
         "migration:rollback": "@migration:migrate prev",
-        "icons": "@php bin/console ux:icons:lock",
-        "backup": "@php bin/console app:db:backup"
-    },
-    "conflict": {
-        "symfony/symfony": "*"
-    },
-    "extra": {
-        "symfony": {
-            "allow-contrib": false,
-            "require": "8.0.*",
-            "docker": true
-        }
+        "self-audit": [
+            "@composer audit",
+            "@composer audit --working-dir=tools"
+        ],
+        "self-check": [
+            "@self-audit",
+            "@self-dump-autoload",
+            "@self-normalize",
+            "@self-validate"
+        ],
+        "self-dump-autoload": [
+            "@composer dump-autoload --dry-run --optimize --strict-psr",
+            "@composer dump-autoload --dry-run --optimize --strict-psr --working-dir=tools"
+        ],
+        "self-normalize": [
+            "@composer normalize ../composer.json --dry-run --working-dir=tools",
+            "@composer normalize composer.json --dry-run --working-dir=tools"
+        ],
+        "self-validate": "@composer validate --strict"
     }
 }
