@@ -28,6 +28,7 @@ final readonly class ChartMeasurementService
         }
 
         $initMeasurement = $this->measurementService->getInitMeasurement($user, $month);
+
         /** @var BodyMeasurement $initMeasurement */
         $initMeasurement ??= array_first($measurements);
 

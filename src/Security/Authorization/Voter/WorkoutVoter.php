@@ -60,9 +60,9 @@ final class WorkoutVoter extends Voter
             self::DELETE,
             self::EXERCISE_DELETE,
             self::SET_DELETE => (
-                    $this->editWorkout($user, $attribute, $subject)
-                    && $this->security->isGrantedForUser($user, UserRole::Admin->value)
-                )
+                $this->editWorkout($user, $attribute, $subject)
+                && $this->security->isGrantedForUser($user, UserRole::Admin->value)
+            )
                 || $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
         };
     }

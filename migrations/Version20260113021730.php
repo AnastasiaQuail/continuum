@@ -16,15 +16,17 @@ final class Version20260113021730 extends AbstractMigration
 
     public function down(Schema $schema): void
     {
-        $this->addSql(<<<'SQL'
-            CREATE TABLE reflection_moods (
-              id UUID NOT NULL,
-              date DATE NOT NULL,
-              type VARCHAR(255) NOT NULL,
-              text VARCHAR(255) NOT NULL,
-              PRIMARY KEY (id)
-            )
-        SQL);
+        $this->addSql(
+            <<<'SQL'
+                CREATE TABLE reflection_moods (
+                  id UUID NOT NULL,
+                  date DATE NOT NULL,
+                  type VARCHAR(255) NOT NULL,
+                  text VARCHAR(255) NOT NULL,
+                  PRIMARY KEY (id)
+                )
+                SQL
+        );
         $this->addSql('CREATE UNIQUE INDEX uniq_identifier_date ON reflection_moods (date)');
     }
 }

@@ -43,10 +43,8 @@ final class EditLocationType extends AbstractImmutableType
             ]);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configure(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefault('location', null);
         $resolver->setAllowedTypes('location', ['null', Location::class]);
     }

@@ -46,10 +46,8 @@ final class NewCalendarEventType extends AbstractImmutableType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configure(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefault('timezone', null);
         $resolver->setAllowedTypes('timezone', ['null', DateTimeZone::class]);
     }

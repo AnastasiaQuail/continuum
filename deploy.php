@@ -34,7 +34,7 @@ add('writable_dirs', ['var/backups']);
 task('deploy:assets:compile', static function (): void {
     run('cd {{release_path}} && {{bin/console}} asset-map:compile {{console_options}}');
 });
-task('deploy:paths:clear', function () {
+task('deploy:paths:clear', static function (): void {
     $paths = explode("\n", run("cd {{release_path}} && find . -maxdepth 1 -mindepth 1 -printf '%f\n'"));
 
     set('clear_paths', array_values(array_diff($paths, get('deploy_paths'))));

@@ -47,7 +47,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'input' => 'datetime_immutable',
                 'constraints' => [
                     new Callback(
-                        function (DateTimeImmutable $datetime, ExecutionContextInterface $context) use ($user): void {
+                        static function (DateTimeImmutable $datetime, ExecutionContextInterface $context) use ($user): void {
                             $currentDate = new DateTimeImmutable('now', $user->getTimezone());
 
                             if ($currentDate->format('Y-m-d') < $datetime->format('Y-m-d')) {
@@ -151,17 +151,15 @@ final class EditMeasurementType extends AbstractImmutableType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configure(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefault('lastMeasurement', null);
         $resolver->setDefault('measurement', null);
         $resolver->setAllowedTypes('lastMeasurement', ['null', LastMeasurement::class]);
         $resolver->setAllowedTypes('measurement', ['null', BodyMeasurement::class]);
     }
 
-    private function getHelp(null|float|int $value, string $name = 'cm'): ?string
+    private function getHelp(float|int|null $value, string $name = 'cm'): ?string
     {
         if ($value === null) {
             return null;

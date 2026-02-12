@@ -46,6 +46,7 @@ final readonly class UpcomingEventService
     {
         /** @var array<string, CalendarEvent> $dayEvents */
         $dayEvents = [];
+
         /** @var array<string, CalendarEvent> $hourEvents */
         $hourEvents = [];
 

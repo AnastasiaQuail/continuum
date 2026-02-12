@@ -4,11 +4,17 @@ declare(strict_types=1);
 
 namespace Continuum\Tests;
 
+use Continuum\Controller\Security\LoginController;
 use Continuum\Entity\User;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
+/**
+ * @internal
+ */
+#[CoversClass(LoginController::class)]
 final class LoginControllerTest extends WebTestCase
 {
     private KernelBrowser $client;

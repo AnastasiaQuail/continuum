@@ -6,7 +6,6 @@ namespace Continuum\Service\Weather;
 
 use Continuum\Component\Weather\Dto\Weather;
 use Continuum\Component\Weather\Dto\Wind;
-use Continuum\Component\Weather\WmoCode;
 use Continuum\Entity\Location;
 use DateTimeImmutable;
 use Psr\Cache\CacheItemPoolInterface;

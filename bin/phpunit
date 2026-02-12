@@ -3,4 +3,4 @@
 
 declare(strict_types=1);
 
-require dirname(__DIR__).'/vendor/phpunit/phpunit/phpunit';
+require dirname(__DIR__) . '/vendor/phpunit/phpunit/phpunit';

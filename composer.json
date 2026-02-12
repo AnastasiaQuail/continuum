@@ -94,6 +94,8 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
         },
+        "cs": "@php tools/vendor/bin/php-cs-fixer fix",
+        "cs:check": "@php tools/vendor/bin/php-cs-fixer check --verbose --diff",
         "icons": "@php bin/console ux:icons:lock",
         "install-tools": "@composer --working-dir=tools install",
         "migration": "@php bin/console make:migration --formatted",

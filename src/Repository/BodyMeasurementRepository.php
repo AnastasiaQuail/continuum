@@ -63,20 +63,20 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
 
     public function findOneLastWithNotNull(): LastMeasurement
     {
-        $sql = <<<SQL
-SELECT
-    (SELECT weight FROM body_measurements ORDER BY datetime DESC LIMIT 1),
-    (SELECT neck FROM body_measurements WHERE neck IS NOT NULL ORDER BY datetime DESC LIMIT 1),
-    (SELECT chest FROM body_measurements WHERE chest IS NOT NULL ORDER BY datetime DESC LIMIT 1),
-    (SELECT shoulders FROM body_measurements WHERE shoulders IS NOT NULL ORDER BY datetime DESC LIMIT 1),
-    (SELECT waist FROM body_measurements WHERE waist IS NOT NULL ORDER BY datetime DESC LIMIT 1),
-    (SELECT flexed_biceps FROM body_measurements WHERE flexed_biceps IS NOT NULL ORDER BY datetime DESC LIMIT 1),
-    (SELECT hips FROM body_measurements WHERE hips IS NOT NULL ORDER BY datetime DESC LIMIT 1),
-    (SELECT thigh FROM body_measurements WHERE thigh IS NOT NULL ORDER BY datetime DESC LIMIT 1),
-    (SELECT calf FROM body_measurements WHERE calf IS NOT NULL ORDER BY datetime DESC LIMIT 1)
-FROM body_measurements
-LIMIT 1
-SQL;
+        $sql = <<<'SQL'
+            SELECT
+                (SELECT weight FROM body_measurements ORDER BY datetime DESC LIMIT 1),
+                (SELECT neck FROM body_measurements WHERE neck IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+                (SELECT chest FROM body_measurements WHERE chest IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+                (SELECT shoulders FROM body_measurements WHERE shoulders IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+                (SELECT waist FROM body_measurements WHERE waist IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+                (SELECT flexed_biceps FROM body_measurements WHERE flexed_biceps IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+                (SELECT hips FROM body_measurements WHERE hips IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+                (SELECT thigh FROM body_measurements WHERE thigh IS NOT NULL ORDER BY datetime DESC LIMIT 1),
+                (SELECT calf FROM body_measurements WHERE calf IS NOT NULL ORDER BY datetime DESC LIMIT 1)
+            FROM body_measurements
+            LIMIT 1
+            SQL;
 
         /** @var array<string, int> $row */
         $row = $this->getEntityManager()->getConnection()

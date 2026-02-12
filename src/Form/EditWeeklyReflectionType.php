@@ -1,6 +1,6 @@
 <?php
 
-declare (strict_types=1);
+declare(strict_types=1);
 
 namespace Continuum\Form;
 
@@ -70,10 +70,8 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configure(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefault('weeklyReflection', null);
         $resolver->setAllowedTypes('weeklyReflection', ['null', WeeklyReflection::class]);
     }
