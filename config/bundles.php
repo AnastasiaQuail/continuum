@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 use DAMA\DoctrineTestBundle\DAMADoctrineTestBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
@@ -13,14 +14,12 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\UX\Icons\UXIconsBundle;
-use Twig\Extra\TwigExtraBundle\TwigExtraBundle;
 
 return [
     FrameworkBundle::class => ['all' => true],
     DoctrineBundle::class => ['all' => true],
     DoctrineMigrationsBundle::class => ['all' => true],
     TwigBundle::class => ['all' => true],
-    TwigExtraBundle::class => ['all' => true],
     SecurityBundle::class => ['all' => true],
     MonologBundle::class => ['all' => true],
     UXIconsBundle::class => ['all' => true],

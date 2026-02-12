@@ -1,6 +1,6 @@
 {
     "dama/doctrine-test-bundle": {
-        "version": "8.4",
+        "version": "8.6",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "main",
@@ -171,7 +171,7 @@
         ]
     },
     "symfony/maker-bundle": {
-        "version": "1.65",
+        "version": "1.66",
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -288,8 +288,5 @@
             "config/packages/web_profiler.yaml",
             "config/routes/web_profiler.yaml"
         ]
-    },
-    "twig/extra-bundle": {
-        "version": "v3.22.2"
     }
 }

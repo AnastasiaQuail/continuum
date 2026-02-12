@@ -34,8 +34,10 @@ final class MeasurementType extends NumberType
         }
     }
 
-    protected function configure(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefault('html5', true);
         $resolver->setDefault('min', null);
         $resolver->setDefault('max', null);
