@@ -8,7 +8,7 @@ use Continuum\Entity\Workout;
 use Continuum\Security\Authorization\Voter\WorkoutVoter;
 use Continuum\Service\Workout\WorkoutService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -20,7 +20,7 @@ final class WorkoutDeleteController extends AbstractController
 
     #[Route(path: '/workouts/{id}', name: 'app_workout_delete', methods: ['DELETE'])]
     #[IsGranted(WorkoutVoter::EXERCISE_DELETE, 'workout')]
-    public function __invoke(Workout $workout): Response
+    public function __invoke(Workout $workout): RedirectResponse
     {
         $this->workoutService->delete($workout);
 
