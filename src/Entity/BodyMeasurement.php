@@ -70,12 +70,12 @@ final class BodyMeasurement
 
     private function from(?int $value, int $coefficient = 10, int $precision = 1): ?float
     {
-        return $value !== null ? round($value / $coefficient, $precision) : null;
+        return null !== $value ? round($value / $coefficient, $precision) : null;
     }
 
     private function to(?float $value, int $coefficient = 10): ?int
     {
-        return $value !== null ? (int) round($value * $coefficient) : null;
+        return null !== $value ? (int) round($value * $coefficient) : null;
     }
 
     public function getId(): Uuid

@@ -23,7 +23,7 @@ final readonly class ChartMeasurementService
      */
     public function getChartMeasurements(User $user, DateTimeImmutable $month, array $measurements): array
     {
-        if ($measurements === []) {
+        if ([] === $measurements) {
             return [];
         }
 

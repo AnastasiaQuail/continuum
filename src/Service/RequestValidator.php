@@ -32,7 +32,7 @@ final readonly class RequestValidator
             return $error;
         }
 
-        if ($month->format('d:H:i:s') !== '01:00:00:00') {
+        if ('01:00:00:00' !== $month->format('d:H:i:s')) {
             return 'Wrong month format. Allowed only "Y-m" format.';
         }
 
@@ -49,11 +49,11 @@ final readonly class RequestValidator
             return $error;
         }
 
-        if ($week->format('D') !== 'Sun') {
+        if ('Sun' !== $week->format('D')) {
             return 'Wrong week format. Allowed only sunday.';
         }
 
-        if ($week->format('H:i:s') !== '00:00:00') {
+        if ('00:00:00' !== $week->format('H:i:s')) {
             return 'Wrong week format. Allowed only "Y-m-d" format.';
         }
 
@@ -70,7 +70,7 @@ final readonly class RequestValidator
             return $error;
         }
 
-        if ($day->format('H:i:s') !== '00:00:00') {
+        if ('00:00:00' !== $day->format('H:i:s')) {
             return 'Wrong day format. Allowed only "Y-m-d" format.';
         }
 

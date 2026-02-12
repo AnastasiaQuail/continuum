@@ -84,7 +84,7 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             ->fetchAssociative();
 
         foreach ($row as $field => $value) {
-            $row[$field] = round($value / ($field === 'weight' ? 1000 : 10), 1);
+            $row[$field] = round($value / ('weight' === $field ? 1000 : 10), 1);
         }
 
         return new LastMeasurement(...array_values($row));

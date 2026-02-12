@@ -169,12 +169,12 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
 
     public function isActive(): bool
     {
-        return $this->status === UserStatus::Active;
+        return UserStatus::Active === $this->status;
     }
 
     public function isDisabled(): bool
     {
-        return $this->status === UserStatus::Disabled;
+        return UserStatus::Disabled === $this->status;
     }
 
     /**

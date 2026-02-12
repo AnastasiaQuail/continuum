@@ -161,11 +161,11 @@ final class EditMeasurementType extends AbstractImmutableType
 
     private function getHelp(float|int|null $value, string $name = 'cm'): ?string
     {
-        if ($value === null) {
+        if (null === $value) {
             return null;
         }
 
-        if (is_int($value) || fmod($value, 1.0) === 0.0) {
+        if (is_int($value) || 0.0 === fmod($value, 1.0)) {
             return sprintf('Last: %d %s', $value, $name);
         }
 

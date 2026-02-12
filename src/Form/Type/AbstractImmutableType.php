@@ -41,7 +41,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
      */
     private function getDataClass(): string
     {
-        if ($this->dataClass !== '') {
+        if ('' !== $this->dataClass) {
             return $this->dataClass;
         }
 

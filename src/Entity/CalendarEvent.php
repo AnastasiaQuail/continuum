@@ -51,7 +51,7 @@ final class CalendarEvent
 
     public function isAllDay(): bool
     {
-        return $this->format === CalendarEventFormat::Day;
+        return CalendarEventFormat::Day === $this->format;
     }
 
     public function getFormat(): CalendarEventFormat

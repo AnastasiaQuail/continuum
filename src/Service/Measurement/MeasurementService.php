@@ -68,7 +68,7 @@ final readonly class MeasurementService
 
     public function save(User $user, ?BodyMeasurement $measurement, EditMeasurement $dto): BodyMeasurement
     {
-        if ($measurement === null) {
+        if (null === $measurement) {
             $measurement = new BodyMeasurement(
                 age: $this->userService->getAge($user, $dto->datetime),
                 height: $this->userService->getHeight(),

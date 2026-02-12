@@ -33,7 +33,6 @@ return new Config()
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
         'phpdoc_align' => ['align' => 'left'],
 
-        'yoda_style' => false, // todo enable
         'ordered_class_elements' => false, // todo enable
         'phpdoc_types_order' => false, // todo enable
         'increment_style' => false, // todo enable

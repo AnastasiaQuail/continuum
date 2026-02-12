@@ -78,9 +78,9 @@ final readonly class CalendarEventService
         );
 
         $event = new CalendarEvent(
-            datetime: $dto->time === null ? new DateTimeImmutable($dateTime->format('Y-m-d H:i:s'))
+            datetime: null === $dto->time ? new DateTimeImmutable($dateTime->format('Y-m-d H:i:s'))
                 : $dateTime->setTimezone(new DateTimeZone('UTC')),
-            format: $dto->time === null ? CalendarEventFormat::Day : CalendarEventFormat::Hour,
+            format: null === $dto->time ? CalendarEventFormat::Day : CalendarEventFormat::Hour,
             type: $dto->type,
             title: $dto->title,
         );

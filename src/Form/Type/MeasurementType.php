@@ -22,13 +22,13 @@ final class MeasurementType extends NumberType
 
         parent::buildView($view, $form, $options);
 
-        if ($options['min'] !== null) {
+        if (null !== $options['min']) {
             $view->vars['attr']['min'] = $options['min'];
         }
-        if ($options['max'] !== null) {
+        if (null !== $options['max']) {
             $view->vars['attr']['max'] = $options['max'];
         }
-        if ($options['postfix'] !== null) {
+        if (null !== $options['postfix']) {
             $view->vars['attr']['data-mask'] = 'postfix';
             $view->vars['attr']['data-postfix'] = $options['postfix'];
         }
