@@ -11,11 +11,8 @@ return new Config()
         Finder::create()
             ->in(__DIR__)
             ->exclude(['var'])
-            ->append([
-                'bin/console',
-                'bin/phpunit',
-                __FILE__,
-            ])
+            ->append(['bin/console', 'bin/phpunit', __FILE__])
+            ->notPath(['config/reference.php'])
     )
     ->setRiskyAllowed(true)
     ->setRules([
