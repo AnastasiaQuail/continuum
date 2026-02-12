@@ -22,20 +22,6 @@ final class MoodReflectionRepository extends ServiceEntityRepository
     /**
      * @return list<MoodReflection>
      */
-    private function findBetweenDates(DateTimeImmutable $from, DateTimeImmutable $to): array
-    {
-        return $this->createQueryBuilder('rm')
-            ->andWhere('rm.date BETWEEN :from AND :to')
-            ->setParameter('from', $from)
-            ->setParameter('to', $to)
-            ->addOrderBy('rm.date', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @return list<MoodReflection>
-     */
     public function findPreviousDays(int $days): array
     {
         return $this->findBetweenDates(
@@ -68,5 +54,19 @@ final class MoodReflectionRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($moodReflection);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @return list<MoodReflection>
+     */
+    private function findBetweenDates(DateTimeImmutable $from, DateTimeImmutable $to): array
+    {
+        return $this->createQueryBuilder('rm')
+            ->andWhere('rm.date BETWEEN :from AND :to')
+            ->setParameter('from', $from)
+            ->setParameter('to', $to)
+            ->addOrderBy('rm.date', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

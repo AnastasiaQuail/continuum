@@ -67,16 +67,6 @@ final class BodyMeasurement
         $this->datetime = new DateTimeImmutable();
     }
 
-    private function from(?int $value, int $coefficient = 10, int $precision = 1): ?float
-    {
-        return null !== $value ? round($value / $coefficient, $precision) : null;
-    }
-
-    private function to(?float $value, int $coefficient = 10): ?int
-    {
-        return null !== $value ? (int) round($value * $coefficient) : null;
-    }
-
     public function getId(): Uuid
     {
         return $this->id;
@@ -221,5 +211,15 @@ final class BodyMeasurement
     public function setCalf(?float $calf): void
     {
         $this->calf = $this->to($calf);
+    }
+
+    private function from(?int $value, int $coefficient = 10, int $precision = 1): ?float
+    {
+        return null !== $value ? round($value / $coefficient, $precision) : null;
+    }
+
+    private function to(?float $value, int $coefficient = 10): ?int
+    {
+        return null !== $value ? (int) round($value * $coefficient) : null;
     }
 }

@@ -33,9 +33,6 @@ return new Config()
         'multiline_whitespace_before_semicolons' => ['strategy' => 'no_multi_line'],
         'phpdoc_align' => ['align' => 'left'],
 
-        'ordered_class_elements' => false, // todo enable
-        'octal_notation' => false, // todo enable
-
         // '@PHPUnit100Migration:risky' => true,
         // 'get_class_to_class_keyword' => true,
         // 'modernize_strpos' => true,

@@ -34,27 +34,6 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
         $this->configure($resolver);
     }
 
-    protected function configure(OptionsResolver $resolver): void {}
-
-    /**
-     * @return class-string<T>
-     */
-    private function getDataClass(): string
-    {
-        if ('' !== $this->dataClass) {
-            return $this->dataClass;
-        }
-
-        $method = new ReflectionMethod(static::class, 'mapDataClass');
-        $returnType = $method->getReturnType();
-
-        if (!$returnType instanceof ReflectionNamedType) {
-            throw new InvalidConfigurationException('You must define a valid return type.');
-        }
-
-        return $this->dataClass = $returnType->getName();
-    }
-
     final public function getBlockPrefix(): string
     {
         return '';
@@ -81,6 +60,16 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
         $this->mapForms($data, $viewData);
     }
 
+    final public function mapFormsToData(Traversable $forms, mixed &$viewData): void
+    {
+        /** @var FormInterface[] $data */
+        $data = iterator_to_array($forms);
+
+        $viewData = $this->mapDataClass($data);
+    }
+
+    protected function configure(OptionsResolver $resolver): void {}
+
     /**
      * @param FormInterface[] $forms
      * @param T $dataClass
@@ -90,18 +79,29 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
         throw new InvalidConfigurationException('This method should be overridden.');
     }
 
-    final public function mapFormsToData(Traversable $forms, mixed &$viewData): void
-    {
-        /** @var FormInterface[] $data */
-        $data = iterator_to_array($forms);
-
-        $viewData = $this->mapDataClass($data);
-    }
-
     /**
      * @param FormInterface[] $forms
      *
      * @return T
      */
     abstract protected function mapDataClass(array $forms): object;
+
+    /**
+     * @return class-string<T>
+     */
+    private function getDataClass(): string
+    {
+        if ('' !== $this->dataClass) {
+            return $this->dataClass;
+        }
+
+        $method = new ReflectionMethod(static::class, 'mapDataClass');
+        $returnType = $method->getReturnType();
+
+        if (!$returnType instanceof ReflectionNamedType) {
+            throw new InvalidConfigurationException('You must define a valid return type.');
+        }
+
+        return $this->dataClass = $returnType->getName();
+    }
 }

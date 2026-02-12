@@ -23,20 +23,6 @@ final class CalendarEventRepository extends ServiceEntityRepository
     /**
      * @return list<CalendarEvent>
      */
-    private function findBetweenDates(DateTimeImmutable $from, DateTimeImmutable $to): array
-    {
-        return $this->createQueryBuilder('cd')
-            ->andWhere('cd.datetime BETWEEN :from AND :to')
-            ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
-            ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
-            ->addOrderBy('cd.datetime', 'ASC')
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * @return list<CalendarEvent>
-     */
     public function findUpcomingNextDays(int $days, DateTimeZone $timeZone): array
     {
         return $this->findBetweenDates(
@@ -79,5 +65,19 @@ final class CalendarEventRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->persist($event);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @return list<CalendarEvent>
+     */
+    private function findBetweenDates(DateTimeImmutable $from, DateTimeImmutable $to): array
+    {
+        return $this->createQueryBuilder('cd')
+            ->andWhere('cd.datetime BETWEEN :from AND :to')
+            ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
+            ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
+            ->addOrderBy('cd.datetime', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }
