@@ -75,7 +75,7 @@ final readonly class DatabaseDumper
             $this->logger->error($exception->getMessage());
 
             if ($exception instanceof ProcessFailedException) {
-                throw new RuntimeException('Backup failed');
+                throw new RuntimeException('Backup failed', $exception->getCode(), previous: $exception);
             }
 
             throw $exception;
@@ -99,7 +99,7 @@ final readonly class DatabaseDumper
             $this->logger->error($exception->getMessage());
 
             if ($exception instanceof ProcessFailedException) {
-                throw new RuntimeException('Backup failed');
+                throw new RuntimeException('Backup failed', $exception->getCode(), previous: $exception);
             }
 
             throw $exception;

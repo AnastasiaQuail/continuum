@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
     ->withCache(__DIR__ . '/var/cache/rector')
     ->withSymfonyContainerPhp(__DIR__ . '/tests/symfony-container.php')
-    ->withParallel()
     ->withRootFiles()
     ->withPaths([
         __DIR__ . '/bin',
@@ -21,4 +21,11 @@ return RectorConfig::configure()
         __DIR__ . '/tools/vendor/*',
     ])
     ->withImportNames()
-    ->withPhpSets();
+    ->withPhpSets()
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+    )
+    ->withSkip([
+        FlipTypeControlToUseExclusiveTypeRector::class,
+    ]);

@@ -7,6 +7,7 @@ namespace Continuum\Form;
 use Continuum\Dto\Request\Reflection\EditWeeklyReflection;
 use Continuum\Entity\WeeklyReflection;
 use Continuum\Form\Type\AbstractImmutableType;
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -70,6 +71,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
         );
     }
 
+    #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
         $resolver->setDefault('weeklyReflection', null);

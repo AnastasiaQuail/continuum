@@ -8,6 +8,7 @@ use Continuum\Dto\Request\Reflection\EditMoodReflection;
 use Continuum\Entity\MoodReflection;
 use Continuum\Enum\MoodType;
 use Continuum\Form\Type\AbstractImmutableType;
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -42,6 +43,7 @@ final class EditMoodReflectionType extends AbstractImmutableType
         );
     }
 
+    #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
         $resolver->setDefault('moodReflection', null);

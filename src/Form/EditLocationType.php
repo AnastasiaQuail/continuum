@@ -8,6 +8,7 @@ use Continuum\Dto\Request\User\EditLocation;
 use Continuum\Entity\Location;
 use Continuum\Form\Type\AbstractImmutableType;
 use Continuum\Form\Type\MeasurementType;
+use Override;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -43,6 +44,7 @@ final class EditLocationType extends AbstractImmutableType
             ]);
     }
 
+    #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
         $resolver->setDefault('location', null);

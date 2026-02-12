@@ -121,11 +121,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
             return false;
         }
 
-        if ($this->getStatus() !== $user->getStatus()) {
-            return false;
-        }
-
-        return true;
+        return $this->getStatus() === $user->getStatus();
     }
 
     public function getId(): Uuid

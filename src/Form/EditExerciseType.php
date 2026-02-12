@@ -8,6 +8,7 @@ use Continuum\Dto\Request\Workout\EditExercise;
 use Continuum\Entity\Exercise;
 use Continuum\Enum\ExerciseGroup;
 use Continuum\Form\Type\AbstractImmutableType;
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -43,6 +44,7 @@ final class EditExerciseType extends AbstractImmutableType
         );
     }
 
+    #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
         $resolver->setDefault('exercise', null);
