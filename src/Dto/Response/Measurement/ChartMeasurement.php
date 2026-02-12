@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Continuum\Dto\Response\Measurement;
 
+use Continuum\Enum\Change;
+
 final readonly class ChartMeasurement
 {
-    public const string TYPE_INCREASE = 'increase';
-    public const string TYPE_UNCHANGED = 'unchanged';
-    public const string TYPE_DECREASE = 'decrease';
-
     public function __construct(
-        public string $type,
+        public Change $type,
         public ?int $prevTime,
         public int $time,
         public float $fat,
@@ -21,7 +19,7 @@ final readonly class ChartMeasurement
     public static function first(float $fat, float $weight): self
     {
         return new self(
-            type: self::TYPE_UNCHANGED,
+            type: Change::Unchanged,
             prevTime: null,
             time: 0,
             fat: $fat,

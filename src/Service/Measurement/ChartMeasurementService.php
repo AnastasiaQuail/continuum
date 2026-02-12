@@ -7,6 +7,7 @@ namespace Continuum\Service\Measurement;
 use Continuum\Dto\Response\Measurement\ChartMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
+use Continuum\Enum\Change;
 use DateTimeImmutable;
 
 final readonly class ChartMeasurementService
@@ -40,9 +41,9 @@ final readonly class ChartMeasurementService
         foreach ($measurements as $measurement) {
             $chartMeasurements[] = $prevChartMeasurement = new ChartMeasurement(
                 type: match (true) {
-                    $prevChartMeasurement->fat < $measurement->getFatDeurenberg() => ChartMeasurement::TYPE_INCREASE,
-                    $prevChartMeasurement->fat > $measurement->getFatDeurenberg() => ChartMeasurement::TYPE_DECREASE,
-                    default => ChartMeasurement::TYPE_UNCHANGED,
+                    $prevChartMeasurement->fat < $measurement->getFatDeurenberg() => Change::Increased,
+                    $prevChartMeasurement->fat > $measurement->getFatDeurenberg() => Change::Decreased,
+                    default => Change::Unchanged,
                 },
                 prevTime: $prevChartMeasurement->time,
                 time: $measurement->getDatetime()->getTimestamp() - $month->getTimestamp(),

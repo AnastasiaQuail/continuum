@@ -164,7 +164,7 @@ function initMeasurementWeightChart(element, data) {
                 return {
                     gt: item.prev_time ?? null,
                     lte: item.time,
-                    color: item.type === 'increase' ? redColor : greenColor
+                    color: item.type === 'increased' ? redColor : greenColor
                 };
             }),
         },

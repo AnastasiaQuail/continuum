@@ -103,6 +103,17 @@
                                         <div class="workout-exercise-description">
                                             <div class="exercise-name">
                                                 {{- workoutExercise.exercise.name|capitalize -}}
+
+                                                {%- set weId = workoutExercise.id.toString -%}
+                                                {%- if progresses[weId] is defined -%}
+                                                    {%- if progresses[weId].change.value !== 'unchanged' -%}
+                                                        <span class="exercise-progress"
+                                                              data-change="{{ progresses[weId].change.value }}">
+                                                            {{- progresses[weId].percent -}}%
+                                                            {{- ux_icon('lucide:trending-up') -}}
+                                                        </span>
+                                                    {%- endif -%}
+                                                {%- endif -%}
                                             </div>
                                             <div class="workout-exercise-duration">
                                                 {%- set minutes = 0 -%}

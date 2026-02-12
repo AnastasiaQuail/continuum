@@ -3005,11 +3005,34 @@ textarea {
                     }
 
                     .exercise-name {
+                        display: flex;
+                        align-items: center;
+                        column-gap: calc(var(--gap-inline) / 4);
                         font-size: var(--font-size-medium);
                         color: var(--exercise-color);
 
                         [data-theme="dark"] & {
                             color: color-mix(in srgb, var(--exercise-color) var(--transparent-color-tiny), var(--color));
+                        }
+
+                        .exercise-progress {
+                            display: inline-flex;
+                            align-items: center;
+                            column-gap: calc(var(--gap-inline) / 8);
+                            font-size: var(--font-size-extra-small);
+                            color: var(--color-green);
+
+                            svg {
+                                font-size: var(--font-size);
+                            }
+
+                            &[data-change="decreased"] {
+                                color: var(--color-red);
+
+                                svg {
+                                    transform: scaleY(-1);
+                                }
+                            }
                         }
                     }
 

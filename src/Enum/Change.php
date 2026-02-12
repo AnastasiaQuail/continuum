@@ -1,0 +1,12 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Continuum\Enum;
+
+enum Change: string
+{
+    case Unchanged = 'unchanged';
+    case Increased = 'increased';
+    case Decreased = 'decreased';
+}
