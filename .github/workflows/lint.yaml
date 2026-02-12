@@ -29,6 +29,9 @@ jobs:
       - name: "Lint Composer config"
         run: composer self-validate
 
+      - name: "Detect dependency issues"
+        run: composer self-dependencies
+
       - name: "Check if autoloader is valid"
         run: composer self-dump-autoload
 
