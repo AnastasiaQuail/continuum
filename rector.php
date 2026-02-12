@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
+use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
+use Rector\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector;
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
@@ -25,7 +27,10 @@ return RectorConfig::configure()
     ->withPreparedSets(
         deadCode: true,
         codeQuality: true,
+        codingStyle: true,
     )
     ->withSkip([
+        CatchExceptionNameMatchingTypeRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
+        NewlineBetweenClassLikeStmtsRector::class,
     ]);

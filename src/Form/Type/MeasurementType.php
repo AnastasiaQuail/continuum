@@ -18,6 +18,7 @@ final class MeasurementType extends NumberType
         if (!isset($view->vars['attr']['step'])) {
             $view->vars['attr']['step'] = 0.5;
         }
+
         if (!isset($view->vars['attr']['autocomplete'])) {
             $view->vars['attr']['autocomplete'] = 'off';
         }
@@ -27,9 +28,11 @@ final class MeasurementType extends NumberType
         if (null !== $options['min']) {
             $view->vars['attr']['min'] = $options['min'];
         }
+
         if (null !== $options['max']) {
             $view->vars['attr']['max'] = $options['max'];
         }
+
         if (null !== $options['postfix']) {
             $view->vars['attr']['data-mask'] = 'postfix';
             $view->vars['attr']['data-postfix'] = $options['postfix'];
