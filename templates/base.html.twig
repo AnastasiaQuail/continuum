@@ -28,7 +28,9 @@
                     <div class="header-logo">
                         <a class="header-logo-link" href="{{ path('app_homepage') }}">
                             {{- ux_icon('hugeicons:infinity-02') -}}
-                            <span>Continuum</span>
+                            <span class="logo-text">Continuum
+                                {%- if random(20) === 20 %}{{ ux_icon('lucide:bug', {class: 'logo-bug'}) }}{% endif -%}
+                            </span>
                         </a>
                     </div>
                     <button id="sidebar-toggler" class="header-button">
