@@ -48,7 +48,10 @@ jobs:
       matrix:
         actions:
           - name: "PHP-CS-Fixer"
-            run: composer cs:check -- --ansi --format=checkstyle
+            run: composer cs:check -- --ansi --format=@auto
+
+          - name: "Rector"
+            run: composer rector:check -- --ansi --output-format=github
 
     steps:
       - name: "Checkout code"

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
+use Override;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -14,6 +15,7 @@ final class Version20260113021730 extends AbstractMigration
         $this->addSql('DROP TABLE reflection_moods');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql(

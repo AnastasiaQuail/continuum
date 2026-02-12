@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
+use Override;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -15,6 +16,7 @@ final class Version20260129152057 extends AbstractMigration
         $this->addSql('ALTER TABLE users ADD longitude NUMERIC(9, 6) DEFAULT 0 NOT NULL');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE "users" DROP latitude');

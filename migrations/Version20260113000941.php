@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
+use Override;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -29,6 +30,7 @@ final class Version20260113000941 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_WEEKLY_REFLECTION_DATE ON weekly_reflection (date)');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE weekly_reflection');

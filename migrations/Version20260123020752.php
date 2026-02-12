@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
+use Override;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -78,6 +79,7 @@ final class Version20260123020752 extends AbstractMigration
         );
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE workout_exercises DROP CONSTRAINT FK_2D7B2EC5A6CCCFC9');

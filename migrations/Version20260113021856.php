@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace DoctrineMigrations;
 
+use Override;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
@@ -30,6 +31,7 @@ final class Version20260113021856 extends AbstractMigration
         $this->addSql('DROP TABLE weekly_reflection');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql(
