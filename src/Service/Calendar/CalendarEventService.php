@@ -28,7 +28,7 @@ final readonly class CalendarEventService
     }
 
     /**
-     * @return array<CombinedCalendarEvent>
+     * @return array<non-empty-string, CombinedCalendarEvent>
      */
     public function getByYear(User $user, int $year): array
     {
@@ -58,7 +58,7 @@ final readonly class CalendarEventService
     }
 
     /**
-     * @return array<CalendarEvent>
+     * @return list<CalendarEvent>
      */
     public function getByDay(User $user, DateTimeImmutable $date): array
     {

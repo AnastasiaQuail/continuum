@@ -11,7 +11,7 @@ final readonly class CombinedCalendarEvent
     public function __construct(
         public ?CalendarEvent $dayEvent = null,
         /**
-         * @var array<CalendarEvent>
+         * @var list<CalendarEvent>
          */
         public array $hourEvents = [],
     ) {}

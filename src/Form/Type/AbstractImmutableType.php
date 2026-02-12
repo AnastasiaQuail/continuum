@@ -54,7 +54,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
             throw new UnexpectedTypeException($viewData, $dataClass);
         }
 
-        /** @var FormInterface[] $data */
+        /** @var list<FormInterface> $data */
         $data = iterator_to_array($forms);
 
         $this->mapForms($data, $viewData);
@@ -62,7 +62,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
 
     final public function mapFormsToData(Traversable $forms, mixed &$viewData): void
     {
-        /** @var FormInterface[] $data */
+        /** @var list<FormInterface> $data */
         $data = iterator_to_array($forms);
 
         $viewData = $this->mapDataClass($data);
@@ -71,7 +71,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
     protected function configure(OptionsResolver $resolver): void {}
 
     /**
-     * @param FormInterface[] $forms
+     * @param list<FormInterface> $forms
      * @param T $dataClass
      */
     protected function mapForms(array $forms, object $dataClass): void
@@ -80,7 +80,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
     }
 
     /**
-     * @param FormInterface[] $forms
+     * @param list<FormInterface> $forms
      *
      * @return T
      */
