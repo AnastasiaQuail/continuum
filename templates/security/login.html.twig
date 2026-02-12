@@ -8,11 +8,6 @@
         <div class="alert alert-secondary">
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
         </div>
-    {%- elseif error -%}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {%- endif -%}
-
-    {%- if app.user -%}
         <div>
             <a class="btn btn-primary btn-transparent" href="{{ path('app_homepage') }}">
                 {{ ux_icon('lucide:house') }}
@@ -20,6 +15,22 @@
             </a>
         </div>
     {%- else -%}
+        <div class="alert alert-danger browser-unsupport">
+            <div class="alert-title">
+                {{- ux_icon('lucide:alert-triangle') -}}
+                <strong>This browser isn’t fully supported.</strong>
+            </div>
+            <div>
+                <small>Some features may not work correctly.</small><br>
+                <small>Please update your browser or use a modern alternative.</small>
+            </div>
+            <div><small>(Supported: <strong>Chrome 138+</strong>, <strong>Safari 26.2+</strong>)</small></div>
+        </div>
+
+        {%- if error -%}
+            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {%- endif -%}
+
         <form method="post" action="{{ path('app_login') }}">
             <div>
                 <label for="username" hidden>Email</label>
