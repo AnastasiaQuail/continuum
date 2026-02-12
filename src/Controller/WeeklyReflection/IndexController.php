@@ -25,8 +25,10 @@ final class IndexController extends AbstractController
 
     #[Route(path: '/weekly-reflections', name: 'app_weekly_reflections', methods: ['GET'])]
     public function __invoke(
-        #[CurrentUser] User $user,
-        #[MapQueryParameter('month')] ?string $date = null,
+        #[CurrentUser]
+        User $user,
+        #[MapQueryParameter('month')]
+        ?string $date = null,
     ): Response {
         $month ??= new DateTimeImmutable($date ?? 'first day of this month', $user->getTimezone())->setTime(0, 0);
 

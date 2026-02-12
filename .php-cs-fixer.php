@@ -34,10 +34,7 @@ return new Config()
         'phpdoc_align' => ['align' => 'left'],
 
         'ordered_class_elements' => false, // todo enable
-        'phpdoc_types_order' => false, // todo enable
-        'increment_style' => false, // todo enable
         'octal_notation' => false, // todo enable
-        'method_argument_space' => false, // todo enable
 
         // '@PHPUnit100Migration:risky' => true,
         // 'get_class_to_class_keyword' => true,

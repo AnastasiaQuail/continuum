@@ -26,7 +26,7 @@ final readonly class MoodReflectionService
         $days ??= $this->trendDuration;
 
         $moods = [];
-        for ($day = $days - 1; $day >= 0; $day--) {
+        for ($day = $days - 1; $day >= 0; --$day) {
             $moods[new DateTimeImmutable(sprintf('-%d days', $day))->format('Y-m-d')] = null;
         }
 

@@ -61,7 +61,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
     }
 
     /**
-     * @param T|null $viewData
+     * @param null|T $viewData
      */
     final public function mapDataToForms(mixed $viewData, Traversable $forms): void
     {

@@ -254,7 +254,7 @@ final readonly class DatabaseDumper
         foreach (glob($this->backupDir . '/*.sql') as $file) {
             if (filemtime($file) < strtotime('-7 days')) {
                 unlink($file);
-                $removedFiles++;
+                ++$removedFiles;
             }
         }
 

@@ -26,13 +26,10 @@ final class CalendarEvent
     public function __construct(
         #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
         private readonly DateTimeImmutable $datetime,
-
         #[ORM\Column(enumType: CalendarEventFormat::class)]
         private readonly CalendarEventFormat $format,
-
         #[ORM\Column(enumType: CalendarEventType::class)]
         private readonly CalendarEventType $type,
-
         #[ORM\Column(length: 255)]
         private readonly string $title,
     ) {

@@ -31,13 +31,10 @@ final class WorkoutSet
         #[ORM\ManyToOne(inversedBy: 'sets')]
         #[ORM\JoinColumn(nullable: false)]
         private readonly WorkoutExercise $workoutExercise,
-
         #[ORM\Column]
         private readonly int $weight,
-
         #[ORM\Column]
         private readonly int $reps,
-
         #[ORM\Column]
         private readonly bool $isWarmup = false,
     ) {

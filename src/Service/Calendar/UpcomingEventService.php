@@ -92,7 +92,7 @@ final readonly class UpcomingEventService
     }
 
     /**
-     * @return non-empty-string|null
+     * @return null|non-empty-string
      */
     private function getUpcomingText(User $user, CalendarEvent $event): ?string
     {

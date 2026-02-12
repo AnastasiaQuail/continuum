@@ -71,7 +71,7 @@ final readonly class WorkoutExerciseProgressService
             }
 
             $result += $set->getReps() * $weight;
-            $count++;
+            ++$count;
         }
 
         return $result / $count;

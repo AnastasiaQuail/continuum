@@ -60,7 +60,6 @@ final class BodyMeasurement
     public function __construct(
         #[ORM\Column]
         private readonly int $age,
-
         #[ORM\Column]
         private readonly int $height,
     ) {

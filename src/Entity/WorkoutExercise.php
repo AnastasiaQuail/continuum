@@ -35,7 +35,6 @@ final class WorkoutExercise
         #[ORM\ManyToOne(inversedBy: 'workoutExercises')]
         #[ORM\JoinColumn(nullable: false)]
         private readonly Workout $workout,
-
         #[ORM\ManyToOne(inversedBy: 'workoutExercises')]
         #[ORM\JoinColumn(nullable: false)]
         private readonly Exercise $exercise,
