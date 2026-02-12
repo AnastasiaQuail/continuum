@@ -48,7 +48,7 @@ final class WeeklyReflectionVoter extends Voter
 
     private function isViewGranted(User $user, mixed $subject): bool
     {
-        if ($subject === null) {
+        if (null === $subject) {
             return true;
         }
 

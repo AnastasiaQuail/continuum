@@ -31,7 +31,6 @@ final class Exercise
     public function __construct(
         #[ORM\Column(length: 255)]
         private string $name,
-
         #[ORM\Column(name: 'exercise_group', enumType: ExerciseGroup::class)]
         private ExerciseGroup $group,
     ) {

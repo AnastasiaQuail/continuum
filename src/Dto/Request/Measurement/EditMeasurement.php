@@ -55,11 +55,11 @@ final readonly class EditMeasurement
     #[Assert\Callback]
     public function validate(ExecutionContextInterface $context): void
     {
-        if ($this->neck !== null && $this->waist === null) {
+        if (null !== $this->neck && null === $this->waist) {
             $context->buildViolation('This value is required if neck is filled')
                 ->atPath('waist')
                 ->addViolation();
-        } elseif ($this->neck === null && $this->waist !== null) {
+        } elseif (null === $this->neck && null !== $this->waist) {
             $context->buildViolation('This value is required if waist is filled')
                 ->atPath('neck')
                 ->addViolation();

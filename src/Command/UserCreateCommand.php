@@ -43,7 +43,7 @@ final readonly class UserCreateCommand
         if (null !== $role) {
             $user->addRole($role);
 
-            if ($role === UserRole::SuperAdmin) {
+            if (UserRole::SuperAdmin === $role) {
                 $user->setStatus(UserStatus::Active);
             }
         }

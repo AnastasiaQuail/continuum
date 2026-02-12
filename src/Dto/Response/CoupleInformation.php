@@ -23,13 +23,13 @@ final readonly class CoupleInformation
     {
         $data = [];
         if ($this->together->y > 0) {
-            $data[] = sprintf('%d %s', $this->together->y, $this->together->y === 1 ? 'year' : 'years');
+            $data[] = sprintf('%d %s', $this->together->y, 1 === $this->together->y ? 'year' : 'years');
         }
         if ($this->together->m > 0) {
-            $data[] = sprintf('%d %s', $this->together->m, $this->together->m === 1 ? 'month' : 'months');
+            $data[] = sprintf('%d %s', $this->together->m, 1 === $this->together->m ? 'month' : 'months');
         }
         if ($this->together->d > 0) {
-            $data[] = sprintf('%d %s', $this->together->d, $this->together->d === 1 ? 'day' : 'days');
+            $data[] = sprintf('%d %s', $this->together->d, 1 === $this->together->d ? 'day' : 'days');
         }
 
         return match (count($data)) {

@@ -29,13 +29,6 @@ final readonly class DatabaseDumper
         private DatabaseDumpCache $cache,
     ) {}
 
-    private function getFinder(): Finder
-    {
-        return new Finder()->files()->sortByModifiedTime()
-            ->in($this->backupDir)
-            ->name('*.sql');
-    }
-
     /**
      * @return list<BackupFile>
      */
@@ -71,6 +64,55 @@ final readonly class DatabaseDumper
         return $lastBackupTime > new DateTimeImmutable('-1 day');
     }
 
+    /**
+     * @throws RuntimeException
+     */
+    public function makeBackup(): string
+    {
+        try {
+            $backupPath = $this->doBackup();
+        } catch (RuntimeException $exception) {
+            $this->logger->error($exception->getMessage());
+
+            if ($exception instanceof ProcessFailedException) {
+                throw new RuntimeException('Backup failed');
+            }
+
+            throw $exception;
+        }
+
+        $this->cache->save(new DateTimeImmutable('now'));
+
+        $this->clearLegacyDumps();
+
+        return $backupPath;
+    }
+
+    /**
+     * @throws RuntimeException
+     */
+    public function makeRestore(string $backupFile): void
+    {
+        try {
+            $this->doRestore($backupFile);
+        } catch (RuntimeException $exception) {
+            $this->logger->error($exception->getMessage());
+
+            if ($exception instanceof ProcessFailedException) {
+                throw new RuntimeException('Backup failed');
+            }
+
+            throw $exception;
+        }
+    }
+
+    private function getFinder(): Finder
+    {
+        return new Finder()->files()->sortByModifiedTime()
+            ->in($this->backupDir)
+            ->name('*.sql');
+    }
+
     private function getLastBackupTime(): ?DateTimeImmutable
     {
         try {
@@ -100,33 +142,9 @@ final readonly class DatabaseDumper
     /**
      * @throws RuntimeException
      */
-    public function makeBackup(): string
-    {
-        try {
-            $backupPath = $this->doBackup();
-        } catch (RuntimeException $exception) {
-            $this->logger->error($exception->getMessage());
-
-            if ($exception instanceof ProcessFailedException) {
-                throw new RuntimeException('Backup failed');
-            }
-
-            throw $exception;
-        }
-
-        $this->cache->save(new DateTimeImmutable('now'));
-
-        $this->clearLegacyDumps();
-
-        return $backupPath;
-    }
-
-    /**
-     * @throws RuntimeException
-     */
     private function doBackup(): string
     {
-        if (!is_dir($this->backupDir) && !mkdir($this->backupDir, 0755, true) && !is_dir($this->backupDir)) {
+        if (!is_dir($this->backupDir) && !mkdir($this->backupDir, 0o755, true) && !is_dir($this->backupDir)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $this->backupDir));
         }
 
@@ -167,24 +185,6 @@ final readonly class DatabaseDumper
         );
 
         return $backupPath;
-    }
-
-    /**
-     * @throws RuntimeException
-     */
-    public function makeRestore(string $backupFile): void
-    {
-        try {
-            $this->doRestore($backupFile);
-        } catch (RuntimeException $exception) {
-            $this->logger->error($exception->getMessage());
-
-            if ($exception instanceof ProcessFailedException) {
-                throw new RuntimeException('Backup failed');
-            }
-
-            throw $exception;
-        }
     }
 
     /**
@@ -254,7 +254,7 @@ final readonly class DatabaseDumper
         foreach (glob($this->backupDir . '/*.sql') as $file) {
             if (filemtime($file) < strtotime('-7 days')) {
                 unlink($file);
-                $removedFiles++;
+                ++$removedFiles;
             }
         }
 

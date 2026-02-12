@@ -42,10 +42,8 @@ final class EditMoodReflectionType extends AbstractImmutableType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configure(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefault('moodReflection', null);
         $resolver->setAllowedTypes('moodReflection', ['null', MoodReflection::class]);
     }

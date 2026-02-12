@@ -47,10 +47,8 @@ final class EditUserType extends AbstractImmutableType
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configure(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setRequired('user');
         $resolver->setAllowedTypes('user', [User::class]);
     }

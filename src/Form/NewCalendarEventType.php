@@ -42,14 +42,12 @@ final class NewCalendarEventType extends AbstractImmutableType
         return new NewCalendarEvent(
             $forms['title']->getData() ?? '',
             $forms['type']->getData(),
-            $time !== '' ? $time : null,
+            '' !== $time ? $time : null,
         );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    protected function configure(OptionsResolver $resolver): void
     {
-        parent::configureOptions($resolver);
-
         $resolver->setDefault('timezone', null);
         $resolver->setAllowedTypes('timezone', ['null', DateTimeZone::class]);
     }

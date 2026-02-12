@@ -22,6 +22,6 @@ final readonly class NewWorkoutSet
 
     public function isWarmup(): bool
     {
-        return $this->isWarmup === 'on';
+        return 'on' === $this->isWarmup;
     }
 }

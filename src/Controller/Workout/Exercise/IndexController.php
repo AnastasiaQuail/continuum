@@ -19,7 +19,8 @@ final class IndexController extends AbstractController
 
     #[Route(path: '/exercises', name: 'app_exercises', methods: ['GET'])]
     #[IsGranted(ExerciseVoter::VIEW)]
-    public function __invoke(): Response {
+    public function __invoke(): Response
+    {
         $exercises = $this->exerciseService->getAll();
         $exerciseCountMap = $this->exerciseService->getWorkoutExerciseCountIndexedById();
 

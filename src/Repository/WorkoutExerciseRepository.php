@@ -34,15 +34,15 @@ final class WorkoutExerciseRepository extends ServiceEntityRepository
      */
     public function findPrevByWorkout(Workout $workout): array
     {
-        $sql = <<<SQL
-SELECT id
-FROM (
-    SELECT w.id as workout_id, LAG(we.id) OVER (PARTITION BY we.exercise_id ORDER BY w.date) AS id
-    FROM workout_exercises we
-    JOIN workouts w ON w.id = we.workout_id
-) as prev
-WHERE prev.id IS NOT NULL AND prev.workout_id = :workout_id;
-SQL;
+        $sql = <<<'SQL'
+            SELECT id
+            FROM (
+                SELECT w.id as workout_id, LAG(we.id) OVER (PARTITION BY we.exercise_id ORDER BY w.date) AS id
+                FROM workout_exercises we
+                JOIN workouts w ON w.id = we.workout_id
+            ) as prev
+            WHERE prev.id IS NOT NULL AND prev.workout_id = :workout_id;
+            SQL;
 
         $ids = $this->getEntityManager()->getConnection()
             ->executeQuery($sql, ['workout_id' => $workout->getId()])

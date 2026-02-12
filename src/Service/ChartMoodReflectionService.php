@@ -23,7 +23,7 @@ final readonly class ChartMoodReflectionService
         $charts = [];
 
         foreach ($moodReflections as $moodReflection) {
-            if ($moodReflection === null) {
+            if (null === $moodReflection) {
                 continue;
             }
 

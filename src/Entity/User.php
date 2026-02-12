@@ -14,6 +14,7 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Firewall\ContextListener;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -85,7 +86,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     }
 
     /**
-     * @see \Symfony\Component\Security\Http\Firewall\ContextListener
+     * @see ContextListener
      */
     public function isEqualTo(UserInterface $user): bool
     {
@@ -168,12 +169,12 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
 
     public function isActive(): bool
     {
-        return $this->status === UserStatus::Active;
+        return UserStatus::Active === $this->status;
     }
 
     public function isDisabled(): bool
     {
-        return $this->status === UserStatus::Disabled;
+        return UserStatus::Disabled === $this->status;
     }
 
     /**

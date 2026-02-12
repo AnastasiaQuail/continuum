@@ -24,20 +24,74 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
      */
     private string $dataClass = '';
 
-    public function configureOptions(OptionsResolver $resolver): void
+    final public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => $this->getDataClass(),
             'empty_data' => null,
         ]);
+
+        $this->configure($resolver);
     }
+
+    final public function getBlockPrefix(): string
+    {
+        return '';
+    }
+
+    /**
+     * @param null|T $viewData
+     */
+    final public function mapDataToForms(mixed $viewData, Traversable $forms): void
+    {
+        if (null === $viewData) {
+            return;
+        }
+
+        $dataClass = $this->getDataClass();
+
+        if (!$viewData instanceof $dataClass) {
+            throw new UnexpectedTypeException($viewData, $dataClass);
+        }
+
+        /** @var list<FormInterface> $data */
+        $data = iterator_to_array($forms);
+
+        $this->mapForms($data, $viewData);
+    }
+
+    final public function mapFormsToData(Traversable $forms, mixed &$viewData): void
+    {
+        /** @var list<FormInterface> $data */
+        $data = iterator_to_array($forms);
+
+        $viewData = $this->mapDataClass($data);
+    }
+
+    protected function configure(OptionsResolver $resolver): void {}
+
+    /**
+     * @param list<FormInterface> $forms
+     * @param T $dataClass
+     */
+    protected function mapForms(array $forms, object $dataClass): void
+    {
+        throw new InvalidConfigurationException('This method should be overridden.');
+    }
+
+    /**
+     * @param list<FormInterface> $forms
+     *
+     * @return T
+     */
+    abstract protected function mapDataClass(array $forms): object;
 
     /**
      * @return class-string<T>
      */
     private function getDataClass(): string
     {
-        if ($this->dataClass !== '') {
+        if ('' !== $this->dataClass) {
             return $this->dataClass;
         }
 
@@ -50,54 +104,4 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
 
         return $this->dataClass = $returnType->getName();
     }
-
-    public function getBlockPrefix(): string
-    {
-        return '';
-    }
-
-    /**
-     * @param T|null $viewData
-     */
-    public function mapDataToForms(mixed $viewData, Traversable $forms): void
-    {
-        if (null === $viewData) {
-            return;
-        }
-
-        $dataClass = $this->getDataClass();
-
-        if (!$viewData instanceof $dataClass) {
-            throw new UnexpectedTypeException($viewData, $dataClass);
-        }
-
-        /** @var FormInterface[] $data */
-        $data = iterator_to_array($forms);
-
-        $this->mapForms($data, $viewData);
-    }
-
-    /**
-     * @param FormInterface[] $forms
-     * @param T $dataClass
-     */
-    protected function mapForms(array $forms, object $dataClass): void
-    {
-        throw new InvalidConfigurationException('This method should be overridden.');
-    }
-
-    public function mapFormsToData(Traversable $forms, mixed &$viewData): void
-    {
-        /** @var FormInterface[] $data */
-        $data = iterator_to_array($forms);
-
-        $viewData = $this->mapDataClass($data);
-    }
-
-    /**
-     * @param FormInterface[] $forms
-     *
-     * @return T
-     */
-    abstract protected function mapDataClass(array $forms): object;
 }

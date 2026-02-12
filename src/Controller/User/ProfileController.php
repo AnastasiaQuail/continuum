@@ -13,6 +13,6 @@ final class ProfileController extends AbstractController
     #[Route(path: '/profile', name: 'app_profile', methods: ['GET'])]
     public function __invoke(): Response
     {
-        return  $this->render('user/profile.html.twig');
+        return $this->render('user/profile.html.twig');
     }
 }

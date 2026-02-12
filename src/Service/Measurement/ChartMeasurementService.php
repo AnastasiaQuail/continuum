@@ -23,11 +23,12 @@ final readonly class ChartMeasurementService
      */
     public function getChartMeasurements(User $user, DateTimeImmutable $month, array $measurements): array
     {
-        if ($measurements === []) {
+        if ([] === $measurements) {
             return [];
         }
 
         $initMeasurement = $this->measurementService->getInitMeasurement($user, $month);
+
         /** @var BodyMeasurement $initMeasurement */
         $initMeasurement ??= array_first($measurements);
 

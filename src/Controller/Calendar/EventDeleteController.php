@@ -29,7 +29,7 @@ final class EventDeleteController extends AbstractController
         $this->addFlash('success', sprintf('Event "%s" has been deleted.', $event->getTitle()));
 
         return $this->redirectToRoute('app_calendar_day', [
-            'day' => $event->getDatetime()->setTimezone($user->getTimezone())->format('Y-m-d')
+            'day' => $event->getDatetime()->setTimezone($user->getTimezone())->format('Y-m-d'),
         ]);
     }
 }

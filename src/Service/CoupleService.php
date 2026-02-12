@@ -48,9 +48,9 @@ final readonly class CoupleService
 
     private function getDistance(Location $location, Location $partnerLocation): float
     {
-        $a = sin((deg2rad($partnerLocation->getLatitude()) - deg2rad($location->getLatitude())) / 2) ** 2 +
-            cos(deg2rad($partnerLocation->getLatitude())) * cos(deg2rad($location->getLatitude())) *
-            sin((deg2rad($partnerLocation->getLongitude()) - deg2rad($location->getLongitude())) / 2) ** 2;
+        $a = sin((deg2rad($partnerLocation->getLatitude()) - deg2rad($location->getLatitude())) / 2) ** 2
+            + cos(deg2rad($partnerLocation->getLatitude())) * cos(deg2rad($location->getLatitude()))
+            * sin((deg2rad($partnerLocation->getLongitude()) - deg2rad($location->getLongitude())) / 2) ** 2;
 
         return 6371 * 2 * atan2(sqrt($a), sqrt(1 - $a));
     }

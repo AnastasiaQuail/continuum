@@ -46,6 +46,7 @@ final readonly class UpcomingEventService
     {
         /** @var array<string, CalendarEvent> $dayEvents */
         $dayEvents = [];
+
         /** @var array<string, CalendarEvent> $hourEvents */
         $hourEvents = [];
 
@@ -61,7 +62,7 @@ final readonly class UpcomingEventService
             }
         }
 
-        /** @var array<CalendarEvent> $data */
+        /** @var list<CalendarEvent> $data */
         $data = [...$hourEvents, ...$dayEvents];
         usort($data, static fn (CalendarEvent $a, CalendarEvent $b) => $a->getDatetime() <=> $b->getDatetime());
 
@@ -91,7 +92,7 @@ final readonly class UpcomingEventService
     }
 
     /**
-     * @return non-empty-string|null
+     * @return null|non-empty-string
      */
     private function getUpcomingText(User $user, CalendarEvent $event): ?string
     {

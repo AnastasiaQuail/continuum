@@ -37,3 +37,29 @@ jobs:
 
       - name: "Check if any dependencies are compromised"
         run: composer self-audit
+
+  static-analysis:
+    name: ${{ matrix.actions.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        actions:
+          - name: "PHP-CS-Fixer"
+            run: composer cs:check -- --ansi --format=checkstyle
+
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v4
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.5
+
+      - name: "Install dependencies"
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: --optimize-autoloader
+
+      - name: "Run ${{ matrix.actions.name }}"
+        run: ${{ matrix.actions.run }}

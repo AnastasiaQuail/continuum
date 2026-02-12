@@ -60,22 +60,11 @@ final class BodyMeasurement
     public function __construct(
         #[ORM\Column]
         private readonly int $age,
-
         #[ORM\Column]
         private readonly int $height,
     ) {
         $this->id = Uuid::v7();
         $this->datetime = new DateTimeImmutable();
-    }
-
-    private function from(?int $value, int $coefficient = 10, int $precision = 1): ?float
-    {
-        return $value !== null ? round($value / $coefficient, $precision) : null;
-    }
-
-    private function to(?float $value, int $coefficient = 10): ?int
-    {
-        return $value !== null ? (int) round($value * $coefficient) : null;
     }
 
     public function getId(): Uuid
@@ -222,5 +211,15 @@ final class BodyMeasurement
     public function setCalf(?float $calf): void
     {
         $this->calf = $this->to($calf);
+    }
+
+    private function from(?int $value, int $coefficient = 10, int $precision = 1): ?float
+    {
+        return null !== $value ? round($value / $coefficient, $precision) : null;
+    }
+
+    private function to(?float $value, int $coefficient = 10): ?int
+    {
+        return null !== $value ? (int) round($value * $coefficient) : null;
     }
 }
