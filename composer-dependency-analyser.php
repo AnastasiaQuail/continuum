@@ -7,6 +7,7 @@ use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
 
 return new Configuration()
     ->disableExtensionsAnalysis()
+    // ->enableAnalysisOfUnusedDevDependencies()
     ->ignoreErrorsOnPackage('doctrine/doctrine-migrations-bundle', [ErrorType::UNUSED_DEPENDENCY])
     ->ignoreErrorsOnPackage('symfony/apache-pack', [ErrorType::UNUSED_DEPENDENCY])
     ->ignoreErrorsOnPackage('symfony/asset', [ErrorType::UNUSED_DEPENDENCY])
