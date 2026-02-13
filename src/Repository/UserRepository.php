@@ -32,6 +32,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         if (!$user instanceof User) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
+
         if ('' === $newHashedPassword) {
             throw new UnsupportedUserException('New password cannot be blank.');
         }

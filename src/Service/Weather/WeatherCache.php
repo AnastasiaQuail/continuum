@@ -36,6 +36,7 @@ final readonly class WeatherCache
     public function get(Location $location): ?Weather
     {
         $item = $this->cache->getItem($this->getKey($location));
+
         /**
          * @var null|array{temperature: float, code: null|WmoCode, wind: array{speed: float, direction: float}} $data
          */

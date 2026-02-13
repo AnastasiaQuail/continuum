@@ -215,6 +215,7 @@ final class BodyMeasurement
 
     /**
      * @template T of int|null
+     *
      * @param T $value
      *
      * @return (T is int ? float : null)
@@ -226,6 +227,7 @@ final class BodyMeasurement
 
     /**
      * @template T of float|null
+     *
      * @param T $value
      *
      * @return (T is float ? int : null)

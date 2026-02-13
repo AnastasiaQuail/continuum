@@ -6,12 +6,18 @@ parameters:
 	level: max
 	tmpDir: var/cache/phpstan
 	paths:
-		- bin
-		- config
-		- data
-		- migrations
-		- src
-		- tests
+		- .
+		- bin/console
+		- bin/phpunit
+	excludePaths:
+		- assets/vendor/*
+		- config/reference.php
+		- tools/vendor/*
+		- var/*
+		- vendor/*
+		- composer-dependency-analyser.php # temp
+		- deploy.php # temp
+		- rector.php # temp
 
 	symfony:
 		containerXmlPath: var/cache/dev/Continuum_KernelDevDebugContainer.xml

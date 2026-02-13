@@ -11,6 +11,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
+use function assert;
+
 /**
  * @extends ServiceEntityRepository<Workout>
  */
@@ -23,7 +25,6 @@ final class WorkoutRepository extends ServiceEntityRepository
 
     public function findOneById(Uuid $id): ?Workout
     {
-        /** @var null|Workout $result */
         $result = $this->createQueryBuilder('w')
             ->andWhere('w.id = :id')
             ->setParameter('id', $id)
@@ -38,6 +39,8 @@ final class WorkoutRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
 
+        assert(null === $result || $result instanceof Workout);
+
         return $result;
     }
 
@@ -46,8 +49,7 @@ final class WorkoutRepository extends ServiceEntityRepository
      */
     public function findByRange(DateTimeImmutable $from, DateTimeImmutable $to): array
     {
-        /** @var list<Workout> $result */
-        $result = $this->createQueryBuilder('w')
+        return $this->createQueryBuilder('w')
             ->andWhere('w.date BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
             ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
@@ -62,8 +64,6 @@ final class WorkoutRepository extends ServiceEntityRepository
             ->addOrderBy('ws.orderIndex', 'ASC')
             ->getQuery()
             ->getResult();
-
-        return $result;
     }
 
     public function create(Workout $workout): void

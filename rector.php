@@ -12,15 +12,16 @@ return RectorConfig::configure()
     ->withSymfonyContainerPhp(__DIR__ . '/tests/symfony-container.php')
     ->withRootFiles()
     ->withPaths([
-        __DIR__ . '/bin',
-        __DIR__ . '/config',
-        __DIR__ . '/data',
-        __DIR__ . '/migrations',
-        __DIR__ . '/src',
-        __DIR__ . '/tests',
+        __DIR__,
+        __DIR__ . '/bin/console',
+        __DIR__ . '/bin/phpunit',
     ])
     ->withSkip([
+        __DIR__ . '/assets/vendor',
         __DIR__ . '/config/reference.php',
+        __DIR__ . '/tools/vendor',
+        __DIR__ . '/var',
+        __DIR__ . '/vendor',
     ])
     ->withImportNames()
     ->withPhpSets()

@@ -15,7 +15,7 @@ final readonly class DatabaseDumpCache
         private CacheItemPoolInterface $cache,
     ) {}
 
-    public function save(null|DateTimeImmutable $lastBackupTime): void
+    public function save(?DateTimeImmutable $lastBackupTime): void
     {
         $item = $this->cache->getItem(self::KEY);
         $item->set($lastBackupTime?->getTimestamp() ?? 0);

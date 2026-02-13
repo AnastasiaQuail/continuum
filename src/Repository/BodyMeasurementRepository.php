@@ -46,7 +46,6 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             $timeZone
         );
 
-        /** @var null|BodyMeasurement $result */
         $result = $this->createQueryBuilder('bm')
             ->andWhere('bm.datetime BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
@@ -55,6 +54,8 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+
+        assert(null === $result || $result instanceof BodyMeasurement);
 
         return $result;
     }

@@ -40,17 +40,15 @@ final readonly class CalendarProgress
 
     private function getPastDays(): int
     {
-        /** @var int $days */
         $days = $this->past->days;
 
-        return $days;
+        return false === $days ? 0 : $days;
     }
 
     private function getTotalDays(): int
     {
-        /** @var int $days */
         $days = $this->total->days;
 
-        return $days;
+        return false === $days ? 0 : $days;
     }
 }
