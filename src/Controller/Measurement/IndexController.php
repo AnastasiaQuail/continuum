@@ -32,7 +32,7 @@ final class IndexController extends AbstractController
         #[MapQueryParameter('month')]
         ?string $date = null,
     ): Response {
-        $month ??= new DateTimeImmutable($date ?? 'first day of this month', $user->getTimezone())->setTime(0, 0);
+        $month = new DateTimeImmutable($date ?? 'first day of this month', $user->getTimezone())->setTime(0, 0);
 
         if (null !== $error = $this->requestValidator->validateExistenceMonth($month, $user->getTimezone())) {
             throw new BadRequestHttpException($error);

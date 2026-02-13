@@ -11,6 +11,8 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
+use function assert;
+
 /**
  * @extends ServiceEntityRepository<Workout>
  */
@@ -23,7 +25,7 @@ final class WorkoutRepository extends ServiceEntityRepository
 
     public function findOneById(Uuid $id): ?Workout
     {
-        return $this->createQueryBuilder('w')
+        $result = $this->createQueryBuilder('w')
             ->andWhere('w.id = :id')
             ->setParameter('id', $id)
             ->leftJoin('w.workoutExercises', 'we')
@@ -36,6 +38,10 @@ final class WorkoutRepository extends ServiceEntityRepository
             ->addOrderBy('ws.orderIndex', 'ASC')
             ->getQuery()
             ->getOneOrNullResult();
+
+        assert(null === $result || $result instanceof Workout);
+
+        return $result;
     }
 
     /**

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Deployer;
 
-require 'recipe/symfony.php';
+require __DIR__ . '/vendor/deployer/deployer/recipe/symfony.php';
 
 host('production')
     ->setHostname(getenv('APP_HOSTNAME'))

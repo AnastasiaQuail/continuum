@@ -33,6 +33,10 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
+        if ('' === $newHashedPassword) {
+            throw new UnsupportedUserException('New password cannot be blank.');
+        }
+
         $user->setPassword($newHashedPassword);
 
         $this->save($user);
@@ -60,7 +64,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
      */
     public function findOrdered(): array
     {
-        return $this->findBy([], ['createdAt' => 'ASC']);
+        return array_values($this->findBy([], ['createdAt' => 'ASC']));
     }
 
     public function save(User $user): void

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\User;
 
+use Continuum\Dto\Request\User\EditLocation;
 use Continuum\Entity\User;
 use Continuum\Form\EditLocationType;
 use Continuum\Service\UserService;
@@ -26,7 +27,9 @@ final class LocationEditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->userService->updateLocation($user, $form->getData());
+            /** @var EditLocation $dto */
+            $dto = $form->getData();
+            $this->userService->updateLocation($user, $dto);
 
             $this->addFlash('success', 'Location updated.');
 

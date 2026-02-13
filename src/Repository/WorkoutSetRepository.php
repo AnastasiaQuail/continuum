@@ -21,12 +21,14 @@ final class WorkoutSetRepository extends ServiceEntityRepository
 
     public function findMaxOrderIndexByWorkout(WorkoutExercise $workoutExercise): int
     {
-        return $this->createQueryBuilder('ws')
+        $result = $this->createQueryBuilder('ws')
             ->select('MAX(ws.orderIndex)')
             ->andWhere('ws.workoutExercise = :id')
             ->setParameter('id', $workoutExercise->getId())
             ->getQuery()
-            ->getSingleScalarResult() ?? 0;
+            ->getSingleScalarResult();
+
+        return (int) ($result ?? 0);
     }
 
     public function create(WorkoutSet $workoutSet): void

@@ -26,11 +26,11 @@ final readonly class MeasurementService
     public function getByMonth(User $user, DateTimeImmutable $month): array
     {
         $from = new DateTimeImmutable(
-            sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m')),
+            sprintf('%s-%s-01 00:00:00', $month->format('Y'), $month->format('m')),
             $user->getTimezone()
         );
         $to = new DateTimeImmutable(
-            sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
+            sprintf('%s-%s-%s 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
             $user->getTimezone()
         );
 
@@ -43,11 +43,11 @@ final readonly class MeasurementService
     public function getByRange(User $user, DateTimeImmutable $fromDay, DateTimeImmutable $toDay): array
     {
         $from = new DateTimeImmutable(
-            sprintf('%d-%d-%d 00:00:00', $fromDay->format('Y'), $fromDay->format('m'), $fromDay->format('d')),
+            sprintf('%s-%s-%s 00:00:00', $fromDay->format('Y'), $fromDay->format('m'), $fromDay->format('d')),
             $user->getTimezone()
         );
         $to = new DateTimeImmutable(
-            sprintf('%d-%d-%d 23:59:59', $toDay->format('Y'), $toDay->format('m'), $toDay->format('d')),
+            sprintf('%s-%s-%s 23:59:59', $toDay->format('Y'), $toDay->format('m'), $toDay->format('d')),
             $user->getTimezone()
         );
 

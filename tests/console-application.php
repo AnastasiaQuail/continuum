@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Continuum\Kernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 
 /**
@@ -13,10 +13,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 
 new Dotenv()->bootEnv(dirname(__DIR__) . '/.env');
 
-/** @var Closure(non-empty-array<string, mixed> $context): Kernel $closure */
-$closure = include dirname(__DIR__) . '/public/index.php';
+/** @var Closure(non-empty-array<string, mixed> $context): Application $closure */
+$closure = include dirname(__DIR__) . '/bin/console';
 
-$kernel = $closure($_SERVER);
-$kernel->boot();
-
-return $kernel->getContainer();
+return $closure($_SERVER);

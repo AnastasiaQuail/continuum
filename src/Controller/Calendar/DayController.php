@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Calendar;
 
+use Continuum\Dto\Request\Calendar\NewCalendarEvent;
 use Continuum\Entity\User;
 use Continuum\Form\NewCalendarEventType;
 use Continuum\Security\Authorization\Voter\CalendarVoter;
@@ -39,7 +40,9 @@ final class DayController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $event = $this->calendarEventService->create($user, $day, $form->getData());
+            /** @var NewCalendarEvent $dto */
+            $dto = $form->getData();
+            $event = $this->calendarEventService->create($user, $day, $dto);
 
             $this->addFlash('success', sprintf('The "%s" event was created.', $event->getTitle()));
 

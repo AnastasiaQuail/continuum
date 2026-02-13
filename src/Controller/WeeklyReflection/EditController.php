@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\WeeklyReflection;
 
+use Continuum\Dto\Request\Reflection\EditWeeklyReflection;
 use Continuum\Entity\User;
 use Continuum\Form\EditWeeklyReflectionType;
 use Continuum\Security\Authorization\Voter\WeeklyReflectionVoter;
@@ -41,7 +42,9 @@ final class EditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $weeklyReflection = $this->weeklyReflectionService->save($week, $weeklyReflection, $form->getData());
+            /** @var EditWeeklyReflection $dto */
+            $dto = $form->getData();
+            $weeklyReflection = $this->weeklyReflectionService->save($week, $weeklyReflection, $dto);
 
             $this->addFlash(
                 'success',

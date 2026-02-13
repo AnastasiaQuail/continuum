@@ -19,7 +19,7 @@ final readonly class ChartMeasurementService
     /**
      * @param list<BodyMeasurement> $measurements
      *
-     * @return non-empty-list<ChartMeasurement>
+     * @return list<ChartMeasurement>
      */
     public function getChartMeasurements(User $user, DateTimeImmutable $month, array $measurements): array
     {
@@ -28,8 +28,6 @@ final readonly class ChartMeasurementService
         }
 
         $initMeasurement = $this->measurementService->getInitMeasurement($user, $month);
-
-        /** @var BodyMeasurement $initMeasurement */
         $initMeasurement ??= array_first($measurements);
 
         $chartMeasurements = [

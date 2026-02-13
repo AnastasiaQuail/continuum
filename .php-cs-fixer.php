@@ -10,9 +10,18 @@ return new Config()
     ->setFinder(
         Finder::create()
             ->in(__DIR__)
-            ->exclude(['var'])
-            ->append(['bin/console', 'bin/phpunit', __FILE__])
+            ->append([
+                'bin/console',
+                'bin/phpunit',
+                __FILE__,
+            ])
             ->notPath(['config/reference.php'])
+            ->exclude([
+                'assets/vendor',
+                'tools/vendor',
+                'var',
+                'vendor',
+            ])
     )
     ->setRiskyAllowed(true)
     ->setRules([
@@ -34,4 +43,5 @@ return new Config()
         'phpdoc_array_type' => true,
         'phpdoc_list_type' => true,
         'phpdoc_param_order' => true,
+        'phpdoc_to_comment' => ['ignored_tags' => ['var']],
     ]);

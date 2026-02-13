@@ -17,6 +17,7 @@ if (!is_file(dirname(__DIR__) . '/vendor/autoload_runtime.php')) {
 require_once dirname(__DIR__) . '/vendor/autoload_runtime.php';
 
 return static function (array $context): Application {
+    /** @var array{APP_ENV: non-empty-string, APP_DEBUG: numeric-string} $context */
     $kernel = new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
 
     return new Application($kernel);

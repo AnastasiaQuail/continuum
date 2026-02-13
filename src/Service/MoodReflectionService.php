@@ -19,7 +19,7 @@ final readonly class MoodReflectionService
     ) {}
 
     /**
-     * @return non-empty-array<string, MoodReflection>
+     * @return non-empty-array<non-empty-string, MoodReflection>
      */
     public function getPreviousDays(?int $days = null): array
     {
@@ -27,11 +27,15 @@ final readonly class MoodReflectionService
 
         $moods = [];
         for ($day = $days - 1; $day >= 0; --$day) {
-            $moods[new DateTimeImmutable(sprintf('-%d days', $day))->format('Y-m-d')] = null;
+            /** @var non-empty-string $date */
+            $date = new DateTimeImmutable(sprintf('-%d days', $day))->format('Y-m-d');
+            $moods[$date] = null;
         }
 
         foreach ($this->repository->findPreviousDays($days) as $mood) {
-            $moods[$mood->getDate()->format('Y-m-d')] = $mood;
+            /** @var non-empty-string $date */
+            $date = $mood->getDate()->format('Y-m-d');
+            $moods[$date] = $mood;
         }
 
         return $moods;

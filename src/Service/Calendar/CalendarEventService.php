@@ -73,7 +73,7 @@ final readonly class CalendarEventService
     public function create(User $user, DateTimeImmutable $date, NewCalendarEvent $dto): CalendarEvent
     {
         $dateTime = new DateTimeImmutable(
-            sprintf('%s %d:%d:00', $date->format('Y-m-d'), $dto->time?->format('H'), (int) $dto->time?->format('i')),
+            sprintf('%s %s:%s:00', $date->format('Y-m-d'), $dto->time?->format('H'), $dto->time?->format('i') ?? '00'),
             $user->getTimezone()
         );
 

@@ -20,7 +20,7 @@ final readonly class RequestValidator
         $errors = $this->validator->validate($year, new Year());
 
         if ($errors->count() > 0) {
-            return $errors->get(0)->getMessage();
+            return (string) $errors->get(0)->getMessage();
         }
 
         return null;

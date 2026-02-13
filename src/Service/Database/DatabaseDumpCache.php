@@ -15,10 +15,10 @@ final readonly class DatabaseDumpCache
         private CacheItemPoolInterface $cache,
     ) {}
 
-    public function save(DateTimeImmutable $lastBackupTime): void
+    public function save(?DateTimeImmutable $lastBackupTime): void
     {
         $item = $this->cache->getItem(self::KEY);
-        $item->set($lastBackupTime->getTimestamp());
+        $item->set($lastBackupTime?->getTimestamp() ?? 0);
         $item->expiresAt(new DateTimeImmutable('+8 hours'));
 
         $this->cache->save($item);
@@ -28,7 +28,7 @@ final readonly class DatabaseDumpCache
     {
         $item = $this->cache->getItem(self::KEY);
 
-        if (null === $time = $item->get()) {
+        if (!is_int($time = $item->get())) {
             return null;
         }
 

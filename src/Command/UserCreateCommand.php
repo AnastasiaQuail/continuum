@@ -26,6 +26,10 @@ final readonly class UserCreateCommand
         private UserPasswordHasherInterface $passwordHasher,
     ) {}
 
+    /**
+     * @param non-empty-string $email
+     * @param non-empty-string $password
+     */
     public function __invoke(
         SymfonyStyle $io,
         #[Argument]
@@ -36,9 +40,10 @@ final readonly class UserCreateCommand
         ?UserRole $role = null,
     ): int {
         $user = new User($email);
-        $user->setPassword(
-            $this->passwordHasher->hashPassword($user, $password)
-        );
+
+        /** @var non-empty-string $hashedPassword */
+        $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
+        $user->setPassword($hashedPassword);
 
         if (null !== $role) {
             $user->addRole($role);

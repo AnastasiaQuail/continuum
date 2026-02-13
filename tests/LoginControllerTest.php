@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @internal
@@ -35,11 +34,12 @@ final class LoginControllerTest extends WebTestCase
         $em->flush();
 
         // Create a User fixture
-        /** @var UserPasswordHasherInterface $passwordHasher */
-        $passwordHasher = $container->get('security.user_password_hasher');
-
         $user = new User('email@example.com');
-        $user->setPassword($passwordHasher->hashPassword($user, 'password'));
+
+        /** @var non-empty-string $hashedPassword */
+        $hashedPassword = $container->get('security.user_password_hasher')->hashPassword($user, 'password');
+
+        $user->setPassword($hashedPassword);
 
         $em->persist($user);
         $em->flush();

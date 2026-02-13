@@ -512,7 +512,7 @@ return [
         'National Spanish Paella Day',
     ],
     '03-28' => [
-        'Children\'s Picture Book Day',
+        "Children's Picture Book Day",
         'Eat an Eskimo Pie Day',
         'National Black Forest Cake Day',
         'National Something On a Stick Day',
@@ -525,7 +525,7 @@ return [
         'National Nevada Day',
     ],
     '03-30' => [
-        'National Doctors\' Day',
+        "National Doctors' Day",
         'National Take a Walk in the Park Day',
         'National I Am in Control Day',
         'National Pencil Day',
@@ -547,7 +547,7 @@ return [
         'National Burrito Day',
     ],
     '04-02' => [
-        'International Children\'s Book Day',
+        "International Children's Book Day",
         'National Reconciliation Day',
         'National Peanut Butter and Jelly Day',
         'National Ferret Day',
@@ -625,7 +625,7 @@ return [
     ],
     '04-12' => [
         'Grilled Cheese Day',
-        'Yuri\'s Night',
+        "Yuri's Night",
         'National Big Wind Day',
         'National Licorice Day',
         'National Grilled Cheese Sandwich Day',
@@ -1374,7 +1374,7 @@ return [
         'Respect for Parents Day',
         'American Family Day',
         'National Friendship Day',
-        'Sisters\' Day',
+        "Sisters' Day",
     ],
     '08-02' => [
         'National Coloring Book Day',
@@ -1425,7 +1425,7 @@ return [
     ],
     '08-10' => [
         'Lazy Day',
-        'National S\'mores Day',
+        "National S'mores Day",
         'National Shapewear Day',
         'National Connecticut Day',
     ],

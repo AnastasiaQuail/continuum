@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Admin\User;
 
+use Continuum\Dto\Request\Admin\User\EditUser;
 use Continuum\Entity\User;
 use Continuum\Form\Admin\EditUserType;
 use Continuum\Security\Authorization\Voter\Admin\UserVoter;
@@ -28,7 +29,9 @@ final class EditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->userService->update($user, $form->getData());
+            /** @var EditUser $dto */
+            $dto = $form->getData();
+            $user = $this->userService->update($user, $dto);
 
             $this->addFlash('success', sprintf('The %s user was updated.', $user->getUserIdentifier()));
 

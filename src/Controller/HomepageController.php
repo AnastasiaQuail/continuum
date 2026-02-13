@@ -63,7 +63,7 @@ final class HomepageController extends AbstractController
             $measurements
         );
 
-        $workoutDays = round((30 * $workoutMonths) / 7) * 7 + (int) $date->format('N');
+        $workoutDays = (int) round((30 * $workoutMonths) / 7) * 7 + (int) $date->format('N');
         $workoutPrevDate = $date->modify(sprintf('-%d days', $workoutDays));
         $workouts = $this->workoutService->getByRange($user, $workoutPrevDate, $date);
 

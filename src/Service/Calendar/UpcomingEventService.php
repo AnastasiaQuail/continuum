@@ -62,11 +62,11 @@ final readonly class UpcomingEventService
             }
         }
 
-        /** @var list<CalendarEvent> $data */
+        /** @var array<string, CalendarEvent> $data */
         $data = [...$hourEvents, ...$dayEvents];
         usort($data, static fn (CalendarEvent $a, CalendarEvent $b): int => $a->getDatetime() <=> $b->getDatetime());
 
-        return $data;
+        return array_values($data);
     }
 
     /**
@@ -125,7 +125,7 @@ final readonly class UpcomingEventService
         $days = $currentDate->diff($eventDate)->days;
 
         if ($days >= 7) {
-            $weeks = round($days / 7);
+            $weeks = (int) round($days / 7);
 
             return $weeks > 1 ? sprintf('in %d weeks', $weeks) : 'in a week';
         }
