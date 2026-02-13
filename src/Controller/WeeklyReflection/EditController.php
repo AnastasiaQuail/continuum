@@ -54,7 +54,7 @@ final class EditController extends AbstractController
             return $this->redirectToRoute('app_weekly_reflections', ['month' => $week->format('Y-m')]);
         }
 
-        return $this->render('weeklyReflection/edit.html.twig', [
+        return $this->render('weekly_reflection/edit.html.twig', [
             'week' => $week,
             'form' => $form,
         ]);

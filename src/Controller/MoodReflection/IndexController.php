@@ -43,9 +43,9 @@ final class IndexController extends AbstractController
         $lastMoods = $this->moodReflectionService->getPreviousDays();
         $moods = $this->moodReflectionService->getByMonth($month);
 
-        return $this->render('moodReflection/index.html.twig', [
+        return $this->render('mood_reflection/index.html.twig', [
             'month' => $month,
-            'lastMoods' => $lastMoods,
+            'last_moods' => $lastMoods,
             'moods' => $moods,
         ]);
     }

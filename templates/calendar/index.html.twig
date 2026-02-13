@@ -4,13 +4,13 @@
 {% block body_id %}calendar{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Calendar' },
+    {label: 'Calendar'},
 ] %}
 
 {% block showcase -%}
-    {%- if upcomingEvents is not empty and is_granted('CALENDAR_UPCOMING_EVENTS') -%}
+    {%- if upcoming_events is not empty and is_granted('CALENDAR_UPCOMING_EVENTS') -%}
         <section class="card calendar calendar-upcoming-events" id="calendar-upcoming-events">
-            {{- include('calendar/_upcoming_events.html.twig', {'collapsable': true}) -}}
+            {{- include('calendar/_upcoming_events.html.twig', {collapsable: true}) -}}
         </section>
     {%- endif -%}
 {%- endblock %}
@@ -21,59 +21,59 @@
             <h2>{{ year }}</h2>
 
             {{ include('default/_pagination.html.twig', {
-                'prev': {
-                    url: path('app_calendar', {'year': year - 1}),
+                prev: {
+                    url: path('app_calendar', {year: year - 1}),
                     label: year - 1,
-                    isGranted: year > app_year_min,
+                    is_granted: year > app_year_min,
                 },
-                'next': {
-                    url: path('app_calendar', {'year': year + 1}),
+                next: {
+                    url: path('app_calendar', {year: year + 1}),
                     label: year + 1,
-                    isGranted: year < app_year_max,
-                }
+                    is_granted: year < app_year_max,
+                },
             }) }}
         </div>
 
         <div class="calendar">
             {%- set current = user_date().format('Y-m-d') -%}
-            {%- set isGranted = is_granted('CALENDAR_EDIT') -%}
+            {%- set is_granted = is_granted('CALENDAR_EDIT') -%}
 
-            {%- for monthNumber in 1..12 -%}
-                {%- set month = year ~ '-' ~ (monthNumber < 10 ? '0') ~ monthNumber -%}
-                {%- set firstDay = month ~ '-01' -%}
-                {%- set firstWeekDay = firstDay|date('N') -%}
+            {%- for month_number in 1..12 -%}
+                {%- set month = year ~ '-' ~ (month_number < 10 ? '0') ~ month_number -%}
+                {%- set first_day = month ~ '-01' -%}
+                {%- set first_week_day = first_day|date('N') -%}
 
-                <article class="month" style="--month-offset: {{ firstWeekDay - 1 }};">
+                <article class="month" style="--month-offset: {{ first_week_day - 1 }};">
                     <div class="month-title">{{ month|date('F') }}</div>
                     <div class="month-days">
-                        {%- if firstWeekDay > 1 -%}
-                            <div class="day fake-day" style="--fake-days: {{ firstWeekDay - 1 }};">
+                        {%- if first_week_day > 1 -%}
+                            <div class="day fake-day" style="--fake-days: {{ first_week_day - 1 }};">
                                 <span>1</span>
                             </div>
                         {%- endif -%}
 
-                        {%- for dayNumber in 1..firstDay|date('t') -%}
-                            {%- set day = month ~ '-' ~ (dayNumber < 10 ? '0') ~ dayNumber -%}
-                            {%- set isWeekend = day|date('N') === 6 or day|date('N') === 7 -%}
+                        {%- for day_number in 1..first_day|date('t') -%}
+                            {%- set day = month ~ '-' ~ (day_number < 10 ? '0') ~ day_number -%}
+                            {%- set is_weekend = day|date('N') === 6 or day|date('N') === 7 -%}
 
-                            {%- set dayEvent = events[day] is defined ? events[day].dayEvent : null -%}
-                            {%- set hourEvents = events[day] is defined ? events[day].hourEvents : [] -%}
+                            {%- set day_event = events[day] is defined ? events[day].dayEvent : null -%}
+                            {%- set hour_events = events[day] is defined ? events[day].hourEvents : [] -%}
 
-                            <{% if isGranted %}a{% else %}div{% endif %}
-                                {% if isGranted %}href="{{ path('app_calendar_day', {'day': day}) }}"{% endif %}
-                                class="day {{- day < current ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day < startDay.format('Y-m-d') ? ' day-inactive' -}} {{- isWeekend ? ' day-weekend' -}}"
-                                {%- if dayEvent !== null %}data-general-type="{{ dayEvent.type.value }}"{% endif -%}>
-                                <span>{{ dayNumber }}</span>
+                            <{% if is_granted %}a{% else %}div{% endif %}
+                                {% if is_granted %}href="{{ path('app_calendar_day', {day: day}) }}"{% endif %}
+                                class="day {{- day < current ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day < start_day.format('Y-m-d') ? ' day-inactive' -}} {{- is_weekend ? ' day-weekend' -}}"
+                                {%- if day_event !== null %}data-general-type="{{ day_event.type.value }}"{% endif -%}>
+                                <span>{{ day_number }}</span>
 
-                                {%- if hourEvents is not empty -%}
+                                {%- if hour_events is not empty -%}
                                     <div class="day-badges">
-                                        {%- for hourEvent in hourEvents -%}
+                                        {%- for hour_event in hour_events -%}
                                             <span class="day-badge"
-                                                  data-general-type="{{ hourEvent.type.value }}"></span>
+                                                  data-general-type="{{ hour_event.type.value }}"></span>
                                         {%- endfor -%}
                                     </div>
                                 {%- endif -%}
-                            </{% if isGranted %}a{% else %}div{% endif %}>
+                            </{% if is_granted %}a{% else %}div{% endif %}>
                         {%- endfor -%}
                     </div>
                 </article>

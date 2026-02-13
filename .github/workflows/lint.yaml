@@ -47,14 +47,17 @@ jobs:
     strategy:
       matrix:
         actions:
-          - name: "PHP-CS-Fixer"
-            run: composer cs:check -- --ansi --format=@auto
+          - name: "PHP CS Fixer"
+            run: composer php-cs -- --ansi
+
+          - name: "Twig CS Fixer"
+            run: composer twig-cs -- --ansi
 
           - name: "PHPStan"
-            run: composer phpstan -- --ansi --error-format=github
+            run: composer phpstan -- --ansi
 
           - name: "Rector"
-            run: composer rector:check -- --ansi --output-format=github
+            run: composer rector -- --ansi
 
     steps:
       - name: "Checkout code"

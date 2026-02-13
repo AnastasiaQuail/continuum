@@ -24,7 +24,7 @@ final class BackupController extends AbstractController
         $backups = $this->databaseDumper->getBackups();
 
         return $this->render('admin/backup/index.html.twig', [
-            'hasRelevantBackup' => $this->databaseDumper->hasRelevantBackup(),
+            'has_relevant_backup' => $this->databaseDumper->hasRelevantBackup(),
             'backups' => $backups,
         ]);
     }

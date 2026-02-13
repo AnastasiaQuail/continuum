@@ -36,8 +36,8 @@ final class WorkoutController extends AbstractController
 
         return $this->render('workout/view.html.twig', [
             'workout' => $workout,
-            'prevWorkoutExercises' => $prevWorkoutExercises,
-            'exerciseGroups' => ExerciseGroup::cases(),
+            'prev_workout_exercises' => $prevWorkoutExercises,
+            'exercise_groups' => ExerciseGroup::cases(),
             'exercises' => $exercises,
         ]);
     }

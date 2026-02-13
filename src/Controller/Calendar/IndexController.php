@@ -46,8 +46,8 @@ final class IndexController extends AbstractController
 
         return $this->render('calendar/index.html.twig', [
             'year' => $year,
-            'startDay' => new DateTimeImmutable($this->startDate, $user->getTimezone()),
-            'upcomingEvents' => $upcomingEvents,
+            'start_day' => new DateTimeImmutable($this->startDate, $user->getTimezone()),
+            'upcoming_events' => $upcomingEvents,
             'events' => $events,
         ]);
     }

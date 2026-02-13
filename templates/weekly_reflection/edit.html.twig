@@ -2,18 +2,18 @@
 
 {% set monday = week.modify('-6 days') %}
 {% if monday.format('n') !== week.format('n') %}
-    {% set currentTitle = monday.format('j F') ~ ' - ' ~ week.format('j F') %}
+    {% set current_title = monday.format('j F') ~ ' - ' ~ week.format('j F') %}
 {% else %}
-    {% set currentTitle = monday.format('j') ~ ' - ' ~ week.format('j F') %}
+    {% set current_title = monday.format('j') ~ ' - ' ~ week.format('j F') %}
 {% endif %}
 
-{% block title %}Reflection on {{ currentTitle }}{% endblock %}
-{% block page_title %}{{ currentTitle }}{% endblock %}
+{% block title %}Reflection on {{ current_title }}{% endblock %}
+{% block page_title %}{{ current_title }}{% endblock %}
 {% block body_id %}weekly-reflection-edit{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Weekly reflection', url: path('app_weekly_reflections', {'month': week.format('Y-m')}) },
-    { label: 'Edit' },
+    {label: 'Weekly reflection', url: path('app_weekly_reflections', {month: week.format('Y-m')})},
+    {label: 'Edit'},
 ] %}
 
 {% block main -%}
@@ -23,7 +23,7 @@
         {{- form_start(form) -}}
 
         <div class="weekly-reflection weekly-reflection-form">
-            {%- embed 'weeklyReflection/_alert.html.twig' with {type: 'joy'} -%}
+            {%- embed 'weekly_reflection/_alert.html.twig' with {type: 'joy'} -%}
                 {%- block alert_body -%}
                     <div class="alert-form-textarea">
                         {{- form_widget(form.joy) -}}
@@ -33,7 +33,7 @@
                 {%- endblock -%}
             {%- endembed -%}
 
-            {%- embed 'weeklyReflection/_alert.html.twig' with {type: 'difficulty'} -%}
+            {%- embed 'weekly_reflection/_alert.html.twig' with {type: 'difficulty'} -%}
                 {%- block alert_body -%}
                     <div class="alert-form-textarea">
                         {{- form_widget(form.difficulty) -}}
@@ -43,7 +43,7 @@
                 {%- endblock -%}
             {%- endembed -%}
 
-            {%- embed 'weeklyReflection/_alert.html.twig' with {type: 'achievement'} -%}
+            {%- embed 'weekly_reflection/_alert.html.twig' with {type: 'achievement'} -%}
                 {%- block alert_body -%}
                     <div class="alert-form-textarea">
                         {{- form_widget(form.achievement) -}}

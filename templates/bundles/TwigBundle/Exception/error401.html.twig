@@ -1,7 +1,7 @@
 {% extends 'error.html.twig' %}
 
-{% set errorTitle = 'Hold on… who are you?' %}
-{% set errorDescription = 'You need to sign in to access this page.' %}
+{% set error_title = 'Hold on… who are you?' %}
+{% set error_description = 'You need to sign in to access this page.' %}
 
 {% block errorButtons -%}
     <a class="btn btn-primary btn-transparent" href="{{ path('app_login') }}">

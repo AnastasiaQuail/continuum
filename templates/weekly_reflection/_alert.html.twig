@@ -1,0 +1,36 @@
+{# @var type string #}
+{# @var is_empty bool #}
+{# @var text string|null #}
+{# @var is_private = bool|null #}
+
+{%- set is_private = is_private|default(false) -%}
+{%- set is_secure = is_private and not is_granted('WEEKLY_REFLECTION_PRIVATE') -%}
+{%- set types = {
+    joy: {
+        class: 'alert-success',
+        icon: 'lucide:heart',
+        title: 'Joy',
+    },
+    difficulty: {
+        class: 'alert-warning',
+        icon: 'lucide:triangle-alert',
+        title: 'Difficulty',
+    },
+    achievement: {
+        class: 'alert-primary',
+        icon: 'lucide:trophy',
+        title: 'Achievement',
+    },
+} -%}
+
+<article class="alert {{ is_empty|default(false) ? 'alert-empty' : types[type].class }}">
+    <div class="alert-title">
+        {{- ux_icon(types[type].icon) -}}
+        <span>{{ types[type].title }}</span>
+    </div>
+    <div class="alert-body {{ is_secure ? 'private-secure' : (is_private ? 'private') }}">
+        {%- block alert_body -%}
+            {{- is_secure ? ux_icon('lucide:lock') : text|default('') -}}
+        {%- endblock -%}
+    </div>
+</article>

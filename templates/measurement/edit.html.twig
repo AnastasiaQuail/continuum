@@ -7,8 +7,8 @@
 {% block body_id %}body-measurement-edit{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Body measurements', url: path('app_measurements', {'month': date.format('Y-m')}) },
-    { label: measurement ? 'Edit' : 'Add' },
+    {label: 'Body measurements', url: path('app_measurements', {month: date.format('Y-m')})},
+    {label: measurement ? 'Edit' : 'Add'},
 ] %}
 
 {% block main -%}

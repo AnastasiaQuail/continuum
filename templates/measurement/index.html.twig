@@ -2,7 +2,7 @@
 
 {%- block javascripts -%}
     {{ parent() }}
-    {% if chartMeasurements %}
+    {% if chart_measurements %}
         <script src="{{ asset('js/echarts.min.js') }}"></script>
         <script src="{{ asset('js/chart.js') }}"></script>
     {%- endif -%}
@@ -12,18 +12,18 @@
 {% block body_id %}body-measurements{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Measurements' },
+    {label: 'Measurements'},
 ] %}
 
 {% block page_links -%}
-    {%- set isGranted = is_granted('BODY_MEASUREMENT_CREATE') -%}
+    {%- set is_granted = is_granted('BODY_MEASUREMENT_CREATE') -%}
 
-    <{% if isGranted %}a{% else %}button{% endif %}
-        {% if isGranted %} href="{{ path('app_measurement_create') }}"{% else %} disabled{% endif %}
+    <{% if is_granted %}a{% else %}button{% endif %}
+        {% if is_granted %} href="{{ path('app_measurement_create') }}"{% else %} disabled{% endif %}
         class="btn btn-primary btn-outline">
         {{ ux_icon('lucide:plus') }}
         <span>Measure</span>
-    </{% if isGranted %}a{% else %}button{% endif %}>
+    </{% if is_granted %}a{% else %}button{% endif %}>
 {%- endblock %}
 
 {% block main -%}
@@ -31,19 +31,19 @@
         <div class="weight-change">
             {%- set result = 0 -%}
 
-            {%- if chartMeasurements is not empty -%}
-                {%- set result = ((chartMeasurements|last).weight - (chartMeasurements|first).weight)|round(1) -%}
+            {%- if chart_measurements is not empty -%}
+                {%- set result = ((chart_measurements|last).weight - (chart_measurements|first).weight)|round(1) -%}
 
                 {%- set min = 1000 -%}
                 {%- set max = 0 -%}
 
-                {%- for chartMeasurement in chartMeasurements -%}
-                    {%- if not (loop.first and chartMeasurement.time === 0) -%}
-                        {%- if chartMeasurement.weight > max -%}
-                            {%- set max = chartMeasurement.weight -%}
+                {%- for chart_measurement in chart_measurements -%}
+                    {%- if not (loop.first and chart_measurement.time === 0) -%}
+                        {%- if chart_measurement.weight > max -%}
+                            {%- set max = chart_measurement.weight -%}
                         {%- endif -%}
-                        {%- if chartMeasurement.weight < min -%}
-                            {%- set min = chartMeasurement.weight -%}
+                        {%- if chart_measurement.weight < min -%}
+                            {%- set min = chart_measurement.weight -%}
                         {%- endif -%}
                     {%- endif -%}
                 {%- endfor -%}
@@ -54,7 +54,7 @@
                 <span>{{ result > 0 ? '+' ~ result : result }}</span>
                 <span>kg</span>
             </div>
-            {%- if chartMeasurements is not empty -%}
+            {%- if chart_measurements is not empty -%}
                 <div class="weight-change-difference">
                     <span>{{ ux_icon('lucide:trending-up-down') }}</span>
                     <span>{% if min !== max %}{{ min }} - {% endif %}{{ max }} kg</span>
@@ -62,27 +62,28 @@
             {%- endif -%}
         </div>
 
-        <div class="chart-panel" {% if chartMeasurements %}data-chart="weight-change"
-             data-date="{{ month.format('Y-m-d') }}" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+        <div class="chart-panel" {% if chart_measurements %}data-chart="weight-change"
+             data-date="{{ month.format('Y-m-d') }}"
+             data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
     </section>
 
     <section class="card">
         <div class="card-title card-title-controls">
             <h2>{{ month.format('F Y') }}</h2>
 
-            {% set prevMonth = month.modify('-1 month') %}
-            {% set nextMonth = month.modify('+1 month') %}
+            {% set prev_month = month.modify('-1 month') %}
+            {% set next_month = month.modify('+1 month') %}
             {{ include('default/_pagination.html.twig', {
-                'prev': {
-                    url: path('app_measurements', {'month': prevMonth.format('Y-m')}),
-                    label: prevMonth.format('F'),
-                    isGranted: prevMonth.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prevMonth),
+                prev: {
+                    url: path('app_measurements', {month: prev_month.format('Y-m')}),
+                    label: prev_month.format('F'),
+                    is_granted: prev_month.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prev_month),
                 },
-                'next': {
-                    url: path('app_measurements', {'month': nextMonth.format('Y-m')}),
-                    label: nextMonth.format('F'),
-                    isGranted: user_date().format('Y-m') >= nextMonth.format('Y-m'),
-                }
+                next: {
+                    url: path('app_measurements', {month: next_month.format('Y-m')}),
+                    label: next_month.format('F'),
+                    is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
+                },
             }) }}
         </div>
 
@@ -98,7 +99,7 @@
                         <div class="measurement-date">
                             {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
                             {%- if is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
-                                <a href="{{ path('app_measurement_edit', {'id': measurement.id}) }}">{{ time }}</a>
+                                <a href="{{ path('app_measurement_edit', {id: measurement.id}) }}">{{ time }}</a>
                             {%- else -%}
                                 <span>{{ time }}</span>
                             {%- endif -%}
