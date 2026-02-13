@@ -11,6 +11,7 @@ use Continuum\Entity\User;
 use Continuum\Form\Type\AbstractImmutableType;
 use Continuum\Form\Type\MeasurementType;
 use DateTimeImmutable;
+use Override;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -151,6 +152,7 @@ final class EditMeasurementType extends AbstractImmutableType
         );
     }
 
+    #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
         $resolver->setDefault('lastMeasurement', null);

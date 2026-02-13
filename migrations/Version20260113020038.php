@@ -6,6 +6,7 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 final class Version20260113020038 extends AbstractMigration
 {
@@ -25,6 +26,7 @@ final class Version20260113020038 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_MOOD_REFLECTION_DATE ON mood_reflections (date)');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE mood_reflections');

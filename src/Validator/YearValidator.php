@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Validator;
 
+use Override;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
@@ -22,6 +23,7 @@ final class YearValidator extends RangeValidator
         parent::__construct($propertyAccessor);
     }
 
+    #[Override]
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof Year) {

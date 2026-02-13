@@ -48,7 +48,7 @@ final class WorkoutExerciseRepository extends ServiceEntityRepository
             ->executeQuery($sql, ['workout_id' => $workout->getId()])
             ->fetchFirstColumn();
 
-        if (empty($ids)) {
+        if ([] === $ids) {
             return [];
         }
 

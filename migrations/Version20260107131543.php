@@ -6,6 +6,7 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 final class Version20260107131543 extends AbstractMigration
 {
@@ -14,6 +15,7 @@ final class Version20260107131543 extends AbstractMigration
         $this->addSql('ALTER TABLE calendar_days ADD time TIME(0) WITHOUT TIME ZONE DEFAULT NULL');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE calendar_days DROP time');

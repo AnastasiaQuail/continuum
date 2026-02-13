@@ -6,6 +6,7 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 final class Version20260113022848 extends AbstractMigration
 {
@@ -31,6 +32,7 @@ final class Version20260113022848 extends AbstractMigration
         $this->addSql('DROP TABLE "user"');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql(

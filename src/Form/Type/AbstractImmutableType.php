@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Form\Type;
 
+use Override;
 use ReflectionMethod;
 use ReflectionNamedType;
 use Symfony\Component\Form\AbstractType;
@@ -24,6 +25,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
      */
     private string $dataClass = '';
 
+    #[Override]
     final public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -34,6 +36,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
         $this->configure($resolver);
     }
 
+    #[Override]
     final public function getBlockPrefix(): string
     {
         return '';
@@ -68,7 +71,10 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
         $viewData = $this->mapDataClass($data);
     }
 
-    protected function configure(OptionsResolver $resolver): void {}
+    protected function configure(OptionsResolver $resolver): void
+    {
+        // Override this method for configure options
+    }
 
     /**
      * @param list<FormInterface> $forms

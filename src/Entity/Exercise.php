@@ -38,7 +38,7 @@ final class Exercise
         $this->workoutExercises = new ArrayCollection();
     }
 
-    public function getId(): ?Uuid
+    public function getId(): Uuid
     {
         return $this->id;
     }

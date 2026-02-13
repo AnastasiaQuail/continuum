@@ -52,7 +52,7 @@ final readonly class CalendarEventService
         }
 
         return array_map(
-            static fn ($day) => new CombinedCalendarEvent($day['day'], $day['hours']),
+            static fn (array $day): CombinedCalendarEvent => new CombinedCalendarEvent($day['day'], $day['hours']),
             $events
         );
     }

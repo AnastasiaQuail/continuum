@@ -8,6 +8,7 @@ use Continuum\Dto\Request\Admin\User\EditUser;
 use Continuum\Entity\User;
 use Continuum\Form\Type\AbstractImmutableType;
 use Continuum\Security\User\UserStatus;
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -47,6 +48,7 @@ final class EditUserType extends AbstractImmutableType
         );
     }
 
+    #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
         $resolver->setRequired('user');

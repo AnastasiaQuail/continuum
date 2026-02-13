@@ -41,7 +41,7 @@ final readonly class LastVisitListener
             if ($lastVisited->modify('+8 hours') < $now) {
                 /** @var FlashBagAwareSessionInterface $session */
                 $session = $event->getRequest()->getSession();
-                $session->getFlashBag()->add('success', 'Welcome back! It\'s good to see you again');
+                $session->getFlashBag()->add('success', "Welcome back! It's good to see you again");
             }
         }
     }

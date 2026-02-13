@@ -8,6 +8,7 @@ use Continuum\Dto\Request\Calendar\NewCalendarEvent;
 use Continuum\Enum\CalendarEventType;
 use Continuum\Form\Type\AbstractImmutableType;
 use DateTimeZone;
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -46,6 +47,7 @@ final class NewCalendarEventType extends AbstractImmutableType
         );
     }
 
+    #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
         $resolver->setDefault('timezone', null);

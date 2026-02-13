@@ -64,7 +64,7 @@ final readonly class UpcomingEventService
 
         /** @var list<CalendarEvent> $data */
         $data = [...$hourEvents, ...$dayEvents];
-        usort($data, static fn (CalendarEvent $a, CalendarEvent $b) => $a->getDatetime() <=> $b->getDatetime());
+        usort($data, static fn (CalendarEvent $a, CalendarEvent $b): int => $a->getDatetime() <=> $b->getDatetime());
 
         return $data;
     }
@@ -104,13 +104,14 @@ final readonly class UpcomingEventService
             $eventDate = $event->getDatetime()->setTimezone($user->getTimezone());
         }
 
-        if ($eventDate < $currentDate) {
-            if (
+        if (
+            $eventDate < $currentDate
+            && (
                 !$event->isAllDay()
-                || ($currentDate->setTime(0, 0) < $eventDate->setTime(0, 0))
-            ) {
-                return null;
-            }
+                || $currentDate->setTime(0, 0) < $eventDate->setTime(0, 0)
+            )
+        ) {
+            return null;
         }
 
         return $this->getText($currentDate, $eventDate, $event->isAllDay());

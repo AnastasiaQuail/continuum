@@ -6,6 +6,7 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 final class Version20260109011528 extends AbstractMigration
 {
@@ -25,6 +26,7 @@ final class Version20260109011528 extends AbstractMigration
         );
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE calendar_events');

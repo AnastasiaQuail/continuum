@@ -9,8 +9,8 @@ use Continuum\Service\UserService;
 use DateInvalidTimeZoneException;
 use DateTimeZone;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
@@ -22,7 +22,7 @@ final class TimezoneUpdateController extends AbstractController
     ) {}
 
     #[Route(path: '/users/timezone', name: 'app_user_timezone_update', methods: ['PATCH'])]
-    public function __invoke(#[CurrentUser] User $user, Request $request): Response
+    public function __invoke(#[CurrentUser] User $user, Request $request): JsonResponse
     {
         try {
             $timezone = new DateTimeZone($request->request->getString('timezone'));

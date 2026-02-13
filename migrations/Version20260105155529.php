@@ -6,6 +6,7 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 final class Version20260105155529 extends AbstractMigration
 {
@@ -29,6 +30,7 @@ final class Version20260105155529 extends AbstractMigration
         $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON "user" (email)');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('DROP TABLE "user"');

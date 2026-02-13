@@ -6,6 +6,7 @@ namespace DoctrineMigrations;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
+use Override;
 
 final class Version20260107233437 extends AbstractMigration
 {
@@ -14,6 +15,7 @@ final class Version20260107233437 extends AbstractMigration
         $this->addSql('ALTER TABLE "user" ADD timezone VARCHAR(64) NOT NULL');
     }
 
+    #[Override]
     public function down(Schema $schema): void
     {
         $this->addSql('ALTER TABLE "user" DROP timezone');

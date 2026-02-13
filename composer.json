@@ -118,6 +118,8 @@
         "migration": "@php bin/console make:migration --formatted",
         "migration:migrate": "@php bin/console doctrine:migrations:migrate",
         "migration:rollback": "@migration:migrate prev",
+        "rector": "@php tools/vendor/bin/rector process",
+        "rector:check": "@rector --dry-run",
         "self-audit": [
             "@composer audit",
             "@composer audit --working-dir=tools"
@@ -138,6 +140,10 @@
             "@composer normalize ../composer.json --dry-run --working-dir=tools",
             "@composer normalize composer.json --dry-run --working-dir=tools"
         ],
-        "self-validate": "@composer validate --strict"
+        "self-validate": "@composer validate --strict",
+        "static-analysis": [
+            "@cs:check",
+            "@rector:check"
+        ]
     }
 }
