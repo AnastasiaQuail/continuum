@@ -15,9 +15,9 @@ parameters:
 		- tools/vendor/*
 		- var/*
 		- vendor/*
-		- composer-dependency-analyser.php # temp
-		- deploy.php # temp
-		- rector.php # temp
+	bootstrapFiles:
+		- vendor/deployer/deployer/src/Host/Host.php
+		- vendor/deployer/deployer/src/functions.php
 
 	symfony:
 		containerXmlPath: var/cache/dev/Continuum_KernelDevDebugContainer.xml
