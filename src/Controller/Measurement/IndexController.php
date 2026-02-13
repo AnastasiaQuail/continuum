@@ -48,7 +48,7 @@ final class IndexController extends AbstractController
         return $this->render('measurement/index.html.twig', [
             'month' => $month,
             'measurements' => $measurements,
-            'chartMeasurements' => $chartMeasurements,
+            'chart_measurements' => $chartMeasurements,
         ]);
     }
 }

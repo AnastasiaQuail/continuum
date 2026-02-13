@@ -4,7 +4,7 @@
 {% block body_id %}admin-backups{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Backups' },
+    {label: 'Backups'},
 ] %}
 
 {% block page_links -%}
@@ -19,7 +19,7 @@
 {%- endblock %}
 
 {% block main -%}
-    {%- if not hasRelevantBackup -%}
+    {%- if not has_relevant_backup -%}
         <div class="alert alert-danger alert-inline">
             {{ ux_icon('lucide:triangle-alert') }}
             <span>More one day from last backup!</span>

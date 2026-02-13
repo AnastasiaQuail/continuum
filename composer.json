@@ -68,7 +68,8 @@
         "symfony/css-selector": "^8.0.0",
         "symfony/debug-bundle": "^8.0.0",
         "symfony/maker-bundle": "^1.66.0",
-        "symfony/web-profiler-bundle": "^8.0.4"
+        "symfony/web-profiler-bundle": "^8.0.4",
+        "vincentlanglet/twig-cs-fixer": "^3.13"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
@@ -123,15 +124,15 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
         },
-        "cs": "@php vendor/bin/php-cs-fixer fix",
-        "cs:check": "@php vendor/bin/php-cs-fixer check --verbose --diff",
         "icons": "@php bin/console ux:icons:lock",
         "migration": "@php bin/console make:migration --formatted",
         "migration:migrate": "@php bin/console doctrine:migrations:migrate",
         "migration:rollback": "@migration:migrate prev",
+        "php-cs": "@php vendor/bin/php-cs-fixer check --verbose --diff",
+        "php-cs:fix": "@php vendor/bin/php-cs-fixer fix",
         "phpstan": "@php vendor/bin/phpstan analyse",
-        "rector": "@php vendor/bin/rector process",
-        "rector:check": "@rector --dry-run",
+        "rector": "@rector:fix --dry-run",
+        "rector:fix": "@php vendor/bin/rector process",
         "self-audit": "@composer audit",
         "self-check": [
             "@self-audit",
@@ -145,9 +146,15 @@
         "self-normalize": "@composer normalize composer.json --dry-run",
         "self-validate": "@composer validate --strict",
         "static-analysis": [
-            "@cs:check",
+            "@php-cs",
+            "@twig-cs",
             "@phpstan",
-            "@rector:check"
-        ]
+            "@rector"
+        ],
+        "twig-cs": [
+            "@php bin/console lint:twig --show-deprecations",
+            "@php vendor/bin/twig-cs-fixer lint"
+        ],
+        "twig-cs:fix": "@php vendor/bin/twig-cs-fixer fix"
     }
 }

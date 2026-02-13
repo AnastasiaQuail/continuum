@@ -10,7 +10,7 @@
 {% block page_title %}Dashboard{% endblock %}
 {% block body_id %}homepage{% endblock %}
 
-{% set currentDate = user_date() %}
+{% set current_date = user_date() %}
 
 {% block showcase -%}
     <section class="card">
@@ -19,19 +19,19 @@
             <div class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</div>
         </div>
         <div class="progress-group">
-            {%- set progressPercent = progress.currentProgress -%}
-            <div class="progress" style="--progress: {{ progressPercent }}%;">
+            {%- set progress_percent = progress.currentProgress -%}
+            <div class="progress" style="--progress: {{ progress_percent }}%;">
                 <div class="progress-bar"></div>
             </div>
-            <div class="progress-text">{{ progressPercent }}%</div>
+            <div class="progress-text">{{ progress_percent }}%</div>
         </div>
 
-        {%- if +currentDate.format('j') === 1 -%}
+        {%- if +current_date.format('j') === 1 -%}
             <div class="progress-description">
                 <strong>{{ progress.pastMonths }}</strong> out of
                 <strong>{{ progress.totalMonths }}</strong> months have passed ⚡️
             </div>
-        {%- elseif +currentDate.format('N') === 1 -%}
+        {%- elseif +current_date.format('N') === 1 -%}
             <div class="progress-description">
                 <strong>{{ progress.pastWeeks }}</strong> out of
                 <strong>{{ progress.totalWeeks }}</strong> weeks have passed 💪
@@ -76,11 +76,11 @@
                 <div class="card-title card-title-showcase card-title-controls">
                     <h2>Upcoming</h2>
 
-                    {%- if todayEvents is not empty -%}
+                    {%- if today_events is not empty -%}
                         <div class="card-title-info card-today-events">
-                            <div class="today-events" style="--te-count: {{ todayEvents|length }};">
-                                {%- for todayEvent in todayEvents -%}
-                                    <div class="today-event">{{ todayEvent }}</div>
+                            <div class="today-events" style="--te-count: {{ today_events|length }};">
+                                {%- for today_event in today_events -%}
+                                    <div class="today-event">{{ today_event }}</div>
                                 {%- endfor -%}
                             </div>
                         </div>
@@ -99,8 +99,8 @@
             <section class="card card-panel">
                 <div class="card-title card-title-controls">
                     {%- set result = 0 -%}
-                    {%- if chartMeasurements -%}
-                        {%- set result = ((chartMeasurements|last).weight - (chartMeasurements|first).weight)|round(1) -%}
+                    {%- if chart_measurements -%}
+                        {%- set result = ((chart_measurements|last).weight - (chart_measurements|first).weight)|round(1) -%}
                     {%- endif -%}
 
                     <h2>Body fat</h2>
@@ -110,12 +110,12 @@
                         </span>
                     {%- endif -%}
 
-                    {{- _self.card_title_dropdown(measurementDays, 'measurement') -}}
+                    {{- _self.card_title_dropdown(measurement_days, 'measurement') -}}
                 </div>
 
                 <div class="card-panel-body chart-panel"
-                     {% if chartMeasurements %}data-chart="weight-change" data-days="{{ measurementDays }}"
-                     data-symbols="hide" data-values="{{ chartMeasurements|json_encode }}"{% endif %}></div>
+                     {% if chart_measurements %}data-chart="weight-change" data-days="{{ measurement_days }}"
+                     data-symbols="hide" data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
             </section>
         {%- endif -%}
 
@@ -123,13 +123,13 @@
             <section class="card card-panel">
                 <div class="card-title card-title-controls">
                     <h2>Workouts</h2>
-                    {{- _self.card_title_dropdown(workoutDays, 'workout') -}}
+                    {{- _self.card_title_dropdown(workout_days, 'workout') -}}
                 </div>
 
                 <div class="card-panel-body calendar-heatmap-workout-container">
                     <div class="calendar-heatmap-week">
-                        {%- for dayName in ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] -%}
-                            <div class="calendar-heatmap-week-day">{{ dayName|capitalize }}</div>
+                        {%- for day_name in ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] -%}
+                            <div class="calendar-heatmap-week-day">{{ day_name|capitalize }}</div>
                         {%- endfor -%}
                     </div>
                     <div class="calendar-heatmap-workout">
@@ -138,21 +138,21 @@
                             {%- set dates = dates|merge({(workout.date.format('Y-m-d')): workout}) -%}
                         {%- endfor -%}
 
-                        {%- set weekDay = currentDate.format('N') -%}
-                        {%- set date = currentDate.modify('+1 day') -%}
+                        {%- set week_day = current_date.format('N') -%}
+                        {%- set date = current_date.modify('+1 day') -%}
 
-                        {%- for workoutDay in 1..workoutDays -%}
+                        {%- for workout_day in 1..workout_days -%}
                             {%- set date = date.modify('-1 day') -%}
                             {%- set day = date.format('Y-m-d') -%}
                             {%- set workout = dates[day] is defined ? dates[day] : null -%}
 
                             <div class="calendar-workout-day {{ workout !== null ? 'done' }}"
-                                 {% if loop.first %}style="--workout-row: {{ weekDay }};"{% endif %}>
+                                 {% if loop.first %}style="--workout-row: {{ week_day }};"{% endif %}>
                                 <div>{{- date.format('j') -}}</div>
                                 <div class="calendar-workout-exercises">
-                                    {%- for workoutExercise in workout?.workoutExercises -%}
+                                    {%- for workout_exercise in workout?.workoutExercises -%}
                                         <span
-                                            data-general-type="{{ workoutExercise.exercise.group.color.value }}"></span>
+                                            data-general-type="{{ workout_exercise.exercise.group.color.value }}"></span>
                                     {%- endfor -%}
                                 </div>
                             </div>
@@ -167,12 +167,12 @@
         <section class="card card-panel">
             <div class="card-title card-title-controls">
                 <h2>Mood trend</h2>
-                {{- _self.card_title_dropdown(moodReflectionDays, 'mood') -}}
+                {{- _self.card_title_dropdown(mood_reflection_days, 'mood') -}}
             </div>
 
             <div class="card-panel-body chart-panel"
-                 {% if chartMoodReflections %}data-chart="mood-reflections" data-days="{{ moodReflectionDays }}"
-                 data-values="{{ chartMoodReflections|json_encode }}"{% endif %}></div>
+                 {% if chart_mood_reflections %}data-chart="mood-reflections" data-days="{{ mood_reflection_days }}"
+                 data-values="{{ chart_mood_reflections|json_encode }}"{% endif %}></div>
         </section>
     {%- endif -%}
 {%- endblock %}

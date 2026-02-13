@@ -78,14 +78,14 @@ final class HomepageController extends AbstractController
         return $this->render('default/homepage.html.twig', [
             'progress' => $progress,
             'couple' => $couple,
-            'upcomingEvents' => $upcomingEvents,
-            'todayEvents' => $todayEvents,
-            'measurementDays' => $measurementDays,
-            'chartMeasurements' => $chartMeasurements,
-            'workoutDays' => $workoutDays,
+            'upcoming_events' => $upcomingEvents,
+            'today_events' => $todayEvents,
+            'measurement_days' => $measurementDays,
+            'chart_measurements' => $chartMeasurements,
+            'workout_days' => $workoutDays,
             'workouts' => $workouts,
-            'moodReflectionDays' => $moodReflectionDays,
-            'chartMoodReflections' => $chartMoodReflections,
+            'mood_reflection_days' => $moodReflectionDays,
+            'chart_mood_reflections' => $chartMoodReflections,
         ]);
     }
 }

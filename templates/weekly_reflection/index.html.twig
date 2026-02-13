@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Weekly reflection{% endblock %}
+{% block body_id %}weekly-reflection{% endblock %}
+
+{% set breadcrumbs = [
+    {label: 'Reflection'},
+] %}
+
+{% block main -%}
+    <section class="card">
+        <div class="card-title card-title-controls">
+            <h2>{{ month.format('F Y') }}</h2>
+
+            {% set prev_month = month.modify('-1 month') %}
+            {% set next_month = month.modify('+1 month') %}
+            {{ include('default/_pagination.html.twig', {
+                prev: {
+                    url: path('app_weekly_reflections', {month: prev_month.format('Y-m')}),
+                    label: prev_month.format('F'),
+                    is_granted: prev_month.format('Y') >= app_year_min and is_granted('WEEKLY_REFLECTION_VIEW', prev_month),
+                },
+                next: {
+                    url: path('app_weekly_reflections', {month: next_month.format('Y-m')}),
+                    label: next_month.format('F'),
+                    is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
+                },
+            }) }}
+        </div>
+
+        <div class="weekly-reflection">
+            {%- for date, reflection in weekly_reflections -%}
+                <div class="week">
+                    <div class="week-title">
+                        {%- set monday = date(date).modify('-6 days') -%}
+                        {%- set sunday = date(date) -%}
+                        {%- set is_different_month = monday.format('n') !== sunday.format('n') -%}
+                        {%- set time = monday.format(is_different_month ? 'j F' : 'j') ~ ' - ' ~ sunday.format('j F') -%}
+
+                        {%- if is_granted('WEEKLY_REFLECTION_EDIT') -%}
+                            <a href="{{ path('app_weekly_reflection_edit', {week: date}) }}">{{ time }}</a>
+                        {%- else -%}
+                            <span>{{ time }}</span>
+                        {%- endif -%}
+                    </div>
+                    <div class="week-body">
+                        {{ include('weekly_reflection/_alert.html.twig', {
+                            type: 'joy',
+                            is_empty: reflection is null,
+                            text: reflection?.joy,
+                            is_private: reflection?.joyPrivate,
+                        }) }}
+                        {{ include('weekly_reflection/_alert.html.twig', {
+                            type: 'difficulty',
+                            is_empty: reflection is null,
+                            text: reflection?.difficulty,
+                            is_private: reflection?.difficultyPrivate,
+                        }) }}
+                        {{ include('weekly_reflection/_alert.html.twig', {
+                            type: 'achievement',
+                            is_empty: reflection is null,
+                            text: reflection?.achievement,
+                            is_private: reflection?.achievementPrivate,
+                        }) }}
+                    </div>
+                </div>
+            {%- endfor -%}
+        </div>
+    </section>
+{%- endblock %}

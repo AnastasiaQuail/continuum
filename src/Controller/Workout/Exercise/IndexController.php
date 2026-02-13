@@ -26,7 +26,7 @@ final class IndexController extends AbstractController
 
         return $this->render('workout/exercises/index.html.twig', [
             'exercises' => $exercises,
-            'exerciseCountMap' => $exerciseCountMap,
+            'exercise_count_map' => $exerciseCountMap,
         ]);
     }
 }

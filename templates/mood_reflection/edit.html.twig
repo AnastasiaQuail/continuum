@@ -5,8 +5,8 @@
 {% block body_id %}mood-reflection-day{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Mood reflection', url: path('app_mood_reflections', {'month': day.format('Y-m')}) },
-    { label: 'Edit' },
+    {label: 'Mood reflection', url: path('app_mood_reflections', {month: day.format('Y-m')})},
+    {label: 'Edit'},
 ] %}
 
 {% block main -%}

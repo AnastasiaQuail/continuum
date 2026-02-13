@@ -5,8 +5,8 @@
 {% block body_id %}calendar-date{% endblock %}
 
 {% set breadcrumbs = [
-    { label: 'Calendar', url: path('app_calendar', {'year': day.format('Y')}) },
-    { label: 'Edit' },
+    {label: 'Calendar', url: path('app_calendar', {year: day.format('Y')})},
+    {label: 'Edit'},
 ] %}
 
 {% block main -%}
@@ -15,15 +15,15 @@
             <h2 class="card-title">Events of the day</h2>
 
             {%- for event in events -%}
-                {%- set eventDate = event.datetime.setTimezone(app.user.timezone) -%}
+                {%- set event_date = event.datetime.setTimezone(app.user.timezone) -%}
 
                 <div class="calendar-event" data-general-type="{{ event.type.value }}">
                     <span class="calendar-event-type">{{ event.title }}</span>
                     {%- if not event.allDay -%}
-                        <span> at {{ eventDate.format('H:i') }}</span>
+                        <span> at {{ event_date.format('H:i') }}</span>
                     {%- endif -%}
 
-                    <form method="post" action="{{ path('app_calendar_event_delete', {'id': event.id}) }}"
+                    <form method="post" action="{{ path('app_calendar_event_delete', {id: event.id}) }}"
                           onsubmit="return confirm('Delete?')">
                         <input type="hidden" name="_method" value="DELETE">
                         <button
@@ -41,19 +41,19 @@
         <div class="card-title card-title-controls">
             <h2>Add new event</h2>
 
-            {%- set prevDay = day.modify('-1 day') -%}
-            {%- set nextDay = day.modify('+1 day') -%}
+            {%- set prev_day = day.modify('-1 day') -%}
+            {%- set next_day = day.modify('+1 day') -%}
             {{ include('default/_pagination.html.twig', {
-                'prev': {
-                    url: path('app_calendar_day', {'day': prevDay.format('Y-m-d')}),
-                    label: prevDay.format('j F'),
-                    isGranted: prevDay.format('Y') > app_year_min,
+                prev: {
+                    url: path('app_calendar_day', {day: prev_day.format('Y-m-d')}),
+                    label: prev_day.format('j F'),
+                    is_granted: prev_day.format('Y') > app_year_min,
                 },
-                'next': {
-                    url: path('app_calendar_day', {'day': nextDay.format('Y-m-d')}),
-                    label: nextDay.format('j F'),
-                    isGranted: nextDay.format('Y') < app_year_max,
-                }
+                next: {
+                    url: path('app_calendar_day', {day: next_day.format('Y-m-d')}),
+                    label: next_day.format('j F'),
+                    is_granted: next_day.format('Y') < app_year_max,
+                },
             }) }}
         </div>
 

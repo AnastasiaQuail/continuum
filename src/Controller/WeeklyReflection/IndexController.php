@@ -42,9 +42,9 @@ final class IndexController extends AbstractController
 
         $weeklyReflections = $this->weeklyReflectionService->getByMonth($month);
 
-        return $this->render('weeklyReflection/index.html.twig', [
+        return $this->render('weekly_reflection/index.html.twig', [
             'month' => $month,
-            'weeklyReflections' => $weeklyReflections,
+            'weekly_reflections' => $weeklyReflections,
         ]);
     }
 }

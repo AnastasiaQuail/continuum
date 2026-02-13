@@ -54,7 +54,7 @@ final class EditController extends AbstractController
             return $this->redirectToRoute('app_mood_reflections', ['month' => $day->format('Y-m')]);
         }
 
-        return $this->render('moodReflection/edit.html.twig', [
+        return $this->render('mood_reflection/edit.html.twig', [
             'day' => $day,
             'form' => $form,
         ]);
