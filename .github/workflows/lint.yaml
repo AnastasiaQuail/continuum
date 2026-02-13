@@ -48,16 +48,16 @@ jobs:
       matrix:
         actions:
           - name: "PHP CS Fixer"
-            run: composer php-cs
+            run: composer php-cs -- --ansi
 
           - name: "Twig CS Fixer"
-            run: composer twig-cs
+            run: composer twig-cs -- --ansi
 
           - name: "PHPStan"
-            run: composer phpstan
+            run: composer phpstan -- --ansi
 
           - name: "Rector"
-            run: composer rector
+            run: composer rector -- --ansi
 
     steps:
       - name: "Checkout code"
