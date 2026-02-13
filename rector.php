@@ -14,14 +14,13 @@ return RectorConfig::configure()
     ->withPaths([
         __DIR__ . '/bin',
         __DIR__ . '/config',
+        __DIR__ . '/data',
         __DIR__ . '/migrations',
         __DIR__ . '/src',
         __DIR__ . '/tests',
-        __DIR__ . '/tools',
     ])
     ->withSkip([
         __DIR__ . '/config/reference.php',
-        __DIR__ . '/tools/vendor/*',
     ])
     ->withImportNames()
     ->withPhpSets()

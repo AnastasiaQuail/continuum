@@ -115,6 +115,7 @@
         "cs:check": "@php tools/vendor/bin/php-cs-fixer check --verbose --diff",
         "icons": "@php bin/console ux:icons:lock",
         "install-tools": "@composer --working-dir=tools install",
+        "phpstan": "@php tools/vendor/bin/phpstan analyse",
         "migration": "@php bin/console make:migration --formatted",
         "migration:migrate": "@php bin/console doctrine:migrations:migrate",
         "migration:rollback": "@migration:migrate prev",
@@ -143,6 +144,7 @@
         "self-validate": "@composer validate --strict",
         "static-analysis": [
             "@cs:check",
+            "@phpstan",
             "@rector:check"
         ]
     }

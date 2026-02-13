@@ -1,0 +1,22 @@
+includes:
+	- phar://phpstan.phar/conf/bleedingEdge.neon
+
+parameters:
+	level: max
+	tmpDir: var/cache/phpstan
+	paths:
+		- bin
+		- config
+		- data
+		- migrations
+		- src
+		- tests
+
+	symfony:
+		containerXmlPath: var/cache/dev/Continuum_KernelDevDebugContainer.xml
+		consoleApplicationLoader: tests/console-application.php
+	doctrine:
+		objectManagerLoader: tests/object-manager.php
+
+	ignoreErrors:
+		- identifier: doctrine.finalEntity

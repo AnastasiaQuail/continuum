@@ -50,6 +50,9 @@ jobs:
           - name: "PHP-CS-Fixer"
             run: composer cs:check -- --ansi --format=@auto
 
+          - name: "PHPStan"
+            run: composer phpstan -- --ansi --error-format=github
+
           - name: "Rector"
             run: composer rector:check -- --ansi --output-format=github
 
