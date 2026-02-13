@@ -9,6 +9,7 @@ use Continuum\Entity\User;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
@@ -47,7 +48,7 @@ final class LoginControllerTest extends WebTestCase
     public function testLogin(): void
     {
         // Denied - Can't log in with invalid email address.
-        $this->client->request('GET', '/login');
+        $this->client->request(Request::METHOD_GET, '/login');
         self::assertResponseIsSuccessful();
 
         $this->client->submitForm('Sign in', [
@@ -62,7 +63,7 @@ final class LoginControllerTest extends WebTestCase
         self::assertSelectorTextContains('.alert-danger', 'Invalid credentials.');
 
         // Denied - Can't log in with invalid password.
-        $this->client->request('GET', '/login');
+        $this->client->request(Request::METHOD_GET, '/login');
         self::assertResponseIsSuccessful();
 
         $this->client->submitForm('Sign in', [

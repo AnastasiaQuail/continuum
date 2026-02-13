@@ -20,6 +20,7 @@ return RectorConfig::configure()
         __DIR__ . '/tools',
     ])
     ->withSkip([
+        __DIR__ . '/config/reference.php',
         __DIR__ . '/tools/vendor/*',
     ])
     ->withImportNames()
@@ -33,6 +34,16 @@ return RectorConfig::configure()
         privatization: true,
         instanceOf: true,
         earlyReturn: true,
+        rectorPreset: true,
+        phpunitCodeQuality: true,
+        doctrineCodeQuality: true,
+        symfonyCodeQuality: true,
+    )
+    ->withComposerBased(
+        twig: true,
+        doctrine: true,
+        phpunit: true,
+        symfony: true,
     )
     ->withSkip([
         CatchExceptionNameMatchingTypeRector::class,
