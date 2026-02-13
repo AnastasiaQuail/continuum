@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\MoodReflection;
 
+use Continuum\Dto\Request\Reflection\EditMoodReflection;
 use Continuum\Entity\User;
 use Continuum\Form\EditMoodReflectionType;
 use Continuum\Security\Authorization\Voter\MoodReflectionVoter;
@@ -41,7 +42,9 @@ final class EditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $moodReflection = $this->moodReflectionService->save($day, $moodReflection, $form->getData());
+            /** @var EditMoodReflection $dto */
+            $dto = $form->getData();
+            $moodReflection = $this->moodReflectionService->save($day, $moodReflection, $dto);
 
             $this->addFlash(
                 'success',

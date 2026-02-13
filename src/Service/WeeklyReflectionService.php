@@ -16,7 +16,7 @@ final readonly class WeeklyReflectionService
     ) {}
 
     /**
-     * @return array<string, WeeklyReflection>
+     * @return array<string, null|WeeklyReflection>
      */
     public function getByMonth(DateTimeImmutable $month): array
     {

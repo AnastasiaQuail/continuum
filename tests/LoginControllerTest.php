@@ -35,11 +35,12 @@ final class LoginControllerTest extends WebTestCase
         $em->flush();
 
         // Create a User fixture
-        /** @var UserPasswordHasherInterface $passwordHasher */
-        $passwordHasher = $container->get('security.user_password_hasher');
-
         $user = new User('email@example.com');
-        $user->setPassword($passwordHasher->hashPassword($user, 'password'));
+
+        /** @var non-empty-string $hashedPassword */
+        $hashedPassword = $container->get('security.user_password_hasher')->hashPassword($user, 'password');
+
+        $user->setPassword($hashedPassword);
 
         $em->persist($user);
         $em->flush();

@@ -29,7 +29,7 @@ final class ExerciseRepository extends ServiceEntityRepository
      */
     public function findOrdered(): array
     {
-        return $this->findBy([], ['group' => 'ASC']);
+        return array_values($this->findBy([], ['group' => 'ASC']));
     }
 
     /**

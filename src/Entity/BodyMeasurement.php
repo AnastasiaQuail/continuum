@@ -213,11 +213,23 @@ final class BodyMeasurement
         $this->calf = $this->to($calf);
     }
 
+    /**
+     * @template T of int|null
+     * @param T $value
+     *
+     * @return (T is int ? float : null)
+     */
     private function from(?int $value, int $coefficient = 10, int $precision = 1): ?float
     {
         return null !== $value ? round($value / $coefficient, $precision) : null;
     }
 
+    /**
+     * @template T of float|null
+     * @param T $value
+     *
+     * @return (T is float ? int : null)
+     */
     private function to(?float $value, int $coefficient = 10): ?int
     {
         return null !== $value ? (int) round($value * $coefficient) : null;

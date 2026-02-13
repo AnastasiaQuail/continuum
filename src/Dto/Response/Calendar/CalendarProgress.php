@@ -15,17 +15,17 @@ final readonly class CalendarProgress
 
     public function getCurrentProgress(): float
     {
-        return floor($this->past->days / $this->total->days * 1000) / 10;
+        return floor($this->getPastDays() / $this->getTotalDays() * 1000) / 10;
     }
 
     public function getPastWeeks(): int
     {
-        return (int) ceil($this->past->days / 7);
+        return (int) ceil($this->getPastDays() / 7);
     }
 
     public function getTotalWeeks(): int
     {
-        return (int) ceil($this->total->days / 7);
+        return (int) ceil($this->getTotalDays() / 7);
     }
 
     public function getPastMonths(): int
@@ -36,5 +36,21 @@ final readonly class CalendarProgress
     public function getTotalMonths(): int
     {
         return $this->total->y * 12 + $this->total->m + ($this->total->d > 0 ? 1 : 0);
+    }
+
+    private function getPastDays(): int
+    {
+        /** @var int $days */
+        $days = $this->past->days;
+
+        return $days;
+    }
+
+    private function getTotalDays(): int
+    {
+        /** @var int $days */
+        $days = $this->total->days;
+
+        return $days;
     }
 }

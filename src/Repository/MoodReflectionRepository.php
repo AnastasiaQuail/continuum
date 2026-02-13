@@ -37,10 +37,10 @@ final class MoodReflectionRepository extends ServiceEntityRepository
     {
         return $this->findBetweenDates(
             new DateTimeImmutable(
-                sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m'))
+                sprintf('%s-%s-01 00:00:00', $month->format('Y'), $month->format('m'))
             ),
             new DateTimeImmutable(
-                sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t'))
+                sprintf('%s-%s-%s 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t'))
             ),
         );
     }

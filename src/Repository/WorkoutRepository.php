@@ -23,7 +23,8 @@ final class WorkoutRepository extends ServiceEntityRepository
 
     public function findOneById(Uuid $id): ?Workout
     {
-        return $this->createQueryBuilder('w')
+        /** @var null|Workout $result */
+        $result = $this->createQueryBuilder('w')
             ->andWhere('w.id = :id')
             ->setParameter('id', $id)
             ->leftJoin('w.workoutExercises', 'we')
@@ -36,6 +37,8 @@ final class WorkoutRepository extends ServiceEntityRepository
             ->addOrderBy('ws.orderIndex', 'ASC')
             ->getQuery()
             ->getOneOrNullResult();
+
+        return $result;
     }
 
     /**
@@ -43,7 +46,8 @@ final class WorkoutRepository extends ServiceEntityRepository
      */
     public function findByRange(DateTimeImmutable $from, DateTimeImmutable $to): array
     {
-        return $this->createQueryBuilder('w')
+        /** @var list<Workout> $result */
+        $result = $this->createQueryBuilder('w')
             ->andWhere('w.date BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
             ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
@@ -58,6 +62,8 @@ final class WorkoutRepository extends ServiceEntityRepository
             ->addOrderBy('ws.orderIndex', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     public function create(Workout $workout): void

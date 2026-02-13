@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Workout\Exercise;
 
+use Continuum\Dto\Request\Workout\EditExercise;
 use Continuum\Entity\Exercise;
 use Continuum\Form\EditExerciseType;
 use Continuum\Security\Authorization\Voter\ExerciseVoter;
@@ -28,7 +29,9 @@ final class EditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $exercise = $this->exerciseService->update($exercise, $form->getData());
+            /** @var EditExercise $dto */
+            $dto = $form->getData();
+            $exercise = $this->exerciseService->update($exercise, $dto);
 
             $this->addFlash('success', sprintf('The "%s" exercise was updated.', $exercise->getName()));
 

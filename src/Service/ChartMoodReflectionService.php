@@ -14,7 +14,7 @@ final readonly class ChartMoodReflectionService
     /**
      * @param array<string, null|MoodReflection> $moodReflections
      *
-     * @return non-empty-list<ChartMoodReflection>
+     * @return list<ChartMoodReflection>
      */
     public function getChartMoodReflections(DateTimeImmutable $date, array $moodReflections): array
     {

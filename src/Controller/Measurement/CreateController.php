@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Measurement;
 
+use Continuum\Dto\Request\Measurement\EditMeasurement;
 use Continuum\Entity\User;
 use Continuum\Form\EditMeasurementType;
 use Continuum\Security\Authorization\Voter\MeasurementVoter;
@@ -31,7 +32,9 @@ final class CreateController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $measurement = $this->measurementService->save($user, null, $form->getData());
+            /** @var EditMeasurement $dto */
+            $dto = $form->getData();
+            $measurement = $this->measurementService->save($user, null, $dto);
             $datetime = $measurement->getDatetime()->setTimezone($user->getTimezone());
 
             $this->addFlash('success', sprintf('The "%s" measurement was created', $datetime->format('j F H:i')));

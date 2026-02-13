@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Measurement;
 
+use Continuum\Dto\Request\Measurement\EditMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Form\EditMeasurementType;
@@ -30,7 +31,9 @@ final class EditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $measurement = $this->measurementService->save($user, $measurement, $form->getData());
+            /** @var EditMeasurement $dto */
+            $dto = $form->getData();
+            $measurement = $this->measurementService->save($user, $measurement, $dto);
             $datetime = $measurement->getDatetime()->setTimezone($user->getTimezone());
 
             $this->addFlash('success', sprintf('The "%s" measurement was updated', $datetime->format('j F H:i')));

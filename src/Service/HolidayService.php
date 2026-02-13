@@ -20,6 +20,7 @@ final readonly class HolidayService
      */
     public function getTodayHolidays(User $user): array
     {
+        /** @var non-empty-array<non-empty-string, list<non-empty-string>> $holidays */
         $holidays = include $this->holidaysFilename;
         $date = new DateTimeImmutable('now', $user->getTimezone());
 

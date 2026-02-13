@@ -38,15 +38,16 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
     public function findOneLastByMonth(DateTimeImmutable $month, DateTimeZone $timeZone): ?BodyMeasurement
     {
         $from = new DateTimeImmutable(
-            sprintf('%d-%d-01 00:00:00', $month->format('Y'), $month->format('m')),
+            sprintf('%s-%s-01 00:00:00', $month->format('Y'), $month->format('m')),
             $timeZone
         );
         $to = new DateTimeImmutable(
-            sprintf('%d-%d-%d 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
+            sprintf('%s-%s-%s 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
             $timeZone
         );
 
-        return $this->createQueryBuilder('bm')
+        /** @var null|BodyMeasurement $result */
+        $result = $this->createQueryBuilder('bm')
             ->andWhere('bm.datetime BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
             ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
@@ -54,11 +55,18 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+
+        return $result;
     }
 
+    /**
+     * @param positive-int $limit
+     *
+     * @return list<BodyMeasurement>
+     */
     public function findLast(int $limit): array
     {
-        return $this->findBy([], ['datetime' => 'ASC'], $limit);
+        return array_values($this->findBy([], ['datetime' => 'ASC'], $limit));
     }
 
     public function findOneLastWithNotNull(): LastMeasurement
