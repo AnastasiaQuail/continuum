@@ -95,7 +95,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
         }
 
         $otherPassword = $user->getPassword();
-        $password = $this->getPassword();
+        $password = $this->password;
 
         if (
             $otherPassword !== $password
@@ -117,11 +117,11 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
             return false;
         }
 
-        if ($this->getUserIdentifier() !== $user->getUserIdentifier()) {
+        if ($this->email !== $user->getUserIdentifier()) {
             return false;
         }
 
-        return $this->getStatus() === $user->getStatus();
+        return $this->status === $user->getStatus();
     }
 
     public function getId(): Uuid

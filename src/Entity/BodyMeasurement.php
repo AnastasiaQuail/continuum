@@ -96,8 +96,8 @@ final class BodyMeasurement
     #[ORM\PreUpdate]
     public function calculateFat(): void
     {
-        $bmi = $this->getWeight() / (($this->getHeight() / 100) ** 2);
-        $fatDeurenberg = (1.2 * $bmi) + (0.23 * $this->getAge()) - 16.2;
+        $bmi = $this->getWeight() / (($this->height / 100) ** 2);
+        $fatDeurenberg = (1.2 * $bmi) + (0.23 * $this->age) - 16.2;
 
         $this->fatDeurenberg = (int) round($fatDeurenberg * 100);
 
@@ -106,7 +106,7 @@ final class BodyMeasurement
             && (null !== $neck = $this->getNeck())
         ) {
             $logBody = log10($waist - $neck);
-            $logHeight = log10($this->getHeight());
+            $logHeight = log10($this->height);
             $fatUsNavy = (495 / (1.0324 - (0.19077 * $logBody) + (0.15456 * $logHeight))) - 450;
 
             $this->fatUsNavy = (int) round($fatUsNavy * 100);
