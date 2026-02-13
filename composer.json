@@ -52,6 +52,7 @@
         "dama/doctrine-test-bundle": "^8.6.0",
         "deployer/deployer": "^7.5.12",
         "doctrine/doctrine-fixtures-bundle": "^4.3.1",
+        "ergebnis/composer-normalize": "^2.50.0",
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan": "^2.1.39",
         "phpstan/phpstan-deprecation-rules": "^2.0.4",
@@ -89,6 +90,7 @@
     },
     "config": {
         "allow-plugins": {
+            "ergebnis/composer-normalize": true,
             "php-http/discovery": true,
             "phpstan/extension-installer": true,
             "symfony/flex": true,
@@ -145,10 +147,7 @@
             "@composer dump-autoload --dry-run --optimize --strict-psr",
             "@composer dump-autoload --dry-run --optimize --strict-psr --working-dir=tools"
         ],
-        "self-normalize": [
-            "@composer normalize ../composer.json --dry-run --working-dir=tools",
-            "@composer normalize composer.json --dry-run --working-dir=tools"
-        ],
+        "self-normalize": "@composer normalize composer.json --dry-run",
         "self-validate": "@composer validate --strict",
         "static-analysis": [
             "@cs:check",
