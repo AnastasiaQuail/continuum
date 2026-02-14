@@ -163,16 +163,6 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
         $this->status = $status;
     }
 
-    public function isActive(): bool
-    {
-        return UserStatus::Active === $this->status;
-    }
-
-    public function isDisabled(): bool
-    {
-        return UserStatus::Disabled === $this->status;
-    }
-
     /**
      * @return list<non-empty-string>
      */
@@ -182,20 +172,12 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
         // guarantee every user at least has ROLE_USER
         $roles[] = UserRole::User->value;
 
-        return array_unique($roles);
+        return array_values(array_unique($roles));
     }
 
     public function addRole(UserRole $role): void
     {
         $this->roles[] = $role->value;
-    }
-
-    /**
-     * @param non-empty-string ...$roles
-     */
-    public function setRoles(string ...$roles): void
-    {
-        $this->roles = $roles;
     }
 
     public function getCreatedAt(): DateTimeImmutable

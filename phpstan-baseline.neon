@@ -61,12 +61,6 @@ parameters:
 			path: src/Entity/User.php
 
 		-
-			rawMessage: 'Method Continuum\Entity\User::getRoles() should return list<non-empty-string> but returns non-empty-array<int<0, max>, non-empty-string>.'
-			identifier: return.type
-			count: 1
-			path: src/Entity/User.php
-
-		-
 			rawMessage: 'Property Continuum\Entity\User::$email type mapping mismatch: database can contain string but property expects non-empty-string.'
 			identifier: doctrine.columnType
 			count: 1
@@ -87,12 +81,6 @@ parameters:
 		-
 			rawMessage: 'Property Continuum\Entity\User::$password type mapping mismatch: database can contain string but property expects non-empty-string.'
 			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			rawMessage: 'Property Continuum\Entity\User::$roles (list<non-empty-string>) does not accept array<int|string, non-empty-string>.'
-			identifier: assign.propertyType
 			count: 1
 			path: src/Entity/User.php
 
