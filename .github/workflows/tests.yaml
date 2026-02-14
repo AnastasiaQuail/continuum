@@ -44,13 +44,6 @@ jobs:
         with:
           composer-options: --optimize-autoloader
 
-      - name: Wait for Postgres
-        run: |
-          until pg_isready -h postgres -p 5432 -U app; do
-            echo "Waiting for Postgres..."
-            sleep 1
-          done
-
       - name: "Run tests"
         env:
           DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/postgres?serverVersion=16&charset=utf8"
