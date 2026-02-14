@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Continuum\Tests;
+namespace Continuum\Tests\Controller\Security;
 
 use Continuum\Controller\Security\LoginController;
 use Continuum\Entity\User;
@@ -60,7 +60,8 @@ final class LoginControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         // Ensure we do not reveal if the user exists or not.
-        self::assertSelectorTextContains('.alert-danger', 'Invalid credentials.');
+        self::assertSelectorTextContains('.alert-danger:not(.browser-unsupport)', 'Invalid credentials.');
+        self::assertInputValueSame('_username', 'doesNotExist@example.com');
 
         // Denied - Can't log in with invalid password.
         $this->client->request(Request::METHOD_GET, '/login');
@@ -75,7 +76,8 @@ final class LoginControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         // Ensure we do not reveal the user exists but the password is wrong.
-        self::assertSelectorTextContains('.alert-danger', 'Invalid credentials.');
+        self::assertSelectorTextContains('.alert-danger:not(.browser-unsupport)', 'Invalid credentials.');
+        self::assertInputValueSame('_username', 'email@example.com');
 
         // Success - Login with valid credentials is allowed.
         $this->client->submitForm('Sign in', [
@@ -87,5 +89,6 @@ final class LoginControllerTest extends WebTestCase
         $this->client->followRedirect();
 
         self::assertSelectorNotExists('.alert-danger');
+        // self::assertSelectorExists('body#homepage');
     }
 }

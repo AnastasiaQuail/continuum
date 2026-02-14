@@ -60,16 +60,6 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
         return $result;
     }
 
-    /**
-     * @param positive-int $limit
-     *
-     * @return list<BodyMeasurement>
-     */
-    public function findLast(int $limit): array
-    {
-        return array_values($this->findBy([], ['datetime' => 'ASC'], $limit));
-    }
-
     public function findOneLastWithNotNull(): LastMeasurement
     {
         $sql = <<<'SQL'
