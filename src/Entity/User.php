@@ -65,7 +65,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
         }
     }
 
-    #[ORM\Embedded(class: Location::class, columnPrefix: false)]
+    #[ORM\Embedded(columnPrefix: false)]
     public Location $location;
 
     #[ORM\Column(name: 'timezone', length: 64)]

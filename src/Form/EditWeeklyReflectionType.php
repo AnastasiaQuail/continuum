@@ -24,36 +24,36 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
 
         $builder->setDataMapper($this)
             ->add('joy', TextareaType::class, [
-                'data' => $weeklyReflection?->joy,
+                'data' => $weeklyReflection?->joy->text,
                 'attr' => [
                     'autofocus' => true,
                     'autocomplete' => 'off',
                 ],
             ])
             ->add('isJoyPrivate', CheckboxType::class, [
-                'data' => $weeklyReflection?->isJoyPrivate,
+                'data' => $weeklyReflection?->joy->isPrivate,
                 'label' => 'private?',
                 'required' => false,
             ])
             ->add('difficulty', TextareaType::class, [
-                'data' => $weeklyReflection?->difficulty,
+                'data' => $weeklyReflection?->difficulty->text,
                 'attr' => [
                     'autocomplete' => 'off',
                 ],
             ])
             ->add('isDifficultyPrivate', CheckboxType::class, [
-                'data' => $weeklyReflection?->isDifficultyPrivate,
+                'data' => $weeklyReflection?->difficulty->isPrivate,
                 'label' => 'private?',
                 'required' => false,
             ])
             ->add('achievement', TextareaType::class, [
-                'data' => $weeklyReflection?->achievement,
+                'data' => $weeklyReflection?->achievement->text,
                 'attr' => [
                     'autocomplete' => 'off',
                 ],
             ])
             ->add('isAchievementPrivate', CheckboxType::class, [
-                'data' => $weeklyReflection?->isAchievementPrivate,
+                'data' => $weeklyReflection?->achievement->isPrivate,
                 'label' => 'private?',
                 'required' => false,
             ]);
