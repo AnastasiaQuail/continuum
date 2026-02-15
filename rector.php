@@ -6,6 +6,7 @@ use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector;
 use Rector\Config\RectorConfig;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 
 return RectorConfig::configure()
     ->withCache(__DIR__ . '/var/cache/rector')
@@ -49,4 +50,5 @@ return RectorConfig::configure()
         CatchExceptionNameMatchingTypeRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
         NewlineBetweenClassLikeStmtsRector::class,
+        PreferPHPUnitThisCallRector::class,
     ]);

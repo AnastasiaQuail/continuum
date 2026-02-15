@@ -30,18 +30,18 @@ final readonly class CoupleService
         $user = $this->userService->get(Uuid::fromString($this->userId));
         $partnerUser = $this->userService->get(Uuid::fromString($this->partnerUserId));
 
-        $userWeather = $this->weatherService->getWeather($user->getLocation());
-        $partnerUserWeather = $this->weatherService->getWeather($partnerUser->getLocation());
+        $userWeather = $this->weatherService->getWeather($user->location);
+        $partnerUserWeather = $this->weatherService->getWeather($partnerUser->location);
 
-        $startDate = new DateTimeImmutable($this->startDate, $currentUser->getTimezone());
-        $currentDate = new DateTimeImmutable('now', $currentUser->getTimezone());
+        $startDate = new DateTimeImmutable($this->startDate, $currentUser->timezone);
+        $currentDate = new DateTimeImmutable('now', $currentUser->timezone);
 
         return new CoupleInformation(
             weather: $userWeather,
-            time: new DateTimeImmutable('now', $user->getTimezone()),
+            time: new DateTimeImmutable('now', $user->timezone),
             partnerWeather: $partnerUserWeather,
-            partnerTime: new DateTimeImmutable('now', $partnerUser->getTimezone()),
-            distance: $this->getDistance($user->getLocation(), $partnerUser->getLocation()),
+            partnerTime: new DateTimeImmutable('now', $partnerUser->timezone),
+            distance: $this->getDistance($user->location, $partnerUser->location),
             together: $startDate->diff($currentDate),
         );
     }

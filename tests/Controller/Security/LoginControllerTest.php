@@ -6,14 +6,12 @@ namespace Continuum\Tests\Controller\Security;
 
 use Continuum\Controller\Security\LoginController;
 use Continuum\Entity\User;
+use Continuum\Security\User\UserStatus;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @internal
- */
 #[CoversClass(LoginController::class)]
 final class LoginControllerTest extends WebTestCase
 {
@@ -35,11 +33,8 @@ final class LoginControllerTest extends WebTestCase
 
         // Create a User fixture
         $user = new User('email@example.com');
-
-        /** @var non-empty-string $hashedPassword */
-        $hashedPassword = $container->get('security.user_password_hasher')->hashPassword($user, 'password');
-
-        $user->setPassword($hashedPassword);
+        $user->password = $container->get('security.user_password_hasher')->hashPassword($user, 'password');
+        $user->status = UserStatus::Active;
 
         $em->persist($user);
         $em->flush();

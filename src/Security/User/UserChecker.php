@@ -18,7 +18,7 @@ final readonly class UserChecker implements UserCheckerInterface
             return;
         }
 
-        match ($user->getStatus()) {
+        match ($user->status) {
             UserStatus::Created => throw new CustomUserMessageAccountStatusException('Account is not active yet.'),
             UserStatus::Active => null,
             UserStatus::Disabled => throw new CustomUserMessageAccountStatusException('Account is disabled.'),

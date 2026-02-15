@@ -31,7 +31,7 @@ final class IndexController extends AbstractController
     #[Route(path: '/calendar', name: 'app_calendar', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, #[MapQueryParameter] ?int $year = null): Response
     {
-        $year ??= (int) new DateTimeImmutable('now', $user->getTimezone())->format('Y');
+        $year ??= (int) new DateTimeImmutable('now', $user->timezone)->format('Y');
 
         if (null !== $error = $this->requestValidator->validateYear($year)) {
             throw new BadRequestHttpException($error);
@@ -46,7 +46,7 @@ final class IndexController extends AbstractController
 
         return $this->render('calendar/index.html.twig', [
             'year' => $year,
-            'start_day' => new DateTimeImmutable($this->startDate, $user->getTimezone()),
+            'start_day' => new DateTimeImmutable($this->startDate, $user->timezone),
             'upcoming_events' => $upcomingEvents,
             'events' => $events,
         ]);

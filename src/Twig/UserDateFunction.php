@@ -25,6 +25,6 @@ final readonly class UserDateFunction
             throw new LogicException('User must be authenticated.');
         }
 
-        return new DateTimeImmutable($datetime, $user->getTimezone());
+        return new DateTimeImmutable($datetime, $user->timezone);
     }
 }

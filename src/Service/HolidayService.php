@@ -22,7 +22,7 @@ final readonly class HolidayService
     {
         /** @var non-empty-array<non-empty-string, list<non-empty-string>> $holidays */
         $holidays = include $this->holidaysFilename;
-        $date = new DateTimeImmutable('now', $user->getTimezone());
+        $date = new DateTimeImmutable('now', $user->timezone);
 
         return $holidays[$date->format('m-d')] ?? [];
     }

@@ -60,7 +60,7 @@ final class WeeklyReflectionVoter extends Voter
             return false;
         }
 
-        $currentDate = new DateTimeImmutable('now', $user->getTimezone());
+        $currentDate = new DateTimeImmutable('now', $user->timezone);
 
         return $currentDate->format('Y-m') === $subject->format('Y-m');
     }

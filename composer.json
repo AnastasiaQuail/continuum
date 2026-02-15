@@ -147,11 +147,15 @@
         "self-validate": "@composer validate --strict",
         "static-analysis": [
             "@php-cs",
-            "@twig-cs",
             "@phpstan",
-            "@rector"
+            "@rector",
+            "@twig-cs"
         ],
         "tests": "@php vendor/bin/phpunit",
+        "tests:ci": [
+            "@putenv DATABASE_PREPARE=1",
+            "@composer tests"
+        ],
         "twig-cs": [
             "@php bin/console lint:twig --show-deprecations",
             "@php vendor/bin/twig-cs-fixer lint"

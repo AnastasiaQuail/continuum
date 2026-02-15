@@ -30,13 +30,13 @@ final class DayController extends AbstractController
     #[IsGranted(CalendarVoter::EDIT)]
     public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {
-        $day = new DateTimeImmutable($date, $user->getTimezone())->setTime(0, 0);
+        $day = new DateTimeImmutable($date, $user->timezone)->setTime(0, 0);
 
         if (null !== $error = $this->requestValidator->validateDay($day)) {
             throw new BadRequestHttpException($error);
         }
 
-        $form = $this->createForm(NewCalendarEventType::class, options: ['timezone' => $user->getTimezone()]);
+        $form = $this->createForm(NewCalendarEventType::class, options: ['timezone' => $user->timezone]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

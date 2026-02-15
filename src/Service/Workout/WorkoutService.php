@@ -39,11 +39,11 @@ final readonly class WorkoutService
     {
         $from = new DateTimeImmutable(
             sprintf('%s-%s-01 00:00:00', $month->format('Y'), $month->format('m')),
-            $user->getTimezone()
+            $user->timezone
         );
         $to = new DateTimeImmutable(
             sprintf('%s-%s-%s 23:59:59', $month->format('Y'), $month->format('m'), $month->format('t')),
-            $user->getTimezone()
+            $user->timezone
         );
 
         return $this->repository->findByRange($from, $to);
@@ -56,11 +56,11 @@ final readonly class WorkoutService
     {
         $from = new DateTimeImmutable(
             sprintf('%s-%s-%s 00:00:00', $fromDay->format('Y'), $fromDay->format('m'), $fromDay->format('d')),
-            $user->getTimezone()
+            $user->timezone
         );
         $to = new DateTimeImmutable(
             sprintf('%s-%s-%s 23:59:59', $toDay->format('Y'), $toDay->format('m'), $toDay->format('d')),
-            $user->getTimezone()
+            $user->timezone
         );
 
         return $this->repository->findByRange($from, $to);

@@ -26,14 +26,14 @@ final class EditUserType extends AbstractImmutableType
         $builder->setDataMapper($this)
             ->add('status', EnumType::class, [
                 'class' => UserStatus::class,
-                'data' => $user->getStatus(),
+                'data' => $user->status,
                 'choices' => [
                     UserStatus::Active,
                     UserStatus::Disabled,
                 ],
             ])
             ->add('roles', TextareaType::class, [
-                'data' => implode(',', $user->getRoles()),
+                'data' => implode(',', $user->roles),
                 'required' => false,
             ]);
     }

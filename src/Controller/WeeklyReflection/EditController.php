@@ -30,9 +30,9 @@ final class EditController extends AbstractController
     #[IsGranted(WeeklyReflectionVoter::EDIT)]
     public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {
-        $week = new DateTimeImmutable($date, $user->getTimezone())->setTime(0, 0);
+        $week = new DateTimeImmutable($date, $user->timezone)->setTime(0, 0);
 
-        if (null !== $error = $this->requestValidator->validateExistenceWeek($week, $user->getTimezone())) {
+        if (null !== $error = $this->requestValidator->validateExistenceWeek($week)) {
             throw new BadRequestHttpException($error);
         }
 

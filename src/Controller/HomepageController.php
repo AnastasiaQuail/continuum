@@ -46,7 +46,7 @@ final class HomepageController extends AbstractController
         #[MapQueryParameter('mood', options: ['min_range' => 1])]
         int $moodReflectionMonths = 3,
     ): Response {
-        $date = new DateTimeImmutable('now', $user->getTimezone())->setTime(0, 0);
+        $date = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);
 
         $progress = $this->calendarProgressService->getProgress($user);
         $couple = $this->coupleService->getInformation($user);

@@ -30,9 +30,9 @@ final class EditController extends AbstractController
     #[IsGranted(MoodReflectionVoter::EDIT)]
     public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {
-        $day = new DateTimeImmutable($date, $user->getTimezone())->setTime(0, 0);
+        $day = new DateTimeImmutable($date, $user->timezone)->setTime(0, 0);
 
-        if (null !== $error = $this->requestValidator->validateExistenceDay($day, $user->getTimezone())) {
+        if (null !== $error = $this->requestValidator->validateExistenceDay($day)) {
             throw new BadRequestHttpException($error);
         }
 

@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
+use InvalidArgumentException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -17,7 +18,7 @@ use Symfony\Component\Uid\Uuid;
 /**
  * @extends ServiceEntityRepository<User>
  */
-final class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+final class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -33,25 +34,13 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
-        if ('' === $newHashedPassword) {
-            throw new UnsupportedUserException('New password cannot be blank.');
+        try {
+            $user->password = $newHashedPassword;
+        } catch (InvalidArgumentException $exception) {
+            throw new UnsupportedUserException('New password cannot be blank.', $exception->getCode(), $exception);
         }
 
-        $user->setPassword($newHashedPassword);
-
         $this->save($user);
-    }
-
-    public function updateLastVisitedAt(User $user): void
-    {
-        $this->createQueryBuilder('u')
-            ->update()
-            ->andWhere('u.id = :id')
-            ->set('u.lastVisitedAt', ':datetime')
-            ->setParameter('id', $user->getId())
-            ->setParameter(':datetime', new DateTimeImmutable())
-            ->getQuery()
-            ->execute();
     }
 
     public function findOneById(Uuid $id): ?User
@@ -73,14 +62,29 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         $this->getEntityManager()->flush();
     }
 
-    public function saveRoles(User $user, string ...$roles): void
+    /**
+     * @param non-empty-string ...$roles
+     */
+    public function updateRoles(Uuid $id, string ...$roles): void
     {
         $this->createQueryBuilder('u')
             ->update()
             ->set('u.roles', ':roles')
             ->andWhere('u.id = :id')
-            ->setParameter('id', $user->getId())
+            ->setParameter('id', $id)
             ->setParameter(':roles', $roles, Types::JSON)
+            ->getQuery()
+            ->execute();
+    }
+
+    public function updateLastVisitedAt(Uuid $id, DateTimeImmutable $lastVisitedAt): void
+    {
+        $this->createQueryBuilder('u')
+            ->update()
+            ->andWhere('u.id = :id')
+            ->set('u.lastVisitedAt', ':datetime')
+            ->setParameter('id', $id)
+            ->setParameter(':datetime', $lastVisitedAt)
             ->getQuery()
             ->execute();
     }
