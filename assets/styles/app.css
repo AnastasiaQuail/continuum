@@ -209,7 +209,7 @@ body {
     display: grid;
     grid-template-rows: auto 1fr;
     grid-template-columns: auto 1fr;
-    height: 100vh;
+    height: 100dvh;
     margin: 0;
     font-size: var(--font-size);
     font-family: "Inter", sans-serif;
@@ -327,7 +327,7 @@ textarea {
 @keyframes fader {
     from {
         opacity: 0;
-        transform: translateY(var(--fade-offset, 5vh));
+        transform: translateY(var(--fade-offset, 5dvh));
     }
     to {
         opacity: 1;
@@ -2595,7 +2595,7 @@ textarea {
     }
 
     .alert {
-        --fade-offset: 2vh;
+        --fade-offset: 2dvh;
 
         display: grid;
         grid-template-rows: auto 1fr;
@@ -2880,7 +2880,7 @@ textarea {
 
 @keyframes error_page_top {
     from {
-        transform: translateY(calc(sibling-index() * -10vh));;
+        transform: translateY(calc(sibling-index() * -10dvh));;
         opacity: calc(1 - sibling-index() * 0.3);
     }
     to {
@@ -2891,7 +2891,7 @@ textarea {
 
 @keyframes error_page_bottom {
     from {
-        transform: translateY(calc(sibling-index() * sibling-index() * 10vh)) scale(calc(sibling-index() * 1.5));
+        transform: translateY(calc(sibling-index() * sibling-index() * 10dvh)) scale(calc(sibling-index() * 1.5));
         opacity: calc(1 - sibling-index() * 0.5);
     }
     to {
@@ -2907,11 +2907,11 @@ textarea {
         align-items: flex-end;
         justify-content: center;
         width: 100vw;
-        height: 100vh;
-        padding-bottom: calc(10vh * calc(1vh / (1vw)));
-        font-size: min(90vh, 50vw);
+        height: 100dvh;
+        padding-bottom: calc(10dvh * calc(1dvh / (1vw)));
+        font-size: min(90dvh, 50vw);
         font-weight: 500;
-        letter-spacing: min(-1vh, -1vw);
+        letter-spacing: min(-1dvh, -1vw);
         color: var(--color-zinc);
         z-index: -1;
 
@@ -2940,8 +2940,8 @@ textarea {
         display: flex;
         flex-direction: column;
         justify-content: end;
-        height: 100vh;
-        padding: calc(6vh * calc(1vw / (1vh))) var(--body-gap-inline);
+        height: 100dvh;
+        padding: calc(6dvh * calc(1vw / (1dvh))) var(--body-gap-inline);
         text-align: center;
         background: linear-gradient(0deg, var(--clr), var(--clr_25), var(--clr_50), var(--clr_75), transparent);
         z-index: 1;
@@ -3002,7 +3002,7 @@ textarea {
             .workout-exercise {
                 --exercise-color: var(--color);
                 --exercise-background-color-transparent: 5%;
-                --fade-offset: 2vh;
+                --fade-offset: 2dvh;
 
                 display: flex;
                 flex-wrap: wrap;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Service;
 
 use Continuum\Dto\Request\Reflection\EditWeeklyReflection;
+use Continuum\Entity\TextField;
 use Continuum\Entity\WeeklyReflection;
 use Continuum\Repository\WeeklyReflectionRepository;
 use DateTimeImmutable;
@@ -50,22 +51,17 @@ final readonly class WeeklyReflectionService
         ?WeeklyReflection $weeklyReflection,
         EditWeeklyReflection $dto
     ): WeeklyReflection {
-        if (null === $weeklyReflection) {
-            $weeklyReflection = new WeeklyReflection(
-                date: $week,
-                joy: $dto->joy,
-                difficulty: $dto->difficulty,
-                achievement: $dto->achievement,
-            );
-        } else {
-            $weeklyReflection->joy = $dto->joy;
-            $weeklyReflection->difficulty = $dto->difficulty;
-            $weeklyReflection->achievement = $dto->achievement;
-        }
+        $joy = new TextField($dto->joy, $dto->isJoyPrivate);
+        $difficulty = new TextField($dto->difficulty, $dto->isDifficultyPrivate);
+        $achievement = new TextField($dto->achievement, $dto->isAchievementPrivate);
 
-        $weeklyReflection->isJoyPrivate = $dto->isJoyPrivate;
-        $weeklyReflection->isDifficultyPrivate = $dto->isDifficultyPrivate;
-        $weeklyReflection->isAchievementPrivate = $dto->isAchievementPrivate;
+        if (null === $weeklyReflection) {
+            $weeklyReflection = new WeeklyReflection($week, $joy, $difficulty, $achievement);
+        } else {
+            $weeklyReflection->joy = $joy;
+            $weeklyReflection->difficulty = $difficulty;
+            $weeklyReflection->achievement = $achievement;
+        }
 
         $this->repository->save($weeklyReflection);
 
