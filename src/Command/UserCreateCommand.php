@@ -40,16 +40,13 @@ final readonly class UserCreateCommand
         ?UserRole $role = null,
     ): int {
         $user = new User($email);
-
-        /** @var non-empty-string $hashedPassword */
-        $hashedPassword = $this->passwordHasher->hashPassword($user, $password);
-        $user->setPassword($hashedPassword);
+        $user->password = $this->passwordHasher->hashPassword($user, $password);
 
         if (null !== $role) {
             $user->addRole($role);
 
             if (UserRole::SuperAdmin === $role) {
-                $user->setStatus(UserStatus::Active);
+                $user->status = UserStatus::Active;
             }
         }
 

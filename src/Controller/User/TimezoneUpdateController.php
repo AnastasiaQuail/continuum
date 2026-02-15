@@ -33,7 +33,7 @@ final class TimezoneUpdateController extends AbstractController
         $this->userService->updateTimezone($user, $timezone);
 
         return $this->json([
-            'new_timezone' => $user->getTimezone()->getName(),
+            'new_timezone' => $user->timezone->getName(),
         ]);
     }
 }

@@ -10,6 +10,7 @@ use Continuum\Security\User\UserStatus;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -27,50 +28,60 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
-    /**
-     * @var non-empty-string
-     */
     #[ORM\Column]
-    private string $password = '';
+    public string $password {
+        get => $this->password ?? throw new InvalidArgumentException('Password should be set.');
+        set => '' !== $value ? $value : throw new InvalidArgumentException('Password cannot be empty.');
+    }
 
     #[ORM\Column(enumType: UserStatus::class)]
-    private UserStatus $status = UserStatus::Active;
+    public UserStatus $status = UserStatus::Created;
 
     /**
      * @var list<non-empty-string>
      */
     #[ORM\Column]
-    private array $roles = [];
+    public private(set) array $roles = [] {
+        // guarantee every user at least has ROLE_USER
+        get => array_values(array_unique(array_merge($this->roles, [UserRole::User->value])));
+        set => array_values(array_unique($value));
+    }
 
     #[ORM\Column]
-    private DateTimeImmutable $createdAt;
+    public private(set) DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private DateTimeImmutable $updatedAt;
+    public private(set) DateTimeImmutable $updatedAt;
 
     #[ORM\Column]
-    private ?DateTimeImmutable $lastVisitedAt;
+    public private(set) DateTimeImmutable $lastVisitedAt;
 
-    #[ORM\Column(length: 64)]
-    private string $timezone;
+    public DateTimeZone $timezone {
+        get => new DateTimeZone($this->timezoneName);
+        set(DateTimeZone $timezone) {
+            $this->timezoneName = $timezone->getName();
+        }
+    }
 
     #[ORM\Embedded(class: Location::class, columnPrefix: false)]
-    private Location $location;
+    public Location $location;
+
+    #[ORM\Column(name: 'timezone', length: 64)]
+    private string $timezoneName;
 
     public function __construct(
-        /**
-         * @var non-empty-string
-         */
         #[ORM\Column(length: 180)]
-        private readonly string $email,
+        public private(set) string $email {
+            set => '' !== $value ? $value : throw new InvalidArgumentException('Email cannot be empty.');
+        }
     ) {
         $this->id = Uuid::v7();
         $this->createdAt = new DateTimeImmutable();
-        $this->updatedAt = new DateTimeImmutable();
-        $this->lastVisitedAt = new DateTimeImmutable();
-        $this->timezone = date_default_timezone_get();
+        $this->updatedAt = $this->createdAt;
+        $this->lastVisitedAt = $this->createdAt;
+        $this->timezoneName = date_default_timezone_get();
         $this->location = new Location('0.0', '0.0');
     }
 
@@ -94,7 +105,14 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
             return false;
         }
 
-        $otherPassword = $user->getPassword();
+        if (
+            $user->email !== $this->email
+            || $user->status !== $this->status
+        ) {
+            return false;
+        }
+
+        $otherPassword = $user->password;
         $password = $this->password;
 
         if (
@@ -107,26 +125,11 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
             return false;
         }
 
-        $otherRoles = $user->getRoles();
-        $roles = $this->getRoles();
+        $otherRoles = $user->roles;
+        $roles = $this->roles;
 
-        if (
-            count($otherRoles) !== count($roles)
-            || count($otherRoles) !== count(array_intersect($otherRoles, $roles))
-        ) {
-            return false;
-        }
-
-        if ($this->email !== $user->getUserIdentifier()) {
-            return false;
-        }
-
-        return $this->status === $user->getStatus();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
+        return (count($otherRoles) === count($roles))
+            && (count($otherRoles) === count(array_intersect($otherRoles, $roles)));
     }
 
     /**
@@ -134,6 +137,8 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
      */
     public function getUserIdentifier(): string
     {
+        assert('' !== $this->email);
+
         return $this->email;
     }
 
@@ -142,25 +147,9 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
      */
     public function getPassword(): string
     {
+        assert('' !== $this->password);
+
         return $this->password;
-    }
-
-    /**
-     * @param non-empty-string $password
-     */
-    public function setPassword(string $password): void
-    {
-        $this->password = $password;
-    }
-
-    public function getStatus(): UserStatus
-    {
-        return $this->status;
-    }
-
-    public function setStatus(UserStatus $status): void
-    {
-        $this->status = $status;
     }
 
     /**
@@ -168,56 +157,17 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = UserRole::User->value;
-
-        return array_values(array_unique($roles));
+        return $this->roles;
     }
 
     public function addRole(UserRole $role): void
     {
-        $this->roles[] = $role->value;
-    }
-
-    public function getCreatedAt(): DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): DateTimeImmutable
-    {
-        return $this->updatedAt;
+        $this->roles = array_merge($this->roles, [$role->value]);
     }
 
     #[ORM\PreUpdate]
     public function update(): void
     {
         $this->updatedAt = new DateTimeImmutable();
-    }
-
-    public function getLastVisitedAt(): DateTimeImmutable
-    {
-        return $this->lastVisitedAt;
-    }
-
-    public function getTimezone(): DateTimeZone
-    {
-        return new DateTimeZone($this->timezone);
-    }
-
-    public function setTimezone(DateTimeZone $timezone): void
-    {
-        $this->timezone = $timezone->getName();
-    }
-
-    public function getLocation(): Location
-    {
-        return $this->location;
-    }
-
-    public function setLocation(Location $location): void
-    {
-        $this->location = $location;
     }
 }

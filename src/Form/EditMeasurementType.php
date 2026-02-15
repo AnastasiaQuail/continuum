@@ -41,15 +41,14 @@ final class EditMeasurementType extends AbstractImmutableType
 
         $builder->setDataMapper($this)
             ->add('datetime', DateTimeType::class, [
-                'data' => ($measurement?->getDatetime() ?? new DateTimeImmutable('now'))
-                    ->setTimezone($user->getTimezone()),
-                'model_timezone' => $user->getTimezone()->getName(),
-                'view_timezone' => $user->getTimezone()->getName(),
+                'data' => ($measurement?->getDatetime() ?? new DateTimeImmutable('now'))->setTimezone($user->timezone),
+                'model_timezone' => $user->timezone->getName(),
+                'view_timezone' => $user->timezone->getName(),
                 'input' => 'datetime_immutable',
                 'constraints' => [
                     new Callback(
                         static function (DateTimeImmutable $datetime, ExecutionContextInterface $context) use ($user): void {
-                            $currentDate = new DateTimeImmutable('now', $user->getTimezone());
+                            $currentDate = new DateTimeImmutable('now', $user->timezone);
 
                             if ($currentDate->format('Y-m-d') < $datetime->format('Y-m-d')) {
                                 $context->buildViolation('You cannot manage measurements for future days.')

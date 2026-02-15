@@ -55,36 +55,6 @@ parameters:
 			path: src/Controller/Admin/Database/BackupCreateController.php
 
 		-
-			rawMessage: 'Method Continuum\Entity\User::getLastVisitedAt() should return DateTimeImmutable but returns DateTimeImmutable|null.'
-			identifier: return.type
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			rawMessage: 'Property Continuum\Entity\User::$email type mapping mismatch: database can contain string but property expects non-empty-string.'
-			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			rawMessage: 'Property Continuum\Entity\User::$lastVisitedAt type mapping mismatch: property can contain DateTimeImmutable|null but database expects DateTimeImmutable.'
-			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			rawMessage: 'Property Continuum\Entity\User::$password (non-empty-string) does not accept default value of type ''''.'
-			identifier: property.defaultValue
-			count: 1
-			path: src/Entity/User.php
-
-		-
-			rawMessage: 'Property Continuum\Entity\User::$password type mapping mismatch: database can contain string but property expects non-empty-string.'
-			identifier: doctrine.columnType
-			count: 1
-			path: src/Entity/User.php
-
-		-
 			rawMessage: 'Cannot call method getData() on mixed.'
 			identifier: method.nonObject
 			count: 2

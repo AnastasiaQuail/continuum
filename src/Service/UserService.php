@@ -8,7 +8,7 @@ use Continuum\Dto\Request\Admin\User\EditUser;
 use Continuum\Dto\Request\User\EditLocation;
 use Continuum\Entity\Location;
 use Continuum\Entity\User;
-use Continuum\Repository\UserRepository;
+use Continuum\Repository\UserRepositoryInterface;
 use DateTimeZone;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
@@ -16,7 +16,7 @@ use Symfony\Component\Uid\Uuid;
 final readonly class UserService
 {
     public function __construct(
-        private UserRepository $repository,
+        private UserRepositoryInterface $repository,
     ) {}
 
     public function get(Uuid $id): User
@@ -34,18 +34,16 @@ final readonly class UserService
 
     public function updateTimezone(User $user, DateTimeZone $timezone): void
     {
-        $user->setTimezone($timezone);
+        $user->timezone = $timezone;
 
         $this->repository->save($user);
     }
 
     public function updateLocation(User $user, EditLocation $dto): void
     {
-        $user->setLocation(
-            new Location(
-                latitude: (string) $dto->latitude,
-                longitude: (string) $dto->longitude,
-            )
+        $user->location = new Location(
+            latitude: (string) $dto->latitude,
+            longitude: (string) $dto->longitude,
         );
 
         $this->repository->save($user);
@@ -53,10 +51,10 @@ final readonly class UserService
 
     public function update(User $user, EditUser $dto): User
     {
-        $user->setStatus($dto->status);
+        $user->status = $dto->status;
 
         $this->repository->save($user);
-        $this->repository->saveRoles($user, ...$dto->roles);
+        $this->repository->updateRoles($user->id, ...$dto->roles);
 
         return $user;
     }

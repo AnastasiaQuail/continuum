@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Continuum\EventSubscriber;
 
 use Continuum\Entity\User;
-use Continuum\Repository\UserRepository;
+use Continuum\Repository\UserRepositoryInterface;
 use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -16,7 +16,7 @@ final readonly class LastVisitListener
 {
     public function __construct(
         private Security $security,
-        private UserRepository $userRepository,
+        private UserRepositoryInterface $userRepository,
     ) {}
 
     #[AsEventListener]
@@ -33,10 +33,10 @@ final readonly class LastVisitListener
         }
 
         $now = new DateTimeImmutable();
-        $lastVisited = $user->getLastVisitedAt();
+        $lastVisited = $user->lastVisitedAt;
 
         if ($lastVisited->modify('+5 minutes') < $now) {
-            $this->userRepository->updateLastVisitedAt($user);
+            $this->userRepository->updateLastVisitedAt($user->id, $now);
 
             if ($lastVisited->modify('+8 hours') < $now) {
                 /** @var FlashBagAwareSessionInterface $session */

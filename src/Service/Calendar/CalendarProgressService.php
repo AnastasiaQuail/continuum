@@ -20,9 +20,9 @@ final readonly class CalendarProgressService
 
     public function getProgress(User $user): CalendarProgress
     {
-        $start = new DateTimeImmutable($this->startDate, $user->getTimezone());
-        $end = new DateTimeImmutable($this->endDate, $user->getTimezone());
-        $current = new DateTimeImmutable('now', $user->getTimezone());
+        $start = new DateTimeImmutable($this->startDate, $user->timezone);
+        $end = new DateTimeImmutable($this->endDate, $user->timezone);
+        $current = new DateTimeImmutable('now', $user->timezone);
 
         return new CalendarProgress(
             past: $start->diff($current),

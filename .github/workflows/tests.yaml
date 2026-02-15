@@ -47,4 +47,4 @@ jobs:
       - name: "Run tests"
         env:
           DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/postgres?serverVersion=16&charset=utf8"
-        run: composer tests -- --colors=always
+        run: composer tests:ci -- --colors=always

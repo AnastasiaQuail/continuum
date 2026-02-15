@@ -24,7 +24,7 @@ final readonly class CalendarEventService
      */
     public function getByNextDays(User $user, int $days): array
     {
-        return $this->repository->findUpcomingNextDays($days, $user->getTimezone());
+        return $this->repository->findUpcomingNextDays($days, $user->timezone);
     }
 
     /**
@@ -34,8 +34,8 @@ final readonly class CalendarEventService
     {
         $events = [];
 
-        foreach ($this->repository->findByYear($year, $user->getTimezone()) as $event) {
-            $date = $event->getDatetime()->setTimezone($user->getTimezone())->format('Y-m-d');
+        foreach ($this->repository->findByYear($year, $user->timezone) as $event) {
+            $date = $event->getDatetime()->setTimezone($user->timezone)->format('Y-m-d');
 
             if (!array_key_exists($date, $events)) {
                 $events[$date] = [
@@ -62,7 +62,7 @@ final readonly class CalendarEventService
      */
     public function getByDay(User $user, DateTimeImmutable $date): array
     {
-        return $this->repository->findByDay($date, $user->getTimezone());
+        return $this->repository->findByDay($date, $user->timezone);
     }
 
     public function delete(CalendarEvent $event): void
@@ -74,7 +74,7 @@ final readonly class CalendarEventService
     {
         $dateTime = new DateTimeImmutable(
             sprintf('%s %s:%s:00', $date->format('Y-m-d'), $dto->time?->format('H'), $dto->time?->format('i') ?? '00'),
-            $user->getTimezone()
+            $user->timezone
         );
 
         $event = new CalendarEvent(

@@ -6,7 +6,6 @@ namespace Continuum\Service;
 
 use Continuum\Validator\Year;
 use DateTimeImmutable;
-use DateTimeZone;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final readonly class RequestValidator
@@ -26,7 +25,7 @@ final readonly class RequestValidator
         return null;
     }
 
-    public function validateExistenceMonth(DateTimeImmutable $month, DateTimeZone $timeZone): ?string
+    public function validateExistenceMonth(DateTimeImmutable $month): ?string
     {
         if (null !== $error = $this->validateYear((int) $month->format('Y'))) {
             return $error;
@@ -36,14 +35,14 @@ final readonly class RequestValidator
             return 'Wrong month format. Allowed only "Y-m" format.';
         }
 
-        if (new DateTimeImmutable('now', $timeZone)->format('Y-m') < $month->format('Y-m')) {
+        if (new DateTimeImmutable('now', $month->getTimezone())->format('Y-m') < $month->format('Y-m')) {
             return 'Future month is not allowed.';
         }
 
         return null;
     }
 
-    public function validateExistenceWeek(DateTimeImmutable $week, DateTimeZone $timeZone): ?string
+    public function validateExistenceWeek(DateTimeImmutable $week): ?string
     {
         if (null !== $error = $this->validateYear((int) $week->format('Y'))) {
             return $error;
@@ -57,7 +56,7 @@ final readonly class RequestValidator
             return 'Wrong week format. Allowed only "Y-m-d" format.';
         }
 
-        if (new DateTimeImmutable('sunday', $timeZone)->format('Y-m-d') < $week->format('Y-m-d')) {
+        if (new DateTimeImmutable('sunday', $week->getTimezone())->format('Y-m-d') < $week->format('Y-m-d')) {
             return 'Future week is not allowed.';
         }
 
@@ -77,13 +76,13 @@ final readonly class RequestValidator
         return null;
     }
 
-    public function validateExistenceDay(DateTimeImmutable $day, DateTimeZone $timeZone): ?string
+    public function validateExistenceDay(DateTimeImmutable $day): ?string
     {
         if (null !== $error = $this->validateDay($day)) {
             return $error;
         }
 
-        if (new DateTimeImmutable('now', $timeZone)->format('Y-m-d') < $day->format('Y-m-d')) {
+        if (new DateTimeImmutable('now', $day->getTimezone())->format('Y-m-d') < $day->format('Y-m-d')) {
             return 'Future day is not allowed.';
         }
 
