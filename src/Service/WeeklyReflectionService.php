@@ -34,7 +34,7 @@ final readonly class WeeklyReflectionService
         } while ($sunday < $endDate);
 
         foreach ($this->repository->findByDays(...$days) as $reflection) {
-            $reflections[$reflection->getDate()->format('Y-m-d')] = $reflection;
+            $reflections[$reflection->date->format('Y-m-d')] = $reflection;
         }
 
         return $reflections;
@@ -50,13 +50,22 @@ final readonly class WeeklyReflectionService
         ?WeeklyReflection $weeklyReflection,
         EditWeeklyReflection $dto
     ): WeeklyReflection {
-        $weeklyReflection ??= new WeeklyReflection($week);
-        $weeklyReflection->setJoy($dto->joy);
-        $weeklyReflection->setIsJoyPrivate($dto->isJoyPrivate);
-        $weeklyReflection->setDifficulty($dto->difficulty);
-        $weeklyReflection->setIsDifficultyPrivate($dto->isDifficultyPrivate);
-        $weeklyReflection->setAchievement($dto->achievement);
-        $weeklyReflection->setIsAchievementPrivate($dto->isAchievementPrivate);
+        if (null === $weeklyReflection) {
+            $weeklyReflection = new WeeklyReflection(
+                date: $week,
+                joy: $dto->joy,
+                difficulty: $dto->difficulty,
+                achievement: $dto->achievement,
+            );
+        } else {
+            $weeklyReflection->joy = $dto->joy;
+            $weeklyReflection->difficulty = $dto->difficulty;
+            $weeklyReflection->achievement = $dto->achievement;
+        }
+
+        $weeklyReflection->isJoyPrivate = $dto->isJoyPrivate;
+        $weeklyReflection->isDifficultyPrivate = $dto->isDifficultyPrivate;
+        $weeklyReflection->isAchievementPrivate = $dto->isAchievementPrivate;
 
         $this->repository->save($weeklyReflection);
 
