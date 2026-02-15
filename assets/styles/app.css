@@ -1058,7 +1058,11 @@ textarea {
         }
 
         .footer-bird {
-            transform: scaleX(-1);
+            white-space: nowrap;
+
+            > svg {
+                transform: scaleX(-1);
+            }
         }
     }
 }
