@@ -15,6 +15,11 @@ final class MeasurementType extends NumberType
     #[Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        // fix phpstan
+        if (!is_array($view->vars['attr'])) {
+            $view->vars['attr'] = [];
+        }
+
         if (!isset($view->vars['attr']['step'])) {
             $view->vars['attr']['step'] = 0.5;
         }
@@ -24,6 +29,11 @@ final class MeasurementType extends NumberType
         }
 
         parent::buildView($view, $form, $options);
+
+        // fix phpstan
+        if (!is_array($view->vars['attr'])) {
+            $view->vars['attr'] = [];
+        }
 
         if (null !== $options['min']) {
             $view->vars['attr']['min'] = $options['min'];

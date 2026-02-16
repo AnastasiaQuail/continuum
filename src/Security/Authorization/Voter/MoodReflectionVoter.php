@@ -6,11 +6,15 @@ namespace Continuum\Security\Authorization\Voter;
 
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
+use DateTimeImmutable;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, null|DateTimeImmutable>
+ */
 final class MoodReflectionVoter extends Voter
 {
     public const string VIEW = 'MOOD_REFLECTION_VIEW';
@@ -40,6 +44,7 @@ final class MoodReflectionVoter extends Voter
         return match ($attribute) {
             self::VIEW => true,
             self::EDIT => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            default => false,
         };
     }
 }

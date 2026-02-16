@@ -7,13 +7,13 @@ namespace Continuum\Service;
 use Continuum\Dto\Request\Reflection\EditWeeklyReflection;
 use Continuum\Entity\TextField;
 use Continuum\Entity\WeeklyReflection;
-use Continuum\Repository\WeeklyReflectionRepository;
+use Continuum\Repository\WeeklyReflectionRepositoryInterface;
 use DateTimeImmutable;
 
 final readonly class WeeklyReflectionService
 {
     public function __construct(
-        private WeeklyReflectionRepository $repository,
+        private WeeklyReflectionRepositoryInterface $repository,
     ) {}
 
     /**

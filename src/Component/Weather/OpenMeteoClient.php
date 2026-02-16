@@ -19,6 +19,35 @@ final readonly class OpenMeteoClient
 
     public function getCurrent(float $latitude, float $longitude): Weather
     {
+        /**
+         * @var array{
+         *  latitude: float,
+         *  longitude: float,
+         *  generationtime_ms: float,
+         *  utc_offset_seconds: int,
+         *  timezone: string,
+         *  timezone_abbreviation: string,
+         *  elevation: float,
+         *  current_weather_units: array{
+         *      time: string,
+         *      interval: string,
+         *      temperature: string,
+         *      windspeed: string,
+         *      winddirection: string,
+         *      is_day: string,
+         *      weathercode: string
+         *  },
+         *  current_weather: array{
+         *      time: string,
+         *      interval: int,
+         *      temperature: float,
+         *      windspeed: float,
+         *      winddirection: int,
+         *      is_day: int,
+         *      weathercode: int
+         *  }
+         * } $data
+         */
         $data = $this->sendRequest('/v1/forecast', [
             'latitude' => $latitude,
             'longitude' => $longitude,
@@ -26,11 +55,11 @@ final readonly class OpenMeteoClient
         ]);
 
         return new Weather(
-            temperature: (float) $data['current_weather']['temperature'],
-            code: WmoCode::tryFrom((int) $data['current_weather']['weathercode']),
+            temperature: $data['current_weather']['temperature'],
+            code: WmoCode::tryFrom($data['current_weather']['weathercode']),
             wind: new Wind(
-                speed: (float) $data['current_weather']['windspeed'],
-                direction: (int) $data['current_weather']['winddirection'],
+                speed: $data['current_weather']['windspeed'],
+                direction: $data['current_weather']['winddirection'],
             ),
         );
     }
@@ -38,6 +67,8 @@ final readonly class OpenMeteoClient
     /**
      * @param non-empty-string $path
      * @param array<string, mixed> $params
+     *
+     * @return array<string, mixed>
      */
     public function sendRequest(string $path, array $params = []): array
     {
@@ -47,6 +78,7 @@ final readonly class OpenMeteoClient
             throw new BadRequestHttpException('Something went wrong.');
         }
 
+        /** @var array<string, mixed> */
         return $response->toArray();
     }
 }

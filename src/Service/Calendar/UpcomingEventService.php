@@ -66,7 +66,7 @@ final readonly class UpcomingEventService
         $data = [...$hourEvents, ...$dayEvents];
         usort($data, static fn (CalendarEvent $a, CalendarEvent $b): int => $a->getDatetime() <=> $b->getDatetime());
 
-        return array_values($data);
+        return $data;
     }
 
     /**

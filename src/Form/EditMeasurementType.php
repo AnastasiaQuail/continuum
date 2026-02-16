@@ -16,21 +16,23 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\Exception\LogicException;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Callback;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
+/**
+ * @extends AbstractImmutableType<EditMeasurement>
+ */
 final class EditMeasurementType extends AbstractImmutableType
 {
     public function __construct(
         private readonly Security $security,
     ) {}
 
-    /**
-     * @param array{lastMeasurement: null|LastMeasurement, measurement: null|BodyMeasurement} $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var array{lastMeasurement: null|LastMeasurement, measurement: null|BodyMeasurement} $options */
         $lastMeasurement = $options['lastMeasurement'];
         $measurement = $options['measurement'];
         $user = $this->security->getUser();
@@ -47,7 +49,9 @@ final class EditMeasurementType extends AbstractImmutableType
                 'input' => 'datetime_immutable',
                 'constraints' => [
                     new Callback(
-                        static function (DateTimeImmutable $datetime, ExecutionContextInterface $context) use ($user): void {
+                        static function (DateTimeImmutable $datetime, ExecutionContextInterface $context) use (
+                            $user
+                        ): void {
                             $currentDate = new DateTimeImmutable('now', $user->timezone);
 
                             if ($currentDate->format('Y-m-d') < $datetime->format('Y-m-d')) {
@@ -135,6 +139,22 @@ final class EditMeasurementType extends AbstractImmutableType
             ]);
     }
 
+    /**
+     * @param array{
+     *  datetime: FormInterface<DateTimeImmutable>,
+     *  weight: FormInterface<float>,
+     *  neck: FormInterface<null|float>,
+     *  chest: FormInterface<null|float>,
+     *  shoulders: FormInterface<null|float>,
+     *  waist: FormInterface<null|float>,
+     *  flexedBiceps: FormInterface<null|float>,
+     *  hips: FormInterface<null|float>,
+     *  thigh: FormInterface<null|float>,
+     *  calf: FormInterface<null|float>
+     * } $forms
+     *
+     * @phpstan-ignore method.childParameterType
+     */
     protected function mapDataClass(array $forms): EditMeasurement
     {
         return new EditMeasurement(
@@ -167,7 +187,7 @@ final class EditMeasurementType extends AbstractImmutableType
         }
 
         if (is_int($value) || 0.0 === fmod($value, 1.0)) {
-            return sprintf('Last: %d %s', $value, $name);
+            return sprintf('Last: %s %s', $value, $name);
         }
 
         return sprintf('Last: %.1f %s', $value, $name);

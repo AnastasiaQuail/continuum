@@ -15,6 +15,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, null|Workout|WorkoutExercise|WorkoutSet>
+ */
 final class WorkoutVoter extends Voter
 {
     public const string VIEW = 'WORKOUT_VIEW';
@@ -61,9 +64,10 @@ final class WorkoutVoter extends Voter
             self::EXERCISE_DELETE,
             self::SET_DELETE => (
                 $this->editWorkout($user, $attribute, $subject)
-                && $this->security->isGrantedForUser($user, UserRole::Admin->value)
+                    && $this->security->isGrantedForUser($user, UserRole::Admin->value)
             )
                 || $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            default => false,
         };
     }
 
@@ -81,6 +85,7 @@ final class WorkoutVoter extends Voter
             self::SET_CREATE => $subject instanceof WorkoutExercise && $this->isCurrentDay($subject->getWorkout()),
             self::SET_DELETE => $subject instanceof WorkoutSet
                 && $this->isCurrentDay($subject->getWorkoutExercise()->getWorkout()),
+            default => false,
         };
     }
 

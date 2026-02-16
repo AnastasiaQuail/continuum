@@ -7,20 +7,23 @@ namespace Continuum\Form;
 use Continuum\Dto\Request\Calendar\NewCalendarEvent;
 use Continuum\Enum\CalendarEventType;
 use Continuum\Form\Type\AbstractImmutableType;
+use DateTimeImmutable;
 use DateTimeZone;
 use Override;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractImmutableType<NewCalendarEvent>
+ */
 final class NewCalendarEventType extends AbstractImmutableType
 {
-    /**
-     * @param array{timezone: null|DateTimeZone} $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var array{timezone: null|DateTimeZone} $options */
         $builder->setDataMapper($this)
             ->add('title', null, [
                 'attr' => ['autofocus' => true],
@@ -36,6 +39,15 @@ final class NewCalendarEventType extends AbstractImmutableType
             ]);
     }
 
+    /**
+     * @param array{
+     *  title: FormInterface<null|string>,
+     *  type: FormInterface<CalendarEventType>,
+     *  time: FormInterface<DateTimeImmutable|string>
+     * } $forms
+     *
+     * @phpstan-ignore method.childParameterType
+     */
     protected function mapDataClass(array $forms): NewCalendarEvent
     {
         $time = $forms['time']->getData();
@@ -43,7 +55,7 @@ final class NewCalendarEventType extends AbstractImmutableType
         return new NewCalendarEvent(
             $forms['title']->getData() ?? '',
             $forms['type']->getData(),
-            '' !== $time ? $time : null,
+            ($time instanceof DateTimeImmutable) ? $time : null,
         );
     }
 

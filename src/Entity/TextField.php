@@ -17,6 +17,6 @@ final class TextField
             set => '' !== $value ? $value : throw new InvalidArgumentException('Text cannot be empty.');
         },
         #[ORM\Column(type: Types::BOOLEAN)]
-        public readonly bool $isPrivate,
+        public readonly bool $isPrivate = false,
     ) {}
 }

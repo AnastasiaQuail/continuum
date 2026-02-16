@@ -10,10 +10,10 @@ use DateTimeImmutable;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
 use SensitiveParameter;
-use SplFileInfo;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -121,17 +121,16 @@ final readonly class DatabaseDumper
             return null;
         }
 
+        /** @var SplFileInfo $file */
         $file = $finder->getIterator()->current();
 
-        if (!$file instanceof SplFileInfo) {
-            return null;
-        }
-
         $time = $file->getCTime();
+        // @phpstan-ignore identical.alwaysFalse
         if (false === $time) {
             $time = $file->getMTime();
         }
 
+        // @phpstan-ignore identical.alwaysFalse
         if (false === $time) {
             throw new RuntimeException('Unable to retrieve last backup time');
         }
@@ -176,12 +175,10 @@ final readonly class DatabaseDumper
             throw new RuntimeException('Backup file was not created');
         }
 
+        /** @var int<0, max> $filesize */
+        $filesize = filesize($backupPath);
         $this->logger->notice(
-            sprintf(
-                'Backup created: %s (%s MB)',
-                $backupPath,
-                number_format(filesize($backupPath) / 1024 / 1024, 2)
-            )
+            sprintf('Backup created: %s (%s MB)', $backupPath, number_format($filesize / 1024 / 1024, 2))
         );
 
         return $backupPath;
@@ -225,25 +222,17 @@ final readonly class DatabaseDumper
 
     private function getCredentials(): DatabaseCredentials
     {
+        /** @var array{host: string, port: int<0, 65535>, user: string, pass: string, path: string} $parts */
         $parts = parse_url($this->databaseUrl);
 
-        if (!is_array($parts)) {
-            throw new RuntimeException('Invalid database url');
-        }
-
-        ['user' => $user, 'pass' => $password, 'host' => $host, 'port' => $port, 'path' => $dbName] = $parts;
-        $dbName = ltrim($dbName ?? '', '/');
-
-        if (!$user || !$dbName) {
-            throw new RuntimeException('Invalid database url components');
-        }
+        ['host' => $host, 'port' => $port, 'user' => $user, 'pass' => $password, 'path' => $dbName] = $parts;
 
         return new DatabaseCredentials(
             user: $user,
             password: $password,
             host: $host,
-            port: (int) $port,
-            name: $dbName,
+            port: $port,
+            name: ltrim($dbName, '/'),
         );
     }
 
@@ -251,7 +240,10 @@ final readonly class DatabaseDumper
     {
         $removedFiles = 0;
 
-        foreach (glob($this->backupDir . '/*.sql') as $file) {
+        /** @var list<non-empty-string> $files */
+        $files = glob($this->backupDir . '/*.sql', GLOB_ERR);
+
+        foreach ($files as $file) {
             if (filemtime($file) < strtotime('-7 days')) {
                 unlink($file);
                 ++$removedFiles;
