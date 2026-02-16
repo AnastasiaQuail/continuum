@@ -11,15 +11,17 @@ use Override;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractImmutableType<EditWeeklyReflection>
+ */
 final class EditWeeklyReflectionType extends AbstractImmutableType
 {
-    /**
-     * @param array{weeklyReflection: null|WeeklyReflection} $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var array{weeklyReflection: null|WeeklyReflection} $options */
         $weeklyReflection = $options['weeklyReflection'];
 
         $builder->setDataMapper($this)
@@ -59,15 +61,27 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
             ]);
     }
 
+    /**
+     * @param array{
+     *  joy: FormInterface<null|string>,
+     *  isJoyPrivate: FormInterface<bool>,
+     *  difficulty: FormInterface<null|string>,
+     *  isDifficultyPrivate: FormInterface<bool>,
+     *  achievement: FormInterface<null|string>,
+     *  isAchievementPrivate: FormInterface<bool>
+     * } $forms
+     *
+     * @phpstan-ignore method.childParameterType
+     */
     protected function mapDataClass(array $forms): EditWeeklyReflection
     {
         return new EditWeeklyReflection(
-            $forms['joy']->getData() ?? '',
-            $forms['isJoyPrivate']->getData(),
-            $forms['difficulty']->getData() ?? '',
-            $forms['isDifficultyPrivate']->getData(),
-            $forms['achievement']->getData() ?? '',
-            $forms['isAchievementPrivate']->getData(),
+            joy: $forms['joy']->getData() ?? '',
+            isJoyPrivate: $forms['isJoyPrivate']->getData(),
+            difficulty: $forms['difficulty']->getData() ?? '',
+            isDifficultyPrivate: $forms['isDifficultyPrivate']->getData(),
+            achievement: $forms['achievement']->getData() ?? '',
+            isAchievementPrivate: $forms['isAchievementPrivate']->getData(),
         );
     }
 

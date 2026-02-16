@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Security\Authorization\Voter;
 
+use Continuum\Entity\Exercise;
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -11,6 +12,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, null|Exercise>
+ */
 final class ExerciseVoter extends Voter
 {
     public const string VIEW = 'EXERCISE_VIEW';
@@ -42,6 +46,7 @@ final class ExerciseVoter extends Voter
             self::VIEW => true,
             self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EDIT => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            default => false,
         };
     }
 }

@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @extends ServiceEntityRepository<WeeklyReflection>
  */
-final class WeeklyReflectionRepository extends ServiceEntityRepository
+final class WeeklyReflectionRepository extends ServiceEntityRepository implements WeeklyReflectionRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

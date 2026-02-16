@@ -12,15 +12,17 @@ use Override;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractImmutableType<EditUser>
+ */
 final class EditUserType extends AbstractImmutableType
 {
-    /**
-     * @param array{user: User} $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var array{user: User} $options $options */
         $user = $options['user'];
 
         $builder->setDataMapper($this)
@@ -38,12 +40,21 @@ final class EditUserType extends AbstractImmutableType
             ]);
     }
 
+    /**
+     * @param array{
+     *  status: FormInterface<UserStatus>,
+     *  roles: FormInterface<null|string>
+     * } $forms
+     *
+     * @phpstan-ignore method.childParameterType
+     */
     protected function mapDataClass(array $forms): EditUser
     {
         $roles = trim($forms['roles']->getData() ?? '');
 
         return new EditUser(
             $forms['status']->getData(),
+            // @phpstan-ignore argument.type
             '' === $roles ? [] : explode(',', $roles),
         );
     }

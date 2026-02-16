@@ -12,6 +12,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, null|BodyMeasurement>
+ */
 final class MeasurementVoter extends Voter
 {
     public const string VIEW = 'BODY_MEASUREMENT_VIEW';
@@ -44,6 +47,7 @@ final class MeasurementVoter extends Voter
             self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EDIT => $subject instanceof BodyMeasurement
                 && $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            default => false,
         };
     }
 }

@@ -12,6 +12,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, null|DateTimeImmutable>
+ */
 final class WeeklyReflectionVoter extends Voter
 {
     public const string VIEW = 'WEEKLY_REFLECTION_VIEW';
@@ -43,6 +46,7 @@ final class WeeklyReflectionVoter extends Voter
             self::VIEW => $this->isViewGranted($user, $subject),
             self::PRIVATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EDIT => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            default => false,
         };
     }
 

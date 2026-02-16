@@ -10,15 +10,17 @@ use Continuum\Form\Type\AbstractImmutableType;
 use Continuum\Form\Type\MeasurementType;
 use Override;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractImmutableType<EditLocation>
+ */
 final class EditLocationType extends AbstractImmutableType
 {
-    /**
-     * @param array{location: null|Location} $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        /** @var array{location: null|Location} $options */
         $location = $options['location'];
 
         $builder->setDataMapper($this)
@@ -51,6 +53,14 @@ final class EditLocationType extends AbstractImmutableType
         $resolver->setAllowedTypes('location', ['null', Location::class]);
     }
 
+    /**
+     * @param array{
+     *  latitude: FormInterface<float>,
+     *  longitude: FormInterface<float>
+     * } $forms
+     *
+     * @phpstan-ignore method.childParameterType
+     */
     protected function mapDataClass(array $forms): EditLocation
     {
         return new EditLocation(

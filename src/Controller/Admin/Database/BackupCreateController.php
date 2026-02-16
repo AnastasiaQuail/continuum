@@ -30,12 +30,14 @@ final class BackupCreateController extends AbstractController
             return $this->redirectToRoute('app_admin_backups');
         }
 
+        /** @var int<0, max> $filesize */
+        $filesize = filesize($backupPath);
         $this->addFlash(
             'success',
             sprintf(
                 'Backup created: %s (%s MB)',
                 array_last(explode('/', $backupPath)),
-                number_format(filesize($backupPath) / 1024 / 1024, 2)
+                number_format($filesize / 1024 / 1024, 2)
             )
         );
 

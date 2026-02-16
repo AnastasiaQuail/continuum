@@ -17,13 +17,15 @@ use Traversable;
 
 /**
  * @template T of object
+ *
+ * @extends AbstractType<T>
  */
 abstract class AbstractImmutableType extends AbstractType implements DataMapperInterface
 {
     /**
-     * @var class-string<T>
+     * @var null|class-string<T>
      */
-    private string $dataClass = '';
+    private ?string $dataClass = null;
 
     #[Override]
     final public function configureOptions(OptionsResolver $resolver): void
@@ -44,6 +46,9 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
 
     /**
      * @param null|T $viewData
+     * @param Traversable<mixed, FormInterface<mixed>> $forms
+     *
+     * @phpstan-ignore-next-line method.childParameterType method.childParameterType
      */
     final public function mapDataToForms(mixed $viewData, Traversable $forms): void
     {
@@ -57,15 +62,20 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
             throw new UnexpectedTypeException($viewData, $dataClass);
         }
 
-        /** @var list<FormInterface> $data */
+        /** @var list<FormInterface<mixed>> $data */
         $data = iterator_to_array($forms);
 
         $this->mapForms($data, $viewData);
     }
 
+    /**
+     * @param Traversable<mixed, FormInterface<mixed>> $forms
+     *
+     * @phpstan-ignore-next-line method.childParameterType
+     */
     final public function mapFormsToData(Traversable $forms, mixed &$viewData): void
     {
-        /** @var list<FormInterface> $data */
+        /** @var array<string, FormInterface<mixed>> $data */
         $data = iterator_to_array($forms);
 
         $viewData = $this->mapDataClass($data);
@@ -77,7 +87,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
     }
 
     /**
-     * @param list<FormInterface> $forms
+     * @param list<FormInterface<mixed>> $forms
      * @param T $dataClass
      */
     protected function mapForms(array $forms, object $dataClass): void
@@ -86,7 +96,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
     }
 
     /**
-     * @param list<FormInterface> $forms
+     * @param array<string, FormInterface<mixed>> $forms
      *
      * @return T
      */
@@ -97,7 +107,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
      */
     private function getDataClass(): string
     {
-        if ('' !== $this->dataClass) {
+        if (null !== $this->dataClass) {
             return $this->dataClass;
         }
 
@@ -108,6 +118,13 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
             throw new InvalidConfigurationException('You must define a valid return type.');
         }
 
-        return $this->dataClass = $returnType->getName();
+        /** @var class-string<T> $className */
+        $className = $returnType->getName();
+
+        if (!class_exists($className)) {
+            throw new InvalidConfigurationException(sprintf('Class "%s" does not exist.', $className));
+        }
+
+        return $this->dataClass = $className;
     }
 }

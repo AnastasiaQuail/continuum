@@ -45,8 +45,8 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
             $newUser = new User($email);
             $newUser->password = 'password';
 
-            new ReflectionProperty(User::class, 'createdAt')
-                ->setValue($newUser, $newUser->createdAt->modify($date));
+            new ReflectionProperty(User::class, 'lastVisitedAt')
+                ->setValue($newUser, $newUser->lastVisitedAt->modify($date));
 
             $this->repository->save($newUser);
         }
@@ -54,8 +54,8 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
         $users = $this->repository->findOrdered();
 
         self::assertCount(6, $users);
-        self::assertSame('email-six@example.com', $users[4]->email);
-        self::assertSame('email-five@example.com', $users[5]->email);
+        self::assertSame('email-five@example.com', $users[0]->email);
+        self::assertSame('email-six@example.com', $users[1]->email);
     }
 
     public function testUpgradePassword(): void

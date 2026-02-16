@@ -11,6 +11,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, null|int>
+ */
 final class CalendarVoter extends Voter
 {
     public const string VIEW = 'CALENDAR_VIEW';
@@ -46,6 +49,7 @@ final class CalendarVoter extends Voter
             self::VIEW => true,
             self::UPCOMING, self::EDIT => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EVENT_DELETE => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            default => false,
         };
     }
 }
