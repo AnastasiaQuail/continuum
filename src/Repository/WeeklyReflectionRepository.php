@@ -7,7 +7,9 @@ namespace Continuum\Repository;
 use Continuum\Entity\WeeklyReflection;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
+use Override;
 
 /**
  * @extends ServiceEntityRepository<WeeklyReflection>
@@ -22,6 +24,7 @@ final class WeeklyReflectionRepository extends ServiceEntityRepository implement
     /**
      * @return list<WeeklyReflection>
      */
+    #[Override]
     public function findByDays(DateTimeImmutable ...$days): array
     {
         return $this->createQueryBuilder('wr')
@@ -30,16 +33,18 @@ final class WeeklyReflectionRepository extends ServiceEntityRepository implement
                 'days',
                 array_map(static fn (DateTimeImmutable $day): string => $day->format('Y-m-d'), $days)
             )
-            ->addOrderBy('wr.date', 'ASC')
+            ->addOrderBy('wr.date', Order::Ascending->value)
             ->getQuery()
             ->getResult();
     }
 
+    #[Override]
     public function findOneByDay(DateTimeImmutable $day): ?WeeklyReflection
     {
         return $this->findOneBy(['date' => $day]);
     }
 
+    #[Override]
     public function save(WeeklyReflection $weeklyReflection): void
     {
         $this->getEntityManager()->persist($weeklyReflection);

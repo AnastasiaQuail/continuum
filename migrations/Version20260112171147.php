@@ -10,6 +10,7 @@ use Override;
 
 final class Version20260112171147 extends AbstractMigration
 {
+    #[Override]
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE UNIQUE INDEX UNIQ_IDENTIFIER_DATE ON reflection_moods (date)');

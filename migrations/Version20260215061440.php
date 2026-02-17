@@ -10,6 +10,7 @@ use Override;
 
 final class Version20260215061440 extends AbstractMigration
 {
+    #[Override]
     public function up(Schema $schema): void
     {
         $this->addSql("ALTER TABLE weekly_reflections ADD joy_text TEXT DEFAULT '' NOT NULL");

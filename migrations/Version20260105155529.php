@@ -10,6 +10,7 @@ use Override;
 
 final class Version20260105155529 extends AbstractMigration
 {
+    #[Override]
     public function up(Schema $schema): void
     {
         $this->addSql(

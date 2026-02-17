@@ -11,6 +11,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
+use Override;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -31,8 +32,8 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     public private(set) Uuid $id;
 
     #[ORM\Column]
-    public string $password {
-        get => $this->password ?? throw new InvalidArgumentException('Password should be set.');
+    public string $password = '' {
+        get => '' !== $this->password ? $this->password : throw new InvalidArgumentException('Password should be set.');
         set => '' !== $value ? $value : throw new InvalidArgumentException('Password cannot be empty.');
     }
 
@@ -99,6 +100,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     /**
      * @see ContextListener
      */
+    #[Override]
     public function isEqualTo(UserInterface $user): bool
     {
         if (!$user instanceof self) {
@@ -135,6 +137,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     /**
      * @return non-empty-string
      */
+    #[Override]
     public function getUserIdentifier(): string
     {
         assert('' !== $this->email);
@@ -145,6 +148,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     /**
      * @return non-empty-string
      */
+    #[Override]
     public function getPassword(): string
     {
         assert('' !== $this->password);
@@ -155,6 +159,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     /**
      * @return list<non-empty-string>
      */
+    #[Override]
     public function getRoles(): array
     {
         return $this->roles;

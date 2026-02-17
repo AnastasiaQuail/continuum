@@ -7,15 +7,32 @@ use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
 
 return new Configuration()
     ->disableExtensionsAnalysis()
-    ->ignoreErrorsOnPackage('doctrine/doctrine-migrations-bundle', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/apache-pack', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/asset', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/asset-mapper', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/flex', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/monolog-bundle', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/runtime', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/twig-bundle', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/ux-icons', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('symfony/yaml', [ErrorType::UNUSED_DEPENDENCY])
-    ->ignoreErrorsOnPackage('doctrine/doctrine-fixtures-bundle', [ErrorType::DEV_DEPENDENCY_IN_PROD])
-    ->ignoreErrorsOnPackage('symfony/dotenv', [ErrorType::PROD_DEPENDENCY_ONLY_IN_DEV]);
+    ->ignoreErrorsOnPackages(
+        [
+            'doctrine/doctrine-migrations-bundle',
+            'symfony/apache-pack',
+            'symfony/asset',
+            'symfony/asset-mapper',
+            'symfony/flex',
+            'symfony/monolog-bundle',
+            'symfony/runtime',
+            'symfony/twig-bundle',
+            'symfony/ux-icons',
+            'symfony/yaml',
+        ],
+        [ErrorType::UNUSED_DEPENDENCY]
+    )
+    ->ignoreErrorsOnPackage(
+        'symfony/dotenv',
+        [ErrorType::PROD_DEPENDENCY_ONLY_IN_DEV]
+    )
+    ->ignoreErrorsOnPackageAndPath(
+        'doctrine/doctrine-fixtures-bundle',
+        __DIR__ . '/src/DataFixtures',
+        [ErrorType::DEV_DEPENDENCY_IN_PROD]
+    )
+    ->ignoreErrorsOnPackageAndPath(
+        'nikic/php-parser',
+        __DIR__ . '/tools',
+        [ErrorType::SHADOW_DEPENDENCY]
+    );

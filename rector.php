@@ -20,7 +20,6 @@ return RectorConfig::configure()
     ->withSkip([
         __DIR__ . '/assets/vendor',
         __DIR__ . '/config/reference.php',
-        __DIR__ . '/tools/vendor',
         __DIR__ . '/var',
         __DIR__ . '/vendor',
     ])

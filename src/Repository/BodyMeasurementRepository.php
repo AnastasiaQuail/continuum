@@ -9,6 +9,7 @@ use Continuum\Entity\BodyMeasurement;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -30,7 +31,7 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             ->andWhere('bm.datetime BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
             ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
-            ->addOrderBy('bm.datetime', 'ASC')
+            ->addOrderBy('bm.datetime', Order::Ascending->value)
             ->getQuery()
             ->getResult();
     }
@@ -50,7 +51,7 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             ->andWhere('bm.datetime BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
             ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
-            ->addOrderBy('bm.datetime', 'DESC')
+            ->addOrderBy('bm.datetime', Order::Descending->value)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();

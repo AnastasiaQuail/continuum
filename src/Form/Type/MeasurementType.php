@@ -16,7 +16,7 @@ final class MeasurementType extends NumberType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         // fix phpstan
-        if (!is_array($view->vars['attr'])) {
+        if (!isset($view->vars['attr']) || !is_array($view->vars['attr'])) {
             $view->vars['attr'] = [];
         }
 
@@ -31,8 +31,13 @@ final class MeasurementType extends NumberType
         parent::buildView($view, $form, $options);
 
         // fix phpstan
-        if (!is_array($view->vars['attr'])) {
+        if (!isset($view->vars['attr']) || !is_array($view->vars['attr'])) {
             $view->vars['attr'] = [];
+        }
+
+        /** @var array{data-prev: null|float, min: null|int, max: null|int, postfix: null|string} $options */
+        if (null !== $options['data-prev']) {
+            $view->vars['attr']['data-value-prev'] = $options['data-prev'];
         }
 
         if (null !== $options['min']) {
@@ -55,10 +60,12 @@ final class MeasurementType extends NumberType
         parent::configureOptions($resolver);
 
         $resolver->setDefault('html5', true);
+        $resolver->setDefault('data-prev', null);
         $resolver->setDefault('min', null);
         $resolver->setDefault('max', null);
         $resolver->setDefault('postfix', null);
 
+        $resolver->setAllowedTypes('data-prev', ['null', 'float']);
         $resolver->setAllowedTypes('min', ['null', 'int']);
         $resolver->setAllowedTypes('max', ['null', 'int']);
         $resolver->setAllowedTypes('postfix', ['null', 'string']);

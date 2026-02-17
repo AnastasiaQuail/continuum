@@ -111,9 +111,18 @@ final readonly class BirdNameFunction
         'Skylark',
     ];
 
+    public function __construct(
+        private UserDateFunction $userDateFunction,
+    ) {}
+
     #[AsTwigFunction('bird_name')]
     public function __invoke(): string
     {
-        return self::NAMES[array_rand(self::NAMES)];
+        $currentDate = ($this->userDateFunction)();
+
+        /** @var non-negative-int $dayOfYear */
+        $dayOfYear = (int) $currentDate->format('z');
+
+        return self::NAMES[$dayOfYear % count(self::NAMES)];
     }
 }

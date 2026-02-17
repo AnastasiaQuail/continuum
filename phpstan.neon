@@ -11,7 +11,6 @@ parameters:
 	excludePaths:
 		- assets/vendor/*
 		- config/reference.php
-		- tools/vendor/*
 		- var/*
 		- vendor/*
 	bootstrapFiles:
@@ -24,5 +23,24 @@ parameters:
 	doctrine:
 		objectManagerLoader: tests/object-manager.php
 
+	checkTooWideReturnTypesInProtectedAndPublicMethods: true
+	checkTooWideParameterOutInProtectedAndPublicMethods: true
+	checkTooWideThrowTypesInProtectedAndPublicMethods: true
+	checkUninitializedProperties: true
+	rememberPossiblyImpureFunctionValues: false
+	checkBenevolentUnionTypes: true
+	reportPossiblyNonexistentGeneralArrayOffset: true
+	reportPossiblyNonexistentConstantArrayOffset: true
+	reportAlwaysTrueInLastCondition: true
+	reportAnyTypeWideningInVarTag: true
+	checkMissingOverrideMethodAttribute: true
+	checkMissingOverridePropertyAttribute: true
+	checkMissingCallableSignature: true
+	treatPhpDocTypesAsCertain: false
+	usePathConstantsAsConstantString: true
+
 	ignoreErrors:
 		- identifier: doctrine.finalEntity
+
+rules:
+	- Continuum\Tools\PhpStan\Rule\FileAndDirectoryExistingRule

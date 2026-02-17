@@ -19,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class EditWeeklyReflectionType extends AbstractImmutableType
 {
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var array{weeklyReflection: null|WeeklyReflection} $options */
@@ -73,6 +74,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
      *
      * @phpstan-ignore method.childParameterType
      */
+    #[Override]
     protected function mapDataClass(array $forms): EditWeeklyReflection
     {
         return new EditWeeklyReflection(

@@ -67,7 +67,7 @@ final readonly class WorkoutExerciseProgressService
 
             $weight = $set->getWeight();
             if (0.0 === $weight) {
-                $weight = 1;
+                $weight = 10;
             }
 
             $result += $set->getReps() * $weight;

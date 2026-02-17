@@ -10,6 +10,7 @@ use Continuum\Security\User\UserRole;
 use Continuum\Security\User\UserStatus;
 use DateTimeZone;
 use InvalidArgumentException;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -186,11 +187,13 @@ final class UserTest extends TestCase
             /**
              * @return list<non-empty-string>
              */
+            #[Override]
             public function getRoles(): array
             {
                 return [];
             }
 
+            #[Override]
             public function getUserIdentifier(): string
             {
                 return '-';

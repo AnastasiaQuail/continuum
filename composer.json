@@ -57,11 +57,11 @@
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan": "^2.1.39",
         "phpstan/phpstan-deprecation-rules": "^2.0.4",
-        "phpstan/phpstan-doctrine": "^2.0",
-        "phpstan/phpstan-phpunit": "^2.0.15",
+        "phpstan/phpstan-doctrine": "^2.0.16",
+        "phpstan/phpstan-phpunit": "^2.0.16",
         "phpstan/phpstan-strict-rules": "^2.0.10",
         "phpstan/phpstan-symfony": "^2.0.14",
-        "phpunit/phpunit": "^12.5.11",
+        "phpunit/phpunit": "^13.0.3",
         "rector/rector": "^2.3.6",
         "shipmonk/composer-dependency-analyser": "^1.8.4",
         "symfony/browser-kit": "^8.0.4",
@@ -91,7 +91,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Continuum\\Tests\\": "tests/"
+            "Continuum\\Tests\\": "tests/",
+            "Continuum\\Tools\\": "tools/"
         }
     },
     "config": {

@@ -7,6 +7,7 @@ namespace Continuum\Tests\Security\User;
 use Continuum\Entity\User;
 use Continuum\Security\User\UserChecker;
 use Continuum\Security\User\UserStatus;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -24,11 +25,13 @@ final class UserCheckerTest extends TestCase
             /**
              * @return list<non-empty-string>
              */
+            #[Override]
             public function getRoles(): array
             {
                 return [];
             }
 
+            #[Override]
             public function getUserIdentifier(): string
             {
                 return '-';

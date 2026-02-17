@@ -11,6 +11,7 @@ use Continuum\Repository\UserRepositoryInterface;
 use Continuum\Security\User\UserRole;
 use Continuum\Security\User\UserStatus;
 use Continuum\Tests\Test\AbstractCommandTestCase;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\Console\Command\Command;
@@ -22,6 +23,7 @@ final class UserCreateCommandTest extends AbstractCommandTestCase
     private UserRepository $repository;
     private UserPasswordHasherInterface $passwordHasher;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->repository = self::getContainer()->get(UserRepositoryInterface::class);

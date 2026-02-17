@@ -10,6 +10,7 @@ use Override;
 
 final class Version20260113021730 extends AbstractMigration
 {
+    #[Override]
     public function up(Schema $schema): void
     {
         $this->addSql('DROP TABLE reflection_moods');

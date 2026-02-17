@@ -20,6 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class EditExerciseType extends AbstractImmutableType
 {
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var array{exercise: null|Exercise} $options */
@@ -46,6 +47,7 @@ final class EditExerciseType extends AbstractImmutableType
      *
      * @phpstan-ignore method.childParameterType
      */
+    #[Override]
     protected function mapDataClass(array $forms): EditExercise
     {
         return new EditExercise(

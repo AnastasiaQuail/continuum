@@ -8,6 +8,7 @@ use Continuum\Entity\User;
 use Continuum\EventSubscriber\LastVisitListener;
 use Continuum\Repository\UserRepositoryInterface;
 use DateTimeImmutable;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionProperty;
@@ -27,6 +28,7 @@ final class LastVisitListenerTest extends KernelTestCase
     private LastVisitListener $listener;
     private RequestEvent $event;
 
+    #[Override]
     protected function setUp(): void
     {
         $kernel = self::bootKernel();

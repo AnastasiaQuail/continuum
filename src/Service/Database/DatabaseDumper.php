@@ -43,10 +43,13 @@ final readonly class DatabaseDumper
         $backups = [];
 
         foreach ($finder as $file) {
+            $size = $file->getSize();
+            $date = $file->getMTime();
+
             $backups[] = new BackupFile(
                 name: $file->getFilename(),
-                size: $file->getSize(),
-                date: new DateTimeImmutable(sprintf('@%d', $file->getMTime())),
+                size: false !== $size ? $size : 0,
+                date: new DateTimeImmutable(sprintf('@%d', false !== $date ? $date : 0)),
             );
         }
 
@@ -125,12 +128,10 @@ final readonly class DatabaseDumper
         $file = $finder->getIterator()->current();
 
         $time = $file->getCTime();
-        // @phpstan-ignore identical.alwaysFalse
         if (false === $time) {
             $time = $file->getMTime();
         }
 
-        // @phpstan-ignore identical.alwaysFalse
         if (false === $time) {
             throw new RuntimeException('Unable to retrieve last backup time');
         }

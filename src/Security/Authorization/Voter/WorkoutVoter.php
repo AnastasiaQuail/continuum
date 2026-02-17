@@ -10,6 +10,7 @@ use Continuum\Entity\WorkoutExercise;
 use Continuum\Entity\WorkoutSet;
 use Continuum\Security\User\UserRole;
 use DateTimeImmutable;
+use Override;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -33,6 +34,7 @@ final class WorkoutVoter extends Voter
         private readonly Security $security,
     ) {}
 
+    #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
         return self::VIEW === $attribute || self::CREATE === $attribute || self::EDIT === $attribute || self::DELETE === $attribute
@@ -40,6 +42,7 @@ final class WorkoutVoter extends Voter
             || self::SET_CREATE === $attribute || self::SET_DELETE === $attribute;
     }
 
+    #[Override]
     protected function voteOnAttribute(
         string $attribute,
         mixed $subject,

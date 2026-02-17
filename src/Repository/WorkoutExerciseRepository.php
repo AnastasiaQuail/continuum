@@ -7,6 +7,7 @@ namespace Continuum\Repository;
 use Continuum\Entity\Workout;
 use Continuum\Entity\WorkoutExercise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -61,7 +62,7 @@ final class WorkoutExerciseRepository extends ServiceEntityRepository
             ->addSelect('e')
             ->leftJoin('we.sets', 'ws')
             ->addSelect('ws')
-            ->addOrderBy('ws.orderIndex', 'ASC')
+            ->addOrderBy('ws.orderIndex', Order::Ascending->value)
             ->getQuery()
             ->getResult();
     }

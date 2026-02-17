@@ -7,9 +7,11 @@ namespace Continuum\Repository;
 use Continuum\Entity\User;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Persistence\ManagerRegistry;
 use InvalidArgumentException;
+use Override;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
@@ -28,6 +30,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
+    #[Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {
         if (!$user instanceof User) {
@@ -43,6 +46,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
         $this->save($user);
     }
 
+    #[Override]
     public function findOneById(Uuid $id): ?User
     {
         return $this->find($id);
@@ -51,11 +55,13 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     /**
      * @return list<User>
      */
+    #[Override]
     public function findOrdered(): array
     {
-        return array_values($this->findBy([], ['lastVisitedAt' => 'DESC']));
+        return array_values($this->findBy([], ['lastVisitedAt' => Order::Descending->value]));
     }
 
+    #[Override]
     public function save(User $user): void
     {
         $this->getEntityManager()->persist($user);
@@ -65,6 +71,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     /**
      * @param non-empty-string ...$roles
      */
+    #[Override]
     public function updateRoles(Uuid $id, string ...$roles): void
     {
         $this->createQueryBuilder('u')
@@ -77,6 +84,7 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
             ->execute();
     }
 
+    #[Override]
     public function updateLastVisitedAt(Uuid $id, DateTimeImmutable $lastVisitedAt): void
     {
         $this->createQueryBuilder('u')

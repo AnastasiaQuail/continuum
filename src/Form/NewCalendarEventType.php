@@ -21,6 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class NewCalendarEventType extends AbstractImmutableType
 {
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var array{timezone: null|DateTimeZone} $options */
@@ -48,6 +49,7 @@ final class NewCalendarEventType extends AbstractImmutableType
      *
      * @phpstan-ignore method.childParameterType
      */
+    #[Override]
     protected function mapDataClass(array $forms): NewCalendarEvent
     {
         $time = $forms['time']->getData();

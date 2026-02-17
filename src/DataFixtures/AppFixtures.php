@@ -11,6 +11,7 @@ use Continuum\Security\User\UserStatus;
 use DateTimeZone;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Override;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class AppFixtures extends Fixture
@@ -19,6 +20,7 @@ final class AppFixtures extends Fixture
         private readonly UserPasswordHasherInterface $passwordHasher,
     ) {}
 
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         $this->loadUsers($manager);

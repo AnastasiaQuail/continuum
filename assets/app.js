@@ -9,7 +9,7 @@ new Services.Sidebar().applyTo('#sidebar');
 new Services.TimezoneDetector().detect('#body-messages');
 new Services.FlashMessages().show('#body-messages');
 new Services.CalendarUpcomingEventsToggler('#calendar-upcoming-events');
-new Services.InputMasker().apply();
+new Services.InputWrapper().apply();
 new Services.TabToggler().apply();
 
 /**

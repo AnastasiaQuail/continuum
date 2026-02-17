@@ -8,6 +8,7 @@ use Continuum\Entity\Workout;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -30,12 +31,12 @@ final class WorkoutRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->leftJoin('w.workoutExercises', 'we')
             ->addSelect('we')
-            ->addOrderBy('we.orderIndex', 'ASC')
+            ->addOrderBy('we.orderIndex', Order::Ascending->value)
             ->leftJoin('we.exercise', 'e')
             ->addSelect('e')
             ->leftJoin('we.sets', 'ws')
             ->addSelect('ws')
-            ->addOrderBy('ws.orderIndex', 'ASC')
+            ->addOrderBy('ws.orderIndex', Order::Ascending->value)
             ->getQuery()
             ->getOneOrNullResult();
 
@@ -53,15 +54,15 @@ final class WorkoutRepository extends ServiceEntityRepository
             ->andWhere('w.date BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
             ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
-            ->addOrderBy('w.date', 'ASC')
+            ->addOrderBy('w.date', Order::Ascending->value)
             ->leftJoin('w.workoutExercises', 'we')
             ->addSelect('we')
-            ->addOrderBy('we.orderIndex', 'ASC')
+            ->addOrderBy('we.orderIndex', Order::Ascending->value)
             ->leftJoin('we.exercise', 'e')
             ->addSelect('e')
             ->leftJoin('we.sets', 'ws')
             ->addSelect('ws')
-            ->addOrderBy('ws.orderIndex', 'ASC')
+            ->addOrderBy('ws.orderIndex', Order::Ascending->value)
             ->getQuery()
             ->getResult();
     }
