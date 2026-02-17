@@ -132,6 +132,7 @@
         "php-cs": "@php vendor/bin/php-cs-fixer check --verbose --diff",
         "php-cs:fix": "@php vendor/bin/php-cs-fixer fix",
         "phpstan": "@php vendor/bin/phpstan analyse",
+        "phpstan:clear": "@php vendor/bin/phpstan clear-result-cache",
         "rector": "@rector:fix --dry-run",
         "rector:fix": "@php vendor/bin/rector process",
         "self-audit": "@composer audit",

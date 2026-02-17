@@ -6,7 +6,10 @@ namespace Continuum\Tools\PhpStan\Rule;
 
 use Override;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
@@ -18,6 +21,12 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class FileAndDirectoryExistingRule implements Rule
 {
+    private const array SKIP_PATHS = [
+        '/assets/vendor',
+        '/var/cache/prod/Continuum_KernelProdContainer.preload.php',
+        '/var/cache/rector',
+    ];
+
     #[Override]
     public function getNodeType(): string
     {
@@ -27,7 +36,14 @@ final readonly class FileAndDirectoryExistingRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        if (!$node->left instanceof Dir) {
+        if (
+            !$node->left instanceof Dir
+            && !(
+                $node->left instanceof FuncCall
+                // @phpstan-ignore property.notFound
+                && 'dirname' === $node->left->name->name
+            )
+        ) {
             return [];
         }
 
@@ -39,13 +55,17 @@ final readonly class FileAndDirectoryExistingRule implements Rule
             ];
         }
 
-        $path = dirname($scope->getFile()) . $node->right->value;
+        $path = $this->getDirectory($node->left, $scope->getFile()) . $node->right->value;
 
         if (
             (false === $realPath = realpath($path))
             || !file_exists($realPath)
         ) {
             if (str_contains($path, '/*')) {
+                return [];
+            }
+
+            if (array_any(self::SKIP_PATHS, static fn (string $skipPath): bool => str_ends_with($path, $skipPath))) {
                 return [];
             }
 
@@ -59,5 +79,36 @@ final readonly class FileAndDirectoryExistingRule implements Rule
         }
 
         return [];
+    }
+
+    private function getDirectory(Dir|FuncCall $node, string $path): string
+    {
+        if ($node instanceof Dir) {
+            return dirname($path);
+        }
+
+        $leftNode = array_first($node->args);
+        $rightNode = array_last($node->args);
+
+        if ($leftNode instanceof Arg) {
+            $leftNode = $leftNode->value;
+
+            if (!$leftNode instanceof Dir) {
+                return '';
+            }
+        }
+
+        $levels = 1;
+
+        if ($rightNode instanceof Arg) {
+            $rightNode = $rightNode->value;
+
+            if ($rightNode instanceof Int_) {
+                /** @var non-negative-int $levels */
+                $levels = $rightNode->value;
+            }
+        }
+
+        return dirname($path, $levels + 1);
     }
 }
