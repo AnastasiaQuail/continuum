@@ -30,6 +30,7 @@ final class EditMeasurementType extends AbstractImmutableType
         private readonly Security $security,
     ) {}
 
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var array{lastMeasurement: null|LastMeasurement, measurement: null|BodyMeasurement} $options */
@@ -64,6 +65,7 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('weight', MeasurementType::class, [
                 'data' => $measurement?->getWeight(),
+                'data-prev' => $lastMeasurement?->weight,
                 'help' => $this->getHelp($lastMeasurement?->weight, 'kg'),
                 'min' => EditMeasurement::WEIGHT_MIN,
                 'max' => EditMeasurement::WEIGHT_MAX,
@@ -75,6 +77,7 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('neck', MeasurementType::class, [
                 'data' => $measurement?->getNeck(),
+                'data-prev' => $lastMeasurement?->neck,
                 'help' => $this->getHelp($lastMeasurement?->neck),
                 'min' => EditMeasurement::NECK_MIN,
                 'max' => EditMeasurement::NECK_MAX,
@@ -83,6 +86,7 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('chest', MeasurementType::class, [
                 'data' => $measurement?->getChest(),
+                'data-prev' => $lastMeasurement?->chest,
                 'help' => $this->getHelp($lastMeasurement?->chest),
                 'min' => EditMeasurement::CHEST_MIN,
                 'max' => EditMeasurement::CHEST_MAX,
@@ -91,6 +95,7 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('shoulders', MeasurementType::class, [
                 'data' => $measurement?->getShoulders(),
+                'data-prev' => $lastMeasurement?->shoulders,
                 'help' => $this->getHelp($lastMeasurement?->shoulders),
                 'min' => EditMeasurement::SHOULDERS_MIN,
                 'max' => EditMeasurement::SHOULDERS_MAX,
@@ -99,6 +104,7 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('waist', MeasurementType::class, [
                 'data' => $measurement?->getWaist(),
+                'data-prev' => $lastMeasurement?->waist,
                 'help' => $this->getHelp($lastMeasurement?->waist),
                 'min' => EditMeasurement::WAIST_MIN,
                 'max' => EditMeasurement::WAIST_MAX,
@@ -107,6 +113,7 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('flexedBiceps', MeasurementType::class, [
                 'data' => $measurement?->getFlexedBiceps(),
+                'data-prev' => $lastMeasurement?->flexedBiceps,
                 'help' => $this->getHelp($lastMeasurement?->flexedBiceps),
                 'min' => EditMeasurement::BICEPS_MIN,
                 'max' => EditMeasurement::BICEPS_MAX,
@@ -115,6 +122,7 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('hips', MeasurementType::class, [
                 'data' => $measurement?->getHips(),
+                'data-prev' => $lastMeasurement?->hips,
                 'help' => $this->getHelp($lastMeasurement?->hips),
                 'min' => EditMeasurement::HIPS_MIN,
                 'max' => EditMeasurement::HIPS_MAX,
@@ -123,6 +131,7 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('thigh', MeasurementType::class, [
                 'data' => $measurement?->getThigh(),
+                'data-prev' => $lastMeasurement?->thigh,
                 'help' => $this->getHelp($lastMeasurement?->thigh),
                 'min' => EditMeasurement::THIGH_MIN,
                 'max' => EditMeasurement::THIGH_MAX,
@@ -131,7 +140,8 @@ final class EditMeasurementType extends AbstractImmutableType
             ])
             ->add('calf', MeasurementType::class, [
                 'data' => $measurement?->getCalf(),
-                'help' => $this->getHelp($lastMeasurement?->calf),
+                'data-prev' => $lastMeasurement?->thigh,
+                'help' => $this->getHelp($lastMeasurement?->thigh),
                 'min' => EditMeasurement::CALF_MIN,
                 'max' => EditMeasurement::CALF_MAX,
                 'postfix' => 'cm',
@@ -155,6 +165,7 @@ final class EditMeasurementType extends AbstractImmutableType
      *
      * @phpstan-ignore method.childParameterType
      */
+    #[Override]
     protected function mapDataClass(array $forms): EditMeasurement
     {
         return new EditMeasurement(

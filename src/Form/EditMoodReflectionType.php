@@ -19,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class EditMoodReflectionType extends AbstractImmutableType
 {
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var array{moodReflection: null|MoodReflection} $options */
@@ -45,6 +46,7 @@ final class EditMoodReflectionType extends AbstractImmutableType
      *
      * @phpstan-ignore method.childParameterType
      */
+    #[Override]
     protected function mapDataClass(array $forms): EditMoodReflection
     {
         return new EditMoodReflection(

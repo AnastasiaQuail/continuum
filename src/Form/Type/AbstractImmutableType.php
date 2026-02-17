@@ -50,6 +50,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
      *
      * @phpstan-ignore-next-line method.childParameterType method.childParameterType
      */
+    #[Override]
     final public function mapDataToForms(mixed $viewData, Traversable $forms): void
     {
         if (null === $viewData) {
@@ -73,6 +74,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
      *
      * @phpstan-ignore-next-line method.childParameterType
      */
+    #[Override]
     final public function mapFormsToData(Traversable $forms, mixed &$viewData): void
     {
         /** @var array<string, FormInterface<mixed>> $data */

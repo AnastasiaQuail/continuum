@@ -18,6 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class EditLocationType extends AbstractImmutableType
 {
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var array{location: null|Location} $options */
@@ -61,6 +62,7 @@ final class EditLocationType extends AbstractImmutableType
      *
      * @phpstan-ignore method.childParameterType
      */
+    #[Override]
     protected function mapDataClass(array $forms): EditLocation
     {
         return new EditLocation(

@@ -32,6 +32,7 @@ final readonly class CalendarEventService
      */
     public function getByYear(User $user, int $year): array
     {
+        /** @var array<non-empty-string, array{day: null|CalendarEvent, hours: list<CalendarEvent>}> $events */
         $events = [];
 
         foreach ($this->repository->findByYear($year, $user->timezone) as $event) {

@@ -7,6 +7,7 @@ namespace Continuum\Tests\Controller\Security;
 use Continuum\Controller\Security\LoginController;
 use Continuum\Entity\User;
 use Continuum\Security\User\UserStatus;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -17,11 +18,12 @@ final class LoginControllerTest extends WebTestCase
 {
     private KernelBrowser $client;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->client = self::createClient();
         $container = self::getContainer();
-        $em = $container->get('doctrine.orm.entity_manager');
+        $em = $container->get('doctrine')->getManager();
         $userRepository = $em->getRepository(User::class);
 
         // Remove any existing users from the test database

@@ -10,6 +10,7 @@ use Continuum\Entity\WeeklyReflection;
 use Continuum\Repository\WeeklyReflectionRepositoryInterface;
 use Continuum\Service\WeeklyReflectionService;
 use DateTimeImmutable;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -21,6 +22,7 @@ final class WeeklyReflectionServiceTest extends TestCase
     private MockObject&WeeklyReflectionRepositoryInterface $repository;
     private WeeklyReflectionService $service;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->repository = $this->createMock(WeeklyReflectionRepositoryInterface::class);

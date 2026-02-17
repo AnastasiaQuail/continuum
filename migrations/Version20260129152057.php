@@ -10,6 +10,7 @@ use Override;
 
 final class Version20260129152057 extends AbstractMigration
 {
+    #[Override]
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE users ADD latitude NUMERIC(9, 6) DEFAULT 0 NOT NULL');

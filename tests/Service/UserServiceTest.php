@@ -12,6 +12,7 @@ use Continuum\Security\User\UserRole;
 use Continuum\Security\User\UserStatus;
 use Continuum\Service\UserService;
 use DateTimeZone;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -24,6 +25,7 @@ final class UserServiceTest extends TestCase
     private MockObject&UserRepositoryInterface $repository;
     private UserService $service;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->repository = $this->createMock(UserRepositoryInterface::class);

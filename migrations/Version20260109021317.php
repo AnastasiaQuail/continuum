@@ -10,6 +10,7 @@ use Override;
 
 final class Version20260109021317 extends AbstractMigration
 {
+    #[Override]
     public function up(Schema $schema): void
     {
         $this->addSql('DROP TABLE calendar_days');

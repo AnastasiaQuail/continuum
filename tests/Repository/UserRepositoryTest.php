@@ -8,6 +8,7 @@ use Continuum\Entity\User;
 use Continuum\Repository\UserRepository;
 use Continuum\Security\User\UserRole;
 use Continuum\Tests\Test\AbstractRepositoryTestCase;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionProperty;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
@@ -17,6 +18,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
 {
     private UserRepository $repository;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->repository = self::getContainer()->get(UserRepository::class);

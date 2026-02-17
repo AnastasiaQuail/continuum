@@ -9,6 +9,7 @@ use Continuum\Entity\WeeklyReflection;
 use Continuum\Repository\WeeklyReflectionRepository;
 use Continuum\Tests\Test\AbstractRepositoryTestCase;
 use DateTimeImmutable;
+use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(WeeklyReflectionRepository::class)]
@@ -16,6 +17,7 @@ final class WeeklyReflectionRepositoryTest extends AbstractRepositoryTestCase
 {
     private WeeklyReflectionRepository $repository;
 
+    #[Override]
     protected function setUp(): void
     {
         $this->repository = self::getContainer()->get(WeeklyReflectionRepository::class);

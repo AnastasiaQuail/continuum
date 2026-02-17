@@ -7,6 +7,7 @@ namespace Continuum\Repository;
 use Continuum\Entity\MoodReflection;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -65,7 +66,7 @@ final class MoodReflectionRepository extends ServiceEntityRepository
             ->andWhere('rm.date BETWEEN :from AND :to')
             ->setParameter('from', $from)
             ->setParameter('to', $to)
-            ->addOrderBy('rm.date', 'ASC')
+            ->addOrderBy('rm.date', Order::Ascending->value)
             ->getQuery()
             ->getResult();
     }

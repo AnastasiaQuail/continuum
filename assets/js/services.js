@@ -161,12 +161,28 @@ export class CalendarUpcomingEventsToggler extends ToggleStorage {
     }
 }
 
-export class InputMasker {
+export class InputWrapper {
     apply() {
         document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('input[data-value-prev]').forEach(input => {
+                this.#togglePrevValue(input);
+            })
+
             document.querySelectorAll('input[data-mask="postfix"][data-postfix]').forEach(input => {
                 this.#maskPostfix(input);
             })
+        });
+    }
+
+    /**
+     * @param {HTMLInputElement} input
+     */
+    #togglePrevValue(input) {
+        input.addEventListener('focusin', () => {
+            if (input.value === '') {
+                input.value = input.dataset.valuePrev;
+                input.dispatchEvent(new Event('input'))
+            }
         });
     }
 

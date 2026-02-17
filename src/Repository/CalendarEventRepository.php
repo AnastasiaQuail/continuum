@@ -8,6 +8,7 @@ use Continuum\Entity\CalendarEvent;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -76,7 +77,7 @@ final class CalendarEventRepository extends ServiceEntityRepository
             ->andWhere('cd.datetime BETWEEN :from AND :to')
             ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
             ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
-            ->addOrderBy('cd.datetime', 'ASC')
+            ->addOrderBy('cd.datetime', Order::Ascending->value)
             ->getQuery()
             ->getResult();
     }

@@ -20,6 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class EditUserType extends AbstractImmutableType
 {
+    #[Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var array{user: User} $options $options */
@@ -48,6 +49,7 @@ final class EditUserType extends AbstractImmutableType
      *
      * @phpstan-ignore method.childParameterType
      */
+    #[Override]
     protected function mapDataClass(array $forms): EditUser
     {
         $roles = trim($forms['roles']->getData() ?? '');

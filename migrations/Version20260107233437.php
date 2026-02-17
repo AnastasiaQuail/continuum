@@ -10,6 +10,7 @@ use Override;
 
 final class Version20260107233437 extends AbstractMigration
 {
+    #[Override]
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE "user" ADD timezone VARCHAR(64) NOT NULL');

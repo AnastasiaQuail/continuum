@@ -6,6 +6,7 @@ namespace Continuum\Repository;
 
 use Continuum\Entity\Exercise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Uid\Uuid;
 
@@ -29,7 +30,7 @@ final class ExerciseRepository extends ServiceEntityRepository
      */
     public function findOrdered(): array
     {
-        return array_values($this->findBy([], ['group' => 'ASC']));
+        return array_values($this->findBy([], ['group' => Order::Ascending->value]));
     }
 
     /**

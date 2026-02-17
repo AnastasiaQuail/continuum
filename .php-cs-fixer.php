@@ -18,7 +18,6 @@ return new Config()
             ->notPath(['config/reference.php'])
             ->exclude([
                 'assets/vendor',
-                'tools/vendor',
                 'var',
                 'vendor',
             ])

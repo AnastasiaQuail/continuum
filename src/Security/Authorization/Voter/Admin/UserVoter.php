@@ -6,6 +6,7 @@ namespace Continuum\Security\Authorization\Voter\Admin;
 
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
+use Override;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Vote;
@@ -23,11 +24,13 @@ final class UserVoter extends Voter
         private readonly Security $security,
     ) {}
 
+    #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
         return self::VIEW === $attribute || self::EDIT === $attribute;
     }
 
+    #[Override]
     protected function voteOnAttribute(
         string $attribute,
         mixed $subject,
