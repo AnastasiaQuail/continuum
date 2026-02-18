@@ -93,7 +93,7 @@ final class WeeklyReflectionServiceTest extends TestCase
         ];
 
         yield [
-            new DateTimeImmutable('2025-12-01'),
+            new DateTimeImmutable('2026-01-01'),
             [],
         ];
 

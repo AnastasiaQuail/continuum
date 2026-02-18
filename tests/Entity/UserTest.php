@@ -216,27 +216,62 @@ final class UserTest extends TestCase
         yield [$userOtherStatus];
 
         $userOtherPassword = new User('email@example.com');
+        $userOtherPassword->status = UserStatus::Active;
         $userOtherPassword->password = 'other_hashed_password';
+        $userOtherPassword->addRole(UserRole::Admin);
 
         yield [$userOtherPassword];
 
         $userDefaultRole = new User('email@example.com');
+        $userDefaultRole->status = UserStatus::Active;
         $userDefaultRole->password = 'hashed_password';
 
         yield [$userDefaultRole];
 
         $userOtherRole = new User('email@example.com');
+        $userOtherRole->status = UserStatus::Active;
         $userOtherRole->password = 'hashed_password';
         $userOtherRole->addRole(UserRole::SuperAdmin);
 
         yield [$userOtherRole];
 
         $userOtherRoles = new User('email@example.com');
+        $userOtherRoles->status = UserStatus::Active;
         $userOtherRoles->password = 'hashed_password';
         $userOtherRoles->addRole(UserRole::Admin);
         $userOtherRoles->addRole(UserRole::SuperAdmin);
 
         yield [$userOtherRoles];
+    }
+
+    public function testSerializedPasswordNotEqualed(): void
+    {
+        $otherUser = new User('email@example.com');
+        $otherUser->password = 'hashed_password';
+        $otherUser->status = UserStatus::Active;
+        $otherUser->addRole(UserRole::Admin);
+
+        $user = new User('email@example.com');
+        $user->password = '12345678';
+        $user->status = UserStatus::Active;
+        $user->addRole(UserRole::Admin);
+
+        self::assertFalse($user->isEqualTo($otherUser));
+    }
+
+    public function testSerializedPasswordEqual(): void
+    {
+        $otherUser = new User('email@example.com');
+        $otherUser->password = 'hashed_password';
+        $otherUser->status = UserStatus::Active;
+        $otherUser->addRole(UserRole::Admin);
+
+        $user = new User('email@example.com');
+        $user->password = hash('crc32c', $otherUser->password);
+        $user->status = UserStatus::Active;
+        $user->addRole(UserRole::Admin);
+
+        self::assertTrue($user->isEqualTo($otherUser));
     }
 
     public function testEqual(): void

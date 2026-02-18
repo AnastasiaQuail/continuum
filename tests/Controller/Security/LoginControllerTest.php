@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Continuum\Tests\Controller\Security;
 
 use Continuum\Controller\Security\LoginController;
-use Continuum\Entity\User;
-use Continuum\Security\User\UserStatus;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
@@ -22,27 +20,9 @@ final class LoginControllerTest extends WebTestCase
     protected function setUp(): void
     {
         $this->client = self::createClient();
-        $container = self::getContainer();
-        $em = $container->get('doctrine')->getManager();
-        $userRepository = $em->getRepository(User::class);
-
-        // Remove any existing users from the test database
-        foreach ($userRepository->findAll() as $user) {
-            $em->remove($user);
-        }
-
-        $em->flush();
-
-        // Create a User fixture
-        $user = new User('email@example.com');
-        $user->password = $container->get('security.user_password_hasher')->hashPassword($user, 'password');
-        $user->status = UserStatus::Active;
-
-        $em->persist($user);
-        $em->flush();
     }
 
-    public function testLogin(): void
+    public function testLoginWrongEmail(): void
     {
         // Denied - Can't log in with invalid email address.
         $this->client->request(Request::METHOD_GET, '/login');
@@ -53,32 +33,47 @@ final class LoginControllerTest extends WebTestCase
             '_password' => 'password',
         ]);
 
+        self::assertResponseStatusCodeSame(302);
         self::assertResponseRedirects('/login');
+
         $this->client->followRedirect();
 
         // Ensure we do not reveal if the user exists or not.
         self::assertSelectorTextContains('.alert-danger:not(.browser-unsupport)', 'Invalid credentials.');
         self::assertInputValueSame('_username', 'doesNotExist@example.com');
+        self::assertInputValueSame('_password', '');
+    }
 
+    public function testLoginWrongPassword(): void
+    {
         // Denied - Can't log in with invalid password.
         $this->client->request(Request::METHOD_GET, '/login');
         self::assertResponseIsSuccessful();
 
         $this->client->submitForm('Sign in', [
-            '_username' => 'email@example.com',
+            '_username' => 'admin@continuum.com',
             '_password' => 'bad-password',
         ]);
 
+        self::assertResponseStatusCodeSame(302);
         self::assertResponseRedirects('/login');
+
         $this->client->followRedirect();
 
         // Ensure we do not reveal the user exists but the password is wrong.
         self::assertSelectorTextContains('.alert-danger:not(.browser-unsupport)', 'Invalid credentials.');
-        self::assertInputValueSame('_username', 'email@example.com');
+        self::assertInputValueSame('_username', 'admin@continuum.com');
+        self::assertInputValueSame('_password', '');
+    }
+
+    public function testLogin(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/login');
+        self::assertResponseIsSuccessful();
 
         // Success - Login with valid credentials is allowed.
         $this->client->submitForm('Sign in', [
-            '_username' => 'email@example.com',
+            '_username' => 'admin@continuum.com',
             '_password' => 'password',
         ]);
 

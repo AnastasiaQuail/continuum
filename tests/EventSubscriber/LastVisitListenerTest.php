@@ -18,6 +18,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -39,7 +40,7 @@ final class LastVisitListenerTest extends KernelTestCase
         );
 
         $request = new Request();
-        $request->setSession(new Session());
+        $request->setSession(new Session(new MockArraySessionStorage()));
 
         $this->event = new RequestEvent(
             kernel: $kernel,
@@ -65,7 +66,7 @@ final class LastVisitListenerTest extends KernelTestCase
 
     public function testInvokeUpdateLastVisited(): void
     {
-        $user = $this->buildUser(new DateTimeImmutable('-6 minutes'));
+        $user = $this->buildUser(new DateTimeImmutable('-5 minutes'));
         $this->userRepository->expects($this->once())->method('updateLastVisitedAt')->with($user->id);
 
         $this->listener->__invoke($this->event);
@@ -77,7 +78,7 @@ final class LastVisitListenerTest extends KernelTestCase
 
     public function testInvokeUpdateLastVisitedAndPushFlashMessage(): void
     {
-        $user = $this->buildUser(new DateTimeImmutable('-9 hours'));
+        $user = $this->buildUser(new DateTimeImmutable('-8 hours'));
         $this->userRepository->expects($this->once())->method('updateLastVisitedAt')->with($user->id);
 
         $this->listener->__invoke($this->event);

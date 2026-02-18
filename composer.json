@@ -54,6 +54,7 @@
         "doctrine/doctrine-fixtures-bundle": "^4.3.1",
         "ergebnis/composer-normalize": "^2.50.0",
         "friendsofphp/php-cs-fixer": "^3.94.0",
+        "infection/infection": "^0.32.4",
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan": "^2.1.39",
         "phpstan/phpstan-deprecation-rules": "^2.0.4",
@@ -69,7 +70,7 @@
         "symfony/debug-bundle": "^8.0.0",
         "symfony/maker-bundle": "^1.66.0",
         "symfony/web-profiler-bundle": "^8.0.4",
-        "vincentlanglet/twig-cs-fixer": "^3.13"
+        "vincentlanglet/twig-cs-fixer": "^3.13.0"
     },
     "replace": {
         "symfony/polyfill-ctype": "*",
@@ -98,6 +99,7 @@
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
+            "infection/extension-installer": true,
             "php-http/discovery": true,
             "phpstan/extension-installer": true,
             "symfony/flex": true,
@@ -126,6 +128,7 @@
             "importmap:install": "symfony-cmd"
         },
         "icons": "@php bin/console ux:icons:lock",
+        "infection": "@php vendor/bin/infection --threads=max --show-mutations=max",
         "migration": "@php bin/console make:migration --formatted",
         "migration:migrate": "@php bin/console doctrine:migrations:migrate",
         "migration:rollback": "@migration:migrate prev",
@@ -133,6 +136,12 @@
         "php-cs:fix": "@php vendor/bin/php-cs-fixer fix",
         "phpstan": "@php vendor/bin/phpstan analyse",
         "phpstan:clear": "@php vendor/bin/phpstan clear-result-cache",
+        "qa": [
+            "@self-check",
+            "@static-analysis",
+            "@tests",
+            "@infection"
+        ],
         "rector": "@rector:fix --dry-run",
         "rector:fix": "@php vendor/bin/rector process",
         "self-audit": "@composer audit",
@@ -158,6 +167,7 @@
             "@putenv DATABASE_PREPARE=1",
             "@composer tests"
         ],
+        "tests:coverage": "@tests --coverage-html src-coverage/",
         "twig-cs": [
             "@php bin/console lint:twig --show-deprecations",
             "@php vendor/bin/twig-cs-fixer lint"

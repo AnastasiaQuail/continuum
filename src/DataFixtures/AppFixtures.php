@@ -73,7 +73,7 @@ final class AppFixtures extends Fixture
                 new Location('52.517389', '13.395131'),
             ],
             [
-                'kate@continuum.com',
+                'user@continuum.com',
                 'password',
                 UserStatus::Active,
                 [],
@@ -81,7 +81,7 @@ final class AppFixtures extends Fixture
                 null,
             ],
             [
-                'paul@continuum.com',
+                'disabled_user@continuum.com',
                 'password',
                 UserStatus::Disabled,
                 [],
