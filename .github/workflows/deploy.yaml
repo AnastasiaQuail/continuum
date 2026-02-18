@@ -13,7 +13,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - name: "Checkout code"
+        uses: actions/checkout@v6
 
       - name: "Setup PHP"
         uses: shivammathur/setup-php@v2
@@ -21,7 +22,9 @@ jobs:
           php-version: 8.5
 
       - name: "Install dependencies"
-        run: composer install
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: --optimize-autoloader
 
       - name: "Deploy"
         uses: deployphp/action@v1

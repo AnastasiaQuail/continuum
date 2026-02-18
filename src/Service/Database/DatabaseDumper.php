@@ -126,11 +126,7 @@ final readonly class DatabaseDumper
 
         /** @var SplFileInfo $file */
         $file = $finder->getIterator()->current();
-
-        $time = $file->getCTime();
-        if (false === $time) {
-            $time = $file->getMTime();
-        }
+        $time = $file->getMTime();
 
         if (false === $time) {
             throw new RuntimeException('Unable to retrieve last backup time');

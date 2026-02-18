@@ -35,10 +35,12 @@ final readonly class LastVisitListener
         $now = new DateTimeImmutable();
         $lastVisited = $user->lastVisitedAt;
 
-        if ($lastVisited->modify('+5 minutes') < $now) {
+        // @infection-ignore-all
+        if ($lastVisited->modify('+5 minutes') <= $now) {
             $this->userRepository->updateLastVisitedAt($user->id, $now);
 
-            if ($lastVisited->modify('+8 hours') < $now) {
+            // @infection-ignore-all
+            if ($lastVisited->modify('+8 hours') <= $now) {
                 /** @var FlashBagAwareSessionInterface $session */
                 $session = $event->getRequest()->getSession();
                 $session->getFlashBag()->add('success', "Welcome back! It's good to see you again");

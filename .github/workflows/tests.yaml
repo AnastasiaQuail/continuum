@@ -48,3 +48,40 @@ jobs:
         env:
           DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/postgres?serverVersion=16&charset=utf8"
         run: composer tests:ci -- --colors=always
+
+  infection:
+    name: "Infection"
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: "Checkout code"
+        uses: actions/checkout@v6
+
+      - name: "Setup PHP"
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.5
+
+      - name: "Install dependencies"
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: --optimize-autoloader
+
+      - name: "Run mutation tests"
+        env:
+          DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/postgres?serverVersion=16&charset=utf8"
+          DATABASE_PREPARE: 1
+        run: composer infection -- --ansi

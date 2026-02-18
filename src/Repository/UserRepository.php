@@ -58,7 +58,8 @@ final class UserRepository extends ServiceEntityRepository implements PasswordUp
     #[Override]
     public function findOrdered(): array
     {
-        return array_values($this->findBy([], ['lastVisitedAt' => Order::Descending->value]));
+        /** @var list<User> */
+        return $this->findBy([], ['lastVisitedAt' => Order::Descending->value]);
     }
 
     #[Override]
