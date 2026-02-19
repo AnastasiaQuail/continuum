@@ -24,6 +24,7 @@ final readonly class WeeklyReflectionService
         $days = [];
         $reflections = [];
 
+        $month = $month->modify('first day of this month');
         $sunday = $month->modify('sunday');
         $endDate = $month->modify('+1 month');
 

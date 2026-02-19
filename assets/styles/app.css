@@ -45,7 +45,7 @@
 
     --link-color: var(--color-blue);
 
-    --header-gap-top: var(--body-gap-inline);
+    --header-gap-block: var(--body-gap-inline);
     --header-height: 40px;
 
     --sidebar-width: 190px;
@@ -83,7 +83,7 @@
 
     @media (width >= 768px) {
         --h-font-size-coefficient: 0.5;
-        --header-gap-top: var(--container-gap-block);
+        --header-gap-block: var(--container-gap-block);
         --sidebar-gap-block: var(--body-gap-inline);
         --body-gap-block: calc(var(--gap-block) * 1.5);
         --body-gap-inline: calc(var(--gap-inline) * 1);
@@ -372,7 +372,7 @@ textarea {
     position: relative;
     display: flex;
     align-items: center;
-    padding: var(--header-gap-top) var(--body-gap-inline) 0;
+    padding: var(--header-gap-block) var(--body-gap-inline) 0;
     background-color: var(--body-background-color);
     z-index: 100;
 
@@ -956,7 +956,7 @@ textarea {
 
         & > .body-messages {
             position: fixed;
-            top: calc(var(--header-gap-top) * 2 + var(--header-height));
+            top: calc(var(--header-gap-block) * 2 + var(--header-height));
             right: var(--body-gap-inline);
             display: none;
             flex-direction: column;
@@ -976,7 +976,7 @@ textarea {
             }
 
             @media (width >= 768px) {
-                top: calc(var(--header-gap-top) * 1.5 + var(--header-height));
+                top: calc(var(--header-gap-block) * 1.5 + var(--header-height));
                 width: 40vw;
             }
 
@@ -1657,7 +1657,8 @@ textarea {
         align-items: center;
         justify-content: space-between;
 
-        & h2 {
+        & h2,
+        & h3 {
             margin-bottom: 0;
         }
 
@@ -1665,7 +1666,11 @@ textarea {
             --font-size-coefficient: calc(var(--h-font-size-coefficient) / 3);
         }
 
-        &.card-title-showcase:is(h2), &.card-title-showcase h2 {
+        &:is(h3), & h3 {
+            --font-size-coefficient: calc(var(--h-font-size-coefficient) / 5);
+        }
+
+        &.card-title-showcase h2 {
             --font-size-coefficient: calc(var(--h-font-size-coefficient) / 6);
         }
 
@@ -1706,9 +1711,10 @@ textarea {
                 --label-color: var(--color);
 
                 display: inline-flex;
-                column-gap: calc(var(--gap-inline) / 4);
+                column-gap: calc(var(--gap-inline) / 6);
                 padding: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 3);
                 margin-right: auto;
+                align-items: baseline;
                 width: fit-content;
                 font-size: calc(1em * 0.75);
                 font-weight: var(--font-weight-bold-extra);
@@ -1728,6 +1734,10 @@ textarea {
 
                 &.value-bad {
                     --label-color: var(--color-red);
+                }
+
+                & > span:last-child {
+                    font-size: .875em;
                 }
             }
 
@@ -1870,6 +1880,10 @@ textarea {
                 --s-color: color-mix(in srgb, var(--color-pink) 40%, var(--color));
             }
         }
+
+        &:is(:last-child) {
+            margin-bottom: 0;
+        }
     }
 
     .card-submit {
@@ -1901,6 +1915,7 @@ textarea {
     --progress-height: calc(var(--gap-block) / 2);
     --progress-color: var(--color-green);
     --progress-color-transparent: 10%;
+    --progress-bar-color-transparent: var(--transparent-color);
     --progress-border-width: var(--border-width);
     --progress-border-radius: calc(var(--border-radius) / 2);
 
@@ -1917,9 +1932,28 @@ textarea {
         height: calc(var(--progress-border-width) * 2 + 100%);
         width: calc(var(--progress-border-width) * 2 + var(--progress));
         margin: calc(var(--progress-border-width) * -1);
-        background-color: color-mix(in srgb, var(--progress-color) var(--transparent-color), var(--background-color));
-        border-radius: var(--progress-border-radius);
+        background-color: color-mix(in srgb, var(--progress-color) var(--progress-bar-color-transparent), var(--background-color));
         transition: width .3s;
+
+        &:first-child {
+            border-top-left-radius: var(--progress-border-radius);
+            border-bottom-left-radius: var(--progress-border-radius);
+        }
+
+        &:last-child {
+            --progress-bar-color-transparent: var(--transparent-color);
+            border-top-right-radius: var(--progress-border-radius);
+            border-bottom-right-radius: var(--progress-border-radius);
+        }
+    }
+
+    &.progress-offset {
+        --progress-bar-color-transparent: 30%;
+
+        .progress-bar:last-child {
+            border-top-left-radius: var(--progress-border-radius);
+            border-bottom-left-radius: var(--progress-border-radius);
+        }
     }
 }
 
@@ -2377,7 +2411,7 @@ textarea {
 
         & > strong {
             display: inline-flex;
-            padding: calc(var(--gap-inline) / 6) calc(var(--gap-inline) / 2);
+            padding: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 2);
             color: var(--general-color);
             border-radius: calc(var(--border-radius) * 1.5);
             background-color: color-mix(in srgb, var(--general-color) var(--ue-background-color-transparent), var(--background-color));

@@ -19,11 +19,10 @@
             <div class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</div>
         </div>
         <div class="progress-group">
-            {%- set progress_percent = progress.currentProgress -%}
-            <div class="progress" style="--progress: {{ progress_percent }}%;">
+            <div class="progress" style="--progress: {{ progress.currentProgress }}%;">
                 <div class="progress-bar"></div>
             </div>
-            <div class="progress-text">{{ progress_percent }}%</div>
+            <div class="progress-text">{{ progress.currentProgress }}%</div>
         </div>
 
         {%- if +current_date.format('j') === 1 -%}
@@ -43,7 +42,7 @@
         <section class="card">
             <div class="card-title card-title-showcase card-title-controls card-title-shine">
                 <h2>Love story</h2>
-                <span class="card-title-info">{{ couple.togetherString }}</span>
+                <span class="card-title-info">{{ couple.together }}</span>
             </div>
             <div class="card-couple">
                 <div class="couple-partner">

@@ -38,7 +38,7 @@ final readonly class CalendarProgress
         return $this->total->y * 12 + $this->total->m + ($this->total->d > 0 ? 1 : 0);
     }
 
-    private function getPastDays(): int
+    public function getPastDays(): int
     {
         $days = $this->past->days;
 
