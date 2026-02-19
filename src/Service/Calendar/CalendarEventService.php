@@ -6,9 +6,11 @@ namespace Continuum\Service\Calendar;
 
 use Continuum\Dto\Request\Calendar\NewCalendarEvent;
 use Continuum\Dto\Response\Calendar\CombinedCalendarEvent;
+use Continuum\Dto\Response\Calendar\ReportCalendarEvent;
 use Continuum\Entity\CalendarEvent;
 use Continuum\Entity\User;
 use Continuum\Enum\CalendarEventFormat;
+use Continuum\Enum\CalendarEventType;
 use Continuum\Repository\CalendarEventRepository;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -56,6 +58,39 @@ final readonly class CalendarEventService
             static fn (array $day): CombinedCalendarEvent => new CombinedCalendarEvent($day['day'], $day['hours']),
             $events
         );
+    }
+
+    /**
+     * @return list<ReportCalendarEvent>
+     */
+    public function getCountMapBetweenDates(User $user, DateTimeImmutable $endDate): array
+    {
+        $data = [];
+
+        foreach ($this->repository->findByMonth($endDate, $user->timezone) as $event) {
+            $data[$event->getTitle()][$event->getType()->value] ??= 0;
+            ++$data[$event->getTitle()][$event->getType()->value];
+        }
+
+        $events = [];
+
+        /**
+         * @var non-empty-string $title
+         * @var non-empty-array<value-of<CalendarEventType>, positive-int> $types
+         */
+        foreach ($data as $title => $types) {
+            foreach ($types as $type => $count) {
+                $events[] = new ReportCalendarEvent(
+                    title: $title,
+                    type: CalendarEventType::from($type),
+                    count: $count,
+                );
+            }
+        }
+
+        usort($events, static fn (ReportCalendarEvent $a, ReportCalendarEvent $b): int => $b->count <=> $a->count);
+
+        return $events;
     }
 
     /**

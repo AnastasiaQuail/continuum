@@ -46,6 +46,19 @@ final class CalendarEventRepository extends ServiceEntityRepository
     /**
      * @return list<CalendarEvent>
      */
+    public function findByMonth(DateTimeImmutable $date, DateTimeZone $timeZone): array
+    {
+        $month = $date->format('Y-m');
+
+        return $this->findBetweenDates(
+            new DateTimeImmutable(sprintf('%s-01 00:00:00', $month), $timeZone),
+            new DateTimeImmutable(sprintf('%s-%s 23:59:59', $month, $date->format('t')), $timeZone),
+        );
+    }
+
+    /**
+     * @return list<CalendarEvent>
+     */
     public function findByDay(DateTimeImmutable $date, DateTimeZone $timeZone): array
     {
         $day = $date->format('Y-m-d');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Service;
 
 use Continuum\Dto\Response\CoupleInformation;
+use Continuum\Dto\Response\CoupleTogetherInformation;
 use Continuum\Entity\Location;
 use Continuum\Entity\User;
 use Continuum\Service\Weather\WeatherService;
@@ -25,7 +26,7 @@ final readonly class CoupleService
         private string $startDate,
     ) {}
 
-    public function getInformation(User $currentUser): CoupleInformation
+    public function getInformation(User $currentUser, DateTimeImmutable $currentDate): CoupleInformation
     {
         $user = $this->userService->get(Uuid::fromString($this->userId));
         $partnerUser = $this->userService->get(Uuid::fromString($this->partnerUserId));
@@ -33,16 +34,20 @@ final readonly class CoupleService
         $userWeather = $this->weatherService->getWeather($user->location);
         $partnerUserWeather = $this->weatherService->getWeather($partnerUser->location);
 
-        $startDate = new DateTimeImmutable($this->startDate, $currentUser->timezone);
-        $currentDate = new DateTimeImmutable('now', $currentUser->timezone);
-
         return new CoupleInformation(
             weather: $userWeather,
             time: new DateTimeImmutable('now', $user->timezone),
             partnerWeather: $partnerUserWeather,
             partnerTime: new DateTimeImmutable('now', $partnerUser->timezone),
+            together: $this->getTogether($currentUser, $currentDate),
             distance: $this->getDistance($user->location, $partnerUser->location),
-            together: $startDate->diff($currentDate),
+        );
+    }
+
+    public function getTogether(User $currentUser, DateTimeImmutable $currentDate): CoupleTogetherInformation
+    {
+        return new CoupleTogetherInformation(
+            new DateTimeImmutable($this->startDate, $currentUser->timezone)->diff($currentDate)
         );
     }
 

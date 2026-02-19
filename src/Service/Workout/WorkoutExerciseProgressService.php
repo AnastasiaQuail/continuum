@@ -74,6 +74,10 @@ final readonly class WorkoutExerciseProgressService
             ++$count;
         }
 
+        if (0 === $count) {
+            return 0;
+        }
+
         return $result / $count;
     }
 }

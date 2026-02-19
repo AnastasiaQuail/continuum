@@ -1,0 +1,170 @@
+{% extends 'report.html.twig' %}
+
+{% block title %}Month report{% endblock %}
+{% block body_id %}report-month{% endblock %}
+
+{% block main -%}
+    {%- set progress_offset = progress.offset -%}
+    {%- set couple_together_info = couple_together ~ '' -%}
+
+    {%- if progress_offset > 0 or couple_together_info !== '' -%}
+        <section class="card">
+            {%- if progress_offset > 0 -%}
+                <div class="card-title card-title-controls">
+                    <h3>The Wait</h3>
+                    <div class="card-title-label value-good">
+                        <span>+{{ progress_offset }}</span><span>%</span>
+                    </div>
+
+                    <div class="card-title-info card-title-progress">
+                        <div class="progress-group">
+                            <div class="progress progress-offset">
+                                <div class="progress-bar"
+                                     style="--progress: {{ progress.startProgress.currentProgress }}%;"></div>
+                                <div class="progress-bar" style="--progress: {{ progress_offset }}%;"></div>
+                            </div>
+                            <div class="progress-text">{{ progress.endProgress.currentProgress }}%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+            {%- endif -%}
+
+            {%- if couple_together_info !== '' -%}
+                <div class="card-title card-title-controls">
+                    <h3>Love story</h3>
+                    <div class="card-title-label value-good">
+                        <span>+{{ couple_progress_days }}</span><span>days</span>
+                    </div>
+                    <div class="card-title-info">{{ couple_together_info }}</div>
+                </div>
+            {%- endif -%}
+        </section>
+    {%- endif -%}
+
+    {%- if calendar_events is not empty -%}
+        <section class="card">
+            <div class="card-title card-title-controls">
+                <h3>Calendar</h3>
+            </div>
+
+            <div class="upcoming-events-body upcoming-events-report">
+                {%- for calendar_event in calendar_events -%}
+                    <div class="upcoming-event-text" data-general-type="{{ calendar_event.type.value }}">
+                        <strong>{{ calendar_event.title }}</strong>
+                        {%- if calendar_event.count > 1 -%}
+                            <span class="upcoming-event-badge">{{ calendar_event.count }}</span>
+                        {%- endif -%}
+                    </div>
+                {%- endfor -%}
+            </div>
+        </section>
+    {%- endif -%}
+
+    {%- if (mood_reflections is not empty) or (weekly_reflections is not empty) -%}
+        <h2 class="report-title">Reflection</h2>
+
+        <section class="card">
+            {%- if mood_reflections is not empty -%}
+                <div class="card-title card-title-controls">
+                    <h3>Mood trend</h3>
+                </div>
+
+                <div class="mood-reflections">
+                    {%- for mood_reflection in mood_reflections -%}
+                        <div class="mood-reflection-dot"
+                             data-general-type="{{ mood_reflection.type.color.value }}"></div>
+                    {%- endfor -%}
+                </div>
+
+                {%- set total_days = month.format('t') -%}
+                {%- set okay_days = 0 -%}
+                {%- set okay_color = '' -%}
+                {%- set good_days = 0 -%}
+                {%- set good_color = '' -%}
+                {%- set great_days = 0 -%}
+                {%- set great_color = '' -%}
+
+                {%- for mood_reflection in mood_reflections -%}
+                    {%- if mood_reflection.type.value === 'okay' -%}
+                        {%- set okay_days = okay_days + 1 -%}
+                        {%- set okay_color = mood_reflection.type.color.value -%}
+                    {%- elseif mood_reflection.type.value === 'good' -%}
+                        {%- set good_days = good_days + 1 -%}
+                        {%- set good_color = mood_reflection.type.color.value -%}
+                    {%- elseif mood_reflection.type.value === 'great' -%}
+                        {%- set great_days = great_days + 1 -%}
+                        {%- set great_color = mood_reflection.type.color.value -%}
+                    {%- endif -%}
+                {%- endfor -%}
+
+                <div class="mood-reflection-messages">
+                    {%- if great_days > 0 -%}
+                        <div class="mood-reflection-message" data-general-type="{{ great_color }}">
+                            More than
+                            <strong>{{ (great_days / total_days * 100)|round ~ '%' }}</strong>
+                            great days!
+                        </div>
+                    {%- endif -%}
+                    {%- if good_days > 0 -%}
+                        <div class="mood-reflection-message" data-general-type="{{ good_color }}">
+                            More than
+                            <strong>{{ (good_days / total_days * 100)|round ~ '%' }}</strong>
+                            good days!
+                        </div>
+                    {%- endif -%}
+                    {%- if (great_days === 0 or good_days === 0) and okay_days > 0 -%}
+                        <div class="mood-reflection-message" data-general-type="{{ okay_color }}">
+                            <strong>{{ (okay_days / total_days * 100)|round ~ '%' }}</strong>
+                            normal days
+                        </div>
+                    {%- endif -%}
+                </div>
+            {%- endif -%}
+
+            {%- if weekly_reflections is not empty -%}
+                <hr>
+
+                <div class="card-title card-title-controls">
+                    <h3>Joy of weeks</h3>
+                </div>
+
+                <div class="weekly-reflections">
+                    {%- for weekly_reflection in weekly_reflections -%}
+                        {%- if weekly_reflection.joy.isPrivate -%}
+                            <div class="weekly-reflection-joy private-secure">{{ ux_icon('lucide:lock') }}</div>
+                        {%- else -%}
+                            <div class="weekly-reflection-joy">{{ weekly_reflection.joy.text }}</div>
+                        {%- endif -%}
+                    {%- endfor -%}
+                </div>
+            {%- endif -%}
+        </section>
+    {%- endif -%}
+{%- endblock %}
+
+{% block footer %}
+    <footer class="footer-container">
+        <div class="report-navigation">
+            {%- set prev_month = month.modify('last day of previous month') -%}
+            {%- set next_month = month.modify('last day of next month') -%}
+            {%- set is_prev_granted = prev_month.format('Y') >= app_year_min -%}
+            {%- set is_next_granted = user_date().modify('-1 month').format('Y-m') >= next_month.format('Y-m') -%}
+
+            <{% if is_prev_granted %}a{% else %}span{% endif %}
+                {% if is_prev_granted %}href="{{ path('app_report_month', {month: prev_month.format('Y-m')}) }}"{% endif %}
+                class="page-link page-link-prev {% if not is_prev_granted %}page-link-disabled{% endif %}">
+                {{- ux_icon('lucide:chevron-right') -}}
+                <span>{{ prev_month.format('F') }}</span>
+            </{% if is_prev_granted %}a{% else %}span{% endif %}>
+
+            <{% if is_next_granted %}a{% else %}span{% endif %}
+                {% if is_next_granted %}href="{{ path('app_report_month', {month: next_month.format('Y-m')}) }}"{% endif %}
+                class="page-link page-link-next {% if not is_next_granted %}page-link-disabled{% endif %}">
+                <span>{{ next_month.format('F') }}</span>
+                {{- ux_icon('lucide:chevron-right') -}}
+            </{% if is_next_granted %}a{% else %}span{% endif %}>
+        </div>
+    </footer>
+{% endblock %}

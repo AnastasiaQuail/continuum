@@ -24,7 +24,7 @@
     {%- block header -%}
         <header class="header">
             <nav class="header-container">
-                {%- if sidebar_show|default !== 'hide' -%}
+                {%- if logo_show|default !== 'hide' -%}
                     <div class="header-logo">
                         <a class="header-logo-link" href="{{ path('app_homepage') }}">
                             {{- ux_icon('hugeicons:infinity-02') -}}
@@ -33,6 +33,8 @@
                             </span>
                         </a>
                     </div>
+                {%- endif -%}
+                {%- if sidebar_show|default !== 'hide' -%}
                     <button id="sidebar-toggler" class="header-button">
                         {{- ux_icon('lucide:menu', {class: 'icon-menu-open'}) -}}
                         {{- ux_icon('lucide:x', {class: 'icon-menu-close'}) -}}
@@ -93,7 +95,7 @@
                         <span class="theme-dark">{{ ux_icon('lucide:moon') }}</span>
                     </button>
 
-                    {%- if is_granted('ROLE_USER') -%}
+                    {%- if logout_show|default !== 'hide' and is_granted('ROLE_USER') -%}
                         <a class="header-button" href="{{ logout_path() }}">{{ ux_icon('lucide:log-out') }}</a>
                     {%- endif -%}
                 </div>
@@ -168,6 +170,15 @@
                             ['app_profile_location', 'app_profile_password'],
                             ux_icon('lucide:user'),
                             'Profile',
+                        ) -}}
+                    </li>
+                    <li class="nav-item">
+                        {{- _self.sidebar_link(
+                            'app_report_month',
+                            [],
+                            ux_icon('lucide:chart-bar-big'),
+                            'Monthly report',
+                            is_granted('ROLE_SUPER_ADMIN'),
                         ) -}}
                     </li>
                     {%- if is_granted('ADMIN_USER_VIEW') -%}
