@@ -10,6 +10,7 @@ use Continuum\Repository\CalendarEventRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use InvalidArgumentException;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV7;
@@ -37,20 +38,14 @@ final class CalendarEvent
         $this->id = Uuid::v7();
     }
 
-    public function getId(): Uuid
+    public function getId(): UuidV7
     {
-        return $this->id;
+        return $this->id instanceof UuidV7 ? $this->id : throw new InvalidArgumentException('Wrong UUID');
     }
 
     public function isOlderThan(self $event): bool
     {
-        /** @var UuidV7 $id */
-        $id = $this->id;
-
-        /** @var UuidV7 $eventId */
-        $eventId = $event->getId();
-
-        return $id->getDateTime() < $eventId->getDateTime();
+        return $this->getId()->getDateTime() < $event->getId()->getDateTime();
     }
 
     public function getDatetime(): DateTimeImmutable

@@ -18,20 +18,24 @@
                 {%- set event_date = event.datetime.setTimezone(app.user.timezone) -%}
 
                 <div class="calendar-event" data-general-type="{{ event.type.value }}">
-                    <span class="calendar-event-type">{{ event.title }}</span>
-                    {%- if not event.allDay -%}
-                        <span> at {{ event_date.format('H:i') }}</span>
-                    {%- endif -%}
+                    <div class="calendar-event-body">
+                        <span class="calendar-event-type">{{ event.title }}</span>
+                        {%- if not event.allDay -%}
+                            <span> at {{ event_date.format('H:i') }}</span>
+                        {%- endif -%}
 
-                    <form method="post" action="{{ path('app_calendar_event_delete', {id: event.id}) }}"
-                          onsubmit="return confirm('Delete?')">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button
-                            class="btn btn-sm btn-transparent btn-danger"
-                            {% if is_granted('CALENDAR_EVENT_DELETE') %}type="submit" {% else %}disabled{% endif %}>
-                            {{- ux_icon('lucide:trash') -}}
-                        </button>
-                    </form>
+                        <form method="post" action="{{ path('app_calendar_event_delete', {id: event.id}) }}"
+                              onsubmit="return confirm('Delete?')">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button
+                                class="btn btn-sm btn-transparent btn-danger"
+                                {% if is_granted('CALENDAR_EVENT_DELETE') %}type="submit" {% else %}disabled{% endif %}>
+                                {{- ux_icon('lucide:trash') -}}
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="calendar-event-created-at">Added {{ event.id.datetime.format('j F Y, H:i') }}</div>
                 </div>
             {%- endfor -%}
         </section>
