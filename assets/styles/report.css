@@ -254,8 +254,8 @@
         &:not(.page-link-disabled):hover,
         &:not(.page-link-disabled):focus-visible {
             --pl-color-transparent: 10%;
-            color: var(--link-color);
-            background-color: color-mix(in oklch, var(--link-color) var(--pl-color-transparent), transparent);
+            color: var(--primary-color);
+            background-color: color-mix(in oklch, var(--primary-color) var(--pl-color-transparent), transparent);
 
             [data-theme="dark"] & {
                 --pl-color-transparent: 15%;

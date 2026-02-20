@@ -43,7 +43,11 @@
     --body-background-color: var(--color-inverse);
     --background-color: #fff;
 
-    --link-color: var(--color-blue);
+    --primary-color: var(--color-blue);
+
+    &[data-couple-day] {
+        --primary-color: var(--color-purple);
+    }
 
     --header-gap-block: var(--body-gap-inline);
     --header-height: 40px;
@@ -283,7 +287,7 @@ strong {
 a {
     --link-color-transparent: 90%;
 
-    color: color-mix(in srgb, var(--link-color) var(--link-color-transparent), var(--color));
+    color: color-mix(in srgb, var(--primary-color) var(--link-color-transparent), var(--color));
     text-decoration: underline;
 
     &:hover {
@@ -449,7 +453,7 @@ textarea {
                 > svg {
                     height: calc(var(--logo-font-size) * 1.4);
                     width: calc(var(--logo-font-size) * 1.4);
-                    color: var(--link-color);
+                    color: var(--primary-color);
                 }
 
                 &:active {
@@ -464,7 +468,7 @@ textarea {
                         top: calc(-1 * (var(--logo-font-size) / 8));
                         right: calc(-1 * (var(--logo-font-size) / 2));
                         font-size: calc(var(--logo-font-size) * 0.75);
-                        color: var(--link-color);
+                        color: var(--primary-color);
                         filter: drop-shadow(0 0 3px var(--body-background-color));
                         transform: rotate(-30deg);
                         transition: opacity .5s ease-in;
@@ -472,7 +476,7 @@ textarea {
                 }
 
                 &:hover {
-                    color: var(--link-color);
+                    color: var(--primary-color);
 
                     .logo-bug {
                         opacity: 0;
@@ -511,8 +515,8 @@ textarea {
             &:focus-visible {
                 --h-b-color-transparent: 10%;
 
-                color: var(--link-color);
-                background-color: color-mix(in oklch, var(--link-color) var(--h-b-color-transparent), transparent);
+                color: var(--primary-color);
+                background-color: color-mix(in oklch, var(--primary-color) var(--h-b-color-transparent), transparent);
 
                 [data-theme="dark"] & {
                     --h-b-color-transparent: 15%;
@@ -747,10 +751,10 @@ textarea {
                     }
 
                     &.active {
-                        --nav-link-background-color: var(--link-color);
+                        --nav-link-background-color: var(--primary-color);
                         --nav-link-background-color-transparent: 10%;
 
-                        color: var(--link-color);
+                        color: var(--primary-color);
                     }
 
                     &:is([disabled]) {
@@ -967,7 +971,7 @@ textarea {
                 height: var(--loader-size);
                 margin: auto;
                 border: calc(var(--loader-size) / 10) solid color-mix(in srgb, var(--color) 10%, transparent);
-                border-top-color: var(--link-color);
+                border-top-color: var(--primary-color);
                 border-radius: 50%;
                 animation: spin 1s linear infinite;
                 z-index: 1;
@@ -1076,7 +1080,7 @@ textarea {
             transition: color .15s;
 
             &:hover {
-                color: var(--link-color);
+                color: var(--primary-color);
                 cursor: pointer;
             }
 
@@ -1228,10 +1232,10 @@ textarea {
     &:focus {
         color: var(--form-control-color);
         background-color: var(--background-color);
-        border-color: color-mix(in oklch, var(--link-color) var(--transparent-color), transparent);
-        caret-color: color-mix(in oklch, var(--link-color) var(--transparent-color), transparent);
+        border-color: color-mix(in oklch, var(--primary-color) var(--transparent-color), transparent);
+        caret-color: color-mix(in oklch, var(--primary-color) var(--transparent-color), transparent);
         outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        box-shadow: 0 0 0 0.25rem color-mix(in oklch, var(--primary-color) 20%, transparent);
     }
 
     &::placeholder {
@@ -1311,14 +1315,14 @@ textarea {
     }
 
     &:focus {
-        border-color: color-mix(in oklch, var(--link-color) var(--transparent-color), transparent);
+        border-color: color-mix(in oklch, var(--primary-color) var(--transparent-color), transparent);
         outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        box-shadow: 0 0 0 0.25rem color-mix(in oklch, var(--primary-color) 20%, transparent);
     }
 
     &:checked {
         border-color: transparent;
-        background-color: color-mix(in oklch, var(--color-blue) var(--transparent-color), transparent);
+        background-color: color-mix(in oklch, var(--primary-color) var(--transparent-color), transparent);
 
         &[type=checkbox] {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
@@ -1387,7 +1391,7 @@ textarea {
         padding-inline: var(--control-padding-block);
 
         &:hover {
-            --btn-general-color: var(--link-color);
+            --btn-general-color: var(--primary-color);
             --btn-background-color-transparent: 5%;
         }
     }
@@ -1505,7 +1509,7 @@ textarea {
     }
 
     &.btn-primary {
-        --btn-general-color: var(--color-blue);
+        --btn-general-color: var(--primary-color);
     }
 
     &.btn-success {
@@ -1884,7 +1888,7 @@ textarea {
 
                     &:not(.page-link-disabled):hover {
                         --pl-color-transparent: 6%;
-                        color: var(--link-color);
+                        color: var(--primary-color);
                     }
 
                     &.page-link-disabled {

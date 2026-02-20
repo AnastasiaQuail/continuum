@@ -49,7 +49,7 @@ final class HomepageController extends AbstractController
         $date = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);
 
         $progress = $this->calendarProgressService->getProgress($user, $date);
-        $couple = $this->coupleService->getInformation($user, $date);
+        $couple = $this->coupleService->getInformation();
 
         $upcomingEvents = $this->upcomingEventService->getClosestEvents($user);
         $todayEvents = $this->holidayService->getTodayHolidays($user);

@@ -10,6 +10,8 @@ use Continuum\Entity\Location;
 use Continuum\Entity\User;
 use Continuum\Service\Weather\WeatherService;
 use DateTimeImmutable;
+use LogicException;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Uid\Uuid;
 
@@ -24,9 +26,10 @@ final readonly class CoupleService
         private WeatherService $weatherService,
         #[Autowire(env: 'APP_PARTNER_DATE_START')]
         private string $startDate,
+        private Security $security,
     ) {}
 
-    public function getInformation(User $currentUser, DateTimeImmutable $currentDate): CoupleInformation
+    public function getInformation(): CoupleInformation
     {
         $user = $this->userService->get(Uuid::fromString($this->userId));
         $partnerUser = $this->userService->get(Uuid::fromString($this->partnerUserId));
@@ -39,15 +42,23 @@ final readonly class CoupleService
             time: new DateTimeImmutable('now', $user->timezone),
             partnerWeather: $partnerUserWeather,
             partnerTime: new DateTimeImmutable('now', $partnerUser->timezone),
-            together: $this->getTogether($currentUser, $currentDate),
+            together: $this->getTogether(),
             distance: $this->getDistance($user->location, $partnerUser->location),
         );
     }
 
-    public function getTogether(User $currentUser, DateTimeImmutable $currentDate): CoupleTogetherInformation
+    public function getTogether(?DateTimeImmutable $date = null): CoupleTogetherInformation
     {
+        $user = $this->security->getUser();
+
+        if (!$user instanceof User) {
+            throw new LogicException('User must be authenticated.');
+        }
+
+        $date ??= new DateTimeImmutable('now', $user->timezone);
+
         return new CoupleTogetherInformation(
-            new DateTimeImmutable($this->startDate, $currentUser->timezone)->diff($currentDate)
+            new DateTimeImmutable($this->startDate, $user->timezone)->diff($date->setTime(0, 0))
         );
     }
 

@@ -52,7 +52,7 @@ final class MonthController extends AbstractController
 
         $progress = $this->calendarProgressService->getReportProgress($user, $startDate, $endDate);
 
-        $coupleTogether = $this->coupleService->getTogether($user, $endDate);
+        $coupleTogether = $this->coupleService->getTogether($endDate);
         $coupleProgressDays = $coupleTogether->getDays($diff);
 
         $calendarEvents = $this->calendarEventService->getCountMapBetweenDates($user, $startDate);

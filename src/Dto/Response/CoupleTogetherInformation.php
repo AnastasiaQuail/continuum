@@ -42,6 +42,11 @@ final readonly class CoupleTogetherInformation implements Stringable
         };
     }
 
+    public function isStartDay(): bool
+    {
+        return 0 === $this->together->d;
+    }
+
     public function getDays(int $days): int
     {
         $togetherDays = $this->together->days;
