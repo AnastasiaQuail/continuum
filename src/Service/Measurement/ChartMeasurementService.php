@@ -28,8 +28,6 @@ final readonly class ChartMeasurementService
             return [];
         }
 
-        $month = $month->modify('first day of this month');
-
         $initMeasurement = $this->measurementService->getInitMeasurement($user, $month);
         $initMeasurement ??= array_first($measurements);
 

@@ -175,7 +175,7 @@
 
         &.private-secure {
             min-height: var(--font-size);
-            color: color-mix(in srgb, var(--color) 20%, transparent);
+            color: color-mix(in srgb, var(--color) 20%, var(--color-inverse));
             border-color: color-mix(in srgb, var(--color-green) 40%, transparent);
         }
     }
