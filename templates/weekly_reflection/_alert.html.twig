@@ -24,10 +24,12 @@
 } -%}
 
 <article class="alert {{ is_empty|default(false) ? 'alert-empty' : types[type].class }}">
-    <div class="alert-title">
-        {{- ux_icon(types[type].icon) -}}
-        <span>{{ types[type].title }}</span>
-    </div>
+    {%- if not is_empty|default(false) -%}
+        <div class="alert-title">
+            {{- ux_icon(types[type].icon) -}}
+            <span>{{ types[type].title }}</span>
+        </div>
+    {%- endif -%}
     <div class="alert-body {{ is_secure ? 'private-secure' : (is_private ? 'private') }}">
         {%- block alert_body -%}
             {{- is_secure ? ux_icon('lucide:lock') : text|default('') -}}

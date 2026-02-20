@@ -19,7 +19,7 @@ final readonly class WeeklyReflectionService
     /**
      * @return array<string, null|WeeklyReflection>
      */
-    public function getByMonth(DateTimeImmutable $month): array
+    public function getByMonth(DateTimeImmutable $month, ?DateTimeImmutable $currentDate = null): array
     {
         $days = [];
         $reflections = [];
@@ -28,9 +28,17 @@ final readonly class WeeklyReflectionService
         $sunday = $month->modify('sunday');
         $endDate = $month->modify('+1 month');
 
+        if (null !== $currentDate) {
+            $currentDate = $currentDate->modify('sunday');
+        }
+
         do {
-            $days[] = $sunday;
-            $reflections[$sunday->format('Y-m-d')] = null;
+            $date = $sunday->format('Y-m-d');
+
+            if (null === $currentDate || $date <= $currentDate->format('Y-m-d')) {
+                $days[] = $sunday;
+                $reflections[$sunday->format('Y-m-d')] = null;
+            }
 
             $sunday = $sunday->modify('+1 week');
         } while ($sunday < $endDate);

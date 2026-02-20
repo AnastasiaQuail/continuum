@@ -2523,28 +2523,38 @@ textarea {
 }
 
 .calendar-event {
-    display: flex;
-    gap: calc(var(--gap-inline) / 2);
-    align-items: center;
     padding: calc(var(--gap-block) / 2) var(--gap-inline);
     border-radius: var(--border-radius);
     background-color: color-mix(in oklch, var(--general-color) 10%, transparent);
 
     & + & {
-        margin-top: calc(var(--gap-block) / 2);
+        margin-top: calc(var(--gap-block) / 1.5);
     }
 
-    .calendar-event-type {
-        display: inline-flex;
-        padding: calc(var(--control-padding-block) / 1.5) calc(var(--control-padding-inline) / 1.5);
-        color: var(--color-light);
-        font-weight: var(--font-weight-bold);
-        border-radius: calc(var(--border-radius) / 2);
-        background-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
+    .calendar-event-body {
+        display: flex;
+        column-gap: calc(var(--gap-inline) / 2);
+        align-items: center;
+
+        .calendar-event-type {
+            display: inline-flex;
+            padding: calc(var(--control-padding-block) / 1.5) calc(var(--control-padding-inline) / 1.5);
+            color: var(--color-light);
+            font-weight: var(--font-weight-bold);
+            border-radius: calc(var(--border-radius) / 2);
+            background-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
+        }
+
+        form {
+            margin-left: auto;
+        }
     }
 
-    form {
-        margin-left: auto;
+    .calendar-event-created-at {
+        margin-top: calc(var(--gap-block) / 4);
+        font-size: calc(var(--font-size) / 2);
+        font-weight: var(--font-weight-light);
+        color: color-mix(in srgb, var(--general-color) 20%, var(--color) 20%);
     }
 }
 
@@ -2631,7 +2641,7 @@ textarea {
 
 .weekly-reflection {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
     gap: var(--container-gap-block);
 
     .week {
