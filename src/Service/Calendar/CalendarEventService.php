@@ -34,7 +34,7 @@ final readonly class CalendarEventService
      */
     public function getByYear(User $user, int $year): array
     {
-        /** @var array<non-empty-string, array{day: null|CalendarEvent, hours: list<CalendarEvent>}> $events */
+        /** @var array<non-empty-string, array{days: list<CalendarEvent>, hours: list<CalendarEvent>}> $events */
         $events = [];
 
         foreach ($this->repository->findByYear($year, $user->timezone) as $event) {
@@ -42,20 +42,25 @@ final readonly class CalendarEventService
 
             if (!array_key_exists($date, $events)) {
                 $events[$date] = [
-                    'day' => null,
+                    'days' => [],
                     'hours' => [],
                 ];
             }
 
             if ($event->isAllDay()) {
-                $events[$date]['day'] = $event;
+                $events[$date]['days'][] = $event;
             } else {
                 $events[$date]['hours'][] = $event;
             }
         }
 
         return array_map(
-            static fn (array $day): CombinedCalendarEvent => new CombinedCalendarEvent($day['day'], $day['hours']),
+            static function (array $day): CombinedCalendarEvent {
+                $days = $day['days'];
+                usort($days, static fn (CalendarEvent $a, CalendarEvent $b): int => $b->isOlderThan($a) ? 1 : 0);
+
+                return new CombinedCalendarEvent(array_first($days), $day['hours']);
+            },
             $events
         );
     }
