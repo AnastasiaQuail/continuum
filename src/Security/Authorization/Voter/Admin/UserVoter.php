@@ -27,7 +27,7 @@ final class UserVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute || self::EDIT === $attribute;
+        return in_array($attribute, [self::VIEW, self::EDIT], true);
     }
 
     #[Override]

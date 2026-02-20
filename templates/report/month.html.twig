@@ -43,10 +43,18 @@
         </section>
     {%- endif -%}
 
-    {%- if calendar_events is not empty -%}
+    {%- if (calendar_events is not empty) and is_granted('CALENDAR_REPORT_VIEW') -%}
         <section class="card">
             <div class="card-title card-title-controls">
                 <h3>Calendar</h3>
+                <div class="card-title-info">
+                    {%- set events_count = 0 -%}
+                    {%- for calendar_event in calendar_events -%}
+                        {%- set events_count = events_count + calendar_event.count -%}
+                    {%- endfor -%}
+
+                    {{- events_count ~ ' events' -}}
+                </div>
             </div>
 
             <div class="upcoming-events-body upcoming-events-report">
@@ -62,20 +70,25 @@
         </section>
     {%- endif -%}
 
-    {%- if (mood_reflections is not empty) or (weekly_reflections is not empty) -%}
+    {%- set is_mood_reflection_granted = (mood_reflections is not empty) and is_granted('MOOD_REFLECTION_REPORT_VIEW') -%}
+    {%- set is_weekly_reflection_granted = (weekly_reflections is not empty) and is_granted('WEEKLY_REFLECTION_REPORT_VIEW') -%}
+
+    {%- if is_mood_reflection_granted or is_weekly_reflection_granted -%}
         <h2 class="report-title">Reflection</h2>
 
         <section class="card">
-            {%- if mood_reflections is not empty -%}
+            {%- if is_mood_reflection_granted -%}
                 <div class="card-title card-title-controls">
                     <h3>Mood trend</h3>
-                </div>
 
-                <div class="mood-reflections">
-                    {%- for mood_reflection in mood_reflections -%}
-                        <div class="mood-reflection-dot"
-                             data-general-type="{{ mood_reflection.type.color.value }}"></div>
-                    {%- endfor -%}
+                    <div class="card-title-info">
+                        <div class="mood-reflections">
+                            {%- for mood_reflection in mood_reflections -%}
+                                <div class="mood-reflection-dot"
+                                     data-general-type="{{ mood_reflection.type.color.value }}"></div>
+                            {%- endfor -%}
+                        </div>
+                    </div>
                 </div>
 
                 {%- set total_days = month.format('t') -%}
@@ -123,8 +136,9 @@
                 </div>
             {%- endif -%}
 
-            {%- if weekly_reflections is not empty -%}
-                <hr>
+            {%- if is_weekly_reflection_granted -%}
+                {%- if is_mood_reflection_granted %}
+                    <hr>{% endif -%}
 
                 <div class="card-title card-title-controls">
                     <h3>Joy of weeks</h3>
@@ -142,6 +156,61 @@
             {%- endif -%}
         </section>
     {%- endif -%}
+
+    {%- set weight_change = offset_measurement.offset -%}
+
+    {%- set is_weight_change_granted = weight_change !== 0.0 and is_granted('BODY_MEASUREMENT_REPORT_VIEW') -%}
+    {%- set is_workout_granted = workout_report.count > 0 and is_granted('WORKOUT_REPORT_VIEW') -%}
+
+    {%- if is_weight_change_granted or is_workout_granted -%}
+        <h2 class="report-title">Health</h2>
+
+        <section class="card">
+            {%- if is_weight_change_granted -%}
+                <div class="card-title card-title-controls">
+                    <h3>Weight change</h3>
+                    <div class="card-title-label {{ weight_change > 0 ? 'value-bad' : 'value-good' }}">
+                        <span>{{ weight_change > 0 ? '+' ~ weight_change : weight_change }}</span>
+                        <span>kg</span>
+                    </div>
+
+                    {%- if offset_measurement.min !== offset_measurement.max -%}
+                        <div class="card-title-info">
+                            <span>{{ ux_icon('lucide:trending-up-down') }}</span>
+                            <span>min {{ offset_measurement.min }}, max {{ offset_measurement.max }} kg</span>
+                        </div>
+                    {%- endif -%}
+                </div>
+            {%- endif -%}
+
+            {%- if is_workout_granted -%}
+                {%- if is_weight_change_granted %}
+                    <hr>{% endif -%}
+
+                <div class="card-title card-title-controls">
+                    <h3>Workouts</h3>
+                    <div class="card-title-label value-good">
+                        <span>+{{ workout_report.count }}</span>
+                        <span>workouts</span>
+                    </div>
+                    <div class="card-title-info">{{ (workout_report.duration / 3600)|round ~ '+ hours' }}</div>
+                </div>
+
+                <div class="workouts-report">
+                    {%- for workout_progress in workout_report.progresses -%}
+                        <div class="workout-exercise-report"
+                             data-general-type="{{ workout_progress.exercise.group.color.value }}">
+                            <span>{{ workout_progress.exercise.name|capitalize }}</span>
+                            <span class="exercise-progress" data-change="{{ workout_progress.progress.change.value }}">
+                                {{- workout_progress.progress.percent -}}%
+                                {{- ux_icon('lucide:trending-up') -}}
+                            </span>
+                        </div>
+                    {%- endfor -%}
+                </div>
+            {%- endif -%}
+        </section>
+    {%- endif -%}
 {%- endblock %}
 
 {% block footer %}
@@ -149,8 +218,8 @@
         <div class="report-navigation">
             {%- set prev_month = month.modify('last day of previous month') -%}
             {%- set next_month = month.modify('last day of next month') -%}
-            {%- set is_prev_granted = prev_month.format('Y') >= app_year_min -%}
-            {%- set is_next_granted = user_date().modify('-1 month').format('Y-m') >= next_month.format('Y-m') -%}
+            {%- set is_prev_granted = prev_month.format('Y') >= app_year_min and is_granted('REPORT_MONTH_VIEW', prev_month) -%}
+            {%- set is_next_granted = is_granted('REPORT_MONTH_VIEW', next_month) -%}
 
             <{% if is_prev_granted %}a{% else %}span{% endif %}
                 {% if is_prev_granted %}href="{{ path('app_report_month', {month: prev_month.format('Y-m')}) }}"{% endif %}

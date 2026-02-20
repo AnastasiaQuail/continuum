@@ -22,6 +22,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class WorkoutVoter extends Voter
 {
     public const string VIEW = 'WORKOUT_VIEW';
+    public const string REPORT_VIEW = 'WORKOUT_REPORT_VIEW';
     public const string CREATE = 'WORKOUT_CREATE';
     public const string EDIT = 'WORKOUT_EDIT';
     public const string DELETE = 'WORKOUT_DELETE';
@@ -37,9 +38,21 @@ final class WorkoutVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute || self::CREATE === $attribute || self::EDIT === $attribute || self::DELETE === $attribute
-            || self::EXERCISE_CREATE === $attribute || self::EXERCISE_DELETE === $attribute
-            || self::SET_CREATE === $attribute || self::SET_DELETE === $attribute;
+        return in_array(
+            $attribute,
+            [
+                self::VIEW,
+                self::REPORT_VIEW,
+                self::CREATE,
+                self::EDIT,
+                self::DELETE,
+                self::EXERCISE_CREATE,
+                self::EXERCISE_DELETE,
+                self::SET_CREATE,
+                self::SET_DELETE,
+            ],
+            true
+        );
     }
 
     #[Override]
@@ -56,7 +69,8 @@ final class WorkoutVoter extends Voter
         }
 
         return match ($attribute) {
-            self::VIEW => true,
+            self::VIEW,
+            self::REPORT_VIEW => true,
 
             self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
 

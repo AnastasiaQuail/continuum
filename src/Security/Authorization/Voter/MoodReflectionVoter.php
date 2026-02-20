@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class MoodReflectionVoter extends Voter
 {
     public const string VIEW = 'MOOD_REFLECTION_VIEW';
+    public const string REPORT_VIEW = 'MOOD_REFLECTION_REPORT_VIEW';
     public const string EDIT = 'MOOD_REFLECTION_EDIT';
 
     public function __construct(
@@ -28,7 +29,7 @@ final class MoodReflectionVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute || self::EDIT === $attribute;
+        return in_array($attribute, [self::VIEW, self::REPORT_VIEW, self::EDIT], true);
     }
 
     #[Override]
@@ -45,7 +46,7 @@ final class MoodReflectionVoter extends Voter
         }
 
         return match ($attribute) {
-            self::VIEW => true,
+            self::VIEW, self::REPORT_VIEW => true,
             self::EDIT => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
             default => false,
         };

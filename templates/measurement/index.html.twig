@@ -29,35 +29,21 @@
 {% block main -%}
     <section class="card card-weight-result">
         <div class="weight-change">
-            {%- set result = 0 -%}
-
-            {%- if chart_measurements is not empty -%}
-                {%- set result = ((chart_measurements|last).weight - (chart_measurements|first).weight)|round(1) -%}
-
-                {%- set min = 1000 -%}
-                {%- set max = 0 -%}
-
-                {%- for chart_measurement in chart_measurements -%}
-                    {%- if not (loop.first and chart_measurement.time === 0) -%}
-                        {%- if chart_measurement.weight > max -%}
-                            {%- set max = chart_measurement.weight -%}
-                        {%- endif -%}
-                        {%- if chart_measurement.weight < min -%}
-                            {%- set min = chart_measurement.weight -%}
-                        {%- endif -%}
-                    {%- endif -%}
-                {%- endfor -%}
-            {%- endif -%}
-
             <h2 class="weight-change-title">Weight Change</h2>
-            <div class="weight-change-result {{ result > 0 ? 'value-bad' }}{{ result < 0 ? 'value-good' }}">
-                <span>{{ result > 0 ? '+' ~ result : result }}</span>
+            {%- set change = offset_measurement.offset -%}
+            <div class="weight-change-result {{ change > 0 ? 'value-bad' }}{{ change < 0 ? 'value-good' }}">
+                <span>{{ change > 0 ? '+' ~ change : change }}</span>
                 <span>kg</span>
             </div>
-            {%- if chart_measurements is not empty -%}
+            {%- if offset_measurement.max > 0 -%}
                 <div class="weight-change-difference">
                     <span>{{ ux_icon('lucide:trending-up-down') }}</span>
-                    <span>{% if min !== max %}{{ min }} - {% endif %}{{ max }} kg</span>
+                    <span>
+                        {%- if offset_measurement.min !== offset_measurement.max -%}
+                            {{- offset_measurement.min ~ ' - ' -}}
+                        {%- endif -%}
+                        {{- offset_measurement.max ~ ' kg' -}}
+                    </span>
                 </div>
             {%- endif -%}
         </div>

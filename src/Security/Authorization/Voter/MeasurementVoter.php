@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class MeasurementVoter extends Voter
 {
     public const string VIEW = 'BODY_MEASUREMENT_VIEW';
+    public const string REPORT_VIEW = 'BODY_MEASUREMENT_REPORT_VIEW';
     public const string CREATE = 'BODY_MEASUREMENT_CREATE';
     public const string EDIT = 'BODY_MEASUREMENT_EDIT';
 
@@ -29,7 +30,7 @@ final class MeasurementVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute || self::CREATE === $attribute || self::EDIT === $attribute;
+        return in_array($attribute, [self::VIEW, self::REPORT_VIEW, self::CREATE, self::EDIT], true);
     }
 
     #[Override]
@@ -46,7 +47,7 @@ final class MeasurementVoter extends Voter
         }
 
         return match ($attribute) {
-            self::VIEW => true,
+            self::VIEW, self::REPORT_VIEW => true,
             self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EDIT => $subject instanceof BodyMeasurement
                 && $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),

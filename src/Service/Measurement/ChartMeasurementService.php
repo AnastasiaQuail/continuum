@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Service\Measurement;
 
 use Continuum\Dto\Response\Measurement\ChartMeasurement;
+use Continuum\Dto\Response\Measurement\OffsetMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Enum\Change;
@@ -26,6 +27,8 @@ final readonly class ChartMeasurementService
         if ([] === $measurements) {
             return [];
         }
+
+        $month = $month->modify('first day of this month');
 
         $initMeasurement = $this->measurementService->getInitMeasurement($user, $month);
         $initMeasurement ??= array_first($measurements);
@@ -52,5 +55,41 @@ final readonly class ChartMeasurementService
         }
 
         return $chartMeasurements;
+    }
+
+    /**
+     * @param list<ChartMeasurement> $measurements
+     */
+    public function getOffsetMeasurement(array $measurements): OffsetMeasurement
+    {
+        $first = array_first($measurements);
+        $last = array_last($measurements);
+
+        if (null === $first || null === $last) {
+            return new OffsetMeasurement(0, 0, 0);
+        }
+
+        $max = 0;
+        $min = 1000;
+
+        foreach ($measurements as $measurement) {
+            if (0 === $measurement->time) {
+                continue;
+            }
+
+            if ($measurement->weight < $min) {
+                $min = $measurement->weight;
+            }
+
+            if ($measurement->weight > $max) {
+                $max = $measurement->weight;
+            }
+        }
+
+        return new OffsetMeasurement(
+            offset: round($last->weight - $first->weight, 1),
+            min: $min,
+            max: $max,
+        );
     }
 }

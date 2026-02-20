@@ -7,7 +7,7 @@ namespace Continuum\Controller\Workout;
 use Continuum\Entity\User;
 use Continuum\Security\Authorization\Voter\WorkoutVoter;
 use Continuum\Service\RequestValidator;
-use Continuum\Service\Workout\WorkoutExerciseProgressService;
+use Continuum\Service\Workout\WorkoutProgressService;
 use Continuum\Service\Workout\WorkoutService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +22,7 @@ final class IndexController extends AbstractController
     public function __construct(
         private readonly RequestValidator $requestValidator,
         private readonly WorkoutService $workoutService,
-        private readonly WorkoutExerciseProgressService $workoutExerciseProgressService,
+        private readonly WorkoutProgressService $workoutProgressService,
     ) {}
 
     #[Route(path: '/workouts', name: 'app_workouts', methods: ['GET'])]
@@ -43,7 +43,7 @@ final class IndexController extends AbstractController
         }
 
         $workouts = $this->workoutService->getByMonth($user, $month);
-        $progresses = $this->workoutExerciseProgressService->getProgress($workouts);
+        $progresses = $this->workoutProgressService->getProgresses($workouts);
 
         return $this->render('workout/index.html.twig', [
             'month' => $month,

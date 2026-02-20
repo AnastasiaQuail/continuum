@@ -172,15 +172,18 @@
                             'Profile',
                         ) -}}
                     </li>
-                    <li class="nav-item">
-                        {{- _self.sidebar_link(
-                            'app_report_month',
-                            [],
-                            ux_icon('lucide:chart-bar-big'),
-                            'Monthly report',
-                            is_granted('ROLE_SUPER_ADMIN'),
-                        ) -}}
-                    </li>
+                    {%- if true or is_granted('REPORT_MONTH_VIEW') -%}
+                        <li class="nav-item" data-general-type="red">
+                            {{- _self.sidebar_link(
+                                'app_report_month',
+                                [],
+                                ux_icon('lucide:chart-bar-big'),
+                                'Monthly report',
+                                true,
+                                {icon: ux_icon('lucide:badge-info'), type: 'orange'},
+                            ) -}}
+                        </li>
+                    {%- endif -%}
                     {%- if is_granted('ADMIN_USER_VIEW') -%}
                         <li class="nav-item">
                             {{- _self.sidebar_link(
@@ -199,7 +202,7 @@
                                 ux_icon('lucide:database-backup'),
                                 'Backups',
                                 true,
-                                has_backup_alert(),
+                                has_backup_alert() ? {icon: ux_icon('lucide:triangle-alert'), type: 'red'} : null,
                             ) -}}
                         </li>
                     {%- endif -%}
@@ -272,7 +275,7 @@
 </body>
 </html>
 
-{%- macro sidebar_link(path, related_paths, icon, name, is_granted = true, has_alert = false) -%}
+{%- macro sidebar_link(path, related_paths, icon, name, is_granted = true, alert = {}) -%}
     {%- set is_active = false -%}
     {%- for related_path in [path, ...related_paths] -%}
         {%- if app.current_route === related_path -%}
@@ -285,8 +288,8 @@
         class="nav-link {{ is_active ? 'active' }}">
         {{- icon|raw -}}
         <span>{{ name }}</span>
-        {%- if has_alert -%}
-            <span class="nav-icon icon-danger">{{ ux_icon('lucide:triangle-alert') }}</span>
+        {%- if alert -%}
+            <span class="nav-icon" data-general-type="{{ alert.type }}">{{ alert.icon|raw }}</span>
         {%- endif -%}
     </{% if is_granted %}a{% else %}button{% endif %}>
 {%- endmacro -%}
