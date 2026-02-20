@@ -39,11 +39,11 @@ final class MonthController extends AbstractController
     #[Route('/reports', name: 'app_report_month', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, #[MapQueryParameter] ?string $month = null): Response
     {
-        $endDate = new DateTimeImmutable($month ?? '-1 month', $user->timezone)
-            ->modify('last day of this month')->setTime(23, 59, 59);
-        $startDate = $endDate->modify('last day of previous month');
+        $startDate = new DateTimeImmutable($month ?? '-1 month', $user->timezone)
+            ->modify('first day of this month')->setTime(0, 0);
+        $endDate = $startDate->modify('first day of next month');
 
-        if (!$this->isGranted(ReportVoter::MONTH_VIEW, $endDate)) {
+        if (!$this->isGranted(ReportVoter::MONTH_VIEW, $startDate)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -55,20 +55,20 @@ final class MonthController extends AbstractController
         $coupleTogether = $this->coupleService->getTogether($user, $endDate);
         $coupleProgressDays = $coupleTogether->getDays($diff);
 
-        $calendarEvents = $this->calendarEventService->getCountMapBetweenDates($user, $endDate);
+        $calendarEvents = $this->calendarEventService->getCountMapBetweenDates($user, $startDate);
 
-        $moodReflections = $this->moodReflectionService->getByMonth($endDate);
-        $weeklyReflections = array_filter($this->weeklyReflectionService->getByMonth($endDate));
+        $moodReflections = $this->moodReflectionService->getByMonth($startDate);
+        $weeklyReflections = array_filter($this->weeklyReflectionService->getByMonth($startDate));
 
-        $measurements = $this->measurementService->getByMonth($user, $endDate);
-        $chartMeasurements = $this->chartMeasurementService->getChartMeasurements($user, $endDate, $measurements);
+        $measurements = $this->measurementService->getByMonth($user, $startDate);
+        $chartMeasurements = $this->chartMeasurementService->getChartMeasurements($user, $startDate, $measurements);
         $offsetMeasurement = $this->chartMeasurementService->getOffsetMeasurement($chartMeasurements);
 
-        $workouts = $this->workoutService->getByRange($user, $startDate, $endDate);
+        $workouts = $this->workoutService->getByRange($user, $startDate, $endDate->modify('-1 second'));
         $workoutReport = $this->workoutReportService->getReport($workouts);
 
         return $this->render('report/month.html.twig', [
-            'month' => $endDate,
+            'month' => $startDate,
             'progress' => $progress,
             'couple_together' => $coupleTogether,
             'couple_progress_days' => $coupleProgressDays,
