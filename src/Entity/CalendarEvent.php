@@ -12,6 +12,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 #[ORM\Entity(repositoryClass: CalendarEventRepository::class)]
 #[ORM\Table(name: 'calendar_events')]
@@ -39,6 +40,17 @@ final class CalendarEvent
     public function getId(): Uuid
     {
         return $this->id;
+    }
+
+    public function isOlderThan(self $event): bool
+    {
+        /** @var UuidV7 $id */
+        $id = $this->id;
+
+        /** @var UuidV7 $eventId */
+        $eventId = $event->getId();
+
+        return $id->getDateTime() < $eventId->getDateTime();
     }
 
     public function getDatetime(): DateTimeImmutable

@@ -189,7 +189,7 @@ final readonly class DatabaseDumper
     private function doRestore(string $backupFile): void
     {
         $db = $this->getCredentials();
-        $backupPath = sprintf('%s/%s', $this->backupDir, $backupFile);
+        $backupPath = str_starts_with($backupFile, '/') ? $backupFile : sprintf('%s/%s', $this->backupDir, $backupFile);
 
         if (!file_exists($backupPath)) {
             throw new RuntimeException('Backup file was not exists');
