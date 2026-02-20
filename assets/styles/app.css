@@ -1893,11 +1893,14 @@ textarea {
 .collection-empty {
     display: flex;
     column-gap: calc(var(--gap-inline) / 2);
-    padding: var(--gap-block) var(--gap-inline);
     color: color-mix(in oklch, var(--color) 40%, transparent);
     border: var(--border-width) dashed color-mix(in oklch, var(--color) 20%, transparent);
-    border-radius: var(--border-radius);
     user-select: none;
+
+    &:is(:not(.card)) {
+        padding: var(--gap-block) var(--gap-inline);
+        border-radius: var(--border-radius);
+    }
 }
 
 .progress {

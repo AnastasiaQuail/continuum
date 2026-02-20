@@ -41,6 +41,11 @@
                 </div>
             {%- endif -%}
         </section>
+    {%- else -%}
+        <section class="card collection-empty">
+            {{- ux_icon('lucide:heart') -}}
+            <span>The love story has not yet begun</span>
+        </section>
     {%- endif -%}
 
     {%- if (calendar_events is not empty) and is_granted('CALENDAR_REPORT_VIEW') -%}
@@ -53,7 +58,7 @@
                         {%- set events_count = events_count + calendar_event.count -%}
                     {%- endfor -%}
 
-                    {{- events_count ~ ' events' -}}
+                    {{- events_count ~ (events_count > 1 ? ' events' : ' event') -}}
                 </div>
             </div>
 
@@ -191,7 +196,7 @@
                     <h3>Workouts</h3>
                     <div class="card-title-label value-good">
                         <span>+{{ workout_report.count }}</span>
-                        <span>workouts</span>
+                        <span>{{ workout_report.count > 1 ? 'workouts' : 'workout' }}</span>
                     </div>
                     <div class="card-title-info">{{ (workout_report.duration / 3600)|round ~ '+ hours' }}</div>
                 </div>
