@@ -295,3 +295,50 @@ export class TabToggler {
         })
     }
 }
+
+export class EasterEggs {
+    apply() {
+        document.addEventListener('DOMContentLoaded', () => {
+            this.#bird();
+            this.#dog();
+        });
+    }
+
+    #bird() {
+        document.getElementById('footer-bird').onclick = () => {
+            const data = document.documentElement.dataset;
+            const number = Number(data.eggBird ?? 0) + 1;
+
+            data.eggBird = number > 3 ? '0' : number.toString();
+        }
+    }
+
+    /**
+     * @return {HTMLDivElement|null}
+     */
+    #dog() {
+        document.getElementById('footer-dog').onclick = event => {
+            const container = document.querySelector('.body-container');
+            container.classList.add('is-loading');
+
+            fetch(event.currentTarget.dataset.href, {method: 'POST'})
+                .then(response => {
+                    container.classList.remove('is-loading');
+
+                    if (!response.ok) {
+                        throw new Error('Unknown error');
+                    }
+
+                    return response.json();
+                })
+                .then(json => {
+                    const img = document.createElement('img');
+                    img.src = json.href;
+
+                    container.classList.add('container-justify')
+                    container.innerHTML = '';
+                    container.appendChild(img);
+                });
+        }
+    }
+}

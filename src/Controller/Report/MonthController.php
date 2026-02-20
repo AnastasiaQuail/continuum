@@ -36,7 +36,7 @@ final class MonthController extends AbstractController
         private readonly WorkoutReportService $workoutReportService,
     ) {}
 
-    #[Route('/reports', name: 'app_report_month', methods: ['GET'])]
+    #[Route(path: '/reports', name: 'app_report_month', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, #[MapQueryParameter] ?string $month = null): Response
     {
         $startDate = new DateTimeImmutable($month ?? '-1 month', $user->timezone)
