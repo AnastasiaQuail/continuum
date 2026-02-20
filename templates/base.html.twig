@@ -1,10 +1,12 @@
+{%- set is_couple_day = app.user and is_couple_day() -%}
 <!DOCTYPE html>
-<html lang="en" data-timezone="{{ app.user ? app.user.timezone.name }}">
+<html lang="en" data-timezone="{{ app.user?.timezone?.name }}" {%- if is_couple_day %}data-couple-day{% endif %}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}Continuum{% endblock %}</title>
-    <link rel="shortcut icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+    <link rel="shortcut icon" type="image/svg+xml"
+          href="{{ is_couple_day ? asset('favicon-couple-day.svg') : asset('favicon.svg') }}">
     <script>
         Object.keys(localStorage)
             .filter(key => key.startsWith('continuum-ls-'))
