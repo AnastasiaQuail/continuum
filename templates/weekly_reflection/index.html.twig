@@ -23,7 +23,7 @@
                 next: {
                     url: path('app_weekly_reflections', {month: next_month.format('Y-m')}),
                     label: next_month.format('F'),
-                    is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
+                    is_granted: prev_month.format('Y') <= app_year_max and is_granted('WEEKLY_REFLECTION_VIEW', next_month),
                 },
             }) }}
         </div>

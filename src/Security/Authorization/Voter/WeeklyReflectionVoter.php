@@ -49,7 +49,7 @@ final class WeeklyReflectionVoter extends Voter
         return match ($attribute) {
             self::VIEW, self::REPORT_VIEW => $this->isViewGranted($user, $subject),
             self::PRIVATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
-            self::EDIT => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            self::EDIT => $this->isEditGranted($user),
             default => false,
         };
     }
@@ -60,16 +60,31 @@ final class WeeklyReflectionVoter extends Voter
             return true;
         }
 
-        if ($this->security->isGrantedForUser($user, UserRole::Admin->value)) {
-            return true;
-        }
-
         if (!$subject instanceof DateTimeImmutable) {
             return false;
         }
 
         $currentDate = new DateTimeImmutable('now', $user->timezone);
 
-        return $currentDate->format('Y-m') === $subject->format('Y-m');
+        if ($currentDate->format('Y-m') === $subject->format('Y-m')) {
+            return true;
+        }
+
+        // previous months
+        if ($currentDate->format('Y-m') > $subject->format('Y-m')) {
+            return $this->security->isGrantedForUser($user, UserRole::Admin->value);
+        }
+
+        // closest sunday is first week of the next month
+        if ($currentDate->modify('sunday')->format('Y-m') === $subject->format('Y-m')) {
+            return $this->isEditGranted($user);
+        }
+
+        return false;
+    }
+
+    private function isEditGranted(User $user): bool
+    {
+        return $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value);
     }
 }

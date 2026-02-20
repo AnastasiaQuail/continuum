@@ -33,7 +33,7 @@ final class IndexController extends AbstractController
         $month = new DateTimeImmutable($date ?? 'first day of this month', $user->timezone)->setTime(0, 0);
         $currentDate = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);
 
-        if (null !== $error = $this->requestValidator->validateExistenceMonth($month)) {
+        if (null !== $error = $this->requestValidator->validateMonth($month)) {
             throw new BadRequestHttpException($error);
         }
 

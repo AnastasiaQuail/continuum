@@ -25,7 +25,7 @@ final readonly class RequestValidator
         return null;
     }
 
-    public function validateExistenceMonth(DateTimeImmutable $month): ?string
+    public function validateMonth(DateTimeImmutable $month): ?string
     {
         if (null !== $error = $this->validateYear((int) $month->format('Y'))) {
             return $error;
@@ -33,6 +33,15 @@ final readonly class RequestValidator
 
         if ('01:00:00:00' !== $month->format('d:H:i:s')) {
             return 'Wrong month format. Allowed only "Y-m" format.';
+        }
+
+        return null;
+    }
+
+    public function validateExistenceMonth(DateTimeImmutable $month): ?string
+    {
+        if (null !== $error = $this->validateMonth($month)) {
+            return $error;
         }
 
         if (new DateTimeImmutable('now', $month->getTimezone())->format('Y-m') < $month->format('Y-m')) {
