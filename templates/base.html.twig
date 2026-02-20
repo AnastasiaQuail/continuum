@@ -172,7 +172,7 @@
                             'Profile',
                         ) -}}
                     </li>
-                    {%- if true or is_granted('REPORT_MONTH_VIEW') -%}
+                    {%- if is_granted('REPORT_MONTH_VIEW') -%}
                         <li class="nav-item" data-general-type="red">
                             {{- _self.sidebar_link(
                                 'app_report_month',
@@ -180,7 +180,7 @@
                                 ux_icon('lucide:chart-bar-big'),
                                 'Monthly report',
                                 true,
-                                {icon: ux_icon('lucide:badge-info'), type: 'orange'},
+                                user_date().format('j') <= 3 ? {icon: ux_icon('lucide:badge-info'), type: 'orange'} : {},
                             ) -}}
                         </li>
                     {%- endif -%}

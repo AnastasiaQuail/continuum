@@ -60,8 +60,8 @@ final class ReportVoter extends Voter
 
         // Access only during the first three days and only the previous month
         if (
-            (null === $dateMonth || $prevMonth === $dateMonth)
-            && (3 < (int) $currentDate->format('j'))
+            null === $dateMonth || $prevMonth === $dateMonth
+            // && (3 >= (int) $currentDate->format('j'))
         ) {
             return true;
         }
