@@ -44,11 +44,13 @@ final class IndexController extends AbstractController
 
         $measurements = $this->measurementService->getByMonth($user, $month);
         $chartMeasurements = $this->chartMeasurementService->getChartMeasurements($user, $month, $measurements);
+        $offsetMeasurement = $this->chartMeasurementService->getOffsetMeasurement($chartMeasurements);
 
         return $this->render('measurement/index.html.twig', [
             'month' => $month,
             'measurements' => $measurements,
             'chart_measurements' => $chartMeasurements,
+            'offset_measurement' => $offsetMeasurement,
         ]);
     }
 }

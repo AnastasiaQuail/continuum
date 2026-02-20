@@ -764,19 +764,9 @@ textarea {
                     }
 
                     .nav-icon {
-                        --icon-color: var(--color);
-
                         display: inline-flex;
                         margin-left: auto;
-                        color: var(--icon-color);
-
-                        &.icon-danger {
-                            --icon-color: var(--color-red);
-                        }
-
-                        &.icon-warning {
-                            --icon-color: var(--color-orange);
-                        }
+                        color: var(--general-color);
                     }
                 }
 
@@ -850,7 +840,7 @@ textarea {
                     height: var(--font-size-small);
                     width: var(--font-size-small);
                     border-radius: 50%;
-                    background-color: color-mix(in srgb, var(--icon-color) var(--transparent-color-tiny), var(--body-background-color));
+                    background-color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--body-background-color));
                     border: calc(var(--border-width) * 2) solid color-mix(in srgb, var(--nav-link-background-color) var(--nav-link-background-color-transparent), var(--body-background-color));
 
                     & > svg {

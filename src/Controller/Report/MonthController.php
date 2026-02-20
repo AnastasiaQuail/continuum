@@ -5,11 +5,16 @@ declare(strict_types=1);
 namespace Continuum\Controller\Report;
 
 use Continuum\Entity\User;
+use Continuum\Security\Authorization\Voter\ReportVoter;
 use Continuum\Service\Calendar\CalendarEventService;
 use Continuum\Service\Calendar\CalendarProgressService;
 use Continuum\Service\CoupleService;
+use Continuum\Service\Measurement\ChartMeasurementService;
+use Continuum\Service\Measurement\MeasurementService;
 use Continuum\Service\MoodReflectionService;
 use Continuum\Service\WeeklyReflectionService;
+use Continuum\Service\Workout\WorkoutReportService;
+use Continuum\Service\Workout\WorkoutService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,14 +30,22 @@ final class MonthController extends AbstractController
         private readonly CalendarEventService $calendarEventService,
         private readonly MoodReflectionService $moodReflectionService,
         private readonly WeeklyReflectionService $weeklyReflectionService,
+        private readonly MeasurementService $measurementService,
+        private readonly ChartMeasurementService $chartMeasurementService,
+        private readonly WorkoutService $workoutService,
+        private readonly WorkoutReportService $workoutReportService,
     ) {}
 
-    #[Route('/reports/month', name: 'app_report_month', methods: ['GET'])]
+    #[Route('/reports', name: 'app_report_month', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, #[MapQueryParameter] ?string $month = null): Response
     {
         $endDate = new DateTimeImmutable($month ?? '-1 month', $user->timezone)
             ->modify('last day of this month')->setTime(23, 59, 59);
         $startDate = $endDate->modify('last day of previous month');
+
+        if (!$this->isGranted(ReportVoter::MONTH_VIEW, $endDate)) {
+            throw $this->createAccessDeniedException();
+        }
 
         /** @var int $diff */
         $diff = $startDate->diff($endDate)->days;
@@ -47,6 +60,13 @@ final class MonthController extends AbstractController
         $moodReflections = $this->moodReflectionService->getByMonth($endDate);
         $weeklyReflections = array_filter($this->weeklyReflectionService->getByMonth($endDate));
 
+        $measurements = $this->measurementService->getByMonth($user, $endDate);
+        $chartMeasurements = $this->chartMeasurementService->getChartMeasurements($user, $endDate, $measurements);
+        $offsetMeasurement = $this->chartMeasurementService->getOffsetMeasurement($chartMeasurements);
+
+        $workouts = $this->workoutService->getByRange($user, $startDate, $endDate);
+        $workoutReport = $this->workoutReportService->getReport($workouts);
+
         return $this->render('report/month.html.twig', [
             'month' => $endDate,
             'progress' => $progress,
@@ -55,6 +75,8 @@ final class MonthController extends AbstractController
             'calendar_events' => $calendarEvents,
             'mood_reflections' => $moodReflections,
             'weekly_reflections' => $weeklyReflections,
+            'offset_measurement' => $offsetMeasurement,
+            'workout_report' => $workoutReport,
         ]);
     }
 }

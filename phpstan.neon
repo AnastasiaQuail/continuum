@@ -39,8 +39,5 @@ parameters:
 	treatPhpDocTypesAsCertain: false
 	usePathConstantsAsConstantString: true
 
-	ignoreErrors:
-		- identifier: doctrine.finalEntity
-
 rules:
 	- Continuum\Tools\PhpStan\Rule\FileAndDirectoryExistingRule

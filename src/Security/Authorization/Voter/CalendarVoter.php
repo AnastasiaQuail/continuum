@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 final class CalendarVoter extends Voter
 {
     public const string VIEW = 'CALENDAR_VIEW';
+    public const string REPORT_VIEW = 'CALENDAR_REPORT_VIEW';
     public const string UPCOMING = 'CALENDAR_UPCOMING_EVENTS';
     public const string EDIT = 'CALENDAR_EDIT';
     public const string EVENT_DELETE = 'CALENDAR_EVENT_DELETE';
@@ -29,10 +30,17 @@ final class CalendarVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return self::VIEW === $attribute
-            || self::UPCOMING === $attribute
-            || self::EDIT === $attribute
-            || self::EVENT_DELETE === $attribute;
+        return in_array(
+            $attribute,
+            [
+                self::VIEW,
+                self::REPORT_VIEW,
+                self::UPCOMING,
+                self::EDIT,
+                self::EVENT_DELETE,
+            ],
+            true
+        );
     }
 
     #[Override]
@@ -49,8 +57,8 @@ final class CalendarVoter extends Voter
         }
 
         return match ($attribute) {
-            self::VIEW => true,
-            self::UPCOMING, self::EDIT => $this->security->isGrantedForUser($user, UserRole::Admin->value),
+            self::VIEW, self::REPORT_VIEW, self::UPCOMING => true,
+            self::EDIT => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EVENT_DELETE => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
             default => false,
         };
