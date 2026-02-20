@@ -30,37 +30,33 @@ final class WeeklyReflectionServiceTest extends TestCase
     }
 
     /**
-     * @param list<WeeklyReflection> $weeklyReflections
+     * @param list<DateTimeImmutable> $expectDates
+     * @param list<WeeklyReflection> $expectWeeklyReflections
      */
     #[DataProvider('provideGetByMonthCases')]
-    public function testGetByMonth(DateTimeImmutable $month, array $weeklyReflections): void
-    {
-        $dates = [];
-        $sunday = $month->modify('sunday');
-        $endDate = $month->modify('+1 month');
-
-        do {
-            $dates[] = $sunday;
-            $sunday = $sunday->modify('+1 week');
-        } while ($sunday < $endDate);
-
+    public function testGetByMonth(
+        DateTimeImmutable $month,
+        ?DateTimeImmutable $currentDate,
+        array $expectDates,
+        array $expectWeeklyReflections
+    ): void {
         $this->repository->expects($this->once())->method('findByDays')
-            ->with(...$dates)->willReturn($weeklyReflections);
+            ->with(...$expectDates)->willReturn($expectWeeklyReflections);
 
-        $foundWeeklyReflections = $this->service->getByMonth($month);
+        $foundWeeklyReflections = $this->service->getByMonth($month, $currentDate);
 
-        self::assertCount(count($dates), $foundWeeklyReflections);
+        self::assertCount(count($expectDates), $foundWeeklyReflections);
         self::assertSame(
             array_map(
                 static fn (DateTimeImmutable $date): string => $date->format('Y-m-d'),
-                $dates,
+                $expectDates,
             ),
             array_keys($foundWeeklyReflections),
         );
         self::assertSame(
             array_map(
                 static fn (WeeklyReflection $wr): string => $wr->date->format('Y-m-d'),
-                $weeklyReflections,
+                $expectWeeklyReflections,
             ),
             array_map(
                 static fn (WeeklyReflection $fwr): string => $fwr->date->format('Y-m-d'),
@@ -70,21 +66,35 @@ final class WeeklyReflectionServiceTest extends TestCase
     }
 
     /**
-     * @return iterable<array{0: DateTimeImmutable, 1: list<WeeklyReflection>}>
+     * @return iterable<array{
+     *     0: DateTimeImmutable,
+     *     1: null|DateTimeImmutable,
+     *     2: list<DateTimeImmutable>,
+     *     3: list<WeeklyReflection>
+     * }>
      */
     public static function provideGetByMonthCases(): iterable
     {
         yield [
-            $month = new DateTimeImmutable('2025-11-01'),
+            // saturday
+            new DateTimeImmutable('2025-11-01'),
+            null,
+            [
+                new DateTimeImmutable('2025-11-02'),
+                new DateTimeImmutable('2025-11-09'),
+                new DateTimeImmutable('2025-11-16'),
+                new DateTimeImmutable('2025-11-23'),
+                new DateTimeImmutable('2025-11-30'),
+            ],
             [
                 new WeeklyReflection(
-                    $month->modify('+8 days')->modify('sunday'),
+                    new DateTimeImmutable('2025-11-09'),
                     new TextField('-'),
                     new TextField('-'),
                     new TextField('-'),
                 ),
                 new WeeklyReflection(
-                    $month->modify('+20 days')->modify('sunday'),
+                    new DateTimeImmutable('2025-11-23'),
                     new TextField('-'),
                     new TextField('-'),
                     new TextField('-'),
@@ -93,20 +103,56 @@ final class WeeklyReflectionServiceTest extends TestCase
         ];
 
         yield [
+            // monday
+            new DateTimeImmutable('2025-12-01'),
+            null,
+            [
+                new DateTimeImmutable('2025-12-07'),
+                new DateTimeImmutable('2025-12-14'),
+                new DateTimeImmutable('2025-12-21'),
+                new DateTimeImmutable('2025-12-28'),
+            ],
+            [
+                new WeeklyReflection(
+                    new DateTimeImmutable('2025-12-21'),
+                    new TextField('-'),
+                    new TextField('-'),
+                    new TextField('-'),
+                ),
+            ],
+        ];
+
+        yield [
+            // monday
+            new DateTimeImmutable('2025-12-01'),
+            // tuesday
+            new DateTimeImmutable('2025-12-16'),
+            [
+                new DateTimeImmutable('2025-12-07'),
+                new DateTimeImmutable('2025-12-14'),
+                new DateTimeImmutable('2025-12-21'),
+            ],
+            [
+                new WeeklyReflection(
+                    new DateTimeImmutable('2025-12-14'),
+                    new TextField('-'),
+                    new TextField('-'),
+                    new TextField('-'),
+                ),
+            ],
+        ];
+
+        yield [
+            // thursday
             new DateTimeImmutable('2026-01-01'),
-            [],
-        ];
-
-        yield [
-            $month = new DateTimeImmutable('2025-12-01'),
+            null,
             [
-                new WeeklyReflection(
-                    $month->modify('+15 days')->modify('sunday'),
-                    new TextField('-'),
-                    new TextField('-'),
-                    new TextField('-'),
-                ),
+                new DateTimeImmutable('2026-01-04'),
+                new DateTimeImmutable('2026-01-11'),
+                new DateTimeImmutable('2026-01-18'),
+                new DateTimeImmutable('2026-01-25'),
             ],
+            [],
         ];
     }
 

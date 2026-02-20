@@ -31,6 +31,7 @@ final class IndexController extends AbstractController
         ?string $date = null,
     ): Response {
         $month = new DateTimeImmutable($date ?? 'first day of this month', $user->timezone)->setTime(0, 0);
+        $currentDate = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);
 
         if (null !== $error = $this->requestValidator->validateExistenceMonth($month)) {
             throw new BadRequestHttpException($error);
@@ -40,7 +41,7 @@ final class IndexController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $weeklyReflections = $this->weeklyReflectionService->getByMonth($month);
+        $weeklyReflections = $this->weeklyReflectionService->getByMonth($month, $currentDate);
 
         return $this->render('weekly_reflection/index.html.twig', [
             'month' => $month,
