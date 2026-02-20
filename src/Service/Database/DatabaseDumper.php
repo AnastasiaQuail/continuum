@@ -49,7 +49,7 @@ final readonly class DatabaseDumper
             $backups[] = new BackupFile(
                 name: $file->getFilename(),
                 size: false !== $size ? $size : 0,
-                date: new DateTimeImmutable(sprintf('@%d', false !== $date ? $date : 0)),
+                date: DateTimeImmutable::createFromTimestamp(false !== $date ? $date : 0),
             );
         }
 
@@ -119,20 +119,22 @@ final readonly class DatabaseDumper
     private function getLastBackupTime(): ?DateTimeImmutable
     {
         try {
-            $finder = $this->getFinder()->sortByModifiedTime();
+            $finder = $this->getFinder();
         } catch (DirectoryNotFoundException) {
             return null;
         }
 
-        /** @var SplFileInfo $file */
-        $file = $finder->getIterator()->current();
-        $time = $file->getMTime();
+        $file = array_last(iterator_to_array($finder));
 
-        if (false === $time) {
-            throw new RuntimeException('Unable to retrieve last backup time');
+        if (!$file instanceof SplFileInfo) {
+            return null;
         }
 
-        return DateTimeImmutable::createFromTimestamp($time);
+        if (false !== $time = $file->getMTime()) {
+            return DateTimeImmutable::createFromTimestamp($time);
+        }
+
+        throw new RuntimeException('Unable to retrieve last backup time');
     }
 
     /**
