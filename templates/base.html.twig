@@ -262,12 +262,17 @@
                 <div class="footer-datetime">{{ user_date().format('j F, H:i') }}</div>
                 <div class="footer-controls">
                     {%- if app.debug and is_granted('ROLE_SUPER_ADMIN') -%}
-                        <div class="footer-toolbar" id="footer-toolbar">
+                        <div class="footer-control" id="footer-toolbar">
                             {{- ux_icon('lucide:database') -}}
                             <span>0</span>
                         </div>
                     {%- endif -%}
-                    <div class="footer-bird" id="footer-bird">{{ ux_icon('lucide:bird') }}{{ bird_name() }}</div>
+                    <div class="footer-control" id="footer-dog" data-href="{{ path('app_easter_egg_dog') }}">
+                        {{- ux_icon('lucide:dog') -}}
+                    </div>
+                    <div class="footer-control footer-control-bird" id="footer-bird">
+                        {{- ux_icon('lucide:bird') }}{{ bird_name() -}}
+                    </div>
                 </div>
             </footer>
         {%- endblock -%}

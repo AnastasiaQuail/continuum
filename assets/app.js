@@ -11,6 +11,7 @@ new Services.FlashMessages().show('#body-messages');
 new Services.CalendarUpcomingEventsToggler('#calendar-upcoming-events');
 new Services.InputWrapper().apply();
 new Services.TabToggler().apply();
+new Services.EasterEggs().apply();
 
 /**
  * @param {HTMLElement} element
@@ -42,12 +43,5 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             buildToolbar();
         }
-    }
-
-    document.getElementById('footer-bird').onclick = () => {
-        const data = document.documentElement.dataset;
-        const number = Number(data.eggBird ?? 0) + 1;
-
-        data.eggBird = number > 3 ? '0' : number.toString();
     }
 });

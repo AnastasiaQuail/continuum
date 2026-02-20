@@ -9,6 +9,9 @@ use Continuum\Component\Weather\Dto\Wind;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * @see https://open-meteo.com/en/docs
+ */
 final readonly class OpenMeteoClient
 {
     private const string API_URL = 'https://api.open-meteo.com';
@@ -70,7 +73,7 @@ final readonly class OpenMeteoClient
      *
      * @return array<string, mixed>
      */
-    public function sendRequest(string $path, array $params = []): array
+    private function sendRequest(string $path, array $params = []): array
     {
         $response = $this->client->request('GET', self::API_URL . $path . '?' . http_build_query($params));
 
