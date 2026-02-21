@@ -2754,6 +2754,8 @@ textarea {
     }
 
     &.weekly-reflection-form {
+        flex-direction: column;
+
         .alert {
             gap: calc(var(--gap-block) / 1.5);
 
