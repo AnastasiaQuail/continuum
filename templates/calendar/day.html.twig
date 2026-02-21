@@ -35,7 +35,9 @@
                         </form>
                     </div>
 
-                    <div class="calendar-event-created-at">Added {{ event.id.datetime.format('j F Y, H:i') }}</div>
+                    <div class="calendar-event-created-at">
+                        {{- 'Added ' ~ event.id.datetime.setTimezone(app.user.timezone).format('j F Y, H:i') -}}
+                    </div>
                 </div>
             {%- endfor -%}
         </section>
