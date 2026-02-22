@@ -28,10 +28,10 @@ final class EditMoodReflectionType extends AbstractImmutableType
         $builder->setDataMapper($this)
             ->add('type', EnumType::class, [
                 'class' => MoodType::class,
-                'data' => $moodReflection?->getType() ?? MoodType::Okay,
+                'data' => $moodReflection?->type ?? MoodType::Okay,
             ])
             ->add('text', null, [
-                'data' => $moodReflection?->getText() ?? '',
+                'data' => $moodReflection?->text ?? '',
                 'attr' => [
                     'autocomplete' => 'off',
                 ],

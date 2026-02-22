@@ -28,7 +28,7 @@ final readonly class ChartMoodReflectionService
             }
 
             $charts[] = $prevChart = new ChartMoodReflection(
-                type: match ($moodReflection->getType()) {
+                type: match ($moodReflection->type) {
                     MoodType::Terrible => 1,
                     MoodType::Bad => 2,
                     MoodType::Okay => 3,
@@ -36,8 +36,8 @@ final readonly class ChartMoodReflectionService
                     MoodType::Great => 5,
                 },
                 prevTime: $prevChart?->time,
-                time: $moodReflection->getDate()->getTimestamp() - $date->getTimestamp(),
-                color: $moodReflection->getType()->getColor(),
+                time: $moodReflection->date->getTimestamp() - $date->getTimestamp(),
+                color: $moodReflection->type->getColor(),
             );
         }
 
