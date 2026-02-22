@@ -35,7 +35,7 @@ final class CreateController extends AbstractController
             /** @var EditMeasurement $dto */
             $dto = $form->getData();
             $measurement = $this->measurementService->save($user, null, $dto);
-            $datetime = $measurement->getDatetime()->setTimezone($user->timezone);
+            $datetime = $measurement->datetime->setTimezone($user->timezone);
 
             $this->addFlash('success', sprintf('The "%s" measurement was created', $datetime->format('j F H:i')));
 
