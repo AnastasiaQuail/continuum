@@ -9,11 +9,12 @@ use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
+use Override;
 
 /**
  * @extends ServiceEntityRepository<MoodReflection>
  */
-final class MoodReflectionRepository extends ServiceEntityRepository
+final class MoodReflectionRepository extends ServiceEntityRepository implements MoodReflectionRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -23,6 +24,7 @@ final class MoodReflectionRepository extends ServiceEntityRepository
     /**
      * @return list<MoodReflection>
      */
+    #[Override]
     public function findPreviousDays(int $days): array
     {
         return $this->findBetweenDates(
@@ -34,6 +36,7 @@ final class MoodReflectionRepository extends ServiceEntityRepository
     /**
      * @return list<MoodReflection>
      */
+    #[Override]
     public function findByMonth(DateTimeImmutable $month): array
     {
         return $this->findBetweenDates(
@@ -46,11 +49,13 @@ final class MoodReflectionRepository extends ServiceEntityRepository
         );
     }
 
+    #[Override]
     public function findOneByDay(DateTimeImmutable $day): ?MoodReflection
     {
         return $this->findOneBy(['date' => $day]);
     }
 
+    #[Override]
     public function save(MoodReflection $moodReflection): void
     {
         $this->getEntityManager()->persist($moodReflection);

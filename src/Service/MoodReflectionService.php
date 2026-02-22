@@ -6,7 +6,7 @@ namespace Continuum\Service;
 
 use Continuum\Dto\Request\Reflection\EditMoodReflection;
 use Continuum\Entity\MoodReflection;
-use Continuum\Repository\MoodReflectionRepository;
+use Continuum\Repository\MoodReflectionRepositoryInterface;
 use DateTimeImmutable;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -15,7 +15,7 @@ final readonly class MoodReflectionService
     public function __construct(
         #[Autowire(param: 'app.reflection.mood_trend.days')]
         private int $trendDuration,
-        private MoodReflectionRepository $repository,
+        private MoodReflectionRepositoryInterface $repository,
     ) {}
 
     /**
