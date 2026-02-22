@@ -21,48 +21,18 @@ final class MoodReflection
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     #[ORM\Column(enumType: MoodType::class)]
-    private MoodType $type = MoodType::Okay;
+    public MoodType $type = MoodType::Okay;
 
     #[ORM\Column(length: 255)]
-    private string $text = '';
+    public string $text = '';
 
     public function __construct(
         #[ORM\Column(type: Types::DATE_IMMUTABLE)]
-        private readonly DateTimeImmutable $date,
+        public readonly DateTimeImmutable $date,
     ) {
         $this->id = Uuid::v7();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getDate(): DateTimeImmutable
-    {
-        return $this->date;
-    }
-
-    public function getType(): MoodType
-    {
-        return $this->type;
-    }
-
-    public function setType(MoodType $type): void
-    {
-        $this->type = $type;
-    }
-
-    public function getText(): string
-    {
-        return $this->text;
-    }
-
-    public function setText(string $text): void
-    {
-        $this->text = $text;
     }
 }

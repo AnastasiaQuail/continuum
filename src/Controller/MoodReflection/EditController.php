@@ -48,7 +48,7 @@ final class EditController extends AbstractController
 
             $this->addFlash(
                 'success',
-                sprintf('The mood for %s was saved.', $moodReflection->getDate()->format('j F'))
+                sprintf('The mood for %s was saved.', $moodReflection->date->format('j F'))
             );
 
             return $this->redirectToRoute('app_mood_reflections', ['month' => $day->format('Y-m')]);

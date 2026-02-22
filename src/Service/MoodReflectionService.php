@@ -6,7 +6,7 @@ namespace Continuum\Service;
 
 use Continuum\Dto\Request\Reflection\EditMoodReflection;
 use Continuum\Entity\MoodReflection;
-use Continuum\Repository\MoodReflectionRepository;
+use Continuum\Repository\MoodReflectionRepositoryInterface;
 use DateTimeImmutable;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
@@ -15,7 +15,7 @@ final readonly class MoodReflectionService
     public function __construct(
         #[Autowire(param: 'app.reflection.mood_trend.days')]
         private int $trendDuration,
-        private MoodReflectionRepository $repository,
+        private MoodReflectionRepositoryInterface $repository,
     ) {}
 
     /**
@@ -32,8 +32,7 @@ final readonly class MoodReflectionService
         }
 
         foreach ($this->repository->findPreviousDays($days) as $mood) {
-            $date = $mood->getDate()->format('Y-m-d');
-            $moods[$date] = $mood;
+            $moods[$mood->date->format('Y-m-d')] = $mood;
         }
 
         return $moods;
@@ -46,7 +45,7 @@ final readonly class MoodReflectionService
     {
         $moods = [];
         foreach ($this->repository->findByMonth($date) as $mood) {
-            $moods[$mood->getDate()->format('Y-m-d')] = $mood;
+            $moods[$mood->date->format('Y-m-d')] = $mood;
         }
 
         return $moods;
@@ -60,8 +59,8 @@ final readonly class MoodReflectionService
     public function save(DateTimeImmutable $day, ?MoodReflection $mood, EditMoodReflection $dto): MoodReflection
     {
         $mood ??= new MoodReflection($day);
-        $mood->setType($dto->type);
-        $mood->setText($dto->text);
+        $mood->type = $dto->type;
+        $mood->text = $dto->text;
 
         $this->repository->save($mood);
 
