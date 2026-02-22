@@ -62,7 +62,7 @@ final class AppFixtures extends Fixture
                 UserStatus::Active,
                 [UserRole::SuperAdmin],
                 new DateTimeZone('Asia/Istanbul'),
-                new Location('41.006381', '28.975872'),
+                new Location(41.006381, 28.975872),
             ],
             [
                 'admin@continuum.com',
@@ -70,7 +70,7 @@ final class AppFixtures extends Fixture
                 UserStatus::Active,
                 [UserRole::Admin],
                 new DateTimeZone('Europe/Berlin'),
-                new Location('52.517389', '13.395131'),
+                new Location(52.517389, 13.395131),
             ],
             [
                 'user@continuum.com',

@@ -20,7 +20,7 @@ final readonly class WeatherService
         $weather = $this->cache->get($location);
 
         if (null === $weather) {
-            $weather = $this->client->getCurrent($location->getLatitude(), $location->getLongitude());
+            $weather = $this->client->getCurrent($location->latitude, $location->longitude);
 
             $this->cache->save($location, $weather);
         }

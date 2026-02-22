@@ -167,7 +167,10 @@
             "@putenv DATABASE_PREPARE=1",
             "@composer tests"
         ],
-        "tests:coverage": "@tests --coverage-html src-coverage/",
+        "tests:coverage": [
+            "@putenv XDEBUG_MODE=coverage",
+            "@tests --coverage-html src-coverage/"
+        ],
         "twig-cs": [
             "@php bin/console lint:twig --show-deprecations",
             "@php vendor/bin/twig-cs-fixer lint"

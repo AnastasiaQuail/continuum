@@ -49,6 +49,19 @@ final class LastVisitListenerTest extends KernelTestCase
         );
     }
 
+    public function testInvokeNotMainRequest(): void
+    {
+        $subRequestEvent = new RequestEvent(
+            kernel: $this->event->getKernel(),
+            request: $this->event->getRequest(),
+            requestType: HttpKernelInterface::SUB_REQUEST,
+        );
+        $this->buildUser(new DateTimeImmutable('-10 minutes'));
+        $this->userRepository->expects($this->never())->method('updateLastVisitedAt');
+
+        $this->listener->__invoke($subRequestEvent);
+    }
+
     public function testInvokeNotAuthenticated(): void
     {
         $this->userRepository->expects($this->never())->method('updateLastVisitedAt');

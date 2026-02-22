@@ -6,7 +6,6 @@ namespace Continuum\Service;
 
 use Continuum\Dto\Response\CoupleInformation;
 use Continuum\Dto\Response\CoupleTogetherInformation;
-use Continuum\Entity\Location;
 use Continuum\Entity\User;
 use Continuum\Service\Weather\WeatherService;
 use DateTimeImmutable;
@@ -43,7 +42,7 @@ final readonly class CoupleService
             partnerWeather: $partnerUserWeather,
             partnerTime: new DateTimeImmutable('now', $partnerUser->timezone),
             together: $this->getTogether(),
-            distance: $this->getDistance($user->location, $partnerUser->location),
+            distance: $user->location->getDistance($partnerUser->location),
         );
     }
 
@@ -60,14 +59,5 @@ final readonly class CoupleService
         return new CoupleTogetherInformation(
             new DateTimeImmutable($this->startDate, $user->timezone)->diff($date->setTime(0, 0))
         );
-    }
-
-    private function getDistance(Location $location, Location $partnerLocation): float
-    {
-        $a = sin((deg2rad($partnerLocation->getLatitude()) - deg2rad($location->getLatitude())) / 2) ** 2
-            + cos(deg2rad($partnerLocation->getLatitude())) * cos(deg2rad($location->getLatitude()))
-            * sin((deg2rad($partnerLocation->getLongitude()) - deg2rad($location->getLongitude())) / 2) ** 2;
-
-        return 6371 * 2 * atan2(sqrt($a), sqrt(1 - $a));
     }
 }
