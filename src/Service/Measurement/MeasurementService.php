@@ -8,7 +8,7 @@ use Continuum\Dto\Request\Measurement\EditMeasurement;
 use Continuum\Dto\Response\Measurement\LastMeasurement;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
-use Continuum\Repository\BodyMeasurementRepository;
+use Continuum\Repository\BodyMeasurementRepositoryInterface;
 use Continuum\Service\GodUserService;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -17,7 +17,7 @@ final readonly class MeasurementService
 {
     public function __construct(
         private GodUserService $userService,
-        private BodyMeasurementRepository $repository,
+        private BodyMeasurementRepositoryInterface $repository,
     ) {}
 
     /**
@@ -75,16 +75,16 @@ final readonly class MeasurementService
             );
         }
 
-        $measurement->setDatetime($dto->datetime->setTimezone(new DateTimeZone('UTC')));
-        $measurement->setWeight($dto->weight);
-        $measurement->setNeck($dto->neck);
-        $measurement->setChest($dto->chest);
-        $measurement->setShoulders($dto->shoulders);
-        $measurement->setWaist($dto->waist);
-        $measurement->setFlexedBiceps($dto->flexedBiceps);
-        $measurement->setHips($dto->hips);
-        $measurement->setThigh($dto->thigh);
-        $measurement->setCalf($dto->calf);
+        $measurement->datetime = $dto->datetime->setTimezone(new DateTimeZone('UTC'));
+        $measurement->weight = $dto->weight;
+        $measurement->neck = $dto->neck;
+        $measurement->chest = $dto->chest;
+        $measurement->shoulders = $dto->shoulders;
+        $measurement->waist = $dto->waist;
+        $measurement->flexedBiceps = $dto->flexedBiceps;
+        $measurement->hips = $dto->hips;
+        $measurement->thigh = $dto->thigh;
+        $measurement->calf = $dto->calf;
 
         $this->repository->save($measurement);
 

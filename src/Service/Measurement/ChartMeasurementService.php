@@ -33,22 +33,22 @@ final readonly class ChartMeasurementService
 
         $chartMeasurements = [
             $prevChartMeasurement = ChartMeasurement::first(
-                $initMeasurement->getFatDeurenberg(),
-                $initMeasurement->getWeight()
+                $initMeasurement->fatDeurenberg,
+                $initMeasurement->weight
             ),
         ];
 
         foreach ($measurements as $measurement) {
             $chartMeasurements[] = $prevChartMeasurement = new ChartMeasurement(
                 type: match (true) {
-                    $prevChartMeasurement->fat < $measurement->getFatDeurenberg() => Change::Increased,
-                    $prevChartMeasurement->fat > $measurement->getFatDeurenberg() => Change::Decreased,
+                    $prevChartMeasurement->fat < $measurement->fatDeurenberg => Change::Increased,
+                    $prevChartMeasurement->fat > $measurement->fatDeurenberg => Change::Decreased,
                     default => Change::Unchanged,
                 },
                 prevTime: $prevChartMeasurement->time,
-                time: $measurement->getDatetime()->getTimestamp() - $month->getTimestamp(),
-                fat: $measurement->getFatDeurenberg(),
-                weight: $measurement->getWeight(),
+                time: $measurement->datetime->getTimestamp() - $month->getTimestamp(),
+                fat: $measurement->fatDeurenberg,
+                weight: $measurement->weight,
             );
         }
 

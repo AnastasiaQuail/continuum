@@ -11,11 +11,12 @@ use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
+use Override;
 
 /**
  * @extends ServiceEntityRepository<BodyMeasurement>
  */
-final class BodyMeasurementRepository extends ServiceEntityRepository
+final class BodyMeasurementRepository extends ServiceEntityRepository implements BodyMeasurementRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -25,6 +26,7 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
     /**
      * @return list<BodyMeasurement>
      */
+    #[Override]
     public function findByRange(DateTimeImmutable $from, DateTimeImmutable $to): array
     {
         return $this->createQueryBuilder('bm')
@@ -36,6 +38,7 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    #[Override]
     public function findOneLastByMonth(DateTimeImmutable $month, DateTimeZone $timeZone): ?BodyMeasurement
     {
         $from = new DateTimeImmutable(
@@ -61,6 +64,7 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
         return $result;
     }
 
+    #[Override]
     public function findOneLastWithNotNull(): LastMeasurement
     {
         $sql = <<<'SQL'
@@ -83,13 +87,10 @@ final class BodyMeasurementRepository extends ServiceEntityRepository
             ->executeQuery($sql)
             ->fetchAssociative();
 
-        foreach ($row as $field => $value) {
-            $row[$field] = round($value / ('weight' === $field ? 1000 : 10), 1);
-        }
-
         return new LastMeasurement(...array_values($row));
     }
 
+    #[Override]
     public function save(BodyMeasurement $measurement): void
     {
         $this->getEntityManager()->persist($measurement);

@@ -7,7 +7,7 @@ namespace Continuum\Dto\Response\Measurement;
 final readonly class LastMeasurement
 {
     public function __construct(
-        public ?float $weight = null,
+        public float $weight,
         public ?float $neck = null,
         public ?float $chest = null,
         public ?float $shoulders = null,

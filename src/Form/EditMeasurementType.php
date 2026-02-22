@@ -42,9 +42,11 @@ final class EditMeasurementType extends AbstractImmutableType
             throw new LogicException('User must be authenticated.');
         }
 
+        $datetime = null !== $measurement ? $measurement->datetime : new DateTimeImmutable('now');
+
         $builder->setDataMapper($this)
             ->add('datetime', DateTimeType::class, [
-                'data' => ($measurement?->getDatetime() ?? new DateTimeImmutable('now'))->setTimezone($user->timezone),
+                'data' => $datetime->setTimezone($user->timezone),
                 'model_timezone' => $user->timezone->getName(),
                 'view_timezone' => $user->timezone->getName(),
                 'input' => 'datetime_immutable',
@@ -64,7 +66,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 ],
             ])
             ->add('weight', MeasurementType::class, [
-                'data' => $measurement?->getWeight(),
+                'data' => $measurement?->weight,
                 'data-prev' => $lastMeasurement?->weight,
                 'help' => $this->getHelp($lastMeasurement?->weight, 'kg'),
                 'min' => EditMeasurement::WEIGHT_MIN,
@@ -76,7 +78,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 ],
             ])
             ->add('neck', MeasurementType::class, [
-                'data' => $measurement?->getNeck(),
+                'data' => $measurement?->neck,
                 'data-prev' => $lastMeasurement?->neck,
                 'help' => $this->getHelp($lastMeasurement?->neck),
                 'min' => EditMeasurement::NECK_MIN,
@@ -85,7 +87,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'required' => false,
             ])
             ->add('chest', MeasurementType::class, [
-                'data' => $measurement?->getChest(),
+                'data' => $measurement?->chest,
                 'data-prev' => $lastMeasurement?->chest,
                 'help' => $this->getHelp($lastMeasurement?->chest),
                 'min' => EditMeasurement::CHEST_MIN,
@@ -94,7 +96,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'required' => false,
             ])
             ->add('shoulders', MeasurementType::class, [
-                'data' => $measurement?->getShoulders(),
+                'data' => $measurement?->shoulders,
                 'data-prev' => $lastMeasurement?->shoulders,
                 'help' => $this->getHelp($lastMeasurement?->shoulders),
                 'min' => EditMeasurement::SHOULDERS_MIN,
@@ -103,7 +105,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'required' => false,
             ])
             ->add('waist', MeasurementType::class, [
-                'data' => $measurement?->getWaist(),
+                'data' => $measurement?->waist,
                 'data-prev' => $lastMeasurement?->waist,
                 'help' => $this->getHelp($lastMeasurement?->waist),
                 'min' => EditMeasurement::WAIST_MIN,
@@ -112,7 +114,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'required' => false,
             ])
             ->add('flexedBiceps', MeasurementType::class, [
-                'data' => $measurement?->getFlexedBiceps(),
+                'data' => $measurement?->flexedBiceps,
                 'data-prev' => $lastMeasurement?->flexedBiceps,
                 'help' => $this->getHelp($lastMeasurement?->flexedBiceps),
                 'min' => EditMeasurement::BICEPS_MIN,
@@ -121,7 +123,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'required' => false,
             ])
             ->add('hips', MeasurementType::class, [
-                'data' => $measurement?->getHips(),
+                'data' => $measurement?->hips,
                 'data-prev' => $lastMeasurement?->hips,
                 'help' => $this->getHelp($lastMeasurement?->hips),
                 'min' => EditMeasurement::HIPS_MIN,
@@ -130,7 +132,7 @@ final class EditMeasurementType extends AbstractImmutableType
                 'required' => false,
             ])
             ->add('thigh', MeasurementType::class, [
-                'data' => $measurement?->getThigh(),
+                'data' => $measurement?->thigh,
                 'data-prev' => $lastMeasurement?->thigh,
                 'help' => $this->getHelp($lastMeasurement?->thigh),
                 'min' => EditMeasurement::THIGH_MIN,
@@ -139,9 +141,9 @@ final class EditMeasurementType extends AbstractImmutableType
                 'required' => false,
             ])
             ->add('calf', MeasurementType::class, [
-                'data' => $measurement?->getCalf(),
-                'data-prev' => $lastMeasurement?->thigh,
-                'help' => $this->getHelp($lastMeasurement?->thigh),
+                'data' => $measurement?->calf,
+                'data-prev' => $lastMeasurement?->calf,
+                'help' => $this->getHelp($lastMeasurement?->calf),
                 'min' => EditMeasurement::CALF_MIN,
                 'max' => EditMeasurement::CALF_MAX,
                 'postfix' => 'cm',
