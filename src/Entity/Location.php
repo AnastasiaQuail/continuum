@@ -8,22 +8,25 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Embeddable]
-final readonly class Location
+final class Location
 {
     public function __construct(
-        #[ORM\Column(type: Types::DECIMAL, precision: 9, scale: 6, options: ['default' => 0])]
-        private string $latitude,
-        #[ORM\Column(type: Types::DECIMAL, precision: 9, scale: 6, options: ['default' => 0])]
-        private string $longitude,
+        #[ORM\Column(type: Types::FLOAT)]
+        public private(set) float $latitude {
+            set => round($value, 6);
+        },
+        #[ORM\Column(type: Types::FLOAT)]
+        public private(set) float $longitude {
+            set => round($value, 6);
+        },
     ) {}
 
-    public function getLatitude(): float
+    public function getDistance(self $location): float
     {
-        return (float) $this->latitude;
-    }
+        $a = sin((deg2rad($this->latitude) - deg2rad($location->latitude)) / 2) ** 2
+            + cos(deg2rad($this->latitude)) * cos(deg2rad($location->latitude))
+            * sin((deg2rad($this->longitude) - deg2rad($location->longitude)) / 2) ** 2;
 
-    public function getLongitude(): float
-    {
-        return (float) $this->longitude;
+        return 6371 * 2 * atan2(sqrt($a), sqrt(1 - $a));
     }
 }

@@ -96,8 +96,8 @@ final class UserServiceTest extends TestCase
 
         $this->service->updateLocation($user, $dto);
 
-        self::assertSame($dto->latitude, $user->location->getLatitude());
-        self::assertSame($dto->longitude, $user->location->getLongitude());
+        self::assertSame($dto->latitude, $user->location->latitude);
+        self::assertSame($dto->longitude, $user->location->longitude);
     }
 
     public function testUpdate(): void

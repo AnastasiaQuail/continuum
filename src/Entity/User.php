@@ -83,7 +83,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
         $this->updatedAt = $this->createdAt;
         $this->lastVisitedAt = $this->createdAt;
         $this->timezoneName = date_default_timezone_get();
-        $this->location = new Location('0.0', '0.0');
+        $this->location = new Location(0.0, 0.0);
     }
 
     /**

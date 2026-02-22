@@ -8,12 +8,14 @@ use Continuum\Entity\Location;
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
 use Continuum\Security\User\UserStatus;
+use DateTimeImmutable;
 use DateTimeZone;
 use InvalidArgumentException;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\UuidV7;
 
@@ -36,8 +38,39 @@ final class UserTest extends TestCase
         self::assertSame($user->createdAt->getTimestamp(), $user->updatedAt->getTimestamp());
         self::assertSame($user->createdAt->getTimestamp(), $user->lastVisitedAt->getTimestamp());
         self::assertSame(date_default_timezone_get(), $user->timezone->getName());
-        self::assertSame(0.0, $user->location->getLatitude());
-        self::assertSame(0.0, $user->location->getLongitude());
+        self::assertSame(0.0, $user->location->latitude);
+        self::assertSame(0.0, $user->location->longitude);
+    }
+
+    public function testSerialize(): void
+    {
+        $location = new Location(100.12, -50.80);
+
+        $user = new User('email@example.com');
+        $user->password = 'hashed_password';
+        $user->status = UserStatus::Active;
+        $user->addRole(UserRole::Admin);
+        $user->timezone = new DateTimeZone('Africa/Tunis');
+        $user->location = $location;
+
+        $data = $user->__serialize();
+
+        self::assertSame(
+            [
+                'id' => $user->id,
+                'password' => 'hashed_password',
+                'status' => UserStatus::Active,
+                'roles' => [UserRole::User->value, UserRole::Admin->value],
+                'createdAt' => $user->createdAt,
+                'updatedAt' => $user->createdAt,
+                'lastVisitedAt' => $user->createdAt,
+                'location' => $location,
+                "\0" . User::class . "\0timezoneName" => 'Africa/Tunis',
+                'email' => 'email@example.com',
+                "\0" . User::class . "\0password" => hash('crc32c', 'hashed_password'),
+            ],
+            $data
+        );
     }
 
     public function testEmptyEmail(): void
@@ -161,10 +194,10 @@ final class UserTest extends TestCase
     {
         $user = new User('email@example.com');
 
-        $user->location = new Location('100.123456', '9.876543');
+        $user->location = new Location(100.123456, 9.876543);
 
-        self::assertSame(100.123456, $user->location->getLatitude());
-        self::assertSame(9.876543, $user->location->getLongitude());
+        self::assertSame(100.123456, $user->location->latitude);
+        self::assertSame(9.876543, $user->location->longitude);
     }
 
     #[DataProvider('provideNotEqualedCases')]
@@ -286,8 +319,19 @@ final class UserTest extends TestCase
         $otherUser->status = UserStatus::Active;
         $otherUser->addRole(UserRole::Admin);
         $otherUser->timezone = new DateTimeZone('Africa/Tunis');
-        $otherUser->location = new Location('100.12', '-50.80');
+        $otherUser->location = new Location(100.12, -50.80);
 
         self::assertTrue($user->isEqualTo($otherUser));
+    }
+
+    public function testUpdate(): void
+    {
+        $user = new User('email@example.com');
+        new ReflectionProperty(User::class, 'updatedAt')
+            ->setValue($user, $user->updatedAt->modify('-1 year'));
+
+        $user->update();
+
+        self::assertSame(new DateTimeImmutable()->format('Y-m-d H:i'), $user->updatedAt->format('Y-m-d H:i'));
     }
 }

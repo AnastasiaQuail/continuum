@@ -79,4 +79,29 @@ final class UserCheckerTest extends TestCase
             new CustomUserMessageAccountStatusException('Account is disabled.'),
         ];
     }
+
+    public function testCheckPostAuth(): void
+    {
+        $userChecker = new UserChecker();
+        $user = new class implements UserInterface {
+            /**
+             * @return list<non-empty-string>
+             */
+            #[Override]
+            public function getRoles(): array
+            {
+                return [];
+            }
+
+            #[Override]
+            public function getUserIdentifier(): string
+            {
+                return '-';
+            }
+        };
+
+        $this->expectNotToPerformAssertions();
+
+        $userChecker->checkPostAuth($user);
+    }
 }

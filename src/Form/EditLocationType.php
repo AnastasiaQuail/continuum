@@ -26,7 +26,7 @@ final class EditLocationType extends AbstractImmutableType
 
         $builder->setDataMapper($this)
             ->add('latitude', MeasurementType::class, [
-                'data' => $location?->getLatitude(),
+                'data' => $location?->latitude,
                 'min' => EditLocation::LATITUDE_MIN,
                 'max' => EditLocation::LATITUDE_MAX,
                 'scale' => 6,
@@ -36,7 +36,7 @@ final class EditLocationType extends AbstractImmutableType
                 ],
             ])
             ->add('longitude', MeasurementType::class, [
-                'data' => $location?->getLongitude(),
+                'data' => $location?->longitude,
                 'min' => EditLocation::LONGITUDE_MIN,
                 'max' => EditLocation::LONGITUDE_MAX,
                 'scale' => 6,

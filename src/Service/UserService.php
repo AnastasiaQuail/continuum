@@ -42,8 +42,8 @@ final readonly class UserService
     public function updateLocation(User $user, EditLocation $dto): void
     {
         $user->location = new Location(
-            latitude: (string) $dto->latitude,
-            longitude: (string) $dto->longitude,
+            latitude: $dto->latitude,
+            longitude: $dto->longitude,
         );
 
         $this->repository->save($user);

@@ -12,6 +12,7 @@ use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use ReflectionProperty;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[CoversClass(UserRepository::class)]
 final class UserRepositoryTest extends AbstractRepositoryTestCase
@@ -58,6 +59,23 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
         self::assertCount(6, $users);
         self::assertSame('email-five@example.com', $users[0]->email);
         self::assertSame('email-six@example.com', $users[1]->email);
+    }
+
+    public function testUpgradePasswordWrongUser(): void
+    {
+        $user = new class implements PasswordAuthenticatedUserInterface {
+            #[Override]
+            public function getPassword(): ?string
+            {
+                return null;
+            }
+        };
+
+        $this->expectExceptionObject(
+            new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class))
+        );
+
+        $this->repository->upgradePassword($user, 'newPassword');
     }
 
     public function testUpgradePassword(): void

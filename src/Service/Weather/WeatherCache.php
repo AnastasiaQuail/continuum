@@ -60,8 +60,8 @@ final readonly class WeatherCache
     {
         return sprintf(
             'app.weather.%s.%s',
-            str_replace('.', '_', (string) $location->getLatitude()),
-            str_replace('.', '_', (string) $location->getLongitude()),
+            str_replace('.', '_', (string) $location->latitude),
+            str_replace('.', '_', (string) $location->longitude),
         );
     }
 }
