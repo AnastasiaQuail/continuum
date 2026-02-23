@@ -4,6 +4,9 @@ on:
   push:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 # It is important to specify "concurrency" for the workflow,
 # to prevent concurrency between different deploys.
 concurrency: production_environment

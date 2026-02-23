@@ -7,6 +7,7 @@ use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
 
 return new Configuration()
     ->disableExtensionsAnalysis()
+    ->ignoreErrorsOnPackage('doctrine/data-fixtures', [ErrorType::SHADOW_DEPENDENCY])
     ->ignoreErrorsOnPackages(
         [
             'doctrine/doctrine-migrations-bundle',
