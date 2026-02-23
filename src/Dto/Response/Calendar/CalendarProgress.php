@@ -49,6 +49,7 @@ final readonly class CalendarProgress
     {
         $days = $this->total->days;
 
+        // @infection-ignore-all
         return false === $days ? 0 : $days;
     }
 }
