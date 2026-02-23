@@ -51,6 +51,8 @@ final class AppFixtures extends Fixture
     }
 
     /**
+     * @codeCoverageIgnore
+     *
      * @return list<array{non-empty-string, non-empty-string, UserStatus, list<UserRole>, DateTimeZone, null|Location}>
      */
     private function getUserData(): array
