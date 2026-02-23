@@ -129,6 +129,7 @@
         },
         "icons": "@php bin/console ux:icons:lock",
         "infection": "@php vendor/bin/infection --threads=max --show-mutations=max",
+        "infection:one": "@php bin/infection-one @additional_args --threads=max --show-mutations=max",
         "migration": "@php bin/console make:migration --formatted",
         "migration:migrate": "@php bin/console doctrine:migrations:migrate",
         "migration:rollback": "@migration:migrate prev",

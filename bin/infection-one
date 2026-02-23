@@ -1,0 +1,32 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Fix for filtering one test with Infection when using the `--filter` option.
+ *
+ * @see https://github.com/sebastianbergmann/phpunit/issues/6472
+ * @see https://github.com/infection/infection/issues/2440
+ *
+ * @var array{argv: array} $_SERVER
+ */
+
+// @phpstan-ignore-next-line
+$_SERVER['argv'] = (static function (array $arguments): array {
+    /** @var array{0: non-empty-string, 1: non-empty-string} $arguments */
+
+    $filterFile = $arguments[1];
+    $filterOption = pathinfo(__DIR__ . '/../' . $filterFile, PATHINFO_FILENAME);
+
+    return array_merge(
+        [$arguments[0]],
+        [
+            sprintf('--filter=%s', $filterFile),
+            sprintf("--test-framework-options=--filter='%s'", $filterOption),
+        ],
+        array_slice($arguments, 2),
+    );
+})($_SERVER['argv']);
+
+include __DIR__ . '/../vendor/bin/infection';
