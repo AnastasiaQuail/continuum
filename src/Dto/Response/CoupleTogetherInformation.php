@@ -54,6 +54,8 @@ final readonly class CoupleTogetherInformation implements Stringable
             $togetherDays = 0;
         }
 
+        // Intentionally using < (not <=) but both are equivalent for min operation
+        // @infection-ignore-all
         return $togetherDays < $days ? $togetherDays : $days;
     }
 }
