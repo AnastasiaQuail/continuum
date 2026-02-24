@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Tests\Dto\Request\Admin\User;
 
 use Continuum\Dto\Request\Admin\User\EditUser;
+use Continuum\Security\User\UserRole;
 use Continuum\Security\User\UserStatus;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
@@ -16,10 +17,22 @@ final class EditUserTest extends TestCase
     {
         $dto = new EditUser(
             status: UserStatus::Active,
-            roles: [],
+            roles: [UserRole::User->value],
         );
 
         self::assertSame(UserStatus::Active, $dto->status);
-        self::assertEmpty($dto->roles);
+        self::assertSame([UserRole::User->value], $dto->roles);
+    }
+
+    public function testValues(): void
+    {
+        $expected = [];
+        foreach (UserRole::cases() as $role) {
+            $expected[] = $role->value;
+        }
+
+        $roles = EditUser::values();
+
+        self::assertSame($expected, $roles);
     }
 }

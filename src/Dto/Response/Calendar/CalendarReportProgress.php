@@ -11,10 +11,10 @@ final readonly class CalendarReportProgress
         public CalendarProgress $endProgress,
     ) {}
 
-    public function getOffset(): float
+    public function getOffset(): ?float
     {
         if ($this->startProgress->getPastDays() > $this->endProgress->getPastDays()) {
-            return 0;
+            return null;
         }
 
         return $this->endProgress->getCurrentProgress() - $this->startProgress->getCurrentProgress();
