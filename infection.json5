@@ -19,7 +19,9 @@
     "mutators": {
         "@default": true,
         "global-ignoreSourceCodeByRegex": [
-            ".*\\#\\[ORM\\\\Column.*"
+            ".*\\#\\[ORM\\\\Column\\(.*",
+            ".*\\#\\[Assert\\\\(Length|Range)\\(.*",
+            ".*new Assert\\\\Choice\\(.*"
         ]
     }
 }
