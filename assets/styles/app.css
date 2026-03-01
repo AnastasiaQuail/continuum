@@ -2146,20 +2146,21 @@ textarea {
         transform: rotateX(180deg);
 
         .calendar-workout-day {
-            --workout-color-day: color-mix(in oklch, var(--color) 20%, transparent);
+            --workout-day-bg-color: color-mix(in oklch, var(--color) 20%, transparent);
+            --workout-day-bg-color-transparent: 10%;
             --workout-row: 1;
 
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: calc(var(--font-size) / 4);
-            color: var(--workout-color-day);
+            color: color-mix(in srgb, var(--color) 30%, transparent);
             border-radius: calc(var(--border-radius) / 4);
-            background-color: color-mix(in oklch, var(--workout-color-day) 15%, transparent);
+            background-color: color-mix(in oklch, var(--workout-day-bg-color) var(--workout-day-bg-color-transparent), transparent);
             transform: rotateX(180deg);
 
             [data-theme="dark"] & {
-                color: color-mix(in srgb, var(--workout-color-day) var(--transparent-color-tiny), var(--color));
+                --workout-day-bg-color-transparent: 15%;
             }
 
             &:first-child {
@@ -2167,7 +2168,7 @@ textarea {
             }
 
             &.done {
-                --workout-color-day: var(--color-green);
+                --workout-day-bg-color: var(--color-green);
 
                 font-size: 0;
                 color: transparent;
@@ -2183,10 +2184,14 @@ textarea {
                 gap: 1px;
 
                 & > span {
-                    width: 3px;
+                    width: 2px;
                     aspect-ratio: 1;
                     border-radius: 50%;
                     background-color: var(--general-color);
+
+                    @media (width >= 992px) {
+                        width: 3px;
+                    }
                 }
             }
         }

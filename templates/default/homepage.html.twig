@@ -109,7 +109,7 @@
                         </span>
                     {%- endif -%}
 
-                    {{- _self.card_title_dropdown(measurement_days, 'measurement') -}}
+                    {{- _self.card_title_dropdown(measurement_days, 'measurement', [1, 2, 3, 4, 6]) -}}
                 </div>
 
                 <div class="card-panel-body chart-panel"
@@ -122,7 +122,7 @@
             <section class="card card-panel">
                 <div class="card-title card-title-controls">
                     <h2>Workouts</h2>
-                    {{- _self.card_title_dropdown(workout_days, 'workout') -}}
+                    {{- _self.card_title_dropdown(workout_days, 'workout', [2, 3, 4]) -}}
                 </div>
 
                 <div class="card-panel-body calendar-heatmap-workout-container">
@@ -166,7 +166,7 @@
         <section class="card card-panel">
             <div class="card-title card-title-controls">
                 <h2>Mood trend</h2>
-                {{- _self.card_title_dropdown(mood_reflection_days, 'mood') -}}
+                {{- _self.card_title_dropdown(mood_reflection_days, 'mood', [3, 4, 6]) -}}
             </div>
 
             <div class="card-panel-body chart-panel"
@@ -176,12 +176,12 @@
     {%- endif -%}
 {%- endblock %}
 
-{% macro card_title_dropdown(days, query) -%}
+{% macro card_title_dropdown(days, query, months) -%}
     <div class="card-title-dropdown">
-        {%- set months = (days / 30)|round -%}
-        <span>{{ months }} {{ months > 1 ? 'months' : 'month' }} {{ ux_icon('lucide:chevron-right') }}</span>
+        {%- set months_count = (days / 30)|round -%}
+        <span>{{ months_count }} {{ months_count > 1 ? 'months' : 'month' }} {{ ux_icon('lucide:chevron-right') }}</span>
         <ul class="dropdown-menu">
-            {%- for month in 1..3 -%}
+            {%- for month in months -%}
                 <li>
                     <a class="dropdown-item" href="{{ path('app_homepage', {(query): month}) }}">
                         {{- month }} {{ month > 1 ? 'months' : 'month' -}}

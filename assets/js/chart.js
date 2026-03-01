@@ -130,7 +130,7 @@ function initMeasurementWeightChart(element, data) {
 
     myChart.setOption({
         animationDuration: 200,
-        grid: {left: 4, bottom: 4, top: 4, right: 4},
+        grid: {left: 0, bottom: 0, top: 0, right: 0},
         xAxis: {
             min: xAxis.min,
             max: xAxis.max,
@@ -145,7 +145,8 @@ function initMeasurementWeightChart(element, data) {
             axisLine: false,
             axisLabel: {
                 fontSize: 10,
-                formatter: '{value} %',
+                formatter: '{value} {percentStyle|%}',
+                rich: {percentStyle: {fontSize: 8, opacity: 0.15}},
                 color: getHexColorByCssProperty('--color'),
                 opacity: 0.2,
             },
@@ -224,7 +225,7 @@ function initMoodReflectionsChart(element, data) {
 
     myChart.setOption({
         animationDuration: 200,
-        grid: {left: 4, bottom: 4, top: 4, right: 4},
+        grid: {left: 0, bottom: 4, top: 4, right: 0},
         xAxis: {
             min: xAxis.min,
             max: xAxis.max,
