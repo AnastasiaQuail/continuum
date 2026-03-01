@@ -40,11 +40,11 @@ final class HomepageController extends AbstractController
         #[CurrentUser]
         User $user,
         #[MapQueryParameter('measurement', options: ['min_range' => 1])]
-        int $measurementMonths = 2,
+        int $measurementMonths = 3,
         #[MapQueryParameter('workout', options: ['min_range' => 1])]
-        int $workoutMonths = 2,
+        int $workoutMonths = 3,
         #[MapQueryParameter('mood', options: ['min_range' => 1])]
-        int $moodReflectionMonths = 3,
+        int $moodReflectionMonths = 4,
     ): Response {
         $date = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);
 
