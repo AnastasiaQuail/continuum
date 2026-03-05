@@ -19,6 +19,7 @@ final class BackupVoter extends Voter
 {
     public const string VIEW = 'ADMIN_BACKUP_VIEW';
     public const string CREATE = 'ADMIN_BACKUP_CREATE';
+    public const string DOWNLOAD = 'ADMIN_BACKUP_DOWNLOAD';
 
     public function __construct(
         private readonly Security $security,
@@ -27,7 +28,7 @@ final class BackupVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::CREATE], true);
+        return in_array($attribute, [self::VIEW, self::CREATE, self::DOWNLOAD], true);
     }
 
     #[Override]
@@ -43,6 +44,11 @@ final class BackupVoter extends Voter
             return false;
         }
 
-        return $this->security->isGrantedForUser($user, UserRole::Admin->value);
+        return match ($attribute) {
+            self::VIEW,
+            self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
+            self::DOWNLOAD => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            default => false,
+        };
     }
 }
