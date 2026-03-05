@@ -8,7 +8,7 @@
 ] %}
 
 {% block page_links -%}
-    <form method="post" action="{{ path('app_admin_database_backup_create') }}">
+    <form method="post" action="{{ path('app_admin_backup_create') }}">
         <button
             class="btn btn-primary btn-outline"
             {% if is_granted('ADMIN_BACKUP_CREATE') %}type="submit" {% else %}disabled{% endif %}>
@@ -30,7 +30,17 @@
         <div class="backups">
             {%- for backup in backups -%}
                 <div class="backup">
-                    <div>{{ backup.date.setTimezone(app.user.timezone).format('j F Y, H:i') }}</div>
+                    {%- set backup_date = backup.date.setTimezone(app.user.timezone).format('j F Y, H:i') -%}
+
+                    {%- if is_granted('ADMIN_BACKUP_DOWNLOAD') -%}
+                        <a class="backup-date" href="{{ path('app_admin_backup_download', {filename: backup.name}) }}">
+                            {{- ux_icon('lucide:download') -}}
+                            <span>{{ backup_date }}</span>
+                        </a>
+                    {%- else -%}
+                        <div class="backup-date">{{ backup_date }}</div>
+                    {%- endif -%}
+
                     <div class="backup-information">
                         <div>{{ (backup.size / 1024 / 1024)|number_format(2, '.', ' ') }} MB</div>
                         <div>{{ backup.name }}</div>

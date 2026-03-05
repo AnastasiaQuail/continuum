@@ -3717,10 +3717,26 @@ textarea {
             border-bottom: var(--border-width) solid color-mix(in oklch, var(--border-color) 40%, transparent);
         }
 
+        .backup-date {
+            display: flex;
+            align-items: center;
+            column-gap: calc(var(--container-gap-inline) / 4);
+            text-decoration: none;
+            transition: color .15s;
+
+            &:not(:hover) {
+                color: var(--color);
+            }
+
+            & > svg {
+                color: var(--primary-color);
+            }
+        }
+
         .backup-information {
             display: flex;
             gap: calc(var(--container-gap-inline) / 2);
-            margin-top: calc(var(--container-gap-inline) / 8);
+            margin-top: calc(var(--container-gap-inline) / 6);
             font-size: var(--font-size-extra-small);
             opacity: var(--transparent-color);
         }

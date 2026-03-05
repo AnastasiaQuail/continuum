@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Continuum\Controller\Admin\Database;
+namespace Continuum\Controller\Admin\Backup;
 
 use Continuum\Security\Authorization\Voter\Admin\BackupVoter;
 use Continuum\Service\Database\DatabaseDumper;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final class BackupController extends AbstractController
+final class IndexController extends AbstractController
 {
     public function __construct(
         private readonly DatabaseDumper $databaseDumper,

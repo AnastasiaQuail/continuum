@@ -29,6 +29,17 @@ final readonly class DatabaseDumper
         private DatabaseDumpCache $cache,
     ) {}
 
+    public function getBackup(string $filename): SplFileInfo
+    {
+        $backup = $this->backupDir . '/' . $filename;
+
+        if (!file_exists($backup)) {
+            throw new RuntimeException('Backup file not found');
+        }
+
+        return new SplFileInfo($backup, $this->backupDir, $backup);
+    }
+
     /**
      * @return list<BackupFile>
      */
