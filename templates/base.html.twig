@@ -1,12 +1,21 @@
-{%- set is_couple_day = app.user and is_couple_day() -%}
+{%- if app.user and is_couple_day() -%}
+    {%- set html_data_day = 'data-couple-day' -%}
+    {%- set favicon_href = asset('favicon-couple-day.svg') -%}
+{%- elseif app.user and user_date().format('m-d') === '03-08' -%}
+    {%- set html_data_day = 'data-women-day' -%}
+    {%- set favicon_href = asset('favicon-women-day.svg') -%}
+{%- else -%}
+    {%- set html_data_day = null -%}
+    {%- set favicon_href = asset('favicon.svg') -%}
+{%- endif -%}
+
 <!DOCTYPE html>
-<html lang="en" data-timezone="{{ app.user?.timezone?.name }}" {%- if is_couple_day %}data-couple-day{% endif %}>
+<html lang="en" data-timezone="{{ app.user?.timezone?.name }}" {{ html_data_day }}>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}Continuum{% endblock %}</title>
-    <link rel="shortcut icon" type="image/svg+xml"
-          href="{{ is_couple_day ? asset('favicon-couple-day.svg') : asset('favicon.svg') }}">
+    <link rel="shortcut icon" type="image/svg+xml" href="{{ favicon_href }}">
     <script>
         Object.keys(localStorage)
             .filter(key => key.startsWith('continuum-ls-'))

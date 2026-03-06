@@ -13,6 +13,17 @@
 {% set current_date = user_date() %}
 
 {% block showcase -%}
+    {%- if current_date.format('m-d') === '03-08' -%}
+        <section class="card card-shine">
+            <div class="card-title">
+                <h2>International Women's Day 👩‍🔬👩‍🏫👩‍💼👩‍⚕️👩‍💻</h2>
+            </div>
+            <div>
+                <small>Commemorating women's fight for equality and liberation 💪</small>
+            </div>
+        </section>
+    {%- endif -%}
+
     <section class="card">
         <div class="card-title card-title-showcase">
             <h2>The Wait</h2>

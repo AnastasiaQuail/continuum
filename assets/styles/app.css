@@ -49,6 +49,10 @@
         --primary-color: var(--color-purple);
     }
 
+    &[data-women-day] {
+        --primary-color: var(--color-pink);
+    }
+
     --header-gap-block: var(--body-gap-inline);
     --header-height: 40px;
 
@@ -1904,23 +1908,39 @@ textarea {
         }
 
         &.card-title-shine {
-            --s-color: var(--color-pink);
+            --s-color-inverse: var(--color);
+            --s-color-transparent: 100%;
+            --s-color: color-mix(in srgb, var(--color-pink) var(--s-color-transparent), var(--s-color-inverse));
 
             padding-bottom: calc(var(--gap-block) / 4);
             margin-bottom: calc(var(--container-gap-block) - var(--gap-block) / 4);
-            background: linear-gradient(90deg, var(--s-color) 0%, var(--color) 25%, var(--color) 75%, var(--s-color) 100%);
+            background: linear-gradient(45deg, var(--s-color) 0%, var(--s-color-inverse) 25%, var(--s-color-inverse) 75%, var(--s-color) 100%);
             background-size: 200% 100%;
             background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: shine 5s linear infinite;
 
             [data-theme="dark"] & {
-                --s-color: color-mix(in srgb, var(--color-pink) 40%, var(--color));
+                --s-color-transparent: 40%;
             }
         }
 
         &:is(:last-child) {
             margin-bottom: 0;
+        }
+    }
+
+    &.card-shine {
+        --s-color-inverse: var(--background-color);
+        --s-color-transparent: 20%;
+        --s-color: color-mix(in srgb, var(--color-pink) var(--s-color-transparent), var(--s-color-inverse));
+
+        background: linear-gradient(45deg, var(--s-color-inverse) 20%, var(--s-color) 50%, var(--s-color-inverse) 80%);
+        background-size: 200% 100%;
+        animation: shine 5s linear infinite;
+
+        [data-theme="dark"] & {
+            --s-color-transparent: 10%;
         }
     }
 
