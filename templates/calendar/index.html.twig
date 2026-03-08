@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{%- block javascripts -%}
+    {{ parent() }}
+    <script src="{{ asset('js/calendar.js') }}"></script>
+{%- endblock -%}
+
 {% block title %}Calendar{% endblock %}
 {% block body_id %}calendar{% endblock %}
 
@@ -9,7 +14,7 @@
 
 {% block showcase -%}
     {%- if upcoming_events is not empty and is_granted('CALENDAR_UPCOMING_EVENTS') -%}
-        <section class="card calendar calendar-upcoming-events" id="calendar-upcoming-events">
+        <section class="card calendar-upcoming-events" id="calendar-upcoming-events">
             {{- include('calendar/_upcoming_events.html.twig', {collapsable: true}) -}}
         </section>
     {%- endif -%}
@@ -35,7 +40,9 @@
         </div>
 
         <div class="calendar">
-            {%- set current = user_date().format('Y-m-d') -%}
+            {%- set current_date = user_date() -%}
+            {%- set current_month = current_date.format('Y-m') -%}
+            {%- set current = current_date.format('Y-m-d') -%}
             {%- set is_granted = is_granted('CALENDAR_EDIT') -%}
 
             {%- for month_number in 1..12 -%}
@@ -43,7 +50,8 @@
                 {%- set first_day = month ~ '-01' -%}
                 {%- set first_week_day = first_day|date('N') -%}
 
-                <article class="month" style="--month-offset: {{ first_week_day - 1 }};">
+                <article class="month {{ month === current_month ? ' month-current' }}"
+                         style="--month-offset: {{ first_week_day - 1 }};">
                     <div class="month-title">{{ month|date('F') }}</div>
                     <div class="month-days">
                         {%- if first_week_day > 1 -%}

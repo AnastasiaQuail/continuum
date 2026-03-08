@@ -2243,16 +2243,38 @@ textarea {
     --day-border-radius: calc(var(--day-font-size) / 1.6);
     --day-badge-size: 1.4vw;
 
-    display: grid;
-    grid-template-columns: repeat(var(--grid-month-columns), 1fr);
+    display: flex;
+    flex-direction: row;
     gap: var(--container-gap-block) var(--gap-inline);
+    margin-inline: calc(-1 * var(--container-gap-inline));
+    overflow: hidden;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
+
+    @media (width >= 768px) {
+        display: grid;
+        grid-template-columns: repeat(var(--grid-month-columns), 1fr);
+        margin-inline: 0;
+        overflow: auto;
+    }
 
     .month {
+        padding-left: var(--container-gap-inline);
+        scroll-snap-align: start;
         animation: fader 1s ease-out;
         animation-timeline: view();
         animation-range: entry 0% cover 20%;
 
+        &:last-child {
+            padding-right: var(--container-gap-inline);
+        }
+
+        @media (width >= 768px) {
+            padding-inline: 0;
+        }
+
         .month-title {
+            width: clamp(40vw, 250px, 60vw);
             margin-bottom: calc(var(--gap-block) * 1.25);
             font-size: var(--font-size-medium);
             font-weight: var(--font-weight-light);
@@ -2260,6 +2282,10 @@ textarea {
             opacity: .4;
             cursor: default;
             user-select: none;
+
+            @media (width >= 768px) {
+                width: auto;
+            }
         }
 
         .month-days {
