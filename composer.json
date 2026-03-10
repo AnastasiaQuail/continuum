@@ -127,6 +127,7 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd",
             "importmap:install": "symfony-cmd"
         },
+        "db:restore": "@php bin/console app:db:restore /app/data/backup.sql",
         "icons": "@php bin/console ux:icons:lock",
         "infection": "@php vendor/bin/infection --threads=max --show-mutations=max",
         "infection:one": "@php bin/infection-one @additional_args --threads=max --show-mutations=max",
