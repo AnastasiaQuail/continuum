@@ -2187,7 +2187,7 @@ textarea {
                 grid-row: span 1 / calc(9 - var(--workout-row));
             }
 
-            &.done {
+            &:has(.calendar-workout-exercises) {
                 --workout-day-bg-color: var(--color-green);
 
                 font-size: 0;
