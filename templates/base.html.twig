@@ -270,7 +270,6 @@
 
         {%- block footer -%}
             <footer class="footer-container">
-                <div class="footer-datetime">{{ user_date().format('j F, H:i') }}</div>
                 <div class="footer-controls">
                     {%- if app.debug and is_granted('ROLE_SUPER_ADMIN') -%}
                         <div class="footer-control" id="footer-toolbar">

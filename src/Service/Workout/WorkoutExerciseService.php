@@ -44,4 +44,23 @@ final readonly class WorkoutExerciseService
 
         return $workoutExercises;
     }
+
+    /**
+     * @return array<non-empty-string, list<WorkoutExercise>>
+     */
+    public function getExercisesByWorkouts(Workout ...$workouts): array
+    {
+        $exercises = [];
+
+        foreach ($workouts as $workout) {
+            $date = $workout->getDate()->format('Y-m-d');
+            $exercises[$date] ??= [];
+
+            foreach ($workout->getWorkoutExercises() as $workoutExercise) {
+                $exercises[$date][] = $workoutExercise;
+            }
+        }
+
+        return $exercises;
+    }
 }

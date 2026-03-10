@@ -84,7 +84,7 @@
         {%- if is_granted('CALENDAR_UPCOMING_EVENTS') -%}
             <section class="card">
                 <div class="card-title card-title-showcase card-title-controls">
-                    <h2>Upcoming</h2>
+                    <h2>Calendar</h2>
 
                     {%- if today_events is not empty -%}
                         <div class="card-title-info card-today-events">
@@ -143,28 +143,25 @@
                         {%- endfor -%}
                     </div>
                     <div class="calendar-heatmap-workout">
-                        {%- set dates = [] -%}
-                        {%- for workout in workouts -%}
-                            {%- set dates = dates|merge({(workout.date.format('Y-m-d')): workout}) -%}
-                        {%- endfor -%}
-
                         {%- set week_day = current_date.format('N') -%}
                         {%- set date = current_date.modify('+1 day') -%}
 
                         {%- for workout_day in 1..workout_days -%}
                             {%- set date = date.modify('-1 day') -%}
                             {%- set day = date.format('Y-m-d') -%}
-                            {%- set workout = dates[day] is defined ? dates[day] : null -%}
 
-                            <div class="calendar-workout-day {{ workout !== null ? 'done' }}"
+                            <div class="calendar-workout-day"
                                  {% if loop.first %}style="--workout-row: {{ week_day }};"{% endif %}>
                                 <div>{{- date.format('j') -}}</div>
-                                <div class="calendar-workout-exercises">
-                                    {%- for workout_exercise in workout?.workoutExercises -%}
-                                        <span
-                                            data-general-type="{{ workout_exercise.exercise.group.color.value }}"></span>
-                                    {%- endfor -%}
-                                </div>
+
+                                {%- if workout_exercises[day] is defined -%}
+                                    <div class="calendar-workout-exercises">
+                                        {%- for workout_exercise in workout_exercises[day] -%}
+                                            {%- set exercise_group = workout_exercise.exercise.group -%}
+                                            <span data-general-type="{{ exercise_group.color.value }}"></span>
+                                        {%- endfor -%}
+                                    </div>
+                                {%- endif -%}
                             </div>
                         {%- endfor -%}
                     </div>

@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Events on {{ day.format('j F Y') }}{% endblock %}
-{% block page_title %}{{ day.format('j F Y') }}{% endblock %}
+{% block page_title %}{{ day.format('j F Y') }}, <small>{{ day.format('l') }}</small>{% endblock %}
 {% block body_id %}calendar-date{% endblock %}
 
 {% set breadcrumbs = [
