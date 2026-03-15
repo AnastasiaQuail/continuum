@@ -10,7 +10,7 @@
 {% set is_granted = is_granted('MOOD_REFLECTION_EDIT') %}
 
 {% block showcase -%}
-    <section class="card card-mood-chart">
+    <section id="mood-chart-card" class="card card-mood-chart">
         <div class="mood-chart" style="--chart-columns: {{ last_moods|length }};">
             {%- for last_mood in last_moods -%}
                 {%- if last_mood -%}

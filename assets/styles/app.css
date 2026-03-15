@@ -209,6 +209,10 @@
     --general-color: var(--color-stone);
 }
 
+@view-transition {
+    navigation: auto;
+}
+
 *, ::after, ::before {
     box-sizing: border-box;
 }
@@ -418,6 +422,7 @@ textarea {
             display: flex;
             align-items: center;
             height: var(--header-height);
+            view-transition-name: header-logo;
 
             @media (width >= 576px) {
                 left: 50%;
@@ -556,6 +561,8 @@ textarea {
             }
 
             &#theme-toggler {
+                view-transition-name: theme-toggler;
+
                 & > * {
                     display: flex;
 
@@ -2032,6 +2039,22 @@ textarea {
     color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
 }
 
+#the-wait-card {
+    view-transition-name: the-wait-card;
+}
+
+#the-wait-title {
+    view-transition-name: the-wait-title;
+}
+
+#the-wait-progress {
+    view-transition-name: the-wait-progress;
+}
+
+#love-story {
+    view-transition-name: love-story;
+}
+
 .card-couple {
     display: flex;
     flex-direction: row;
@@ -2142,6 +2165,16 @@ textarea {
             z-index: 0;
         }
     }
+}
+
+#calendar-card,
+#calendar-upcoming-events {
+    view-transition-name: calendar-card;
+}
+
+#calendar-title,
+#page-title-calendar {
+    view-transition-name: calendar-title;
 }
 
 .calendar-heatmap-workout-container {
@@ -2541,10 +2574,6 @@ textarea {
 
                 transition: margin .15s;
 
-                &:first-child {
-                    margin-right: calc(var(--margin-offset) / 2);
-                }
-
                 &:not(:first-child) {
                     margin-left: calc(var(--margin-offset) * 2);
                     font-size: 0;
@@ -2558,7 +2587,7 @@ textarea {
                 }
 
                 & > span {
-                    font-size: 0;
+                    display: none;
                 }
             }
 
@@ -2605,6 +2634,15 @@ textarea {
         font-weight: var(--font-weight-light);
         color: color-mix(in srgb, var(--general-color) 20%, var(--color) 20%);
     }
+}
+
+#mood-chart-card {
+    view-transition-name: mood-chart-card;
+}
+
+#mood-chart-title,
+#page-title-mood-reflection {
+    view-transition-name: mood-chart-title;
 }
 
 .card-calendar-mood {
@@ -2686,6 +2724,11 @@ textarea {
             }
         }
     }
+}
+
+#joy-of-weeks-title,
+#page-title-weekly-reflection {
+    view-transition-name: weekly-reflection-title;
 }
 
 .weekly-reflection {
@@ -2838,6 +2881,22 @@ textarea {
     @media (width >= 768px) {
         max-width: 600px;
     }
+}
+
+#weight-change-chart {
+    view-transition-name: weight-change-chart;
+}
+
+#weight-change-title {
+    view-transition-name: weight-change-title;
+}
+
+#weight-change-label {
+    view-transition-name: weight-change-label;
+}
+
+#weight-change-difference {
+    view-transition-name: weight-change-difference;
 }
 
 .weight-change {
@@ -3095,6 +3154,15 @@ textarea {
             animation: error_page_bottom calc(0.4s + sibling-index() * .1s) ease-out;
         }
     }
+}
+
+#workouts-card {
+    view-transition-name: workouts-card;
+}
+
+#workouts-title,
+#page-title-workouts {
+    view-transition-name: workouts-title;
 }
 
 .workouts {

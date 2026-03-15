@@ -24,12 +24,12 @@
         </section>
     {%- endif -%}
 
-    <section class="card">
+    <section id="the-wait-card" class="card">
         <div class="card-title card-title-showcase">
-            <h2>The Wait</h2>
+            <h2 id="the-wait-title">The Wait</h2>
             <div class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</div>
         </div>
-        <div class="progress-group">
+        <div id="the-wait-progress" class="progress-group">
             <div class="progress" style="--progress: {{ progress.currentProgress }}%;">
                 <div class="progress-bar"></div>
             </div>
@@ -51,7 +51,7 @@
 
     <div class="row row-md-2">
         <section class="card">
-            <div class="card-title card-title-showcase card-title-controls card-title-shine">
+            <div id="love-story" class="card-title card-title-showcase card-title-controls card-title-shine">
                 <h2>Love story</h2>
                 <span class="card-title-info">{{ couple.together }}</span>
             </div>
@@ -82,9 +82,9 @@
         </section>
 
         {%- if is_granted('CALENDAR_UPCOMING_EVENTS') -%}
-            <section class="card">
+            <section id="calendar-card" class="card">
                 <div class="card-title card-title-showcase card-title-controls">
-                    <h2>Calendar</h2>
+                    <h2 id="calendar-title">Calendar</h2>
 
                     {%- if today_events is not empty -%}
                         <div class="card-title-info card-today-events">
@@ -106,16 +106,17 @@
 {% block main -%}
     <div class="row row-sm-2">
         {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
-            <section class="card card-panel">
+            <section id="weight-change-chart" class="card card-panel">
                 <div class="card-title card-title-controls">
                     {%- set result = 0 -%}
                     {%- if chart_measurements -%}
                         {%- set result = ((chart_measurements|last).weight - (chart_measurements|first).weight)|round(1) -%}
                     {%- endif -%}
 
-                    <h2>Body fat</h2>
+                    <h2 id="weight-change-title">Body fat</h2>
                     {%- if result !== 0 -%}
-                        <span class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
+                        <span id="weight-change-label"
+                              class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
                             <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
                         </span>
                     {%- endif -%}
@@ -130,9 +131,9 @@
         {%- endif -%}
 
         {%- if is_granted('WORKOUT_VIEW') -%}
-            <section class="card card-panel">
+            <section id="workouts-card" class="card card-panel">
                 <div class="card-title card-title-controls">
-                    <h2>Workouts</h2>
+                    <h2 id="workouts-title">Workouts</h2>
                     {{- _self.card_title_dropdown(workout_days, 'workout', [2, 3, 4]) -}}
                 </div>
 
@@ -171,9 +172,9 @@
     </div>
 
     {%- if is_granted('MOOD_REFLECTION_VIEW') -%}
-        <section class="card card-panel">
+        <section id="mood-chart-card" class="card card-panel">
             <div class="card-title card-title-controls">
-                <h2>Mood trend</h2>
+                <h2 id="mood-chart-title">Mood trend</h2>
                 {{- _self.card_title_dropdown(mood_reflection_days, 'mood', [3, 4, 6]) -}}
             </div>
 
