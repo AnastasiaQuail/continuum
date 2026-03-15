@@ -9,6 +9,8 @@
     {%- set favicon_href = asset('favicon.svg') -%}
 {%- endif -%}
 
+{%- set body_id = block('body_id') -%}
+
 <!DOCTYPE html>
 <html lang="en" data-timezone="{{ app.user?.timezone?.name }}" {{ html_data_day }}>
 <head>
@@ -31,7 +33,7 @@
         {%- block importmap %}{{ importmap('app') }}{% endblock -%}
     {%- endblock -%}
 </head>
-<body id="{% block body_id %}{% endblock %}" class="{% if sidebar_show|default !== 'hide' %}has-sidebar{% endif %}">
+<body id="{{ body_id }}" class="{% if sidebar_show|default !== 'hide' %}has-sidebar{% endif %}">
     {%- block header -%}
         <header class="header">
             <nav class="header-container">
@@ -259,7 +261,7 @@
 
                 {%- block body_title -%}
                     <div class="page-title">
-                        <h1>{% block page_title %}{{ block('title') }}{% endblock %}</h1>
+                        <h1 id="page-title-{{ body_id }}">{% block page_title %}{{ block('title') }}{% endblock %}</h1>
                         <div class="page-links">{% block page_links %}{% endblock %}</div>
                     </div>
                 {%- endblock -%}

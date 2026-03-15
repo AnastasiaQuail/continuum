@@ -8,16 +8,16 @@
     {%- set couple_together_info = couple_together ~ '' -%}
 
     {%- if progress_offset > 0 or couple_together_info !== '' -%}
-        <section class="card">
+        <section id="the-wait-card" class="card">
             {%- if progress_offset > 0 -%}
                 <div class="card-title card-title-controls">
-                    <h3>The Wait</h3>
+                    <h3 id="the-wait-title">The Wait</h3>
                     <div class="card-title-label value-good">
                         <span>+{{ progress_offset }}</span><span>%</span>
                     </div>
 
                     <div class="card-title-info card-title-progress">
-                        <div class="progress-group">
+                        <div id="the-wait-progress" class="progress-group">
                             <div class="progress progress-offset">
                                 <div class="progress-bar"
                                      style="--progress: {{ progress.startProgress.currentProgress }}%;"></div>
@@ -32,7 +32,7 @@
             {%- endif -%}
 
             {%- if couple_together_info !== '' -%}
-                <div class="card-title card-title-controls">
+                <div id="love-story" class="card-title card-title-controls">
                     <h3>Love story</h3>
                     <div class="card-title-label value-good">
                         <span>+{{ couple_progress_days }}</span><span>days</span>
@@ -49,9 +49,9 @@
     {%- endif -%}
 
     {%- if (calendar_events is not empty) and is_granted('CALENDAR_REPORT_VIEW') -%}
-        <section class="card">
+        <section id="calendar-card" class="card">
             <div class="card-title card-title-controls">
-                <h3>Calendar</h3>
+                <h3 id="calendar-title">Calendar</h3>
                 <div class="card-title-info">
                     {%- set events_count = 0 -%}
                     {%- for calendar_event in calendar_events -%}
@@ -81,10 +81,10 @@
     {%- if is_mood_reflection_granted or is_weekly_reflection_granted -%}
         <h2 class="report-title">Reflection</h2>
 
-        <section class="card">
+        <section id="mood-chart-card" class="card">
             {%- if is_mood_reflection_granted -%}
                 <div class="card-title card-title-controls">
-                    <h3>Mood trend</h3>
+                    <h3 id="mood-chart-title">Mood trend</h3>
 
                     <div class="card-title-info">
                         <div class="mood-reflections">
@@ -142,11 +142,12 @@
             {%- endif -%}
 
             {%- if is_weekly_reflection_granted -%}
-                {%- if is_mood_reflection_granted %}
-                    <hr>{% endif -%}
+                {%- if is_mood_reflection_granted -%}
+                    <hr>
+                {%- endif -%}
 
                 <div class="card-title card-title-controls">
-                    <h3>Joy of weeks</h3>
+                    <h3 id="joy-of-weeks-title">Joy of weeks</h3>
                 </div>
 
                 <div class="weekly-reflections">
@@ -170,17 +171,18 @@
     {%- if is_weight_change_granted or is_workout_granted -%}
         <h2 class="report-title">Health</h2>
 
-        <section class="card">
+        <section id="workouts-card" class="card">
             {%- if is_weight_change_granted -%}
                 <div class="card-title card-title-controls">
-                    <h3>Weight change</h3>
-                    <div class="card-title-label {{ weight_change > 0 ? 'value-bad' : 'value-good' }}">
+                    <h3 id="weight-change-title">Weight change</h3>
+                    <div id="weight-change-label"
+                         class="card-title-label {{ weight_change > 0 ? 'value-bad' : 'value-good' }}">
                         <span>{{ weight_change > 0 ? '+' ~ weight_change : weight_change }}</span>
                         <span>kg</span>
                     </div>
 
                     {%- if offset_measurement.min !== offset_measurement.max -%}
-                        <div class="card-title-info">
+                        <div id="weight-change-difference" class="card-title-info">
                             <span>{{ ux_icon('lucide:trending-up-down') }}</span>
                             <span>min {{ offset_measurement.min }}, max {{ offset_measurement.max }} kg</span>
                         </div>
@@ -189,11 +191,12 @@
             {%- endif -%}
 
             {%- if is_workout_granted -%}
-                {%- if is_weight_change_granted %}
-                    <hr>{% endif -%}
+                {%- if is_weight_change_granted -%}
+                    <hr>
+                {%- endif -%}
 
                 <div class="card-title card-title-controls">
-                    <h3>Workouts</h3>
+                    <h3 id="workouts-title">Workouts</h3>
                     <div class="card-title-label value-good">
                         <span>+{{ workout_report.count }}</span>
                         <span>{{ workout_report.count > 1 ? 'workouts' : 'workout' }}</span>
