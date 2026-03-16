@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use TwigCsFixer\Config\Config;
+use TwigCsFixer\File\Finder;
 use TwigCsFixer\Rules\File\DirectoryNameRule;
 use TwigCsFixer\Rules\File\FileExtensionRule;
 use TwigCsFixer\Rules\File\FileNameRule;
@@ -11,6 +12,10 @@ use TwigCsFixer\Standard\TwigCsFixer;
 
 return new Config()
     ->setCacheFile(__DIR__ . '/var/cache/.twig-cs-fixer.json')
+    ->setFinder(
+        Finder::create()
+            ->in(__DIR__ . '/templates')
+    )
     ->allowNonFixableRules()
     ->setRuleset(
         new Ruleset()

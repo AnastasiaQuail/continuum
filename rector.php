@@ -11,12 +11,12 @@ use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 return RectorConfig::configure()
     ->withCache(__DIR__ . '/var/cache/rector')
     ->withSymfonyContainerPhp(__DIR__ . '/tests/symfony-container.php')
-    ->withRootFiles()
     ->withPaths([
         __DIR__,
         __DIR__ . '/bin/console',
         __DIR__ . '/bin/phpunit',
     ])
+    ->withRootFiles()
     ->withSkip([
         __DIR__ . '/assets/vendor',
         __DIR__ . '/config/reference.php',
