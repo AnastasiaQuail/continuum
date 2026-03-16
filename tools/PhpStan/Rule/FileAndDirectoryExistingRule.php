@@ -23,6 +23,8 @@ final readonly class FileAndDirectoryExistingRule implements Rule
 {
     private const array SKIP_PATHS = [
         '/assets/vendor',
+        '/var/cache/.php-cs-fixer.json',
+        '/var/cache/.twig-cs-fixer.json',
         '/var/cache/prod/Continuum_KernelProdContainer.preload.php',
         '/var/cache/rector',
     ];
