@@ -43,5 +43,4 @@ return new Config()
         'phpdoc_param_order' => true,
         'phpdoc_to_comment' => ['ignored_tags' => ['var']],
         'php_unit_internal_class' => false,
-        'php_unit_test_case_static_method_calls' => ['target' => 'newest'],
     ]);
