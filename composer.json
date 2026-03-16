@@ -134,8 +134,14 @@
         "migration": "@php bin/console make:migration --formatted",
         "migration:migrate": "@php bin/console doctrine:migrations:migrate",
         "migration:rollback": "@migration:migrate prev",
-        "php-cs": "@php vendor/bin/php-cs-fixer check --verbose --diff",
-        "php-cs:fix": "@php vendor/bin/php-cs-fixer fix",
+        "php-cs": [
+            "@putenv PHP_CS_FIXER_FUTURE_MODE=1",
+            "@php vendor/bin/php-cs-fixer check --verbose --diff"
+        ],
+        "php-cs:fix": [
+            "@putenv PHP_CS_FIXER_FUTURE_MODE=1",
+            "@php vendor/bin/php-cs-fixer fix"
+        ],
         "phpstan": "@php vendor/bin/phpstan analyse",
         "phpstan:clear": "@php vendor/bin/phpstan clear-result-cache",
         "qa": [

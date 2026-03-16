@@ -8,6 +8,8 @@ parameters:
 		- .
 		- bin/console
 		- bin/phpunit
+		- .php-cs-fixer.php
+		- .twig-cs-fixer.php
 	excludePaths:
 		- assets/vendor/*
 		- config/reference.php

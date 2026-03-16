@@ -13,7 +13,6 @@ return new Config()
             ->append([
                 'bin/console',
                 'bin/phpunit',
-                __FILE__,
             ])
             ->notPath(['config/reference.php'])
             ->exclude([
