@@ -3712,6 +3712,14 @@ textarea {
     }
 }
 
+#profile-card {
+    view-transition-name: profile-card;
+}
+
+#profile-location-card {
+    view-transition-name: profile-location-card;
+}
+
 .users {
     display: flex;
     flex-direction: column;
