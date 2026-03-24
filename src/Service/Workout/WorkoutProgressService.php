@@ -23,16 +23,44 @@ final readonly class WorkoutProgressService
      */
     public function getProgresses(array $workouts): array
     {
+        /** @var array<non-empty-string, WorkoutExercise> $prevWorkoutExercises */
+        $prevWorkoutExercises = [];
+
+        /** @var array<non-empty-string, WorkoutExercise> $unhandledWorkoutExercises */
+        $unhandledWorkoutExercises = [];
+
         $progresses = [];
 
         foreach ($workouts as $workout) {
-            $prevExercises = $this->workoutExerciseService->getPrevExerciseMap($workout);
+            foreach ($workout->getWorkoutExercises() as $workoutExercise) {
+                $exerciseId = (string) $workoutExercise->getExercise()->getId();
 
-            foreach ($workout->getWorkoutExercises() as $exercise) {
-                $id = (string) $exercise->getExercise()->getId();
+                if (isset($prevWorkoutExercises[$exerciseId])) {
+                    $progresses[(string) $workoutExercise->getId()] = $this->getProgress(
+                        $prevWorkoutExercises[$exerciseId],
+                        $workoutExercise
+                    );
+                } else {
+                    $unhandledWorkoutExercises[$exerciseId] = $workoutExercise;
+                }
 
-                if (isset($prevExercises[$id])) {
-                    $progresses[(string) $exercise->getId()] = $this->getProgress($prevExercises[$id], $exercise);
+                $prevWorkoutExercises[$exerciseId] = $workoutExercise;
+            }
+        }
+
+        if ([] !== $unhandledWorkoutExercises) {
+            $prevWorkoutExercises = $this->workoutExerciseService->getPrevExerciseByIds(...$unhandledWorkoutExercises);
+
+            foreach ($prevWorkoutExercises as $prevWorkoutExercise) {
+                $exerciseId = (string) $prevWorkoutExercise->getExercise()->getId();
+
+                if (isset($unhandledWorkoutExercises[$exerciseId])) {
+                    $workoutExercise = $unhandledWorkoutExercises[$exerciseId];
+
+                    $progresses[(string) $workoutExercise->getId()] = $this->getProgress(
+                        $prevWorkoutExercise,
+                        $workoutExercise,
+                    );
                 }
             }
         }
