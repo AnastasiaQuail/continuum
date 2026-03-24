@@ -8,7 +8,9 @@ use Continuum\Entity\Workout;
 use Continuum\Entity\WorkoutExercise;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Order;
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<WorkoutExercise>
@@ -35,7 +37,7 @@ final class WorkoutExerciseRepository extends ServiceEntityRepository
     /**
      * @return list<WorkoutExercise>
      */
-    public function findPrevByWorkout(Workout $workout): array
+    public function findPrevByWorkoutId(Uuid $workoutId): array
     {
         $sql = <<<'SQL'
             SELECT id
@@ -47,17 +49,56 @@ final class WorkoutExerciseRepository extends ServiceEntityRepository
             WHERE prev.id IS NOT NULL AND prev.workout_id = :workout_id;
             SQL;
 
-        $ids = $this->getEntityManager()->getConnection()
-            ->executeQuery($sql, ['workout_id' => $workout->getId()])
+        $prevIds = $this->getEntityManager()->getConnection()
+            ->executeQuery($sql, ['workout_id' => $workoutId])
             ->fetchFirstColumn();
 
-        if ([] === $ids) {
+        if ([] === $prevIds) {
             return [];
         }
 
         return $this->createQueryBuilder('we')
             ->andWhere('we.id IN (:ids)')
-            ->setParameter('ids', $ids)
+            ->setParameter('ids', $prevIds)
+            ->innerJoin('we.exercise', 'e')
+            ->addSelect('e')
+            ->leftJoin('we.sets', 'ws')
+            ->addSelect('ws')
+            ->addOrderBy('ws.orderIndex', Order::Ascending->value)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return list<WorkoutExercise>
+     */
+    public function findPrevByIds(Uuid ...$ids): array
+    {
+        if ([] === $ids) {
+            return [];
+        }
+
+        $sql = <<<'SQL'
+            SELECT id
+            FROM (
+                SELECT we.id as next_id, LAG(we.id) OVER (PARTITION BY we.exercise_id ORDER BY w.date) AS id
+                FROM workout_exercises we
+                JOIN workouts w ON w.id = we.workout_id
+            ) as prev
+            WHERE prev.id IS NOT NULL AND prev.next_id IN (:ids);
+            SQL;
+
+        $prevIds = $this->getEntityManager()->getConnection()
+            ->executeQuery($sql, ['ids' => $ids], ['ids' => ArrayParameterType::STRING])
+            ->fetchFirstColumn();
+
+        if ([] === $prevIds) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('we')
+            ->andWhere('we.id IN (:ids)')
+            ->setParameter('ids', $prevIds)
             ->innerJoin('we.exercise', 'e')
             ->addSelect('e')
             ->leftJoin('we.sets', 'ws')

@@ -305,19 +305,19 @@ export class EasterEggs {
     }
 
     #bird() {
-        document.getElementById('footer-bird').onclick = () => {
+        document.getElementById('footer-bird')?.addEventListener('click', () => {
             const data = document.documentElement.dataset;
             const number = Number(data.eggBird ?? 0) + 1;
 
             data.eggBird = number > 3 ? '0' : number.toString();
-        }
+        })
     }
 
     /**
      * @return {HTMLDivElement|null}
      */
     #dog() {
-        document.getElementById('footer-dog').onclick = event => {
+        document.getElementById('footer-dog')?.addEventListener('click', event => {
             const container = document.querySelector('.body-container');
             container.classList.add('is-loading');
 
@@ -339,6 +339,6 @@ export class EasterEggs {
                     container.innerHTML = '';
                     container.appendChild(img);
                 });
-        }
+        })
     }
 }

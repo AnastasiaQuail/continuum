@@ -38,11 +38,24 @@ final readonly class WorkoutExerciseService
     public function getPrevExerciseMap(Workout $workout): array
     {
         $workoutExercises = [];
-        foreach ($this->repository->findPrevByWorkout($workout) as $workoutExercise) {
+        foreach ($this->repository->findPrevByWorkoutId($workout->getId()) as $workoutExercise) {
             $workoutExercises[(string) $workoutExercise->getExercise()->getId()] = $workoutExercise;
         }
 
         return $workoutExercises;
+    }
+
+    /**
+     * @return list<WorkoutExercise>
+     */
+    public function getPrevExerciseByIds(WorkoutExercise ...$workoutExercises): array
+    {
+        $ids = [];
+        foreach ($workoutExercises as $workoutExercise) {
+            $ids[] = $workoutExercise->getId();
+        }
+
+        return $this->repository->findPrevByIds(...$ids);
     }
 
     /**

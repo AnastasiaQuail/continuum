@@ -225,19 +225,19 @@
     {%- endblock -%}
 
     <div class="body">
+        <div id="body-messages" class="body-messages">
+            {%- if app.request.hasPreviousSession -%}
+                {%- for type, messages in app.flashes -%}
+                    {%- for message in messages -%}
+                        <div class="alert alert-{{ type }} alert-dismissible hidden"
+                             role="alert">{{ message|trans }}</div>
+                    {%- endfor -%}
+                {%- endfor -%}
+            {%- endif -%}
+        </div>
+
         {%- block body -%}
             <main class="body-container">
-                <div id="body-messages" class="body-messages">
-                    {%- if app.request.hasPreviousSession -%}
-                        {%- for type, messages in app.flashes -%}
-                            {%- for message in messages -%}
-                                <div class="alert alert-{{ type }} alert-dismissible hidden"
-                                     role="alert">{{ message|trans }}</div>
-                            {%- endfor -%}
-                        {%- endfor -%}
-                    {%- endif -%}
-                </div>
-
                 {%- block breadcrumb -%}
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
