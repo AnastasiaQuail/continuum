@@ -47,7 +47,7 @@ final class NewCalendarEventType extends AbstractImmutableType
      *  time: FormInterface<DateTimeImmutable|string>
      * } $forms
      *
-     * @phpstan-ignore method.childParameterType
+     * @phpstan-ignore method.childParameterType (fix of parent stub)
      */
     #[Override]
     protected function mapDataClass(array $forms): NewCalendarEvent

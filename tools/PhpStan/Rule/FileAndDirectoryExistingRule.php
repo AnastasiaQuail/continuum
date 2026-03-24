@@ -42,7 +42,7 @@ final readonly class FileAndDirectoryExistingRule implements Rule
             !$node->left instanceof Dir
             && !(
                 $node->left instanceof FuncCall
-                // @phpstan-ignore property.notFound
+                // @phpstan-ignore property.notFound (fix for phpstan, property exists)
                 && 'dirname' === $node->left->name->name
             )
         ) {

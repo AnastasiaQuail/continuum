@@ -38,7 +38,7 @@ final class AppFixturesTest extends TestCase
             }
         );
         $this->manager->method('getClassMetadata')
-            // @phpstan-ignore-next-line argument.type
+            // @phpstan-ignore argument.type (fix for phpstan, $className is not empty)
             ->willReturnCallback(static fn (string $className): ClassMetadata => new ClassMetadata($className));
 
         $this->referenceRepository = $this->createMock(ReferenceRepository::class);

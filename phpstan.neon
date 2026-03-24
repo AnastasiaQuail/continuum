@@ -25,6 +25,7 @@ parameters:
 	doctrine:
 		objectManagerLoader: tests/object-manager.php
 
+	reportIgnoresWithoutComments: true
 	checkTooWideReturnTypesInProtectedAndPublicMethods: true
 	checkTooWideParameterOutInProtectedAndPublicMethods: true
 	checkTooWideThrowTypesInProtectedAndPublicMethods: true

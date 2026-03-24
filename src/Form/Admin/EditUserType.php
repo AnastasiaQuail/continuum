@@ -47,7 +47,7 @@ final class EditUserType extends AbstractImmutableType
      *  roles: FormInterface<null|string>
      * } $forms
      *
-     * @phpstan-ignore method.childParameterType
+     * @phpstan-ignore method.childParameterType (fix of parent stub)
      */
     #[Override]
     protected function mapDataClass(array $forms): EditUser
@@ -56,7 +56,7 @@ final class EditUserType extends AbstractImmutableType
 
         return new EditUser(
             $forms['status']->getData(),
-            // @phpstan-ignore argument.type
+            // @phpstan-ignore argument.type (will check by attribute)
             '' === $roles ? [] : explode(',', $roles),
         );
     }

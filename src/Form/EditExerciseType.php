@@ -45,7 +45,7 @@ final class EditExerciseType extends AbstractImmutableType
      *  name: FormInterface<null|string>
      * } $forms
      *
-     * @phpstan-ignore method.childParameterType
+     * @phpstan-ignore method.childParameterType (fix of parent stub)
      */
     #[Override]
     protected function mapDataClass(array $forms): EditExercise

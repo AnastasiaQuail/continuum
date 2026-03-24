@@ -48,7 +48,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
      * @param null|T $viewData
      * @param Traversable<mixed, FormInterface<mixed>> $forms
      *
-     * @phpstan-ignore-next-line method.childParameterType method.childParameterType
+     * @phpstan-ignore method.childParameterType (fix of parent stub), method.childParameterType (fix of parent stub)
      */
     #[Override]
     final public function mapDataToForms(mixed $viewData, Traversable $forms): void
@@ -72,7 +72,7 @@ abstract class AbstractImmutableType extends AbstractType implements DataMapperI
     /**
      * @param Traversable<mixed, FormInterface<mixed>> $forms
      *
-     * @phpstan-ignore-next-line method.childParameterType
+     * @phpstan-ignore method.childParameterType (fix of parent stub)
      */
     #[Override]
     final public function mapFormsToData(Traversable $forms, mixed &$viewData): void

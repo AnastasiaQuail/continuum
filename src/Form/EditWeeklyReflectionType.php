@@ -72,7 +72,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
      *  isAchievementPrivate: FormInterface<bool>
      * } $forms
      *
-     * @phpstan-ignore method.childParameterType
+     * @phpstan-ignore method.childParameterType (fix of parent stub)
      */
     #[Override]
     protected function mapDataClass(array $forms): EditWeeklyReflection
