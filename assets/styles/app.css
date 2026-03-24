@@ -706,7 +706,7 @@ textarea {
 
 .sidebar {
     position: fixed;
-    top: calc(var(--container-gap-block) + var(--header-height));
+    top: calc(var(--header-gap-block) + var(--header-height));
     bottom: 0;
     display: none;
     grid-template-rows: auto 1fr;
