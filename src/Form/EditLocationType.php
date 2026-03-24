@@ -60,7 +60,7 @@ final class EditLocationType extends AbstractImmutableType
      *  longitude: FormInterface<float>
      * } $forms
      *
-     * @phpstan-ignore method.childParameterType
+     * @phpstan-ignore method.childParameterType (fix of parent stub)
      */
     #[Override]
     protected function mapDataClass(array $forms): EditLocation

@@ -44,7 +44,7 @@ final class EditMoodReflectionType extends AbstractImmutableType
      *  text: FormInterface<null|string>
      * } $forms
      *
-     * @phpstan-ignore method.childParameterType
+     * @phpstan-ignore method.childParameterType (fix of parent stub)
      */
     #[Override]
     protected function mapDataClass(array $forms): EditMoodReflection

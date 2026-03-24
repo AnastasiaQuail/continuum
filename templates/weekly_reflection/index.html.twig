@@ -47,20 +47,20 @@
                         {{ include('weekly_reflection/_alert.html.twig', {
                             type: 'joy',
                             is_empty: reflection is null,
-                            text: reflection?.joy?.text,
-                            is_private: reflection?.joy?.isPrivate,
+                            text: reflection?.joy.text,
+                            is_private: reflection?.joy.isPrivate,
                         }) }}
                         {{ include('weekly_reflection/_alert.html.twig', {
                             type: 'difficulty',
                             is_empty: reflection is null,
-                            text: reflection?.difficulty?.text,
-                            is_private: reflection?.difficulty?.isPrivate,
+                            text: reflection?.difficulty.text,
+                            is_private: reflection?.difficulty.isPrivate,
                         }) }}
                         {{ include('weekly_reflection/_alert.html.twig', {
                             type: 'achievement',
                             is_empty: reflection is null,
-                            text: reflection?.achievement?.text,
-                            is_private: reflection?.achievement?.isPrivate,
+                            text: reflection?.achievement.text,
+                            is_private: reflection?.achievement.isPrivate,
                         }) }}
                     </div>
                 </div>

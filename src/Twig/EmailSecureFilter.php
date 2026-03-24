@@ -11,7 +11,7 @@ final readonly class EmailSecureFilter
     #[AsTwigFilter('email_secure')]
     public function __invoke(string $email): string
     {
-        // @phpstan-ignore offsetAccess.notFound
+        // @phpstan-ignore offsetAccess.notFound (email always includes a domain)
         [$name, $domain] = explode('@', $email);
 
         if (strlen($name) <= 2) {
