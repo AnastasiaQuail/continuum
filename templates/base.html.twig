@@ -122,6 +122,15 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         {{- _self.sidebar_link(
+                            'app_messages',
+                            [],
+                            ux_icon('lucide:messages-square'),
+                            'Messenger',
+                            true,
+                        ) -}}
+                    </li>
+                    <li class="nav-item">
+                        {{- _self.sidebar_link(
                             'app_calendar',
                             ['app_calendar_day'],
                             ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}),

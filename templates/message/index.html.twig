@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts -%}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('messages-container').parentElement;
+            container.scrollTo({top: container.scrollHeight, behavior: 'auto'});
+        });
+    </script>
+{%- endblock %}
+
+{% block title %}Messenger{% endblock %}
+{% block body_id %}messages{% endblock %}
+
+{% block breadcrumb %}{% endblock %}
+{% block body_title %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block main -%}
+    <section class="body-messages-container">
+        <div class="messages-body">
+            <section id="messages-container" class="messages-container">
+                {%- for message in messages -%}
+                    <div class="message-row {{ message.sender === app.user ? 'message-myself' : 'message-other' }}">
+                        <article class="message">
+                            <div class="message-body">{{ message.content }}</div>
+                            <div class="message-time">{{ message.createdAt.format('H:i') }}</div>
+                        </article>
+                    </div>
+                {%- endfor -%}
+            </section>
+        </div>
+
+        <section class="message-creation">
+            <div class="message-creation-body">
+                <form method="post" action="{{ path('app_message_create', {chatId: chat.id}) }}">
+                    <textarea class="form-control" required="required" autofocus="autofocus" autocomplete="off"
+                              name="content" placeholder="Write a message..."></textarea>
+
+                    <button class="message-creation-send" type="submit">{{ ux_icon('lucide:send-horizontal') }}</button>
+                </form>
+            </div>
+        </section>
+    </section>
+{%- endblock %}
