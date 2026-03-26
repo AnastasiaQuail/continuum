@@ -32,7 +32,7 @@ final class CreateController extends AbstractController
             $dto = $form->getData();
             $exercise = $this->exerciseService->create($dto);
 
-            $this->addFlash('success', sprintf('The "%s" exercise was created.', $exercise->getName()));
+            $this->addFlash('success', sprintf('The "%s" exercise was created.', $exercise->name));
 
             return $this->redirectToRoute('app_exercises');
         }

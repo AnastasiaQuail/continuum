@@ -29,10 +29,10 @@ final class EditExerciseType extends AbstractImmutableType
         $builder->setDataMapper($this)
             ->add('group', EnumType::class, [
                 'class' => ExerciseGroup::class,
-                'data' => $exercise?->getGroup(),
+                'data' => $exercise?->group,
             ])
             ->add('name', TextType::class, [
-                'data' => $exercise?->getName(),
+                'data' => $exercise?->name,
                 'attr' => [
                     'autocomplete' => 'off',
                 ],

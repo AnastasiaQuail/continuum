@@ -23,6 +23,6 @@ final class WorkoutCreateController extends AbstractController
     {
         $workout = $this->workoutService->create();
 
-        return $this->redirectToRoute('app_workouts_view', ['id' => $workout->getId()]);
+        return $this->redirectToRoute('app_workouts_view', ['id' => $workout->id]);
     }
 }

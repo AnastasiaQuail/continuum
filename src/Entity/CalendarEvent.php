@@ -23,53 +23,42 @@ final class CalendarEvent
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     public function __construct(
         #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-        private readonly DateTimeImmutable $datetime,
+        public readonly DateTimeImmutable $datetime,
         #[ORM\Column(enumType: CalendarEventFormat::class)]
         private readonly CalendarEventFormat $format,
         #[ORM\Column(enumType: CalendarEventType::class)]
-        private readonly CalendarEventType $type,
+        public readonly CalendarEventType $type,
         #[ORM\Column(length: 255)]
-        private readonly string $title,
+        public private(set) string $title {
+            set => '' !== $value ? mb_ucfirst($value) : throw new InvalidArgumentException('Title cannot be empty.');
+        },
     ) {
         $this->id = Uuid::v7();
     }
 
-    public function getId(): UuidV7
+    public function getCreatedAt(): DateTimeImmutable
     {
-        return $this->id instanceof UuidV7 ? $this->id : throw new InvalidArgumentException('Wrong UUID');
+        /** @var UuidV7 $id */
+        $id = $this->id;
+
+        return $id->getDateTime();
     }
 
-    public function isOlderThan(self $event): bool
+    public function getUserDatetime(User $user): DateTimeImmutable
     {
-        return $this->getId()->getDateTime() < $event->getId()->getDateTime();
-    }
+        if ($this->isAllDay()) {
+            return new DateTimeImmutable($this->datetime->format('Y-m-d H:i:s'), $user->timezone);
+        }
 
-    public function getDatetime(): DateTimeImmutable
-    {
-        return $this->datetime;
+        return $this->datetime->setTimezone($user->timezone);
     }
 
     public function isAllDay(): bool
     {
         return CalendarEventFormat::Day === $this->format;
-    }
-
-    public function getFormat(): CalendarEventFormat
-    {
-        return $this->format;
-    }
-
-    public function getType(): CalendarEventType
-    {
-        return $this->type;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
     }
 }

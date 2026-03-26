@@ -99,15 +99,15 @@ final class WorkoutVoter extends Voter
             self::DELETE,
             self::EXERCISE_CREATE => $subject instanceof Workout && $this->isCurrentDay($subject),
             self::EXERCISE_DELETE,
-            self::SET_CREATE => $subject instanceof WorkoutExercise && $this->isCurrentDay($subject->getWorkout()),
+            self::SET_CREATE => $subject instanceof WorkoutExercise && $this->isCurrentDay($subject->workout),
             self::SET_DELETE => $subject instanceof WorkoutSet
-                && $this->isCurrentDay($subject->getWorkoutExercise()->getWorkout()),
+                && $this->isCurrentDay($subject->workoutExercise->workout),
             default => false,
         };
     }
 
     private function isCurrentDay(Workout $workout): bool
     {
-        return $workout->getDate()->format('Y-m-d') === new DateTimeImmutable()->format('Y-m-d');
+        return $workout->date->format('Y-m-d') === new DateTimeImmutable()->format('Y-m-d');
     }
 }

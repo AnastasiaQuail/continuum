@@ -44,7 +44,7 @@ final class DayController extends AbstractController
             $dto = $form->getData();
             $event = $this->calendarEventService->create($user, $day, $dto);
 
-            $this->addFlash('success', sprintf('The "%s" event was created.', $event->getTitle()));
+            $this->addFlash('success', sprintf('The "%s" event was created.', $event->title));
 
             return $this->redirectToRoute('app_calendar_day', ['day' => $day->format('Y-m-d')]);
         }

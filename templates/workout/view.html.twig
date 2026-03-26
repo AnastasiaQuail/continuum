@@ -149,7 +149,7 @@
                                             {%- for exercise in exercises -%}
                                                 {%- if exercise_group === exercise.group -%}
                                                     <option value="{{ exercise.id }}">
-                                                        {{- exercise.name|capitalize -}}
+                                                        {{- exercise.name -}}
                                                     </option>
                                                 {%- endif -%}
                                             {%- endfor -%}

@@ -102,7 +102,7 @@
                                          style="--exercise-color: var({{ '--color-' ~ workout_exercise.exercise.group.color.value }});">
                                         <div class="workout-exercise-description">
                                             <div class="exercise-name">
-                                                {{- workout_exercise.exercise.name|capitalize -}}
+                                                {{- workout_exercise.exercise.name -}}
 
                                                 {%- set we_id = workout_exercise.id.toString -%}
                                                 {%- if progresses[we_id] is defined -%}

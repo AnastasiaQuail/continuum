@@ -38,7 +38,7 @@ final readonly class CalendarEventService
         $events = [];
 
         foreach ($this->repository->findByYear($year, $user->timezone) as $event) {
-            $date = $event->getDatetime()->setTimezone($user->timezone)->format('Y-m-d');
+            $date = $event->getUserDatetime($user)->format('Y-m-d');
 
             if (!array_key_exists($date, $events)) {
                 $events[$date] = [
@@ -57,7 +57,10 @@ final readonly class CalendarEventService
         return array_map(
             static function (array $day): CombinedCalendarEvent {
                 $days = $day['days'];
-                usort($days, static fn (CalendarEvent $a, CalendarEvent $b): int => $b->isOlderThan($a) ? 1 : 0);
+                usort(
+                    $days,
+                    static fn (CalendarEvent $a, CalendarEvent $b): int => $a->getCreatedAt() <=> $b->getCreatedAt(),
+                );
 
                 return new CombinedCalendarEvent(array_first($days), $day['hours']);
             },
@@ -73,8 +76,8 @@ final readonly class CalendarEventService
         $data = [];
 
         foreach ($this->repository->findByMonth($endDate, $user->timezone) as $event) {
-            $data[$event->getTitle()][$event->getType()->value] ??= 0;
-            ++$data[$event->getTitle()][$event->getType()->value];
+            $data[$event->title][$event->type->value] ??= 0;
+            ++$data[$event->title][$event->type->value];
         }
 
         $events = [];

@@ -24,6 +24,6 @@ final class WorkoutExerciseDeleteController extends AbstractController
     {
         $this->workoutExerciseService->delete($workoutExercise);
 
-        return $this->redirectToRoute('app_workouts_view', ['id' => $workoutExercise->getWorkout()->getId()]);
+        return $this->redirectToRoute('app_workouts_view', ['id' => $workoutExercise->workout->id]);
     }
 }

@@ -17,9 +17,10 @@ final readonly class WorkoutExerciseService
 
     public function create(Workout $workout, Exercise $exercise): WorkoutExercise
     {
-        $workoutExercise = new WorkoutExercise($workout, $exercise);
-        $workoutExercise->setOrderIndex(
-            $this->repository->findMaxOrderIndexByWorkout($workout) + 1,
+        $workoutExercise = new WorkoutExercise(
+            workout: $workout,
+            exercise: $exercise,
+            orderIndex: $this->repository->findMaxOrderIndexByWorkoutId($workout->id) + 1,
         );
 
         $this->repository->create($workoutExercise);
@@ -38,8 +39,8 @@ final readonly class WorkoutExerciseService
     public function getPrevExerciseMap(Workout $workout): array
     {
         $workoutExercises = [];
-        foreach ($this->repository->findPrevByWorkoutId($workout->getId()) as $workoutExercise) {
-            $workoutExercises[(string) $workoutExercise->getExercise()->getId()] = $workoutExercise;
+        foreach ($this->repository->findPrevByWorkoutId($workout->id) as $workoutExercise) {
+            $workoutExercises[(string) $workoutExercise->exercise->id] = $workoutExercise;
         }
 
         return $workoutExercises;
@@ -52,7 +53,7 @@ final readonly class WorkoutExerciseService
     {
         $ids = [];
         foreach ($workoutExercises as $workoutExercise) {
-            $ids[] = $workoutExercise->getId();
+            $ids[] = $workoutExercise->id;
         }
 
         return $this->repository->findPrevByIds(...$ids);
@@ -66,10 +67,10 @@ final readonly class WorkoutExerciseService
         $exercises = [];
 
         foreach ($workouts as $workout) {
-            $date = $workout->getDate()->format('Y-m-d');
+            $date = $workout->date->format('Y-m-d');
             $exercises[$date] ??= [];
 
-            foreach ($workout->getWorkoutExercises() as $workoutExercise) {
+            foreach ($workout->workoutExercises as $workoutExercise) {
                 $exercises[$date][] = $workoutExercise;
             }
         }

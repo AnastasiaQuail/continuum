@@ -24,8 +24,8 @@ final readonly class WorkoutReportService
         $exercises = [];
 
         foreach ($workouts as $workout) {
-            foreach ($workout->getWorkoutExercises() as $workoutExercise) {
-                $exerciseId = (string) $workoutExercise->getExercise()->getId();
+            foreach ($workout->workoutExercises as $workoutExercise) {
+                $exerciseId = (string) $workoutExercise->exercise->id;
 
                 $exercises[$exerciseId] ??= [];
                 $exercises[$exerciseId][] = $workoutExercise;
@@ -46,7 +46,7 @@ final readonly class WorkoutReportService
 
             if (!$progress->change->isUnchanged()) {
                 $progresses[] = new WorkoutExerciseProgress(
-                    exercise: $workoutExercise->getExercise(),
+                    exercise: $workoutExercise->exercise,
                     progress: $this->workoutProgressService->getProgress($prevWorkoutExercise, $workoutExercise),
                 );
             }
@@ -80,9 +80,9 @@ final readonly class WorkoutReportService
             $minTime = PHP_INT_MAX;
             $maxTime = 0;
 
-            foreach ($workout->getWorkoutExercises() as $workoutExercise) {
-                foreach ($workoutExercise->getSets() as $set) {
-                    $setTime = $set->getPerformedAt()->getTimestamp();
+            foreach ($workout->workoutExercises as $workoutExercise) {
+                foreach ($workoutExercise->sets as $set) {
+                    $setTime = $set->performedAt->getTimestamp();
 
                     if ($setTime < $minTime) {
                         $minTime = $setTime;

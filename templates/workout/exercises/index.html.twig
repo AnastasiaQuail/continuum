@@ -28,7 +28,7 @@
                     class="exercise" data-general-type="{{ exercise.group.color.value }}">
                     <div class="badge">{{ exercise.group.name }}</div>
                     <div class="exercise-name">
-                        <span>{{ exercise.name|capitalize }}</span>
+                        <span>{{ exercise.name }}</span>
                         <span class="exercise-usages">({{ exercise_count_map[exercise.id.toString] }} workouts)</span>
                     </div>
                 </{% if is_granted %}a{% else %}span{% endif %}>

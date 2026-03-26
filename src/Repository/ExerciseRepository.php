@@ -31,7 +31,10 @@ final class ExerciseRepository extends ServiceEntityRepository
     public function findOrdered(): array
     {
         /** @var list<Exercise> */
-        return $this->findBy([], ['group' => Order::Ascending->value]);
+        return $this->findBy([], [
+            'group' => Order::Ascending->value,
+            'name' => Order::Ascending->value,
+        ]);
     }
 
     /**

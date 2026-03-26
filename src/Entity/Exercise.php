@@ -20,54 +20,23 @@ final class Exercise
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private Uuid $id;
+    public private(set) Uuid $id;
 
     /**
      * @var Collection<int, WorkoutExercise>
      */
     #[ORM\OneToMany(targetEntity: WorkoutExercise::class, mappedBy: 'exercise', orphanRemoval: true)]
-    private Collection $workoutExercises;
+    public private(set) Collection $workoutExercises;
 
     public function __construct(
         #[ORM\Column(length: 255)]
-        private string $name,
+        public string $name {
+            set => mb_ucfirst(mb_strtolower($value));
+        },
         #[ORM\Column(name: 'exercise_group', enumType: ExerciseGroup::class)]
-        private ExerciseGroup $group,
+        public ExerciseGroup $group,
     ) {
         $this->id = Uuid::v7();
         $this->workoutExercises = new ArrayCollection();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    public function getGroup(): ExerciseGroup
-    {
-        return $this->group;
-    }
-
-    public function setGroup(ExerciseGroup $group): void
-    {
-        $this->group = $group;
-    }
-
-    /**
-     * @return Collection<int, WorkoutExercise>
-     */
-    public function getWorkoutExercises(): Collection
-    {
-        return $this->workoutExercises;
     }
 }
