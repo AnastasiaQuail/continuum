@@ -26,10 +26,10 @@ final class EventDeleteController extends AbstractController
     {
         $this->calendarEventService->delete($event);
 
-        $this->addFlash('success', sprintf('Event "%s" has been deleted.', $event->getTitle()));
+        $this->addFlash('success', sprintf('Event "%s" has been deleted.', $event->title));
 
         return $this->redirectToRoute('app_calendar_day', [
-            'day' => $event->getDatetime()->setTimezone($user->timezone)->format('Y-m-d'),
+            'day' => $event->getUserDatetime($user)->format('Y-m-d'),
         ]);
     }
 }

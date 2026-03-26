@@ -32,11 +32,11 @@ final readonly class WorkoutProgressService
         $progresses = [];
 
         foreach ($workouts as $workout) {
-            foreach ($workout->getWorkoutExercises() as $workoutExercise) {
-                $exerciseId = (string) $workoutExercise->getExercise()->getId();
+            foreach ($workout->workoutExercises as $workoutExercise) {
+                $exerciseId = (string) $workoutExercise->exercise->id;
 
                 if (isset($prevWorkoutExercises[$exerciseId])) {
-                    $progresses[(string) $workoutExercise->getId()] = $this->getProgress(
+                    $progresses[(string) $workoutExercise->id] = $this->getProgress(
                         $prevWorkoutExercises[$exerciseId],
                         $workoutExercise
                     );
@@ -52,12 +52,12 @@ final readonly class WorkoutProgressService
             $prevWorkoutExercises = $this->workoutExerciseService->getPrevExerciseByIds(...$unhandledWorkoutExercises);
 
             foreach ($prevWorkoutExercises as $prevWorkoutExercise) {
-                $exerciseId = (string) $prevWorkoutExercise->getExercise()->getId();
+                $exerciseId = (string) $prevWorkoutExercise->exercise->id;
 
                 if (isset($unhandledWorkoutExercises[$exerciseId])) {
                     $workoutExercise = $unhandledWorkoutExercises[$exerciseId];
 
-                    $progresses[(string) $workoutExercise->getId()] = $this->getProgress(
+                    $progresses[(string) $workoutExercise->id] = $this->getProgress(
                         $prevWorkoutExercise,
                         $workoutExercise,
                     );

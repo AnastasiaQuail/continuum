@@ -51,7 +51,7 @@ final readonly class UpcomingEventService
         $hourEvents = [];
 
         foreach ($events as $event) {
-            $type = $event->getType()->value;
+            $type = $event->type->value;
 
             if ($event->isAllDay()) {
                 if (!array_key_exists($type, $dayEvents)) {
@@ -64,7 +64,7 @@ final readonly class UpcomingEventService
 
         /** @var array<string, CalendarEvent> $data */
         $data = [...$hourEvents, ...$dayEvents];
-        usort($data, static fn (CalendarEvent $a, CalendarEvent $b): int => $a->getDatetime() <=> $b->getDatetime());
+        usort($data, static fn (CalendarEvent $a, CalendarEvent $b): int => $a->datetime <=> $b->datetime);
 
         return $data;
     }
@@ -81,8 +81,8 @@ final readonly class UpcomingEventService
         foreach ($events as $event) {
             if (null !== $text = $this->getUpcomingText($user, $event)) {
                 $upcomingEvents[] = new UpcomingEvent(
-                    type: $event->getType(),
-                    title: $event->getTitle(),
+                    type: $event->type,
+                    title: $event->title,
                     text: $text,
                 );
             }
@@ -96,13 +96,8 @@ final readonly class UpcomingEventService
      */
     private function getUpcomingText(User $user, CalendarEvent $event): ?string
     {
+        $eventDate = $event->getUserDatetime($user);
         $currentDate = new DateTimeImmutable('now', $user->timezone);
-
-        if ($event->isAllDay()) {
-            $eventDate = new DateTimeImmutable($event->getDatetime()->format('Y-m-d H:i:s'), $user->timezone);
-        } else {
-            $eventDate = $event->getDatetime()->setTimezone($user->timezone);
-        }
 
         if (
             $eventDate < $currentDate

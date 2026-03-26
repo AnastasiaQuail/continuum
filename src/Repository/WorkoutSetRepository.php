@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Continuum\Repository;
 
-use Continuum\Entity\WorkoutExercise;
 use Continuum\Entity\WorkoutSet;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * @extends ServiceEntityRepository<WorkoutSet>
@@ -19,12 +19,12 @@ final class WorkoutSetRepository extends ServiceEntityRepository
         parent::__construct($registry, WorkoutSet::class);
     }
 
-    public function findMaxOrderIndexByWorkout(WorkoutExercise $workoutExercise): int
+    public function findMaxOrderIndexByWorkoutExerciseId(Uuid $id): int
     {
         $result = $this->createQueryBuilder('ws')
             ->select('MAX(ws.orderIndex)')
             ->andWhere('ws.workoutExercise = :id')
-            ->setParameter('id', $workoutExercise->getId())
+            ->setParameter('id', $id)
             ->getQuery()
             ->getSingleScalarResult();
 

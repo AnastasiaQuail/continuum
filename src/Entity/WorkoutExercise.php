@@ -20,59 +20,25 @@ final class WorkoutExercise
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private Uuid $id;
-
-    #[ORM\Column(type: Types::SMALLINT)]
-    private int $orderIndex = 0;
+    public private(set) Uuid $id;
 
     /**
      * @var Collection<int, WorkoutSet>
      */
     #[ORM\OneToMany(targetEntity: WorkoutSet::class, mappedBy: 'workoutExercise', orphanRemoval: true)]
-    private Collection $sets;
+    public private(set) Collection $sets;
 
     public function __construct(
         #[ORM\ManyToOne(inversedBy: 'workoutExercises')]
         #[ORM\JoinColumn(nullable: false)]
-        private readonly Workout $workout,
+        public readonly Workout $workout,
         #[ORM\ManyToOne(inversedBy: 'workoutExercises')]
         #[ORM\JoinColumn(nullable: false)]
-        private readonly Exercise $exercise,
+        public readonly Exercise $exercise,
+        #[ORM\Column(type: Types::SMALLINT)]
+        public readonly int $orderIndex = 0,
     ) {
         $this->id = Uuid::v7();
         $this->sets = new ArrayCollection();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getWorkout(): Workout
-    {
-        return $this->workout;
-    }
-
-    public function getExercise(): Exercise
-    {
-        return $this->exercise;
-    }
-
-    public function getOrderIndex(): int
-    {
-        return $this->orderIndex;
-    }
-
-    public function setOrderIndex(int $orderIndex): void
-    {
-        $this->orderIndex = $orderIndex;
-    }
-
-    /**
-     * @return Collection<int, WorkoutSet>
-     */
-    public function getSets(): Collection
-    {
-        return $this->sets;
     }
 }

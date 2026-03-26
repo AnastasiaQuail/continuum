@@ -19,66 +19,32 @@ final class WorkoutSet
     #[ORM\Column(type: UuidType::NAME, unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
-    private Uuid $id;
-
-    #[ORM\Column(type: Types::SMALLINT)]
-    private int $orderIndex = 0;
+    public private(set) Uuid $id;
 
     #[ORM\Column]
-    private DateTimeImmutable $performedAt;
+    public private(set) DateTimeImmutable $performedAt;
+
+    #[ORM\Column(name: 'weight')]
+    private int $weightValue = 0;
 
     public function __construct(
         #[ORM\ManyToOne(inversedBy: 'sets')]
         #[ORM\JoinColumn(nullable: false)]
-        private readonly WorkoutExercise $workoutExercise,
+        public readonly WorkoutExercise $workoutExercise,
+        public float $weight {
+            get => floor($this->weightValue / 100) / 10;
+            set {
+                $this->weightValue = (int) floor($value * 1000);
+            }
+        },
         #[ORM\Column]
-        private readonly int $weight,
+        public readonly int $reps,
         #[ORM\Column]
-        private readonly int $reps,
-        #[ORM\Column]
-        private readonly bool $isWarmup = false,
+        public readonly bool $isWarmup = false,
+        #[ORM\Column(type: Types::SMALLINT)]
+        public int $orderIndex = 0,
     ) {
         $this->id = Uuid::v7();
         $this->performedAt = new DateTimeImmutable();
-    }
-
-    public function getId(): Uuid
-    {
-        return $this->id;
-    }
-
-    public function getWorkoutExercise(): WorkoutExercise
-    {
-        return $this->workoutExercise;
-    }
-
-    public function getOrderIndex(): int
-    {
-        return $this->orderIndex;
-    }
-
-    public function setOrderIndex(int $orderIndex): void
-    {
-        $this->orderIndex = $orderIndex;
-    }
-
-    public function getWeight(): float
-    {
-        return round($this->weight / 1000, 1);
-    }
-
-    public function getReps(): int
-    {
-        return $this->reps;
-    }
-
-    public function isWarmup(): bool
-    {
-        return $this->isWarmup;
-    }
-
-    public function getPerformedAt(): DateTimeImmutable
-    {
-        return $this->performedAt;
     }
 }

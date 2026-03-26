@@ -19,12 +19,10 @@ final readonly class WorkoutSetService
     {
         $workoutSet = new WorkoutSet(
             workoutExercise: $workoutExercise,
-            weight: (int) round($dto->weight * 1000),
+            weight: $dto->weight,
             reps: $dto->reps,
             isWarmup: $dto->isWarmup(),
-        );
-        $workoutSet->setOrderIndex(
-            $this->repository->findMaxOrderIndexByWorkout($workoutExercise) + 1,
+            orderIndex: $this->repository->findMaxOrderIndexByWorkoutExerciseId($workoutExercise->id) + 1,
         );
 
         $this->repository->create($workoutSet);

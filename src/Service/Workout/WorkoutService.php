@@ -68,7 +68,7 @@ final readonly class WorkoutService
 
     public function delete(Workout $workout): void
     {
-        if (!$workout->getWorkoutExercises()->isEmpty()) {
+        if (!$workout->workoutExercises->isEmpty()) {
             throw new BadRequestHttpException('Workout has exercises');
         }
 

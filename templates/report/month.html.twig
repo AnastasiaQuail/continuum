@@ -208,7 +208,7 @@
                     {%- for workout_progress in workout_report.progresses -%}
                         <div class="workout-exercise-report"
                              data-general-type="{{ workout_progress.exercise.group.color.value }}">
-                            <span>{{ workout_progress.exercise.name|capitalize }}</span>
+                            <span>{{ workout_progress.exercise.name }}</span>
                             <span class="exercise-progress" data-change="{{ workout_progress.progress.change.value }}">
                                 {{- workout_progress.progress.percent -}}%
                                 {{- ux_icon('lucide:trending-up') -}}

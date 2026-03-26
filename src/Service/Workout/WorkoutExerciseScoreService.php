@@ -10,24 +10,24 @@ final readonly class WorkoutExerciseScoreService
 {
     public function getScore(WorkoutExercise $workoutExercise): float
     {
-        if ($workoutExercise->getSets()->isEmpty()) {
+        if ($workoutExercise->sets->isEmpty()) {
             return 0;
         }
 
         $result = 0;
         $count = 0;
 
-        foreach ($workoutExercise->getSets() as $set) {
-            if ($set->isWarmup()) {
+        foreach ($workoutExercise->sets as $set) {
+            if ($set->isWarmup) {
                 continue;
             }
 
-            $weight = $set->getWeight();
+            $weight = $set->weight;
             if (0.0 === $weight) {
                 $weight = 10;
             }
 
-            $result += $set->getReps() * $weight;
+            $result += $set->reps * $weight;
             ++$count;
         }
 

@@ -33,7 +33,7 @@ final class EditController extends AbstractController
             $dto = $form->getData();
             $exercise = $this->exerciseService->update($exercise, $dto);
 
-            $this->addFlash('success', sprintf('The "%s" exercise was updated.', $exercise->getName()));
+            $this->addFlash('success', sprintf('The "%s" exercise was updated.', $exercise->name));
 
             return $this->redirectToRoute('app_exercises');
         }

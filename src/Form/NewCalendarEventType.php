@@ -27,7 +27,10 @@ final class NewCalendarEventType extends AbstractImmutableType
         /** @var array{timezone: null|DateTimeZone} $options */
         $builder->setDataMapper($this)
             ->add('title', null, [
-                'attr' => ['autofocus' => true],
+                'attr' => [
+                    'autofocus' => true,
+                    'autocomplete' => 'on',
+                ],
             ])
             ->add('type', EnumType::class, [
                 'class' => CalendarEventType::class,

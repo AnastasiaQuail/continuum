@@ -51,8 +51,8 @@ final readonly class ExerciseService
 
     public function update(Exercise $exercise, EditExercise $dto): Exercise
     {
-        $exercise->setName($dto->name);
-        $exercise->setGroup($dto->group);
+        $exercise->name = $dto->name;
+        $exercise->group = $dto->group;
 
         $this->repository->save($exercise);
 
