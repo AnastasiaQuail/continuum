@@ -6,6 +6,7 @@ namespace Continuum\Service\Workout;
 
 use Continuum\Dto\Request\Workout\EditExercise;
 use Continuum\Entity\Exercise;
+use Continuum\Enum\ExerciseGroup;
 use Continuum\Repository\ExerciseRepository;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
@@ -21,7 +22,20 @@ final readonly class ExerciseService
      */
     public function getAll(): array
     {
-        return $this->repository->findOrdered();
+        $map = [];
+        foreach (ExerciseGroup::cases() as $index => $case) {
+            $map[$case->value] = $index;
+        }
+
+        $exercises = $this->repository->findOrdered();
+
+        usort(
+            $exercises,
+            // @phpstan-ignore offsetAccess.notFound (key always exists), offsetAccess.notFound (key always exists)
+            static fn (Exercise $a, Exercise $b): int => $map[$a->group->value] <=> $map[$b->group->value],
+        );
+
+        return $exercises;
     }
 
     /**

@@ -112,11 +112,31 @@ class DimensionCalculator {
 
 /**
  * @param {HTMLElement} element
+ * @param {Object} options
+ * @param {Function} listenerOptions
+ */
+function initChart(element, options, listenerOptions) {
+    const myChart = echarts.init(element);
+    myChart.setOption(options);
+
+    window.addEventListener('resize', () => {
+        myChart.resize();
+    });
+
+    document.addEventListener('app:root-data:theme', () => {
+        myChart.setOption(listenerOptions());
+    });
+
+    document.addEventListener('app:root-data:sidebar', () => {
+        myChart.resize();
+    });
+}
+
+/**
+ * @param {HTMLElement} element
  * @param {Array<{type: string, prev_time: number, time: number, fat: number}>} data
  */
 function initMeasurementWeightChart(element, data) {
-    const myChart = echarts.init(element);
-
     const calculator = new DimensionCalculator();
     const xAxis = calculator.getExpandedBoundaries(
         0,
@@ -128,80 +148,74 @@ function initMeasurementWeightChart(element, data) {
     const redColor = getHexColorByCssProperty('--color-red');
     const greenColor = getHexColorByCssProperty('--color-green');
 
-    myChart.setOption({
-        animationDuration: 200,
-        grid: {left: 0, bottom: 0, top: 0, right: 0},
-        xAxis: {
-            min: xAxis.min,
-            max: xAxis.max,
-            axisLine: false,
-            axisLabel: false,
-            splitLine: {show: false}
-        },
-        yAxis: {
-            min: yAxis.min,
-            max: yAxis.max,
-            interval: yAxis.interval,
-            axisLine: false,
-            axisLabel: {
-                fontSize: 10,
-                formatter: '{value} {percentStyle|%}',
-                rich: {percentStyle: {fontSize: 8, opacity: 0.15}},
-                color: getHexColorByCssProperty('--color'),
-                opacity: 0.2,
+    initChart(
+        element,
+        {
+            animationDuration: 200,
+            grid: {left: 0, bottom: 0, top: 0, right: 0},
+            xAxis: {
+                min: xAxis.min,
+                max: xAxis.max,
+                axisLine: false,
+                axisLabel: false,
+                splitLine: {show: false}
             },
-            splitLine: {
-                show: true,
-                lineStyle: {
-                    color: getHexColorByCssProperty('--color'),
-                    opacity: 0.04,
-                }
-            },
-        },
-        visualMap: {
-            show: false,
-            dimension: 0,
-            pieces: data.map(item => {
-                return {
-                    gt: item.prev_time ?? null,
-                    lte: item.time,
-                    color: item.type === 'increased' ? redColor : greenColor
-                };
-            }),
-        },
-        series: [{
-            type: 'line',
-            data: data.map(item => [item.time, item.fat]),
-            smooth: true,
-            showSymbol: element.dataset.symbols !== 'hide',
-            symbol: 'circle',
-            areaStyle: {
-                opacity: 0.1,
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    {offset: 0, color: greenColor},
-                    {offset: 0.3, color: greenColor},
-                    {offset: 1, color: 'transparent'}
-                ])
-            },
-        }]
-    });
-
-    window.addEventListener('resize', () => {
-        myChart.resize();
-    });
-
-    document.addEventListener('app:root-data:theme', () => {
-        myChart.setOption({
             yAxis: {
-                axisLabel: {color: getHexColorByCssProperty('--color')},
-                splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}},
-            }
-        });
-    });
-
-    document.addEventListener('app:root-data:sidebar', () => {
-        myChart.resize();
-    });
+                min: yAxis.min,
+                max: yAxis.max,
+                interval: yAxis.interval,
+                axisLine: false,
+                axisLabel: {
+                    fontSize: 10,
+                    formatter: '{value} {percentStyle|%}',
+                    rich: {percentStyle: {fontSize: 8, opacity: 0.15}},
+                    color: getHexColorByCssProperty('--color'),
+                    opacity: 0.2,
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: getHexColorByCssProperty('--color'),
+                        opacity: 0.04,
+                    }
+                },
+            },
+            visualMap: {
+                show: false,
+                dimension: 0,
+                pieces: data.map(item => {
+                    return {
+                        gt: item.prev_time ?? null,
+                        lte: item.time,
+                        color: item.type === 'increased' ? redColor : greenColor
+                    };
+                }),
+            },
+            series: [{
+                type: 'line',
+                data: data.map(item => [item.time, item.fat]),
+                smooth: true,
+                showSymbol: element.dataset.symbols !== 'hide',
+                symbol: 'circle',
+                areaStyle: {
+                    opacity: 0.1,
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        {offset: 0, color: greenColor},
+                        {offset: 0.3, color: greenColor},
+                        {offset: 1, color: 'transparent'}
+                    ])
+                },
+            }]
+        },
+        function () {
+            return {
+                yAxis: {
+                    axisLabel: {color: getHexColorByCssProperty('--color')},
+                    splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}},
+                }
+            };
+        }
+    );
 }
 
 /**
@@ -209,8 +223,6 @@ function initMeasurementWeightChart(element, data) {
  * @param {Array<{type: string, color: string, prev_time: number, time: number}>} data
  */
 function initMoodReflectionsChart(element, data) {
-    const myChart = echarts.init(element);
-
     const calculator = new DimensionCalculator();
     const xAxis = calculator.getExpandedBoundaries(
         0,
@@ -223,72 +235,137 @@ function initMoodReflectionsChart(element, data) {
         values[value.color] = {color: value.color, value: value.type};
     }
 
-    myChart.setOption({
-        animationDuration: 200,
-        grid: {left: 0, bottom: 4, top: 4, right: 0},
-        xAxis: {
-            min: xAxis.min,
-            max: xAxis.max,
-            axisLine: false,
-            axisLabel: false,
-            splitLine: {show: false},
-        },
-        yAxis: {
-            min: 1,
-            max: 5,
-            interval: 1,
-            axisLine: false,
-            axisLabel: false,
-            splitLine: {
-                show: true,
-                lineStyle: {
-                    color: getHexColorByCssProperty('--color'),
-                    opacity: 0.04,
-                }
+    initChart(
+        element,
+        {
+            animationDuration: 200,
+            grid: {left: 0, bottom: 4, top: 4, right: 0},
+            xAxis: {
+                min: xAxis.min,
+                max: xAxis.max,
+                axisLine: false,
+                axisLabel: false,
+                splitLine: {show: false},
             },
-        },
-        visualMap: {
-            show: false,
-            pieces: Object.values(values).map(value => {
-                return {
-                    gt: value.value - 0.95,
-                    lte: value.value + 0.05,
-                    color: getHexColorByCssProperty('--color-' + value.color)
-                }
-            }),
-        },
-        series: [{
-            type: 'line',
-            data: data.map(item => [item.time, item.type]),
-            smooth: true,
-            symbol: 'circle',
-            areaStyle: {
-                opacity: 0.1,
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    {offset: 0, color: getHexColorByCssProperty('--color-green')},
-                    {offset: 0.3, color: getHexColorByCssProperty('--color-green')},
-                    {offset: 1, color: 'transparent'}
-                ])
-            },
-        }]
-    });
-
-    window.addEventListener('resize', () => {
-        myChart.resize();
-    });
-
-    document.addEventListener('app:root-data:theme', () => {
-        myChart.setOption({
             yAxis: {
-                axisLabel: {color: getHexColorByCssProperty('--color')},
-                splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}},
-            }
-        });
-    });
+                min: 1,
+                max: 5,
+                interval: 1,
+                axisLine: false,
+                axisLabel: false,
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: getHexColorByCssProperty('--color'),
+                        opacity: 0.04,
+                    }
+                },
+            },
+            visualMap: {
+                show: false,
+                pieces: Object.values(values).map(value => {
+                    return {
+                        gt: value.value - 0.95,
+                        lte: value.value + 0.05,
+                        color: getHexColorByCssProperty('--color-' + value.color)
+                    }
+                }),
+            },
+            series: [{
+                type: 'line',
+                data: data.map(item => [item.time, item.type]),
+                smooth: true,
+                symbol: 'circle',
+                areaStyle: {
+                    opacity: 0.1,
+                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                        {offset: 0, color: getHexColorByCssProperty('--color-green')},
+                        {offset: 0.3, color: getHexColorByCssProperty('--color-green')},
+                        {offset: 1, color: 'transparent'}
+                    ])
+                },
+            }]
+        },
+        function () {
+            return {
+                yAxis: {
+                    axisLabel: {color: getHexColorByCssProperty('--color')},
+                    splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}},
+                }
+            };
+        }
+    );
+}
 
-    document.addEventListener('app:root-data:sidebar', () => {
-        myChart.resize();
-    });
+/**
+ * @param {HTMLElement} element
+ * @param {Array<{score: number, date: number}>} data
+ */
+function initExercisesChart(element, data) {
+    const colorName = '--color-' + element.dataset.color;
+    const currentTime = new Date().getTime() / 1000;
+
+    const calculator = new DimensionCalculator();
+    const xAxis = calculator.getExpandedBoundaries(
+        currentTime - element.dataset.days * 86400,
+        currentTime,
+        0
+    );
+    const yAxis = calculator.getBoundariesByValues(data.map(item => item.score), 0.1);
+
+    initChart(
+        element,
+        {
+            animationDuration: 200,
+            color: getHexColorByCssProperty(colorName),
+            grid: {left: 0, bottom: 4, top: 4, right: 0},
+            xAxis: {
+                min: xAxis.min,
+                max: xAxis.max,
+                axisLine: false,
+                axisLabel: {
+                    fontSize: 10,
+                    formatter: function (value) {
+                        const date = new Date(value * 1000);
+
+                        return date.getDate() + ' ' + date.toLocaleString('en-US', {month: 'short'});
+                    },
+                    color: getHexColorByCssProperty('--color'),
+                    opacity: 0.2,
+                },
+                splitLine: {show: false},
+            },
+            yAxis: {
+                min: yAxis.min,
+                max: yAxis.max,
+                interval: yAxis.interval,
+                axisLine: false,
+                axisLabel: false,
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: getHexColorByCssProperty('--color'),
+                        opacity: 0.04,
+                    }
+                },
+            },
+            series: [{
+                type: 'line',
+                data: data.map(item => [item.date, item.score]),
+                itemStyle: {opacity: 0.6},
+                lineStyle: {opacity: 0.2},
+                smooth: true,
+                symbol: 'circle',
+            }]
+        },
+        function () {
+            return {
+                color: getHexColorByCssProperty(colorName),
+                xAxis: {axisLabel: {color: getHexColorByCssProperty('--color')}},
+                yAxis: {splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}}},
+            };
+        }
+    );
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -297,6 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
             initMeasurementWeightChart(element, JSON.parse(element.dataset.values));
         } else if (element.dataset.chart === 'mood-reflections') {
             initMoodReflectionsChart(element, JSON.parse(element.dataset.values));
+        } else if (element.dataset.chart === 'exercise-progress') {
+            initExercisesChart(element, JSON.parse(element.dataset.values));
         }
     })
 });

@@ -5,15 +5,19 @@ declare(strict_types=1);
 namespace Continuum\Service\Workout;
 
 use Continuum\Dto\Response\Workout\ExerciseProgress;
+use Continuum\Entity\User;
 use Continuum\Entity\Workout;
 use Continuum\Entity\WorkoutExercise;
 use Continuum\Enum\Change;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class WorkoutProgressService
 {
     public function __construct(
         private WorkoutExerciseService $workoutExerciseService,
         private WorkoutExerciseScoreService $workoutExerciseScoreService,
+        #[Autowire(param: 'app.workouts.exercise_progress.days')]
+        private int $exerciseProgressDays,
     ) {}
 
     /**
@@ -66,6 +70,28 @@ final readonly class WorkoutProgressService
         }
 
         return $progresses;
+    }
+
+    /**
+     * @return array<non-empty-string, list<array{score: float, date: int}>>
+     */
+    public function getScoreProgresses(User $user): array
+    {
+        $workoutExerciseMap = $this->workoutExerciseService->getPreviousDays($this->exerciseProgressDays, $user);
+        $data = [];
+
+        foreach ($workoutExerciseMap as $exerciseId => $workoutExercises) {
+            $data[$exerciseId] = [];
+
+            foreach ($workoutExercises as $workoutExercise) {
+                $data[$exerciseId][] = [
+                    'score' => $this->workoutExerciseScoreService->getScore($workoutExercise),
+                    'date' => $workoutExercise->workout->date->getTimestamp(),
+                ];
+            }
+        }
+
+        return $data;
     }
 
     public function getProgress(WorkoutExercise $prevExercise, WorkoutExercise $exercise): ExerciseProgress

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Continuum\Repository;
 
 use Continuum\Entity\WorkoutExercise;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Order;
 use Doctrine\DBAL\ArrayParameterType;
@@ -107,6 +109,17 @@ final class WorkoutExerciseRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return list<WorkoutExercise>
+     */
+    public function findPreviousDays(int $days, DateTimeZone $timeZone): array
+    {
+        return $this->findBetweenDates(
+            new DateTimeImmutable(sprintf('-%d days', $days - 1), $timeZone)->setTime(0, 0),
+            new DateTimeImmutable('now', $timeZone)->setTime(23, 59, 59),
+        );
+    }
+
     public function create(WorkoutExercise $workoutExercise): void
     {
         $this->getEntityManager()->persist($workoutExercise);
@@ -117,5 +130,25 @@ final class WorkoutExerciseRepository extends ServiceEntityRepository
     {
         $this->getEntityManager()->remove($workoutExercise);
         $this->getEntityManager()->flush();
+    }
+
+    /**
+     * @return list<WorkoutExercise>
+     */
+    private function findBetweenDates(DateTimeImmutable $from, DateTimeImmutable $to): array
+    {
+        return $this->createQueryBuilder('we')
+            ->innerJoin('we.workout', 'w')
+            ->addSelect('w')
+            ->andWhere('w.date BETWEEN :from AND :to')
+            ->setParameter('from', $from->setTimezone(new DateTimeZone('UTC')))
+            ->setParameter('to', $to->setTimezone(new DateTimeZone('UTC')))
+            ->addOrderBy('w.date', Order::Ascending->value)
+            ->innerJoin('we.exercise', 'e')
+            ->addSelect('e')
+            ->leftJoin('we.sets', 'ws')
+            ->addSelect('ws')
+            ->getQuery()
+            ->getResult();
     }
 }
