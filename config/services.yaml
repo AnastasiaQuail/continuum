@@ -9,6 +9,7 @@
 parameters:
     app.calendar.upcoming_events.days: 21
     app.reflection.mood_trend.days: 60
+    app.workouts.exercise_progress.days: 120
 
 services:
     # default configuration for services in *this* file

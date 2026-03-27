@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Service\Workout;
 
 use Continuum\Entity\Exercise;
+use Continuum\Entity\User;
 use Continuum\Entity\Workout;
 use Continuum\Entity\WorkoutExercise;
 use Continuum\Repository\WorkoutExerciseRepository;
@@ -34,7 +35,20 @@ final readonly class WorkoutExerciseService
     }
 
     /**
-     * @return array<string, WorkoutExercise>
+     * @return array<non-empty-string, non-empty-list<WorkoutExercise>>
+     */
+    public function getPreviousDays(int $days, User $user): array
+    {
+        $workoutExercises = [];
+        foreach ($this->repository->findPreviousDays($days, $user->timezone) as $workoutExercise) {
+            $workoutExercises[(string) $workoutExercise->exercise->id][] = $workoutExercise;
+        }
+
+        return $workoutExercises;
+    }
+
+    /**
+     * @return array<non-empty-string, WorkoutExercise>
      */
     public function getPrevExerciseMap(Workout $workout): array
     {

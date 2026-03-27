@@ -1,5 +1,11 @@
 {% extends 'base.html.twig' %}
 
+{%- block javascripts -%}
+    {{ parent() }}
+    <script src="{{ asset('js/echarts.min.js') }}"></script>
+    <script src="{{ asset('js/chart.js') }}"></script>
+{%- endblock -%}
+
 {% block title %}Exercises{% endblock %}
 {% block body_id %}exercises{% endblock %}
 
@@ -22,15 +28,27 @@
     <section class="card">
         <div class="exercises">
             {%- for exercise in exercises -%}
+                {%- set exercise_id = exercise.id.toString -%}
                 {%- set is_granted = is_granted('EXERCISE_EDIT', exercise) -%}
+
                 <{% if is_granted %}a{% else %}span{% endif %}
-                    {% if is_granted %}href="{{ path('app_exercise_edit', {id: exercise.id}) }}"{% endif %}
+                    {% if is_granted %}href="{{ path('app_exercise_edit', {id: exercise_id}) }}"{% endif %}
                     class="exercise" data-general-type="{{ exercise.group.color.value }}">
-                    <div class="badge">{{ exercise.group.name }}</div>
-                    <div class="exercise-name">
-                        <span>{{ exercise.name }}</span>
-                        <span class="exercise-usages">({{ exercise_count_map[exercise.id.toString] }} workouts)</span>
+                    <div class="exercise-body">
+                        <div class="badge">{{ exercise.group.name }}</div>
+                        <div class="exercise-name">
+                            <span>{{ exercise.name }}</span>
+                            <span class="exercise-usages">({{ exercise_count_map[exercise_id] }} workouts)</span>
+                        </div>
                     </div>
+
+                    {%- if exercise_progress_map[exercise_id] is defined -%}
+                        <div class="exercise-progress">
+                            <div class="exercise-progress-chart" data-chart="exercise-progress"
+                                 data-days="120" data-color="{{ exercise.group.color.value }}"
+                                 data-values="{{ exercise_progress_map[exercise_id]|json_encode }}"></div>
+                        </div>
+                    {%- endif -%}
                 </{% if is_granted %}a{% else %}span{% endif %}>
             {%- endfor -%}
         </div>
