@@ -162,6 +162,7 @@
     gap: calc(var(--container-gap-block) / 3);
 
     .weekly-reflection-joy {
+        position: relative;
         padding: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 1.5);
         font-size: var(--font-size-extra-small);
         font-weight: var(--font-weight-light);
@@ -171,6 +172,24 @@
 
         @media (width >= 576px) {
             font-size: var(--font-size-small);
+        }
+
+        &.private {
+            &:after {
+                content: '';
+                position: absolute;
+                inset: calc(-1 * var(--font-size) / 8);
+                left: calc(var(--font-size) / 8);
+                backdrop-filter: blur(3px);
+                transition: opacity .15s;
+            }
+
+            &:hover {
+                &:after {
+                    opacity: 0;
+                    transition: opacity .5s;
+                }
+            }
         }
 
         &.private-secure {

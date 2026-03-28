@@ -318,7 +318,7 @@ function initExercisesChart(element, data) {
         {
             animationDuration: 200,
             color: getHexColorByCssProperty(colorName),
-            grid: {left: 0, bottom: 4, top: 4, right: 0},
+            grid: {left: 4, bottom: 4, top: 4, right: 4},
             xAxis: {
                 min: xAxis.min,
                 max: xAxis.max,
