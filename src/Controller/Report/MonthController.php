@@ -39,8 +39,7 @@ final class MonthController extends AbstractController
     #[Route(path: '/reports', name: 'app_report_month', methods: ['GET'])]
     public function __invoke(#[CurrentUser] User $user, #[MapQueryParameter] ?string $month = null): Response
     {
-        $startDate = new DateTimeImmutable($month ?? '-1 month', $user->timezone)
-            ->modify('first day of this month')->setTime(0, 0);
+        $startDate = new DateTimeImmutable($month ?? 'first day of previous month', $user->timezone)->setTime(0, 0);
         $endDate = $startDate->modify('first day of next month');
 
         if (!$this->isGranted(ReportVoter::MONTH_VIEW, $startDate)) {
