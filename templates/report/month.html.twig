@@ -152,11 +152,13 @@
 
                 <div class="weekly-reflections">
                     {%- for weekly_reflection in weekly_reflections -%}
-                        {%- if weekly_reflection.joy.isPrivate -%}
-                            <div class="weekly-reflection-joy private-secure">{{ ux_icon('lucide:lock') }}</div>
-                        {%- else -%}
-                            <div class="weekly-reflection-joy">{{ weekly_reflection.joy.text }}</div>
-                        {%- endif -%}
+                        {%- set is_private = weekly_reflection.joy.isPrivate -%}
+                        {%- set is_secure = is_private and not is_granted('WEEKLY_REFLECTION_PRIVATE') -%}
+
+                        <div
+                            class="weekly-reflection-joy {{ is_secure ? 'private-secure' : (is_private ? 'private') }}">
+                            {{- is_secure ? ux_icon('lucide:lock') : weekly_reflection.joy.text -}}
+                        </div>
                     {%- endfor -%}
                 </div>
             {%- endif -%}
