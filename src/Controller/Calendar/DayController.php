@@ -9,6 +9,7 @@ use Continuum\Entity\User;
 use Continuum\Form\NewCalendarEventType;
 use Continuum\Security\Authorization\Voter\CalendarVoter;
 use Continuum\Service\Calendar\CalendarEventService;
+use Continuum\Service\HolidayService;
 use Continuum\Service\RequestValidator;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +25,7 @@ final class DayController extends AbstractController
     public function __construct(
         private readonly RequestValidator $requestValidator,
         private readonly CalendarEventService $calendarEventService,
+        private readonly HolidayService $holidayService,
     ) {}
 
     #[Route(path: '/calendar/{day:date}', name: 'app_calendar_day', methods: ['GET', 'POST'])]
@@ -50,10 +52,12 @@ final class DayController extends AbstractController
         }
 
         $events = $this->calendarEventService->getByDay($user, $day);
+        $holidayEvents = $this->holidayService->getHolidays($day);
 
         return $this->render('calendar/day.html.twig', [
             'day' => $day,
             'events' => $events,
+            'holiday_events' => $holidayEvents,
             'form' => $form,
         ]);
     }
