@@ -10,40 +10,9 @@
 ] %}
 
 {% block main -%}
-    {%- if events is not empty -%}
-        <section class="card">
-            <h2 class="card-title">Events of the day</h2>
-
-            {%- for event in events -%}
-                <div class="calendar-event" data-general-type="{{ event.type.value }}">
-                    <div class="calendar-event-body">
-                        <span class="calendar-event-type">{{ event.title }}</span>
-                        {%- if not event.allDay -%}
-                            <span> at {{ event.getUserDatetime(app.user).format('H:i') }}</span>
-                        {%- endif -%}
-
-                        <form method="post" action="{{ path('app_calendar_event_delete', {id: event.id}) }}"
-                              onsubmit="return confirm('Delete?')">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button
-                                class="btn btn-sm btn-transparent btn-danger"
-                                {% if is_granted('CALENDAR_EVENT_DELETE') %}type="submit" {% else %}disabled{% endif %}>
-                                {{- ux_icon('lucide:trash') -}}
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="calendar-event-created-at">
-                        {{- 'Added ' ~ event.createdAt.setTimezone(app.user.timezone).format('j F Y, H:i') -}}
-                    </div>
-                </div>
-            {%- endfor -%}
-        </section>
-    {%- endif -%}
-
     <section class="card">
         <div class="card-title card-title-controls">
-            <h2>Add new event</h2>
+            <h2>Events of the day</h2>
 
             {%- set prev_day = day.modify('-1 day') -%}
             {%- set next_day = day.modify('+1 day') -%}
@@ -60,6 +29,39 @@
                 },
             }) }}
         </div>
+
+        {%- for event in events -%}
+            <div class="calendar-event" data-general-type="{{ event.type.value }}">
+                <div class="calendar-event-body">
+                    <span class="calendar-event-type">{{ event.title }}</span>
+                    {%- if not event.allDay -%}
+                        <span> at {{ event.getUserDatetime(app.user).format('H:i') }}</span>
+                    {%- endif -%}
+
+                    <form method="post" action="{{ path('app_calendar_event_delete', {id: event.id}) }}"
+                          onsubmit="return confirm('Delete?')">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button
+                            class="btn btn-sm btn-transparent btn-danger"
+                            {% if is_granted('CALENDAR_EVENT_DELETE') %}type="submit" {% else %}disabled{% endif %}>
+                            {{- ux_icon('lucide:trash') -}}
+                        </button>
+                    </form>
+                </div>
+
+                <div class="calendar-event-created-at">
+                    {{- 'Added ' ~ event.createdAt.setTimezone(app.user.timezone).format('j F Y, H:i') -}}
+                </div>
+            </div>
+        {%- endfor -%}
+
+        {%- for holiday_event in holiday_events -%}
+            <div class="calendar-event calendar-holiday-event">{{ holiday_event }}</div>
+        {%- endfor -%}
+    </section>
+
+    <section class="card">
+        <h2 class="card-title">Add new event</h2>
 
         {{- form_start(form) -}}
 

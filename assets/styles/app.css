@@ -2633,6 +2633,17 @@ textarea {
         font-weight: var(--font-weight-light);
         color: color-mix(in srgb, var(--general-color) 20%, var(--color) 20%);
     }
+
+    &.calendar-holiday-event {
+        --general-color: color-mix(in oklch, var(--color) 30%, transparent);
+
+        font-size: var(--font-size-small);
+        color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+
+        & + & {
+            margin-top: calc(var(--gap-block) / 4);
+        }
+    }
 }
 
 #mood-chart-card {
