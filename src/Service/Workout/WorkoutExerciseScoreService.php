@@ -15,6 +15,7 @@ final readonly class WorkoutExerciseScoreService
         }
 
         $result = 0;
+        $multiplier = 1;
         $count = 0;
 
         foreach ($workoutExercise->sets as $set) {
@@ -27,7 +28,8 @@ final readonly class WorkoutExerciseScoreService
                 $weight = 10;
             }
 
-            $result += $set->reps * $weight;
+            $result += ($set->reps * $weight) * $multiplier;
+            $multiplier *= 1.05;
             ++$count;
         }
 
@@ -35,6 +37,6 @@ final readonly class WorkoutExerciseScoreService
             return 0;
         }
 
-        return $result / $count;
+        return round($result / $count, 6);
     }
 }
