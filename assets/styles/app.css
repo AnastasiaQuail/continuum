@@ -2763,6 +2763,7 @@ textarea {
             & > span {
                 display: inline-flex;
                 padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
+                column-gap: calc(var(--gap-inline) / 4);
                 font-size: var(--font-size-small);
                 font-weight: var(--font-weight-light);
                 text-decoration: none;
@@ -2771,6 +2772,10 @@ textarea {
                 &:is(span),
                 &:is(a):not(:hover) {
                     color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+                }
+
+                .week-edit {
+                    color: var(--primary-color);
                 }
             }
         }
@@ -3682,11 +3687,6 @@ textarea {
         color: var(--color);
         border-radius: var(--border-radius);
         background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
-        transition: background-color .15s;
-
-        &:is(a):hover {
-            background-color: color-mix(in oklch, var(--general-color) 10%, transparent);
-        }
 
         .exercise-body {
             display: flex;
@@ -3695,6 +3695,7 @@ textarea {
             padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
             border-radius: var(--border-radius);
             background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
+            transition: background-color .15s;
 
             .badge {
                 width: 75px;
@@ -3724,6 +3725,12 @@ textarea {
                     font-weight: var(--font-weight-light);
                     opacity: var(--transparent-color);
                 }
+            }
+        }
+
+        &:is(a):hover {
+            .exercise-body {
+                background-color: color-mix(in oklch, var(--general-color) 6%, transparent);
             }
         }
 
