@@ -53,7 +53,7 @@
                 </div>
             {%- else -%}
                 {%- for workout in workouts -%}
-                    <div class="workout">
+                    <div class="workout" id="workout_{{ workout.id }}">
                         <div class="workout-date">
                             {%- set start = 0 -%}
                             {%- set end = 0 -%}

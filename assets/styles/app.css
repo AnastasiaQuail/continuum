@@ -2204,6 +2204,7 @@ textarea {
             border-radius: calc(var(--border-radius) / 4);
             background-color: color-mix(in oklch, var(--workout-day-bg-color) var(--workout-day-bg-color-transparent), transparent);
             transform: rotateX(180deg);
+            overflow: hidden;
 
             [data-theme="dark"] & {
                 --workout-day-bg-color-transparent: 15%;

@@ -66,6 +66,20 @@ final readonly class WorkoutService
         return $this->repository->findByRange($from, $to);
     }
 
+    /**
+     * @return array<non-empty-string, Workout>
+     */
+    public function getMapByDate(Workout ...$workouts): array
+    {
+        $map = [];
+
+        foreach ($workouts as $workout) {
+            $map[$workout->date->format('Y-m-d')] = $workout;
+        }
+
+        return $map;
+    }
+
     public function delete(Workout $workout): void
     {
         if (!$workout->workoutExercises->isEmpty()) {
