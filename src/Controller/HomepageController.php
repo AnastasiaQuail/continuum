@@ -13,7 +13,6 @@ use Continuum\Service\HolidayService;
 use Continuum\Service\Measurement\ChartMeasurementService;
 use Continuum\Service\Measurement\MeasurementService;
 use Continuum\Service\MoodReflectionService;
-use Continuum\Service\Workout\WorkoutExerciseService;
 use Continuum\Service\Workout\WorkoutService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,7 +31,6 @@ final class HomepageController extends AbstractController
         private readonly MeasurementService $measurementService,
         private readonly ChartMeasurementService $chartMeasurementService,
         private readonly WorkoutService $workoutService,
-        private readonly WorkoutExerciseService $workoutExerciseService,
         private readonly MoodReflectionService $moodReflectionService,
         private readonly ChartMoodReflectionService $chartMoodReflectionService,
     ) {}
@@ -68,7 +66,7 @@ final class HomepageController extends AbstractController
         $workoutDays = (int) round((30 * $workoutMonths) / 7) * 7 + (int) $date->format('N');
         $workoutPrevDate = $date->modify(sprintf('-%d days', $workoutDays));
         $workouts = $this->workoutService->getByRange($user, $workoutPrevDate, $date);
-        $workoutExercises = $this->workoutExerciseService->getExercisesByWorkouts(...$workouts);
+        $workouts = $this->workoutService->getMapByDate(...$workouts);
 
         $moodReflectionDays = 30 * $moodReflectionMonths;
         $prevMoodReflectionDate = $date->modify(sprintf('-%d days', $moodReflectionDays));
@@ -86,7 +84,7 @@ final class HomepageController extends AbstractController
             'measurement_days' => $measurementDays,
             'chart_measurements' => $chartMeasurements,
             'workout_days' => $workoutDays,
-            'workout_exercises' => $workoutExercises,
+            'workouts' => $workouts,
             'mood_reflection_days' => $moodReflectionDays,
             'chart_mood_reflections' => $chartMoodReflections,
         ]);

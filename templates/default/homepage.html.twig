@@ -151,19 +151,23 @@
                             {%- set date = date.modify('-1 day') -%}
                             {%- set day = date.format('Y-m-d') -%}
 
-                            <div class="calendar-workout-day"
-                                 {% if loop.first %}style="--workout-row: {{ week_day }};"{% endif %}>
+                            {%- set workout = workouts[day] is defined ? workouts[day] : null -%}
+
+                            <{% if workout %}a{% else %}div{% endif %}
+                                class="calendar-workout-day"
+                                {% if workout %}href="{{ path('app_workouts', {month: date.format('Y-m')}) }}#workout_{{ workout.id }}"{% endif %}
+                                {% if loop.first %}style="--workout-row: {{ week_day }};"{% endif %}>
                                 <div>{{- date.format('j') -}}</div>
 
-                                {%- if workout_exercises[day] is defined -%}
+                                {%- if workout -%}
                                     <div class="calendar-workout-exercises">
-                                        {%- for workout_exercise in workout_exercises[day] -%}
+                                        {%- for workout_exercise in workout.workoutExercises -%}
                                             {%- set exercise_group = workout_exercise.exercise.group -%}
                                             <span data-general-type="{{ exercise_group.color.value }}"></span>
                                         {%- endfor -%}
                                     </div>
                                 {%- endif -%}
-                            </div>
+                            </{% if workout %}a{% else %}div{% endif %}>
                         {%- endfor -%}
                     </div>
                 </div>

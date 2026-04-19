@@ -65,8 +65,15 @@
                         {%- endfor -%}
 
                         {%- if is_granted('WORKOUT_SET_CREATE', workout_exercise) -%}
+                            {%- set exercise_id = workout_exercise.exercise.id.toString -%}
+                            {%- set prev_workout_exercise = prev_workout_exercises[exercise_id] is defined ? prev_workout_exercises[exercise_id] : null -%}
+
+                            {%- set last_set = workout_exercise.sets|last -%}
+                            {%- if not last_set and prev_workout_exercise -%}
+                                {%- set last_set = prev_workout_exercise.sets|first -%}
+                            {%- endif -%}
+
                             <div class="workout-exercise-set workout-exercise-set-new">
-                                {%- set last_set = workout_exercise.sets|last -%}
                                 <form method="post"
                                       action="{{ path('app_workout_set_create', {id: workout_exercise.id}) }}">
                                     <label for="weight"></label>
@@ -83,7 +90,8 @@
                                     </div>
                                     <div class="workout-exercise-set-warmup form-control-choose-type-group">
                                         <label class="form-control-choose-type">
-                                            <input type="checkbox" name="warmup">
+                                            <input type="checkbox" name="warmup"
+                                                {% if last_set?.isWarmup ?? false %} checked="checked"{% endif %}>
                                             <span class="btn">
                                             {{- ux_icon('lucide:battery-charging') -}}
                                             <span>Is warmup</span>
@@ -98,10 +106,9 @@
                                 </form>
                             </div>
 
-                            {%- set exercise_id = workout_exercise.exercise.id.toString -%}
-                            {%- if prev_workout_exercises[exercise_id] is defined -%}
+                            {%- if prev_workout_exercise -%}
                                 <div class="workout-exercise-set workout-exercise-set-prev">
-                                    {%- for prev_set in prev_workout_exercises[exercise_id].sets -%}
+                                    {%- for prev_set in prev_workout_exercise.sets -%}
                                         <div class="workout-exercise-prev">
                                             {%- if prev_set.weight > 0 -%}
                                                 <span>{{ prev_set.weight }}<small>kg</small></span>

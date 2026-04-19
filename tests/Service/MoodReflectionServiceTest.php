@@ -104,6 +104,28 @@ final class MoodReflectionServiceTest extends TestCase
         self::assertSame('x', $found->text);
     }
 
+    public function testFindLastMood(): void
+    {
+        $moodReflection = new MoodReflection(date: new DateTimeImmutable('2020-01-01'));
+        $moodReflection->text = 'x';
+
+        $this->repository->expects($this->once())->method('findOneLast')->willReturn($moodReflection);
+
+        $found = $this->service->findLastMood();
+
+        self::assertNotNull($found);
+        self::assertSame('x', $found->text);
+    }
+
+    public function testFindLastMoodWhenNull(): void
+    {
+        $this->repository->expects($this->once())->method('findOneLast')->willReturn(null);
+
+        $found = $this->service->findLastMood();
+
+        self::assertNull($found);
+    }
+
     public function testSaveCreatesNewWhenNull(): void
     {
         $day = new DateTimeImmutable('2025-01-01');

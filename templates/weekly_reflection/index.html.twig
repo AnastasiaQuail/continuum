@@ -38,7 +38,12 @@
                         {%- set time = monday.format(is_different_month ? 'j F' : 'j') ~ ' - ' ~ sunday.format('j F') -%}
 
                         {%- if is_granted('WEEKLY_REFLECTION_EDIT') -%}
-                            <a href="{{ path('app_weekly_reflection_edit', {week: date}) }}">{{ time }}</a>
+                            <a href="{{ path('app_weekly_reflection_edit', {week: date}) }}">
+                                <span>{{ time }}</span>
+                                {%- if reflection is null -%}
+                                    {{- ux_icon('lucide:square-pen', {class: 'week-edit'}) -}}
+                                {%- endif -%}
+                            </a>
                         {%- else -%}
                             <span>{{ time }}</span>
                         {%- endif -%}
