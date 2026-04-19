@@ -104,29 +104,28 @@
                                             <div class="exercise-name">
                                                 {{- workout_exercise.exercise.name -}}
 
-                                                {%- set we_id = workout_exercise.id.toString -%}
-                                                {%- if progresses[we_id] is defined -%}
-                                                    {%- if progresses[we_id].change.value !== 'unchanged' -%}
-                                                        <span class="exercise-progress"
-                                                              data-change="{{ progresses[we_id].change.value }}">
+                                                {%- if workout_exercise.sets is not empty -%}
+                                                    {%- set we_id = workout_exercise.id.toString -%}
+                                                    {%- if progresses[we_id] is defined -%}
+                                                        {%- if progresses[we_id].change.value !== 'unchanged' -%}
+                                                            <span class="exercise-progress"
+                                                                  data-change="{{ progresses[we_id].change.value }}">
                                                             {{- progresses[we_id].percent -}}%
                                                             {{- ux_icon('lucide:trending-up') -}}
                                                         </span>
+                                                        {%- endif -%}
                                                     {%- endif -%}
                                                 {%- endif -%}
                                             </div>
-                                            <div class="workout-exercise-duration">
-                                                {%- set minutes = 0 -%}
 
-                                                {%- if workout_exercise.sets is not empty -%}
+                                            {%- if workout_exercise.sets is not empty -%}
+                                                <div class="workout-exercise-duration">
                                                     {%- set start = (workout_exercise.sets|first).performedAt.timestamp -%}
                                                     {%- set end = (workout_exercise.sets|last).performedAt.timestamp -%}
 
-                                                    {%- set minutes = ((end - start) / 60)|round + 1 -%}
-                                                {%- endif -%}
-
-                                                {{- minutes ~ ' min.' -}}
-                                            </div>
+                                                    {{- (((end - start) / 60)|round + 1) ~ ' min.' -}}
+                                                </div>
+                                            {%- endif -%}
                                         </div>
                                         <div class="workout-exercise-sets">
                                             {%- if workout_exercise.sets.empty -%}

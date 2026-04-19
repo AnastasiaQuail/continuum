@@ -99,13 +99,15 @@ final readonly class WorkoutProgressService
         $prevScore = $this->workoutExerciseScoreService->getScore($prevExercise);
         $score = $this->workoutExerciseScoreService->getScore($exercise);
 
+        $percent = round(($score - $prevScore) / $prevScore * 100, 1);
+
         return new ExerciseProgress(
             change: match (true) {
                 $score > $prevScore => Change::Increased,
                 $score < $prevScore => Change::Decreased,
                 default => Change::Unchanged,
             },
-            percent: round(($score - $prevScore) / $prevScore * 100, 1),
+            percent: 0.0 === $percent ? 0.1 : $percent,
         );
     }
 }
