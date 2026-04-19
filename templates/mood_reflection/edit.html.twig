@@ -10,6 +10,20 @@
 ] %}
 
 {% block main -%}
+    {%- set mood_day = day.format('Y-m-d') -%}
+    {%- set current_date = user_date() -%}
+
+    {%- if mood_day === current_date.format('Y-m-d') -%}
+        <div class="alert alert-success">You are rating your mood for today</div>
+    {%- elseif mood_day === current_date.modify('-1 day').format('Y-m-d') -%}
+        <div class="alert alert-warning">You are rating your mood for yesterday</div>
+    {%- else -%}
+        <div class="alert alert-danger alert-inline">
+            {{- ux_icon('lucide:triangle-alert') -}}
+            <span>You are rating a past day</span>
+        </div>
+    {%- endif -%}
+
     <section class="card">
         <h2 class="card-title">Mood of the day</h2>
 

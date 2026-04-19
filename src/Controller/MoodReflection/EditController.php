@@ -26,7 +26,12 @@ final class EditController extends AbstractController
         private readonly MoodReflectionService $moodReflectionService,
     ) {}
 
-    #[Route(path: '/mood-reflections/{day:date}', name: 'app_mood_reflection_edit', methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/mood-reflections/{day:date}',
+        name: 'app_mood_reflection_edit',
+        requirements: ['day' => '\d{4}-\d{2}-\d{2}'],
+        methods: ['GET', 'POST']
+    )]
     #[IsGranted(MoodReflectionVoter::EDIT)]
     public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {

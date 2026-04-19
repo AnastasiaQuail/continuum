@@ -21,5 +21,7 @@ interface MoodReflectionRepositoryInterface
 
     public function findOneByDay(DateTimeImmutable $day): ?MoodReflection;
 
+    public function findOneLast(): ?MoodReflection;
+
     public function save(MoodReflection $moodReflection): void;
 }

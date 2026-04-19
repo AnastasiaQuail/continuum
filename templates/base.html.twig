@@ -73,8 +73,7 @@
                                 {%- endif -%}
                                 {%- if is_granted('MOOD_REFLECTION_EDIT') -%}
                                     <li class="dropdown-item">
-                                        <a class="dropdown-link"
-                                           href="{{ path('app_mood_reflection_edit', {day: user_date().format('Y-m-d')}) }}">
+                                        <a class="dropdown-link" href="{{ path('app_mood_reflection_last_unfilled') }}">
                                             {{- ux_icon('lucide:scan-face') -}}
                                             <span>Track mood</span>
                                         </a>

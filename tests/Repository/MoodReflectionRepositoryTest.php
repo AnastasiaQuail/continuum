@@ -86,4 +86,34 @@ final class MoodReflectionRepositoryTest extends AbstractRepositoryTestCase
         self::assertNotNull($mood);
         self::assertSame('after_week', $mood->text);
     }
+
+    public function testFindOneLast(): void
+    {
+        $dates = [
+            'one' => new DateTimeImmutable('-5 day'),
+            'two' => new DateTimeImmutable('-1 days'),
+            'three' => new DateTimeImmutable('-4 days'),
+            'four' => new DateTimeImmutable('-10 days'),
+            'five' => new DateTimeImmutable('-3 days'),
+        ];
+
+        foreach ($dates as $text => $date) {
+            $mood = new MoodReflection(date: $date);
+            $mood->text = $text;
+
+            $this->repository->save($mood);
+        }
+
+        $mood = $this->repository->findOneLast();
+
+        self::assertNotNull($mood);
+        self::assertSame('two', $mood->text);
+    }
+
+    public function testFindOneLastNotFound(): void
+    {
+        $mood = $this->repository->findOneLast();
+
+        self::assertNull($mood);
+    }
 }

@@ -56,6 +56,12 @@ final class MoodReflectionRepository extends ServiceEntityRepository implements 
     }
 
     #[Override]
+    public function findOneLast(): ?MoodReflection
+    {
+        return $this->findOneBy([], ['date' => 'DESC']);
+    }
+
+    #[Override]
     public function save(MoodReflection $moodReflection): void
     {
         $this->getEntityManager()->persist($moodReflection);
