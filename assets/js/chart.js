@@ -220,6 +220,88 @@ function initMeasurementWeightChart(element, data) {
 
 /**
  * @param {HTMLElement} element
+ * @param {Array<{time: number, value: number}>} data
+ */
+function initMeasurementChangeChart(element, data) {
+    const currentTime = new Date().getTime() / 1000;
+
+    const calculator = new DimensionCalculator();
+    const xAxis = calculator.getExpandedBoundaries(
+        currentTime - 150 * 86400,
+        currentTime,
+        0
+    );
+    const yAxis = calculator.getBoundariesByValues(data.map(item => item.value), 0.1);
+
+    initChart(
+        element,
+        {
+            animationDuration: 200,
+            grid: {left: 4, bottom: 4, top: 4, right: 4},
+            xAxis: {
+                min: xAxis.min,
+                max: xAxis.max,
+                axisLine: false,
+                axisLabel: {
+                    fontSize: 10,
+                    formatter: function (value) {
+                        const date = new Date(value * 1000);
+
+                        return date.getDate() + ' ' + date.toLocaleString('en-US', {month: 'short'});
+                    },
+                    color: getHexColorByCssProperty('--color'),
+                    opacity: 0.2,
+                },
+                splitLine: {show: false},
+            },
+            yAxis: {
+                min: yAxis.min,
+                max: yAxis.max,
+                interval: yAxis.interval,
+                axisLine: false,
+                axisLabel: {
+                    fontSize: 10,
+                    formatter: '{value} {labelStyle|' + element.dataset.type + '}',
+                    rich: {labelStyle: {fontSize: 8, opacity: 0.15}},
+                    color: getHexColorByCssProperty('--color'),
+                    opacity: 0.2,
+                },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: getHexColorByCssProperty('--color'),
+                        opacity: 0.04,
+                    }
+                },
+            },
+            series: [{
+                type: 'line',
+                data: data.map(item => [item.time, item.value]),
+                itemStyle: {opacity: 0.6, color: getHexColorByCssProperty('--primary-color')},
+                lineStyle: {opacity: 0.2, color: getHexColorByCssProperty('--color')},
+                smooth: true,
+                symbol: 'circle',
+                symbolSize: 4,
+            }]
+        },
+        function () {
+            return {
+                xAxis: {axisLabel: {color: getHexColorByCssProperty('--color')}},
+                yAxis: {
+                    axisLabel: {color: getHexColorByCssProperty('--color')},
+                    splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}},
+                },
+                series: [{
+                    itemStyle: {color: getHexColorByCssProperty('--primary-color')},
+                    lineStyle: {color: getHexColorByCssProperty('--color')},
+                }]
+            };
+        }
+    );
+}
+
+/**
+ * @param {HTMLElement} element
  * @param {Array<{type: string, color: string, prev_time: number, time: number}>} data
  */
 function initMoodReflectionsChart(element, data) {
@@ -372,6 +454,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-chart]').forEach((element) => {
         if (element.dataset.chart === 'weight-change') {
             initMeasurementWeightChart(element, JSON.parse(element.dataset.values));
+        } else if (element.dataset.chart === 'measurement-change') {
+            initMeasurementChangeChart(element, JSON.parse(element.dataset.values));
         } else if (element.dataset.chart === 'mood-reflections') {
             initMoodReflectionsChart(element, JSON.parse(element.dataset.values));
         } else if (element.dataset.chart === 'exercise-progress') {

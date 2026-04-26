@@ -109,7 +109,7 @@
                             {%- if prev_workout_exercise -%}
                                 <div class="workout-exercise-set workout-exercise-set-prev">
                                     {%- for prev_set in prev_workout_exercise.sets -%}
-                                        <div class="workout-exercise-prev">
+                                        <div class="workout-exercise-prev {{ prev_set.isWarmup ? 'prev-warmup' }}">
                                             {%- if prev_set.weight > 0 -%}
                                                 <span>{{ prev_set.weight }}<small>kg</small></span>
                                             {%- endif -%}

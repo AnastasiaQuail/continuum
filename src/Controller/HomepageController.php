@@ -40,7 +40,7 @@ final class HomepageController extends AbstractController
         #[CurrentUser]
         User $user,
         #[MapQueryParameter('measurement', options: ['min_range' => 1])]
-        int $measurementMonths = 3,
+        int $measurementMonths = 4,
         #[MapQueryParameter('workout', options: ['min_range' => 1])]
         int $workoutMonths = 3,
         #[MapQueryParameter('mood', options: ['min_range' => 1])]
