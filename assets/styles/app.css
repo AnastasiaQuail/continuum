@@ -2292,12 +2292,16 @@ textarea {
         animation-timeline: view();
         animation-range: entry 0% cover 20%;
 
-        &:last-child {
-            padding-right: var(--container-gap-inline);
+        @media (width >= 768px) {
+            padding-left: 0;
         }
 
-        @media (width >= 768px) {
-            padding-inline: 0;
+        &:last-child {
+            padding-right: var(--container-gap-inline);
+
+            @media (width >= 768px) {
+                padding-right: 0;
+            }
         }
 
         .month-title {
@@ -3658,6 +3662,10 @@ textarea {
                             small {
                                 font-size: var(--font-size-extra-small);
                             }
+                        }
+
+                        &.prev-warmup {
+                            opacity: 20%;
                         }
                     }
                 }
