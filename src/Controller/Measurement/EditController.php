@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -23,7 +24,12 @@ final class EditController extends AbstractController
         private readonly MeasurementService $measurementService,
     ) {}
 
-    #[Route(path: '/measurements/{id}', name: 'app_measurement_edit', methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/measurements/{id}',
+        name: 'app_measurement_edit',
+        requirements: ['id' => Requirement::UUID],
+        methods: ['GET', 'POST'],
+    )]
     #[IsGranted(MeasurementVoter::EDIT, 'measurement')]
     public function __invoke(#[CurrentUser] User $user, Request $request, BodyMeasurement $measurement): Response
     {

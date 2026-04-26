@@ -17,11 +17,13 @@
         </button>
     </form>
 
-    {%- if is_granted('EXERCISE_VIEW') -%}
-        <a class="btn btn-primary btn-action" href="{{ path('app_exercises') }}">Exercises</a>
-    {%- else -%}
-        <button class="btn btn-primary btn-action" disabled>Exercises</button>
-    {%- endif -%}
+    {%- set is_granted = is_granted('EXERCISE_VIEW') -%}
+
+    <{% if is_granted %}a{% else %}button{% endif %}
+        {% if is_granted %} href="{{ path('app_exercises') }}"{% else %} disabled{% endif %}
+        class="btn btn-primary btn-action">
+        <span>Exercises</span>
+    </{% if is_granted %}a{% else %}button{% endif %}>
 {%- endblock %}
 
 {% block main -%}

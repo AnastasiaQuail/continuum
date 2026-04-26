@@ -1,0 +1,91 @@
+{% extends 'base.html.twig' %}
+
+{%- block javascripts -%}
+    {{ parent() }}
+    <script src="{{ asset('js/echarts.min.js') }}"></script>
+    <script src="{{ asset('js/chart.js') }}"></script>
+{%- endblock -%}
+
+{% block title %}Measurement history{% endblock %}
+{% block body_id %}body-measurement-history{% endblock %}
+
+{% set breadcrumbs = [
+    {label: 'Measurements', url: path('app_measurements')},
+    {label: 'History'},
+] %}
+
+{% block main -%}
+    {%- if measurements is empty -%}
+        <section class="card">
+            <div class="collection-empty">
+                {{- ux_icon('lucide:frown') -}}
+                <span>No measurements</span>
+            </div>
+        </section>
+    {%- else -%}
+        <div class="row row-sm-2">
+            {{- _self.measurent_chart(measurements, 'fatDeurenberg', 'Fat Deurenberg', '%') -}}
+            {{- _self.measurent_chart(measurements, 'fatUsNavy', 'Fat US Navy', '%') -}}
+        </div>
+
+        <div class="row row-sm-2 row-xl-3">
+            {{- _self.measurent_chart(measurements, 'weight', 'Weight', 'kg') -}}
+            {{- _self.measurent_chart(measurements, 'neck', 'Neck') -}}
+            {{- _self.measurent_chart(measurements, 'waist', 'Waist') -}}
+            {{- _self.measurent_chart(measurements, 'chest', 'Chest') -}}
+            {{- _self.measurent_chart(measurements, 'shoulders', 'Shoulders') -}}
+            {{- _self.measurent_chart(measurements, 'flexedBiceps', 'Biceps') -}}
+            {{- _self.measurent_chart(measurements, 'hips', 'Hips') -}}
+            {{- _self.measurent_chart(measurements, 'thigh', 'Thigh') -}}
+            {{- _self.measurent_chart(measurements, 'calf', 'Calf') -}}
+        </div>
+    {%- endif -%}
+{%- endblock %}
+
+{% macro measurent_chart(measurements, field, name, type = 'cm') -%}
+    {%- set values = [] -%}
+    {%- set min = 999999 -%}
+    {%- set max = 0 -%}
+
+    {%- for measurement in measurements -%}
+        {%- set value = attribute(measurement, field) -%}
+
+        {%- if value is not null -%}
+            {%- set values = values|merge([{
+                time: measurement.datetime.setTimezone(app.user.timezone).timestamp,
+                value: value,
+            }]) -%}
+        {%- endif -%}
+    {%- endfor -%}
+
+    <section class="card">
+        <div class="card-title card-title-controls card-title-showcase">
+            <h2>{{ name }}</h2>
+
+            {%- if values -%}
+                {%- set result = ((values|last).value - (values|first).value)|round(1) -%}
+
+                {%- if result !== 0.0 -%}
+                    {%- if type !== 'cm' or field === 'waist' or field === 'hips' -%}
+                        {%- set label_type = result > 0 ? 'value-bad' : 'value-good' -%}
+                    {%- else -%}
+                        {%- set label_type = result > 0 ? 'value-good' : 'value-bad' -%}
+                    {%- endif -%}
+
+                    <span class="card-title-label {{ label_type }}">
+                        <span>{{ result > 0 ? '+' ~ result : result }}</span><span>{{ type }}</span>
+                    </span>
+                {%- endif -%}
+
+                <span class="card-title-info">{{ (values|last).value }} {{ type }}</span>
+            {%- endif -%}
+        </div>
+
+        {%- if values is empty -%}
+            <div class="collection-empty">No values</div>
+        {%- else -%}
+            <div class="chart-panel" data-chart="measurement-change" data-type="{{ type }}"
+                 data-values="{{ values|json_encode }}"></div>
+        {%- endif -%}
+    </section>
+{%- endmacro %}

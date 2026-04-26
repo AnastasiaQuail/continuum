@@ -355,6 +355,10 @@ textarea {
     grid-template-columns: repeat(var(--row-columns), 1fr);
     column-gap: var(--row-column-gap);
 
+    & > * {
+        min-width: 0;
+    }
+
     &.row-2 {
         --row-columns: 2;
     }
@@ -375,6 +379,18 @@ textarea {
         }
 
         &.row-md-3 {
+            --row-columns: 3;
+        }
+    }
+
+    @media (width >= 992px) {
+        &.row-lg-3 {
+            --row-columns: 3;
+        }
+    }
+
+    @media (width >= 1200px) {
+        &.row-xl-3 {
             --row-columns: 3;
         }
     }
