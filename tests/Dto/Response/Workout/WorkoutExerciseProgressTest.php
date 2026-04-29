@@ -20,9 +20,24 @@ final class WorkoutExerciseProgressTest extends TestCase
         $exercise = new Exercise(name: 'ex', group: ExerciseGroup::Arms);
         $progress = new ExerciseProgress(change: Change::Increased, percent: 5.0);
 
-        $dto = new WorkoutExerciseProgress($exercise, $progress);
+        $dto = new WorkoutExerciseProgress(
+            exercise: $exercise,
+            progress: $progress,
+        );
 
         self::assertSame($progress, $dto->progress);
         self::assertSame($exercise, $dto->exercise);
+    }
+
+    public function testEmptyProgress(): void
+    {
+        $exercise = new Exercise(name: 'ex', group: ExerciseGroup::Arms);
+
+        $dto = new WorkoutExerciseProgress(
+            exercise: $exercise,
+        );
+
+        self::assertSame($exercise, $dto->exercise);
+        self::assertNull($dto->progress);
     }
 }

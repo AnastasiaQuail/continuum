@@ -10,6 +10,6 @@ final readonly class WorkoutExerciseProgress
 {
     public function __construct(
         public Exercise $exercise,
-        public ExerciseProgress $progress,
+        public ?ExerciseProgress $progress = null,
     ) {}
 }

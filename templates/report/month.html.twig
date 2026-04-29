@@ -211,10 +211,15 @@
                         <div class="workout-exercise-report"
                              data-general-type="{{ workout_progress.exercise.group.color.value }}">
                             <span>{{ workout_progress.exercise.name }}</span>
-                            <span class="exercise-progress" data-change="{{ workout_progress.progress.change.value }}">
-                                {{- workout_progress.progress.percent -}}%
-                                {{- ux_icon('lucide:trending-up') -}}
-                            </span>
+                            {%- if workout_progress.progress is null -%}
+                                <span class="exercise-progress">NEW</span>
+                            {%- else -%}
+                                <span class="exercise-progress"
+                                      data-change="{{ workout_progress.progress.change.value }}">
+                                    {{- workout_progress.progress.percent -}}%
+                                    {{- ux_icon('lucide:trending-up') -}}
+                                </span>
+                            {%- endif -%}
                         </div>
                     {%- endfor -%}
                 </div>
