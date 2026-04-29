@@ -33,32 +33,30 @@ final readonly class WorkoutReportService
             }
         }
 
-        /** @var list<WorkoutExercise> $firstExercises */
-        $firstExercises = [];
+        /** @var list<WorkoutExercise> $firstWorkoutExercises */
+        $firstWorkoutExercises = [];
 
-        /** @var array<string, WorkoutExercise> $lastExercises */
-        $lastExercises = [];
+        /** @var array<string, WorkoutExercise> $lastWorkoutExercises */
+        $lastWorkoutExercises = [];
 
-        foreach ($exercises as $exerciseId => $exercise) {
-            if (count($exercise) > 1) {
-                $firstExercises[] = array_first($exercise);
-                $lastExercises[$exerciseId] = array_last($exercise);
-            }
+        foreach ($exercises as $exerciseId => $workoutExercises) {
+            $firstWorkoutExercises[] = array_first($workoutExercises);
+            $lastWorkoutExercises[$exerciseId] = array_last($workoutExercises);
         }
 
-        $prevExercises = $this->workoutExerciseService->getPrevExerciseByIds(...$firstExercises);
+        $prevExercises = $this->workoutExerciseService->getPrevExerciseByIds(...$firstWorkoutExercises);
 
         $progresses = [];
 
         foreach ($prevExercises as $prevWorkoutExercise) {
             $exerciseId = (string) $prevWorkoutExercise->exercise->id;
 
-            if (!isset($lastExercises[$exerciseId])) {
+            if (!isset($lastWorkoutExercises[$exerciseId])) {
                 continue;
             }
 
-            $workoutExercise = $lastExercises[$exerciseId];
-            unset($lastExercises[$exerciseId]);
+            $workoutExercise = $lastWorkoutExercises[$exerciseId];
+            unset($lastWorkoutExercises[$exerciseId]);
 
             $progress = $this->workoutProgressService->getProgress($prevWorkoutExercise, $workoutExercise);
 
@@ -70,7 +68,7 @@ final readonly class WorkoutReportService
             }
         }
 
-        foreach ($lastExercises as $workoutExercise) {
+        foreach ($lastWorkoutExercises as $workoutExercise) {
             $progresses[] = new WorkoutExerciseProgress(exercise: $workoutExercise->exercise);
         }
 
