@@ -13,6 +13,7 @@ final readonly class WorkoutReportService
 {
     public function __construct(
         private WorkoutProgressService $workoutProgressService,
+        private WorkoutExerciseService $workoutExerciseService,
     ) {}
 
     /**
@@ -32,15 +33,32 @@ final readonly class WorkoutReportService
             }
         }
 
+        /** @var list<WorkoutExercise> $firstExercises */
+        $firstExercises = [];
+
+        /** @var array<string, WorkoutExercise> $lastExercises */
+        $lastExercises = [];
+
+        foreach ($exercises as $exerciseId => $exercise) {
+            if (count($exercise) > 1) {
+                $firstExercises[] = array_first($exercise);
+                $lastExercises[$exerciseId] = array_last($exercise);
+            }
+        }
+
+        $prevExercises = $this->workoutExerciseService->getPrevExerciseByIds(...$firstExercises);
+
         $progresses = [];
 
-        foreach ($exercises as $workoutExercises) {
-            if (count($workoutExercises) <= 1) {
+        foreach ($prevExercises as $prevWorkoutExercise) {
+            $exerciseId = (string) $prevWorkoutExercise->exercise->id;
+
+            if (!isset($lastExercises[$exerciseId])) {
                 continue;
             }
 
-            $prevWorkoutExercise = array_first($workoutExercises);
-            $workoutExercise = array_last($workoutExercises);
+            $workoutExercise = $lastExercises[$exerciseId];
+            unset($lastExercises[$exerciseId]);
 
             $progress = $this->workoutProgressService->getProgress($prevWorkoutExercise, $workoutExercise);
 
@@ -52,12 +70,16 @@ final readonly class WorkoutReportService
             }
         }
 
+        foreach ($lastExercises as $workoutExercise) {
+            $progresses[] = new WorkoutExerciseProgress(exercise: $workoutExercise->exercise);
+        }
+
         usort(
             $progresses,
             static fn (
                 WorkoutExerciseProgress $a,
                 WorkoutExerciseProgress $b
-            ): int => $b->progress->percent <=> $a->progress->percent,
+            ): int => $b->progress?->percent <=> $a->progress?->percent,
         );
 
         return new WorkoutReport(
