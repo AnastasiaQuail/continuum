@@ -18,10 +18,7 @@ final class WorkoutSetTest extends TestCase
 {
     public function testCreate(): void
     {
-        $workoutExercise = new WorkoutExercise(
-            workout: new Workout(),
-            exercise: new Exercise(name: 'ex', group: ExerciseGroup::Arms),
-        );
+        $workoutExercise = $this->buildWorkoutExercise();
 
         $workoutSet = new WorkoutSet(
             workoutExercise: $workoutExercise,
@@ -39,10 +36,7 @@ final class WorkoutSetTest extends TestCase
 
     public function testIsWarmup(): void
     {
-        $workoutExercise = new WorkoutExercise(
-            workout: new Workout(),
-            exercise: new Exercise(name: 'ex', group: ExerciseGroup::Arms),
-        );
+        $workoutExercise = $this->buildWorkoutExercise();
 
         $workoutSet = new WorkoutSet(
             workoutExercise: $workoutExercise,
@@ -57,10 +51,7 @@ final class WorkoutSetTest extends TestCase
 
     public function testOrderIndex(): void
     {
-        $workoutExercise = new WorkoutExercise(
-            workout: new Workout(),
-            exercise: new Exercise(name: 'ex', group: ExerciseGroup::Arms),
-        );
+        $workoutExercise = $this->buildWorkoutExercise();
 
         $workoutSet = new WorkoutSet(
             workoutExercise: $workoutExercise,
@@ -70,5 +61,13 @@ final class WorkoutSetTest extends TestCase
         );
 
         self::assertSame(3, $workoutSet->orderIndex);
+    }
+
+    private function buildWorkoutExercise(): WorkoutExercise
+    {
+        return new WorkoutExercise(
+            workout: new Workout(),
+            exercise: new Exercise(name: 'ex', group: ExerciseGroup::Arms),
+        );
     }
 }

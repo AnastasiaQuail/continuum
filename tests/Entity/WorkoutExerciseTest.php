@@ -19,7 +19,7 @@ final class WorkoutExerciseTest extends TestCase
     {
         $workoutExercise = new WorkoutExercise(
             workout: $workout = new Workout(),
-            exercise: $exercise = new Exercise(name: 'ex', group: ExerciseGroup::Arms),
+            exercise: $exercise = $this->buildExercise(),
         );
 
         self::assertInstanceOf(UuidV7::class, $workoutExercise->id);
@@ -33,10 +33,15 @@ final class WorkoutExerciseTest extends TestCase
     {
         $workoutExercise = new WorkoutExercise(
             workout: new Workout(),
-            exercise: new Exercise(name: 'ex', group: ExerciseGroup::Arms),
+            exercise: $this->buildExercise(),
             orderIndex: 2,
         );
 
         self::assertSame(2, $workoutExercise->orderIndex);
+    }
+
+    private function buildExercise(): Exercise
+    {
+        return new Exercise(name: 'ex', group: ExerciseGroup::Arms);
     }
 }

@@ -32,7 +32,7 @@ final class WorkoutController extends AbstractController
         }
 
         $prevWorkoutExercises = $this->workoutExerciseService->getPrevExerciseMap($workout);
-        $exercises = $this->exerciseService->getAll();
+        $exercises = $this->exerciseService->getAllActive();
 
         return $this->render('workout/view.html.twig', [
             'workout' => $workout,

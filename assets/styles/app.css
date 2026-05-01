@@ -2298,7 +2298,7 @@ textarea {
         display: grid;
         grid-template-columns: repeat(var(--grid-month-columns), 1fr);
         margin-inline: 0;
-        overflow: auto;
+        overflow: inherit;
     }
 
     .month {
@@ -3721,19 +3721,34 @@ textarea {
             background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
             transition: background-color .15s;
 
-            .badge {
-                width: 75px;
-                flex: none;
-                font-size: var(--font-size-small);
-                border-radius: calc(var(--border-radius) / 2);
+            .exercise-badges {
+                display: flex;
+                column-gap: calc(var(--gap-inline) / 4);
 
-                @media (width >= 576px) {
-                    width: 90px;
-                    font-size: var(--font-size-medium);
+                .badge {
+                    flex: none;
+                    font-size: var(--font-size-small);
+                    border-radius: calc(var(--border-radius) / 2);
+
+                    @media (width >= 576px) {
+                        font-size: var(--font-size-medium);
+                    }
+
+                    &.badge-group {
+                        width: 75px;
+
+                        @media (width >= 576px) {
+                            width: 90px;
+                        }
+                    }
+
+                    &.badge-disabled {
+                        --general-color: var(--color-red);
+                    }
                 }
             }
 
-            .exercise-name {
+            .exercise-title {
                 display: flex;
                 flex-wrap: wrap;
                 align-items: baseline;
@@ -3742,6 +3757,12 @@ textarea {
 
                 @media (width >= 576px) {
                     font-size: var(--font-size);
+                }
+
+                &.exercise-disabled {
+                    .exercise-name {
+                        text-decoration: line-through;
+                    }
                 }
 
                 .exercise-usages {

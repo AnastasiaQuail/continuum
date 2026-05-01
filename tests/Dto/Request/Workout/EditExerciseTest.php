@@ -17,9 +17,11 @@ final class EditExerciseTest extends TestCase
         $dto = new EditExercise(
             group: ExerciseGroup::Arms,
             name: 'Some exercise',
+            isActive: true,
         );
 
         self::assertSame(ExerciseGroup::Arms, $dto->group);
         self::assertSame('Some exercise', $dto->name);
+        self::assertTrue($dto->isActive);
     }
 }

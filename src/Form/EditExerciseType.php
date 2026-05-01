@@ -9,6 +9,7 @@ use Continuum\Entity\Exercise;
 use Continuum\Enum\ExerciseGroup;
 use Continuum\Form\Type\AbstractImmutableType;
 use Override;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -36,13 +37,19 @@ final class EditExerciseType extends AbstractImmutableType
                 'attr' => [
                     'autocomplete' => 'off',
                 ],
+            ])
+            ->add('isActive', CheckboxType::class, [
+                'data' => null !== $exercise ? $exercise->isActive : true,
+                'label' => 'Is active?',
+                'required' => false,
             ]);
     }
 
     /**
      * @param array{
      *  group: FormInterface<null|ExerciseGroup>,
-     *  name: FormInterface<null|string>
+     *  name: FormInterface<null|string>,
+     *  isActive: FormInterface<null|bool>
      * } $forms
      *
      * @phpstan-ignore method.childParameterType (fix of parent stub)
@@ -53,6 +60,7 @@ final class EditExerciseType extends AbstractImmutableType
         return new EditExercise(
             $forms['group']->getData() ?? ExerciseGroup::Arms,
             $forms['name']->getData() ?? '',
+            $forms['isActive']->getData() ?? true,
         );
     }
 
