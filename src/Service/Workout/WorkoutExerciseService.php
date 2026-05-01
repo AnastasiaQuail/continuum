@@ -9,6 +9,7 @@ use Continuum\Entity\User;
 use Continuum\Entity\Workout;
 use Continuum\Entity\WorkoutExercise;
 use Continuum\Repository\WorkoutExerciseRepository;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 final readonly class WorkoutExerciseService
 {
@@ -18,6 +19,10 @@ final readonly class WorkoutExerciseService
 
     public function create(Workout $workout, Exercise $exercise): WorkoutExercise
     {
+        if (!$exercise->isActive) {
+            throw new BadRequestHttpException('Exercise is not active.');
+        }
+
         $workoutExercise = new WorkoutExercise(
             workout: $workout,
             exercise: $exercise,

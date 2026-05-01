@@ -35,9 +35,14 @@
                     {% if is_granted %}href="{{ path('app_exercise_edit', {id: exercise_id}) }}"{% endif %}
                     class="exercise" data-general-type="{{ exercise.group.color.value }}">
                     <div class="exercise-body">
-                        <div class="badge">{{ exercise.group.name }}</div>
-                        <div class="exercise-name">
-                            <span>{{ exercise.name }}</span>
+                        <div class="exercise-badges">
+                            <div class="badge badge-group">{{ exercise.group.name }}</div>
+                            {%- if not exercise.isActive -%}
+                                <div class="badge badge-disabled">{{ ux_icon('lucide:eye-off') }}</div>
+                            {%- endif -%}
+                        </div>
+                        <div class="exercise-title {{ not exercise.isActive ? 'exercise-disabled' }}">
+                            <span class="exercise-name">{{ exercise.name }}</span>
                             <span class="exercise-usages">({{ exercise_count_map[exercise_id] }} workouts)</span>
                         </div>
                     </div>

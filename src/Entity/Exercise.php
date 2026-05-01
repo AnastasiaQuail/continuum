@@ -35,6 +35,8 @@ final class Exercise
         },
         #[ORM\Column(name: 'exercise_group', enumType: ExerciseGroup::class)]
         public ExerciseGroup $group,
+        #[ORM\Column(options: ['default' => true])]
+        public bool $isActive = true,
     ) {
         $this->id = Uuid::v7();
         $this->workoutExercises = new ArrayCollection();

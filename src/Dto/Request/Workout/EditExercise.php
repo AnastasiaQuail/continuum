@@ -13,5 +13,6 @@ final readonly class EditExercise
         public ExerciseGroup $group,
         #[Assert\Length(max: 255)]
         public string $name,
+        public bool $isActive,
     ) {}
 }

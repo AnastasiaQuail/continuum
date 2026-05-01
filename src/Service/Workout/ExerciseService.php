@@ -39,6 +39,19 @@ final readonly class ExerciseService
     }
 
     /**
+     * @return list<Exercise>
+     */
+    public function getAllActive(): array
+    {
+        return array_values(
+            array_filter(
+                $this->getAll(),
+                static fn (Exercise $exercise): bool => $exercise->isActive,
+            )
+        );
+    }
+
+    /**
      * @return array<string, int>
      */
     public function getWorkoutExerciseCountIndexedById(): array
@@ -56,6 +69,7 @@ final readonly class ExerciseService
         $exercise = new Exercise(
             name: $dto->name,
             group: $dto->group,
+            isActive: $dto->isActive,
         );
 
         $this->repository->save($exercise);
@@ -67,6 +81,7 @@ final readonly class ExerciseService
     {
         $exercise->name = $dto->name;
         $exercise->group = $dto->group;
+        $exercise->isActive = $dto->isActive;
 
         $this->repository->save($exercise);
 

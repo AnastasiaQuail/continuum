@@ -17,7 +17,7 @@ final class WorkoutExerciseProgressTest extends TestCase
 {
     public function testConstructor(): void
     {
-        $exercise = new Exercise(name: 'ex', group: ExerciseGroup::Arms);
+        $exercise = $this->buildExercise();
         $progress = new ExerciseProgress(change: Change::Increased, percent: 5.0);
 
         $dto = new WorkoutExerciseProgress(
@@ -31,7 +31,7 @@ final class WorkoutExerciseProgressTest extends TestCase
 
     public function testEmptyProgress(): void
     {
-        $exercise = new Exercise(name: 'ex', group: ExerciseGroup::Arms);
+        $exercise = $this->buildExercise();
 
         $dto = new WorkoutExerciseProgress(
             exercise: $exercise,
@@ -39,5 +39,10 @@ final class WorkoutExerciseProgressTest extends TestCase
 
         self::assertSame($exercise, $dto->exercise);
         self::assertNull($dto->progress);
+    }
+
+    private function buildExercise(): Exercise
+    {
+        return new Exercise(name: 'ex', group: ExerciseGroup::Arms);
     }
 }
