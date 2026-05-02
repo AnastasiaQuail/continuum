@@ -21,7 +21,7 @@ final readonly class ChartMeasurement
         return new self(
             type: Change::Unchanged,
             prevTime: null,
-            time: 0,
+            time: -86400,
             fat: $fat,
             weight: $weight,
         );

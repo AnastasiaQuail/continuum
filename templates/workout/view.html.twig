@@ -21,17 +21,22 @@
                     <div class="exercise" data-general-type="{{ workout_exercise.exercise.group.color.value }}">
                         <div class="exercise-name">{{ workout_exercise.exercise.name }}</div>
                         <div class="exercise-controls">
-                            <form method="post"
-                                  action="{{ path('app_workout_exercise_delete', {id: workout_exercise.id}) }}"
-                                  onsubmit="return confirm('Delete?')">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <button
-                                    class="btn btn-danger btn-link"
-                                    {% if is_granted('WORKOUT_EXERCISE_DELETE', workout_exercise) %}type="submit"
-                                    {% else %}disabled{% endif %}>
-                                    {{- ux_icon('lucide:trash') -}}
-                                </button>
-                            </form>
+                            {%- if workout_exercise.sets.isEmpty -%}
+                                <form method="post"
+                                      action="{{ path('app_workout_exercise_delete', {id: workout_exercise.id}) }}"
+                                      onsubmit="return confirm('Delete?')">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button
+                                        class="btn btn-danger btn-link"
+                                        {% if is_granted('WORKOUT_EXERCISE_DELETE', workout_exercise) %}type="submit"
+                                        {% else %}disabled{% endif %}>
+                                        {{- ux_icon('lucide:trash') -}}
+                                    </button>
+                                </form>
+                            {%- else -%}
+                                {# temporary #}
+                                <button class="btn btn-link">{{ ux_icon('lucide:message-circle-dashed') }}</button>
+                            {%- endif -%}
                         </div>
                     </div>
 

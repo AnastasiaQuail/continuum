@@ -3019,6 +3019,12 @@ textarea {
     }
 }
 
+.card-measurement-history {
+    animation: fader 1s ease-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
+}
+
 .card-body-measurements {
     display: flex;
     flex-direction: column-reverse;
@@ -3405,6 +3411,7 @@ textarea {
             align-items: center;
             column-gap: calc(var(--gap-inline) / 2);
             padding: calc(var(--gap-block) / 4) var(--gap-inline);
+            padding-right: calc(var(--gap-inline) / 2);
             font-size: var(--font-size-medium);
             border-radius: var(--border-radius);
             background-color: color-mix(in oklch, var(--exercise-color) var(--exercise-background-color-transparent), transparent);
@@ -3438,7 +3445,7 @@ textarea {
                 flex-direction: column;
                 align-items: flex-start;
                 row-gap: calc(var(--gap-block) / 3);
-                padding-block: var(--gap-block);
+                padding: var(--gap-block) var(--gap-inline);
                 font-size: var(--font-size);
 
                 .exercise-title {
@@ -3711,6 +3718,9 @@ textarea {
         color: var(--color);
         border-radius: var(--border-radius);
         background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
+        animation: fader 1s ease-out;
+        animation-timeline: view();
+        animation-range: entry 0% cover 20%;
 
         .exercise-body {
             display: flex;
@@ -3784,6 +3794,9 @@ textarea {
 
             .exercise-progress-chart {
                 height: 70px;
+                animation: fader 1s ease-out;
+                animation-timeline: view();
+                animation-range: entry 0% cover 20%;
 
                 @media (width >= 768px) {
                     height: 80px;
