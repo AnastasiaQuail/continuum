@@ -36,6 +36,10 @@ final readonly class WorkoutExerciseService
 
     public function delete(WorkoutExercise $workoutExercise): void
     {
+        if (!$workoutExercise->sets->isEmpty()) {
+            throw new BadRequestHttpException('Workout exercise has sets');
+        }
+
         $this->repository->delete($workoutExercise);
     }
 

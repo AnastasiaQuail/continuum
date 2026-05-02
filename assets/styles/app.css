@@ -3405,6 +3405,7 @@ textarea {
             align-items: center;
             column-gap: calc(var(--gap-inline) / 2);
             padding: calc(var(--gap-block) / 4) var(--gap-inline);
+            padding-right: calc(var(--gap-inline) / 2);
             font-size: var(--font-size-medium);
             border-radius: var(--border-radius);
             background-color: color-mix(in oklch, var(--exercise-color) var(--exercise-background-color-transparent), transparent);
@@ -3438,7 +3439,7 @@ textarea {
                 flex-direction: column;
                 align-items: flex-start;
                 row-gap: calc(var(--gap-block) / 3);
-                padding-block: var(--gap-block);
+                padding: var(--gap-block) var(--gap-inline);
                 font-size: var(--font-size);
 
                 .exercise-title {
