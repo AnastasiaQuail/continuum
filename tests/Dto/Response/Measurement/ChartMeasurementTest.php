@@ -38,7 +38,7 @@ final class ChartMeasurementTest extends TestCase
 
         self::assertSame(Change::Unchanged, $dto->type);
         self::assertNull($dto->prevTime);
-        self::assertSame(0, $dto->time);
+        self::assertSame(-86400, $dto->time);
         self::assertSame(18.0, $dto->fat);
         self::assertSame(70.8, $dto->weight);
     }
