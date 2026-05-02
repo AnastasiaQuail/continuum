@@ -3019,6 +3019,12 @@ textarea {
     }
 }
 
+.card-measurement-history {
+    animation: fader 1s ease-out;
+    animation-timeline: view();
+    animation-range: entry 0% cover 20%;
+}
+
 .card-body-measurements {
     display: flex;
     flex-direction: column-reverse;
@@ -3712,6 +3718,9 @@ textarea {
         color: var(--color);
         border-radius: var(--border-radius);
         background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
+        animation: fader 1s ease-out;
+        animation-timeline: view();
+        animation-range: entry 0% cover 20%;
 
         .exercise-body {
             display: flex;
@@ -3785,6 +3794,9 @@ textarea {
 
             .exercise-progress-chart {
                 height: 70px;
+                animation: fader 1s ease-out;
+                animation-timeline: view();
+                animation-range: entry 0% cover 20%;
 
                 @media (width >= 768px) {
                     height: 80px;
