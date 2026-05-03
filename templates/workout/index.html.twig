@@ -120,6 +120,12 @@
                                                 {%- endif -%}
                                             </div>
 
+                                            {%- if workout_exercise.description !== '' -%}
+                                                <div class="workout-exercise-description">
+                                                    {{- workout_exercise.description -}}
+                                                </div>
+                                            {%- endif -%}
+
                                             {%- if workout_exercise.sets is not empty -%}
                                                 <div class="workout-exercise-duration">
                                                     {%- set start = (workout_exercise.sets|first).performedAt.timestamp -%}

@@ -26,6 +26,7 @@ final class WorkoutExerciseTest extends TestCase
         self::assertSame($workout, $workoutExercise->workout);
         self::assertSame($exercise, $workoutExercise->exercise);
         self::assertSame(0, $workoutExercise->orderIndex);
+        self::assertSame('', $workoutExercise->description);
         self::assertTrue($workoutExercise->sets->isEmpty());
     }
 
@@ -38,6 +39,18 @@ final class WorkoutExerciseTest extends TestCase
         );
 
         self::assertSame(2, $workoutExercise->orderIndex);
+    }
+
+    public function testDescription(): void
+    {
+        $workoutExercise = new WorkoutExercise(
+            workout: new Workout(),
+            exercise: $this->buildExercise(),
+        );
+
+        $workoutExercise->description = 'example';
+
+        self::assertSame('example', $workoutExercise->description);
     }
 
     private function buildExercise(): Exercise
