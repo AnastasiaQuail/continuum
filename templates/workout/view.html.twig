@@ -26,7 +26,15 @@
                     <div class="exercise {{ workout_exercise.description !== '' ? 'exercise-description-show' }}"
                          data-general-type="{{ workout_exercise.exercise.group.color.value }}">
                         <div class="exercise-name">{{ workout_exercise.exercise.name }}</div>
+
+                        {%- set is_update_granted = is_granted('WORKOUT_EXERCISE_UPDATE', workout_exercise) -%}
+
                         <div class="exercise-controls">
+                            <button class="btn btn-link btn-description-show"
+                                    {% if not is_update_granted %}disabled{% endif %}>
+                                {{- ux_icon('lucide:message-circle-more') -}}
+                            </button>
+
                             {%- if workout_exercise.sets.isEmpty -%}
                                 <form method="post"
                                       action="{{ path('app_workout_exercise_delete', {id: workout_exercise.id}) }}"
@@ -39,12 +47,9 @@
                                         {{- ux_icon('lucide:trash') -}}
                                     </button>
                                 </form>
-                            {%- else -%}
-                                <button class="btn btn-link btn-description-show">
-                                    {{- ux_icon('lucide:message-circle-more') -}}
-                                </button>
                             {%- endif -%}
                         </div>
+
                         <div class="exercise-description">
                             <form method="post"
                                   action="{{ path('app_workout_exercise_update', {id: workout_exercise.id}) }}">
@@ -53,7 +58,8 @@
                                 <input class="form-control" type="text" id="description" name="description"
                                        maxlength="255" value="{{ workout_exercise.description }}"
                                        placeholder="Add description...">
-                                <button class="btn btn-transparent" type="submit">
+                                <button class="btn btn-transparent" {% if is_update_granted %}type="submit"
+                                        {% else %}disabled{% endif %}>
                                     {{- ux_icon('lucide:message-circle-plus') -}}
                                 </button>
                             </form>
