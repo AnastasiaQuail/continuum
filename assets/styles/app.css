@@ -3265,6 +3265,11 @@ textarea {
                     display: flex;
                     flex-direction: column;
                     width: 100%;
+                    color: var(--exercise-color);
+
+                    [data-theme="dark"] & {
+                        color: color-mix(in srgb, var(--exercise-color) var(--transparent-color-tiny), var(--color));
+                    }
 
                     @media (width >= 576px) {
                         width: auto;
@@ -3275,11 +3280,6 @@ textarea {
                         align-items: center;
                         column-gap: calc(var(--gap-inline) / 4);
                         font-size: var(--font-size-medium);
-                        color: var(--exercise-color);
-
-                        [data-theme="dark"] & {
-                            color: color-mix(in srgb, var(--exercise-color) var(--transparent-color-tiny), var(--color));
-                        }
 
                         .exercise-progress {
                             display: inline-flex;
@@ -3302,8 +3302,15 @@ textarea {
                         }
                     }
 
+                    .workout-exercise-description {
+                        margin-top: calc(var(--gap-block) / 8);
+                        font-size: var(--font-size-extra-small);
+                        opacity: .4;
+                    }
+
                     .workout-exercise-duration {
                         font-size: 0;
+                        color: var(--color);
                         opacity: 0;
                         transition: all .3s ease-in;
                     }
@@ -3408,6 +3415,7 @@ textarea {
             --exercise-background-color-transparent: 5%;
 
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             column-gap: calc(var(--gap-inline) / 2);
             padding: calc(var(--gap-block) / 4) var(--gap-inline);
@@ -3418,6 +3426,7 @@ textarea {
 
             .exercise-name {
                 flex: 1;
+                padding-block: var(--control-padding-block);
                 color: var(--exercise-color);
 
                 [data-theme="dark"] & {
@@ -3432,6 +3441,40 @@ textarea {
             .exercise-controls {
                 display: flex;
                 align-items: center;
+            }
+
+            .exercise-description {
+                display: none;
+                flex-basis: 100%;
+                padding-right: calc(var(--gap-inline) / 2);
+                padding-bottom: var(--control-padding-block);
+
+                & > form {
+                    display: flex;
+                    column-gap: calc(var(--gap-inline) / 4);
+
+                    & > label {
+                        display: none;
+                    }
+
+                    .form-control {
+                        font-size: var(--font-size-medium);
+                        border-style: dashed;
+                        background-color: color-mix(in srgb, var(--background-color) var(--transparent-color), transparent);
+                    }
+                }
+            }
+
+            &.exercise-description-show {
+                .exercise-controls {
+                    .btn-description-show {
+                        display: none;
+                    }
+                }
+
+                .exercise-description {
+                    display: block;
+                }
             }
         }
 

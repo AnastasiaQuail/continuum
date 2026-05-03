@@ -22,6 +22,9 @@ final class WorkoutExercise
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
     public private(set) Uuid $id;
 
+    #[ORM\Column(options: ['default' => ''])]
+    public string $description = '';
+
     /**
      * @var Collection<int, WorkoutSet>
      */

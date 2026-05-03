@@ -27,6 +27,7 @@ final class WorkoutVoter extends Voter
     public const string EDIT = 'WORKOUT_EDIT';
     public const string DELETE = 'WORKOUT_DELETE';
     public const string EXERCISE_CREATE = 'WORKOUT_EXERCISE_CREATE';
+    public const string EXERCISE_UPDATE = 'WORKOUT_EXERCISE_UPDATE';
     public const string EXERCISE_DELETE = 'WORKOUT_EXERCISE_DELETE';
     public const string SET_CREATE = 'WORKOUT_SET_CREATE';
     public const string SET_DELETE = 'WORKOUT_SET_DELETE';
@@ -47,6 +48,7 @@ final class WorkoutVoter extends Voter
                 self::EDIT,
                 self::DELETE,
                 self::EXERCISE_CREATE,
+                self::EXERCISE_UPDATE,
                 self::EXERCISE_DELETE,
                 self::SET_CREATE,
                 self::SET_DELETE,
@@ -76,6 +78,7 @@ final class WorkoutVoter extends Voter
 
             self::EDIT,
             self::EXERCISE_CREATE,
+            self::EXERCISE_UPDATE,
             self::SET_CREATE,
             self::DELETE,
             self::EXERCISE_DELETE,
@@ -98,6 +101,7 @@ final class WorkoutVoter extends Voter
             self::EDIT,
             self::DELETE,
             self::EXERCISE_CREATE => $subject instanceof Workout && $this->isCurrentDay($subject),
+            self::EXERCISE_UPDATE,
             self::EXERCISE_DELETE,
             self::SET_CREATE => $subject instanceof WorkoutExercise && $this->isCurrentDay($subject->workout),
             self::SET_DELETE => $subject instanceof WorkoutSet

@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{%- block javascripts -%}
+    {{ parent() }}
+    <script src="{{ asset('js/workout.js') }}"></script>
+{%- endblock -%}
+
 {% set date = workout.date.setTimezone(app.user.timezone) %}
 
 {% block title %}Workout on {{ date.format('j F Y') }}{% endblock %}
@@ -18,7 +23,8 @@
         <div class="workout-exercises-edit">
             {%- for workout_exercise in workout.workoutExercises -%}
                 <div class="workout-exercise">
-                    <div class="exercise" data-general-type="{{ workout_exercise.exercise.group.color.value }}">
+                    <div class="exercise {{ workout_exercise.description !== '' ? 'exercise-description-show' }}"
+                         data-general-type="{{ workout_exercise.exercise.group.color.value }}">
                         <div class="exercise-name">{{ workout_exercise.exercise.name }}</div>
                         <div class="exercise-controls">
                             {%- if workout_exercise.sets.isEmpty -%}
@@ -34,9 +40,23 @@
                                     </button>
                                 </form>
                             {%- else -%}
-                                {# temporary #}
-                                <button class="btn btn-link">{{ ux_icon('lucide:message-circle-dashed') }}</button>
+                                <button class="btn btn-link btn-description-show">
+                                    {{- ux_icon('lucide:message-circle-more') -}}
+                                </button>
                             {%- endif -%}
+                        </div>
+                        <div class="exercise-description">
+                            <form method="post"
+                                  action="{{ path('app_workout_exercise_update', {id: workout_exercise.id}) }}">
+                                <input type="hidden" name="_method" value="PATCH">
+                                <label for="description"></label>
+                                <input class="form-control" type="text" id="description" name="description"
+                                       maxlength="255" value="{{ workout_exercise.description }}"
+                                       placeholder="Add description...">
+                                <button class="btn btn-transparent" type="submit">
+                                    {{- ux_icon('lucide:message-circle-plus') -}}
+                                </button>
+                            </form>
                         </div>
                     </div>
 
@@ -87,11 +107,11 @@
                                         <input class="form-control" type="number" id="weight" name="weight"
                                                value="{{ last_set?.weight ?? 0 }}" autocomplete="off"
                                                {%- if loop.last -%}autofocus="autofocus"{%- endif -%}
-                                               min="0" max="199" step="0.1" required data-mask="postfix"
+                                               min="0" max="199" step="0.1" required="required" data-mask="postfix"
                                                data-postfix="kg">
                                         <input class="form-control" type="number" id="reps" name="reps"
                                                value="{{ last_set?.reps ?? 1 }}" autocomplete="off"
-                                               min="1" max="99" step="1" required>
+                                               min="1" max="99" step="1" required="required">
                                     </div>
                                     <div class="workout-exercise-set-warmup form-control-choose-type-group">
                                         <label class="form-control-choose-type">
@@ -155,8 +175,8 @@
                                      data-tab-content-id="{{ exercise_group.value }}">
                                     <form method="post"
                                           action="{{ path('app_workout_exercise_create', {id: workout.id}) }}">
-                                        <select class="form-control" id="exercise_id" name="exercise" required
-                                                onchange="return submitBy(this);">
+                                        <select class="form-control" id="exercise_id" name="exercise"
+                                                required="required" onchange="return submitBy(this);">
                                             <option value="" disabled selected hidden>Choose exercise...</option>
                                             {%- for exercise in exercises -%}
                                                 {%- if exercise_group === exercise.group -%}

@@ -2,7 +2,7 @@
 framework:
     secret: '%env(APP_SECRET)%'
     http_method_override: true
-    allowed_http_method_override: [ 'DELETE' ]
+    allowed_http_method_override: [ 'PATCH', 'DELETE' ]
 
     # Note that the session will be started ONLY if you read or write from it.
     session: true

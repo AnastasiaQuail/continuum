@@ -29,9 +29,16 @@ final readonly class WorkoutExerciseService
             orderIndex: $this->repository->findMaxOrderIndexByWorkoutId($workout->id) + 1,
         );
 
-        $this->repository->create($workoutExercise);
+        $this->repository->save($workoutExercise);
 
         return $workoutExercise;
+    }
+
+    public function updateDescription(WorkoutExercise $workoutExercise, string $description): void
+    {
+        $workoutExercise->description = $description;
+
+        $this->repository->save($workoutExercise);
     }
 
     public function delete(WorkoutExercise $workoutExercise): void

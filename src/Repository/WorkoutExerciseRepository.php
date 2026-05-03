@@ -120,7 +120,7 @@ final class WorkoutExerciseRepository extends ServiceEntityRepository
         );
     }
 
-    public function create(WorkoutExercise $workoutExercise): void
+    public function save(WorkoutExercise $workoutExercise): void
     {
         $this->getEntityManager()->persist($workoutExercise);
         $this->getEntityManager()->flush();
