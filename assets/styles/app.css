@@ -3458,9 +3458,17 @@ textarea {
                     }
 
                     .form-control {
-                        font-size: var(--font-size-medium);
+                        --form-control-color: color-mix(in srgb, var(--color) var(--transparent-color), transparent);
+
+                        font-size: var(--font-size-small);
                         border-style: dashed;
                         background-color: color-mix(in srgb, var(--background-color) var(--transparent-color), transparent);
+                        transition: color .15s;
+
+                        &:focus,
+                        &:focus-visible {
+                            --form-control-color: var(--color);
+                        }
                     }
                 }
             }
@@ -3706,7 +3714,7 @@ textarea {
 
                 &.workout-exercise-set-prev {
                     flex-wrap: wrap;
-                    gap: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 1.5);
+                    gap: calc(var(--gap-block) / 3) calc(var(--gap-inline) / 1.5);
                     padding-top: calc(var(--gap-block) / 3);
                     border-top: var(--border-width) dashed var(--body-border-color);
                     font-size: var(--font-size-small);
@@ -3732,6 +3740,12 @@ textarea {
 
                         &.prev-warmup {
                             opacity: 20%;
+                        }
+
+                        &.prev-description {
+                            flex-basis: 100%;
+                            font-size: var(--font-size-extra-small);
+                            white-space: normal;
                         }
                     }
                 }
