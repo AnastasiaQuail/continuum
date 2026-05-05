@@ -157,7 +157,7 @@
                     <li class="nav-item">
                         {{- _self.sidebar_link(
                             'app_measurements',
-                            ['app_measurement_create', 'app_measurement_edit'],
+                            ['app_measurement_create', 'app_measurement_edit', 'app_measurements_history'],
                             ux_icon('lucide:ruler-dimension-line'),
                             'Measurements',
                             is_granted('BODY_MEASUREMENT_VIEW'),
@@ -166,7 +166,7 @@
                     <li class="nav-item">
                         {{- _self.sidebar_link(
                             'app_workouts',
-                            ['app_workouts_view'],
+                            ['app_workouts_view', 'app_exercises', 'app_exercise_create', 'app_exercise_edit'],
                             ux_icon('lucide:dumbbell'),
                             'Workouts',
                             is_granted('WORKOUT_VIEW'),

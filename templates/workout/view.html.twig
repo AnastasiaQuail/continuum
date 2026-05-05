@@ -147,6 +147,12 @@
                                             <span><small>x</small>{{ prev_set.reps }}</span>
                                         </div>
                                     {%- endfor -%}
+
+                                    {%- if prev_workout_exercise.description !== '' -%}
+                                        <div class="workout-exercise-prev prev-description">
+                                            {{- prev_workout_exercise.description -}}
+                                        </div>
+                                    {%- endif -%}
                                 </div>
                             {%- endif -%}
                         {%- endif -%}
