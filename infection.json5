@@ -23,5 +23,6 @@
             ".*\\#\\[Assert\\\\(Length|Range)\\(.*",
             ".*new Assert\\\\Choice\\(.*"
         ]
-    }
+    },
+    "staticAnalysisTool": "phpstan"
 }

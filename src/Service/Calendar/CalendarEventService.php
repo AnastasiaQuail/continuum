@@ -84,9 +84,12 @@ final readonly class CalendarEventService
 
         /**
          * @var non-empty-string $title
-         * @var non-empty-array<value-of<CalendarEventType>, positive-int> $types
          */
         foreach ($data as $title => $types) {
+            /**
+             * @var value-of<CalendarEventType> $type
+             * @var positive-int $count
+             */
             foreach ($types as $type => $count) {
                 $events[] = new ReportCalendarEvent(
                     title: $title,
