@@ -31,7 +31,6 @@ final readonly class ExerciseService
 
         usort(
             $exercises,
-            // @phpstan-ignore offsetAccess.notFound (key always exists), offsetAccess.notFound (key always exists)
             static fn (Exercise $a, Exercise $b): int => $map[$a->group->value] <=> $map[$b->group->value],
         );
 
