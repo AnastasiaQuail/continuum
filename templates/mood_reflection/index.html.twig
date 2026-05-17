@@ -70,7 +70,7 @@
 
                         <{% if is_granted_day %}a{% else %}div{% endif %}
                             {% if is_granted_day %}href="{{ path('app_mood_reflection_edit', {day: day}) }}"{% endif %}
-                            class="day {{- day === current ? ' day-current' -}} {{- mood !== null ? ' day-past' }}"
+                            class="day {{- mood !== null ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day|is_weekend ? ' day-weekend' -}}"
                             {%- if mood !== null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
                             <span>{{ day_number }}</span>
                         </{% if is_granted_day %}a{% else %}div{% endif %}>

@@ -3198,6 +3198,39 @@ textarea {
     }
 }
 
+@keyframes load_spinner {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+form {
+    .submit-loader,
+    .select-submit-loader {
+        display: none;
+        animation: load_spinner 1s infinite linear;
+    }
+
+    &.disabled {
+        [type="submit"] {
+            svg {
+                display: none;
+
+                &.submit-loader {
+                    display: flex;
+                }
+            }
+        }
+
+        .select-submit-loader {
+            display: flex;
+        }
+    }
+}
+
 #workouts-card {
     view-transition-name: workouts-card;
 }
@@ -3547,18 +3580,11 @@ textarea {
                             display: flex;
                             column-gap: calc(var(--gap-inline) / 2);
                             width: 100%;
-
-                            .exercise-controls {
-                                display: none;
-                                animation: load_spinner 1s infinite linear;
-                            }
-
-                            &:has(select:disabled) {
-                                .exercise-controls {
-                                    display: flex;
-                                }
-                            }
                         }
+                    }
+
+                    .select-submit-loader {
+                        align-items: center;
                     }
                 }
             }
@@ -3751,15 +3777,6 @@ textarea {
                 }
             }
         }
-    }
-}
-
-@keyframes load_spinner {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
     }
 }
 

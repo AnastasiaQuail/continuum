@@ -23,7 +23,7 @@ final readonly class UpcomingEventService
      */
     public function getClosestEvents(User $user): array
     {
-        return $this->getEvents($user, days: 2);
+        return $this->getEvents($user, days: 3);
     }
 
     /**

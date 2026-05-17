@@ -40,6 +40,7 @@
         </div>
 
         <div class="calendar">
+            {%- set start_date = start_day.format('Y-m-d') -%}
             {%- set current_date = user_date() -%}
             {%- set current_month = current_date.format('Y-m') -%}
             {%- set current = current_date.format('Y-m-d') -%}
@@ -62,14 +63,12 @@
 
                         {%- for day_number in 1..first_day|date('t') -%}
                             {%- set day = month ~ '-' ~ (day_number < 10 ? '0') ~ day_number -%}
-                            {%- set is_weekend = day|date('N') === 6 or day|date('N') === 7 -%}
-
                             {%- set day_event = events[day] is defined ? events[day].dayEvent : null -%}
                             {%- set hour_events = events[day] is defined ? events[day].hourEvents : [] -%}
 
                             <{% if is_granted %}a{% else %}div{% endif %}
                                 {% if is_granted %}href="{{ path('app_calendar_day', {day: day}) }}"{% endif %}
-                                class="day {{- day < current ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day < start_day.format('Y-m-d') ? ' day-inactive' -}} {{- is_weekend ? ' day-weekend' -}}"
+                                class="day {{- day < current ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day < start_date ? ' day-inactive' -}} {{- day|is_weekend ? ' day-weekend' -}}"
                                 {%- if day_event !== null %}data-general-type="{{ day_event.type.value }}"{% endif -%}>
                                 <span>{{ day_number }}</span>
 
