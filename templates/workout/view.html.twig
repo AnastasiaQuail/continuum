@@ -38,13 +38,14 @@
                             {%- if workout_exercise.sets.isEmpty -%}
                                 <form method="post"
                                       action="{{ path('app_workout_exercise_delete', {id: workout_exercise.id}) }}"
-                                      onsubmit="return confirm('Delete?')">
+                                      onsubmit="return confirm('Delete?') && submitBy(this);">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button
                                         class="btn btn-danger btn-link"
                                         {% if is_granted('WORKOUT_EXERCISE_DELETE', workout_exercise) %}type="submit"
                                         {% else %}disabled{% endif %}>
                                         {{- ux_icon('lucide:trash') -}}
+                                        {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
                                     </button>
                                 </form>
                             {%- endif -%}
@@ -52,7 +53,8 @@
 
                         <div class="exercise-description">
                             <form method="post"
-                                  action="{{ path('app_workout_exercise_update', {id: workout_exercise.id}) }}">
+                                  action="{{ path('app_workout_exercise_update', {id: workout_exercise.id}) }}"
+                                  onsubmit="return submitBy(this);">
                                 <input type="hidden" name="_method" value="PATCH">
                                 <label for="description"></label>
                                 <input class="form-control" type="text" id="description" name="description"
@@ -61,6 +63,7 @@
                                 <button class="btn btn-transparent" {% if is_update_granted %}type="submit"
                                         {% else %}disabled{% endif %}>
                                     {{- ux_icon('lucide:message-circle-plus') -}}
+                                    {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
                                 </button>
                             </form>
                         </div>
@@ -82,13 +85,14 @@
                                 <div class="workout-exercise-set-controls">
                                     <form method="post"
                                           action="{{ path('app_workout_set_delete', {id: workout_set.id}) }}"
-                                          onsubmit="return confirm('Delete?')">
+                                          onsubmit="return confirm('Delete?') && submitBy(this);">
                                         <input type="hidden" name="_method" value="DELETE">
                                         <button
                                             class="btn btn-danger btn-link"
                                             {% if is_granted('WORKOUT_SET_DELETE', workout_set) %}type="submit"
                                             {% else %}disabled{% endif %}>
                                             {{- ux_icon('lucide:trash') -}}
+                                            {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
                                         </button>
                                     </form>
                                 </div>
@@ -106,7 +110,8 @@
 
                             <div class="workout-exercise-set workout-exercise-set-new">
                                 <form method="post"
-                                      action="{{ path('app_workout_set_create', {id: workout_exercise.id}) }}">
+                                      action="{{ path('app_workout_set_create', {id: workout_exercise.id}) }}"
+                                      onsubmit="return submitBy(this);">
                                     <label for="weight"></label>
                                     <label for="reps"></label>
                                     <div class="workout-exercise-set-fields">
@@ -132,6 +137,7 @@
                                     <div class="workout-exercise-set-controls">
                                         <button class="btn btn-primary btn-transparent" type="submit">
                                             {{- ux_icon('lucide:plus') -}}
+                                            {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
                                         </button>
                                     </div>
                                 </form>
@@ -198,7 +204,7 @@
                                                 {%- endif -%}
                                             {%- endfor -%}
                                         </select>
-                                        <div class="exercise-controls">{{ ux_icon('lucide:loader-circle') }}</div>
+                                        <div class="select-submit-loader">{{ ux_icon('lucide:loader-circle') }}</div>
                                     </form>
                                 </div>
                             {%- endfor -%}

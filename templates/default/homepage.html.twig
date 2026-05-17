@@ -183,8 +183,8 @@
             </div>
 
             <div class="card-panel-body chart-panel"
-                 {% if chart_mood_reflections %}data-chart="mood-reflections" data-days="{{ mood_reflection_days }}"
-                 data-values="{{ chart_mood_reflections|json_encode }}"{% endif %}></div>
+                 data-chart="mood-reflections" data-days="{{ mood_reflection_days }}"
+                 data-values="{{ chart_mood_reflections|json_encode }}"></div>
         </section>
     {%- endif -%}
 {%- endblock %}

@@ -14,12 +14,17 @@ new Services.TabToggler().apply();
 new Services.EasterEggs().apply();
 
 /**
- * @param {HTMLElement} element
+ * @param {HTMLFormElement|HTMLElement} element
  * @return {boolean}
  */
 window.submitBy = function (element) {
-    element.closest('form').submit();
-    element.disabled = true;
+    const form = element instanceof HTMLFormElement ? element : element.closest('form');
+    form.submit();
+    form.classList.add('disabled');
+
+    for (let field of form.elements) {
+        field.disabled = true;
+    }
 
     return false;
 };
