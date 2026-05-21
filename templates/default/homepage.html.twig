@@ -108,13 +108,13 @@
         {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
             <section id="weight-change-chart" class="card card-panel">
                 <div class="card-title card-title-controls">
-                    {%- set result = 0 -%}
+                    {%- set result = 0.0 -%}
                     {%- if chart_measurements -%}
                         {%- set result = ((chart_measurements|last).weight - (chart_measurements|first).weight)|round(1) -%}
                     {%- endif -%}
 
                     <h2 id="weight-change-title">Body fat</h2>
-                    {%- if result !== 0 -%}
+                    {%- if result !== 0.0 -%}
                         <span id="weight-change-label"
                               class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
                             <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
