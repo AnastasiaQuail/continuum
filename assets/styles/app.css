@@ -3215,7 +3215,7 @@ form {
     }
 
     &.disabled {
-        [type="submit"] {
+        [type="submit"]:has(.submit-loader) {
             svg {
                 display: none;
 
