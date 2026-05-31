@@ -168,7 +168,7 @@ final readonly class DatabaseDumper
             '-h',
             $db->host,
             '-p',
-            $db->port,
+            (string) $db->port,
             '-U',
             $db->user,
             '-f',
@@ -208,21 +208,23 @@ final readonly class DatabaseDumper
 
         $this->logger->info('Running drop database');
 
-        new Process(['dropdb', '--force', '-h', $db->host, '-p', $db->port, '-U', $db->user, $db->name])
+        $port = (string) $db->port;
+
+        new Process(['dropdb', '--force', '-h', $db->host, '-p', $port, '-U', $db->user, $db->name])
             ->setEnv(['PGPASSWORD' => $db->password])
             ->setTimeout(150)
             ->mustRun();
 
         $this->logger->info('Running create database');
 
-        new Process(['createdb', '-h', $db->host, '-p', $db->port, '-U', $db->user, $db->name])
+        new Process(['createdb', '-h', $db->host, '-p', $port, '-U', $db->user, $db->name])
             ->setEnv(['PGPASSWORD' => $db->password])
             ->setTimeout(150)
             ->mustRun();
 
         $this->logger->info('Running restore backup');
 
-        new Process(['psql', '-h', $db->host, '-p', $db->port, '-U', $db->user, '-f', $backupPath, '-d', $db->name])
+        new Process(['psql', '-h', $db->host, '-p', $port, '-U', $db->user, '-f', $backupPath, '-d', $db->name])
             ->setEnv(['PGPASSWORD' => $db->password])
             ->setTimeout(300)
             ->mustRun();

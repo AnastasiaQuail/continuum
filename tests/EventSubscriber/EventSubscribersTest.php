@@ -62,12 +62,12 @@ final class EventSubscribersTest extends KernelTestCase
     public function testFrameworkSubscribers(): void
     {
         self::assertCount(12, $this->eventDispatcher->getListeners(KernelEvents::REQUEST));
-        self::assertCount(4, $this->eventDispatcher->getListeners(KernelEvents::EXCEPTION));
-        self::assertCount(2, $this->eventDispatcher->getListeners(KernelEvents::CONTROLLER));
-        self::assertCount(6, $this->eventDispatcher->getListeners(KernelEvents::CONTROLLER_ARGUMENTS));
+        self::assertCount(5, $this->eventDispatcher->getListeners(KernelEvents::EXCEPTION));
+        self::assertCount(3, $this->eventDispatcher->getListeners(KernelEvents::CONTROLLER));
+        self::assertCount(3, $this->eventDispatcher->getListeners(KernelEvents::CONTROLLER_ARGUMENTS));
         self::assertCount(1, $this->eventDispatcher->getListeners(KernelEvents::VIEW));
         self::assertCount(11, $this->eventDispatcher->getListeners(KernelEvents::RESPONSE));
-        self::assertCount(4, $this->eventDispatcher->getListeners(KernelEvents::FINISH_REQUEST));
+        self::assertCount(5, $this->eventDispatcher->getListeners(KernelEvents::FINISH_REQUEST));
         self::assertCount(1, $this->eventDispatcher->getListeners(KernelEvents::TERMINATE));
 
         self::assertCount(3, $this->eventDispatcher->getListeners(ConsoleEvents::COMMAND));
