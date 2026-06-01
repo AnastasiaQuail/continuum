@@ -122,6 +122,7 @@
 
 .mood-reflections {
     --mrd-size: calc(var(--font-size) / 4);
+    --mrd-translate: calc(var(--mrd-size) / 2);
 
     display: flex;
     flex-wrap: wrap;
@@ -133,10 +134,30 @@
     }
 
     .mood-reflection-dot {
-        width: var(--mrd-size);
+        width: calc(var(--mrd-size) / 1.5);
         height: var(--mrd-size);
-        border-radius: 50%;
+        border-radius: calc(var(--mrd-size) / 2);
         background-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
+
+        &.empty-dot {
+            opacity: 20%;
+        }
+
+        &[data-type="terrible"] {
+            transform: translateY(calc(var(--mrd-translate) * 2));
+        }
+
+        &[data-type="bad"] {
+            transform: translateY(var(--mrd-translate));
+        }
+
+        &[data-type="good"] {
+            transform: translateY(calc(var(--mrd-translate) * -1));
+        }
+
+        &[data-type="great"] {
+            transform: translateY(calc(var(--mrd-translate) * -2));
+        }
     }
 }
 

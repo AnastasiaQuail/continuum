@@ -83,20 +83,29 @@
 
         <section id="mood-chart-card" class="card">
             {%- if is_mood_reflection_granted -%}
+                {%- set total_days = month.format('t') -%}
+
                 <div class="card-title card-title-controls">
                     <h3 id="mood-chart-title">Mood trend</h3>
 
                     <div class="card-title-info">
                         <div class="mood-reflections">
-                            {%- for mood_reflection in mood_reflections -%}
-                                <div class="mood-reflection-dot"
-                                     data-general-type="{{ mood_reflection.type.color.value }}"></div>
+                            {%- for day_number in 1..total_days -%}
+                                {%- set day = month.format('Y-m-') ~ (day_number < 10 ? '0') ~ day_number -%}
+
+                                {%- if mood_reflections[day] is defined -%}
+                                    {%- set mood_reflection = mood_reflections[day] -%}
+
+                                    <div class="mood-reflection-dot" data-type="{{ mood_reflection.type.value }}"
+                                         data-general-type="{{ mood_reflection.type.color.value }}"></div>
+                                {%- else -%}
+                                    <div class="mood-reflection-dot empty-dot"></div>
+                                {%- endif -%}
                             {%- endfor -%}
                         </div>
                     </div>
                 </div>
 
-                {%- set total_days = month.format('t') -%}
                 {%- set okay_days = 0 -%}
                 {%- set okay_color = '' -%}
                 {%- set good_days = 0 -%}
