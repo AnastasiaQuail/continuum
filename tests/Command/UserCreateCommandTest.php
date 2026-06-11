@@ -10,15 +10,15 @@ use Continuum\Repository\UserRepository;
 use Continuum\Repository\UserRepositoryInterface;
 use Continuum\Security\User\UserRole;
 use Continuum\Security\User\UserStatus;
-use Continuum\Tests\Test\AbstractCommandTestCase;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[CoversClass(UserCreateCommand::class)]
-final class UserCreateCommandTest extends AbstractCommandTestCase
+final class UserCreateCommandTest extends KernelTestCase
 {
     private UserRepository $repository;
     private UserPasswordHasherInterface $passwordHasher;
@@ -41,12 +41,12 @@ final class UserCreateCommandTest extends AbstractCommandTestCase
             'password' => 'password',
         ];
         if (null !== $role) {
-            $input['--role'] = $role;
+            $input['--role'] = $role->value;
         }
 
-        $commandTester = self::executeCommand('app:user:create', $input);
+        $commandTester = self::runCommand('app:user:create', $input);
 
-        self::assertSame(Command::SUCCESS, $commandTester->getStatusCode());
+        self::assertSame(Command::SUCCESS, $commandTester->statusCode);
         self::assertStringContainsString('The user has been created.', $commandTester->getDisplay());
         self::assertInstanceOf(User::class, $user = $this->repository->findOneBy(['email' => 'email@example.com']));
         self::assertTrue($this->passwordHasher->isPasswordValid($user, 'password'));
