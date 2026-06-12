@@ -21,6 +21,8 @@
         <h2 class="card-title">Workout exercises</h2>
 
         <div class="workout-exercises-edit">
+            {%- set is_autofocused = false -%}
+
             {%- for workout_exercise in workout.workoutExercises -%}
                 <div class="workout-exercise">
                     <div class="exercise {{ workout_exercise.description !== '' ? 'exercise-description-show' }}"
@@ -73,29 +75,35 @@
                         {%- for workout_set in workout_exercise.sets -%}
                             <div class="workout-exercise-set workout-exercise-set-exists">
                                 <div class="workout-exercise-set-fields">
-                                    <div class="workout-exercise-set-weight">
+                                    <div class="workout-exercise-set-field set-weight">
                                         <span>{{ workout_set.weight }}</span>
                                         <span>kg</span>
                                     </div>
-                                    <div class="workout-exercise-set-reps">{{ workout_set.reps }}</div>
+                                    <div class="workout-exercise-set-field set-reps">{{ workout_set.reps }}</div>
                                 </div>
-                                <div class="workout-exercise-set-warmup {{ workout_set.isWarmup ? 'active' }}">
-                                    {{- ux_icon('lucide:battery-charging') -}}
-                                </div>
-                                <div class="workout-exercise-set-controls">
-                                    <form method="post"
-                                          action="{{ path('app_workout_set_delete', {id: workout_set.id}) }}"
-                                          onsubmit="return confirm('Delete?') && submitBy(this);">
-                                        <input type="hidden" name="_method" value="DELETE">
-                                        <button
-                                            class="btn btn-danger btn-link"
-                                            {% if is_granted('WORKOUT_SET_DELETE', workout_set) %}type="submit"
-                                            {% else %}disabled{% endif %}>
-                                            {{- ux_icon('lucide:trash') -}}
-                                            {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
-                                        </button>
-                                    </form>
-                                </div>
+
+                                {%- if workout_set.isWarmup -%}
+                                    <div class="workout-exercise-set-warmup">
+                                        {{- ux_icon('lucide:battery-charging') -}}
+                                    </div>
+                                {%- endif -%}
+
+                                {%- if loop.last -%}
+                                    <div class="workout-exercise-set-controls">
+                                        <form method="post"
+                                              action="{{ path('app_workout_set_delete', {id: workout_set.id}) }}"
+                                              onsubmit="return confirm('Delete?') && submitBy(this);">
+                                            <input type="hidden" name="_method" value="DELETE">
+                                            <button
+                                                class="btn btn-danger btn-link"
+                                                {% if is_granted('WORKOUT_SET_DELETE', workout_set) %}type="submit"
+                                                {% else %}disabled{% endif %}>
+                                                {{- ux_icon('lucide:trash') -}}
+                                                {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
+                                            </button>
+                                        </form>
+                                    </div>
+                                {%- endif -%}
                             </div>
                         {%- endfor -%}
 
@@ -108,6 +116,12 @@
                                 {%- set last_set = prev_workout_exercise.sets|first -%}
                             {%- endif -%}
 
+                            {%- set is_autofocus = false -%}
+                            {%- if not is_autofocused and (loop.last or workout_exercise.sets.isEmpty) -%}
+                                {%- set is_autofocused = true -%}
+                                {%- set is_autofocus = true -%}
+                            {%- endif -%}
+
                             <div class="workout-exercise-set workout-exercise-set-new">
                                 <form method="post"
                                       action="{{ path('app_workout_set_create', {id: workout_exercise.id}) }}"
@@ -117,7 +131,7 @@
                                     <div class="workout-exercise-set-fields">
                                         <input class="form-control" type="number" id="weight" name="weight"
                                                value="{{ last_set?.weight ?? 0 }}" autocomplete="off"
-                                               {%- if loop.last -%}autofocus="autofocus"{%- endif -%}
+                                               {%- if is_autofocus -%}autofocus="autofocus"{%- endif -%}
                                                min="0" max="199" step="0.1" required="required" data-mask="postfix"
                                                data-postfix="kg">
                                         <input class="form-control" type="number" id="reps" name="reps"

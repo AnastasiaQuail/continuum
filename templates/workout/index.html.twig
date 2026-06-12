@@ -106,7 +106,7 @@
                                             <div class="exercise-name">
                                                 {{- workout_exercise.exercise.name -}}
 
-                                                {%- if workout_exercise.sets is not empty -%}
+                                                {%- if not workout_exercise.sets.isEmpty -%}
                                                     {%- set we_id = workout_exercise.id.toString -%}
                                                     {%- if progresses[we_id] is defined -%}
                                                         {%- if progresses[we_id].change.value !== 'unchanged' -%}
@@ -126,7 +126,7 @@
                                                 </div>
                                             {%- endif -%}
 
-                                            {%- if workout_exercise.sets is not empty -%}
+                                            {%- if not workout_exercise.sets.isEmpty -%}
                                                 <div class="workout-exercise-duration">
                                                     {%- set start = (workout_exercise.sets|first).performedAt.timestamp -%}
                                                     {%- set end = (workout_exercise.sets|last).performedAt.timestamp -%}
@@ -136,19 +136,19 @@
                                             {%- endif -%}
                                         </div>
                                         <div class="workout-exercise-sets">
-                                            {%- if workout_exercise.sets.empty -%}
+                                            {%- if workout_exercise.sets.isEmpty -%}
                                                 <div class="workout-exercise-set collection-empty">No reps yet</div>
                                             {%- else -%}
                                                 {%- for exercise_set in workout_exercise.sets -%}
                                                     <div
                                                         class="workout-exercise-set {{ exercise_set.isWarmup ? 'set-warmup' }}">
                                                         {%- if exercise_set.weight > 0 -%}
-                                                            <div class="workout-exercise-set-weight">
+                                                            <div class="workout-exercise-set-field set-weight">
                                                                 <span>{{ exercise_set.weight }}</span>
                                                                 <span>kg</span>
                                                             </div>
                                                         {%- endif -%}
-                                                        <div class="workout-exercise-set-reps">
+                                                        <div class="workout-exercise-set-field set-reps">
                                                             <span>{{ exercise_set.reps }}</span>
                                                             <span>x</span>
                                                         </div>
