@@ -3373,32 +3373,30 @@ form {
                         border-radius: var(--border-radius);
                         background-color: color-mix(in oklch, var(--background-color) var(--transparent-color), transparent);
 
-                        .workout-exercise-set-weight,
-                        .workout-exercise-set-reps {
+                        .workout-exercise-set-field {
                             display: inline-flex;
 
                             & > span:last-child {
                                 font-size: calc(var(--font-size) / 2);
                                 opacity: .4;
                             }
-                        }
 
-                        .workout-exercise-set-weight {
-                            column-gap: calc(var(--gap-inline) / 6);
-                            padding-right: calc(var(--gap-inline) / 3);
-                            margin-right: calc(var(--gap-inline) / 3);
-                            border-right: var(--border-width) solid var(--body-border-color);
-                        }
+                            &.set-weight {
+                                column-gap: calc(var(--gap-inline) / 6);
+                                padding-right: calc(var(--gap-inline) / 3);
+                                margin-right: calc(var(--gap-inline) / 3);
+                                border-right: var(--border-width) solid var(--body-border-color);
+                            }
 
-                        .workout-exercise-set-reps {
-                            flex-direction: row-reverse;
-                            align-items: baseline;
-                            column-gap: calc(var(--gap-inline) / 8);
+                            &.set-reps {
+                                flex-direction: row-reverse;
+                                align-items: baseline;
+                                column-gap: calc(var(--gap-inline) / 8);
+                            }
                         }
 
                         &.set-warmup {
-                            .workout-exercise-set-weight,
-                            .workout-exercise-set-reps {
+                            .workout-exercise-set-field {
                                 & > span:first-child {
                                     font-weight: var(--font-weight-light);
                                     opacity: var(--transparent-color-tiny);
@@ -3474,6 +3472,10 @@ form {
             .exercise-controls {
                 display: flex;
                 align-items: center;
+
+                .btn-description-show:not(:hover) {
+                    opacity: var(--transparent-color);
+                }
             }
 
             .exercise-description {
@@ -3633,12 +3635,9 @@ form {
 
                 .workout-exercise-set-warmup {
                     display: flex;
+                    padding: var(--control-padding-block);
                     font-size: var(--font-size-medium);
-                    opacity: .1;
-
-                    &.active {
-                        opacity: var(--transparent-color);
-                    }
+                    opacity: var(--transparent-color);
                 }
 
                 .workout-exercise-set-controls {
@@ -3650,8 +3649,7 @@ form {
                     .workout-exercise-set-fields {
                         font-size: var(--font-size-medium);
 
-                        .workout-exercise-set-weight,
-                        .workout-exercise-set-reps {
+                        .workout-exercise-set-field {
                             gap: calc(var(--gap-inline) / 4);
                             align-items: baseline;
                             padding: var(--control-padding-block) var(--control-padding-inline);
