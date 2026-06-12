@@ -30,6 +30,14 @@ final readonly class CalendarEventService
     }
 
     /**
+     * @return list<CalendarEvent>
+     */
+    public function getByPreviousDays(User $user, DateTimeImmutable $date, int $days): array
+    {
+        return $this->repository->findPreviousDays($date, $days, $user->timezone);
+    }
+
+    /**
      * @return array<non-empty-string, CombinedCalendarEvent>
      */
     public function getByYear(User $user, int $year): array

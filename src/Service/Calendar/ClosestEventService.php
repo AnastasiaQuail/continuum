@@ -10,31 +10,43 @@ use Continuum\Entity\User;
 use DateTimeImmutable;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-final readonly class UpcomingEventService
+final readonly class ClosestEventService
 {
     public function __construct(
         #[Autowire(param: 'app.calendar.upcoming_events.days')]
         private int $upcomingEventsDays,
+        #[Autowire(param: 'app.calendar.previous_events.days')]
+        private int $previousEventsDays,
         private CalendarEventService $calendarEventService,
     ) {}
 
     /**
      * @return list<UpcomingEvent>
      */
-    public function getClosestEvents(User $user): array
+    public function getClosestUpcomingEvents(User $user): array
     {
-        return $this->getEvents($user, days: 3);
+        return $this->getUpcomingEvents($user, days: 3);
     }
 
     /**
      * @return list<UpcomingEvent>
      */
-    public function getEvents(User $user, ?int $days = null): array
+    public function getUpcomingEvents(User $user, ?int $days = null): array
     {
         $events = $this->calendarEventService->getByNextDays($user, $days ?? $this->upcomingEventsDays);
         $data = $this->getUniqueEvents($events);
 
-        return $this->getUpcomingEvents($user, $data);
+        return $this->mapUpcomingEvents($user, $data);
+    }
+
+    /**
+     * @return list<CalendarEvent>
+     */
+    public function getPreviousEvents(User $user, DateTimeImmutable $date): array
+    {
+        $events = $this->calendarEventService->getByPreviousDays($user, $date, $this->previousEventsDays);
+
+        return $this->getUniqueEvents($events);
     }
 
     /**
@@ -74,7 +86,7 @@ final readonly class UpcomingEventService
      *
      * @return list<UpcomingEvent>
      */
-    private function getUpcomingEvents(User $user, array $events): array
+    private function mapUpcomingEvents(User $user, array $events): array
     {
         $upcomingEvents = [];
 

@@ -1,5 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{%- block javascripts -%}
+    {{ parent() }}
+    <script src="{{ asset('js/calendar.js') }}"></script>
+{%- endblock -%}
+
 {% block title %}Events on {{ day.format('j F Y') }}{% endblock %}
 {% block page_title %}{{ day.format('j F Y') }}, <small>{{ day.format('l') }}</small>{% endblock %}
 {% block body_id %}calendar-date{% endblock %}
@@ -94,6 +99,27 @@
             </div>
             {{- form_errors(form.time) -}}
         </div>
+
+        {%- if previous_events -%}
+            <div class="calendar-event-guesses">
+                <div class="form-label">Or choose from you previous events</div>
+                <div class="calendar-event-guesses-body">
+                    {%- for previous_event in previous_events -%}
+                        {%- set event_time = previous_event.getUserDatetime(app.user).format('H:i') -%}
+                        <button class="btn btn-sm calendar-event-guess"
+                                data-event-title="{{ previous_event.title }}"
+                                data-general-type="{{ previous_event.type.value }}"
+                                {% if not previous_event.allDay %}data-event-time="{{ event_time }}"{% endif %}>
+                            <span>{{ previous_event.title }}</span>
+                            {%- if not previous_event.allDay -%}
+                                <small>at</small>
+                                <span>{{ event_time }}</span>
+                            {%- endif -%}
+                        </button>
+                    {%- endfor -%}
+                </div>
+            </div>
+        {%- endif -%}
 
         <div class="card-submit">
             <button type="submit" class="btn btn-primary btn-outline">Create event</button>

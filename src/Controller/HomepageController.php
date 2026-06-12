@@ -6,7 +6,7 @@ namespace Continuum\Controller;
 
 use Continuum\Entity\User;
 use Continuum\Service\Calendar\CalendarProgressService;
-use Continuum\Service\Calendar\UpcomingEventService;
+use Continuum\Service\Calendar\ClosestEventService;
 use Continuum\Service\ChartMoodReflectionService;
 use Continuum\Service\CoupleService;
 use Continuum\Service\HolidayService;
@@ -26,7 +26,7 @@ final class HomepageController extends AbstractController
     public function __construct(
         private readonly CalendarProgressService $calendarProgressService,
         private readonly CoupleService $coupleService,
-        private readonly UpcomingEventService $upcomingEventService,
+        private readonly ClosestEventService $closestEventService,
         private readonly HolidayService $holidayService,
         private readonly MeasurementService $measurementService,
         private readonly ChartMeasurementService $chartMeasurementService,
@@ -51,7 +51,7 @@ final class HomepageController extends AbstractController
         $progress = $this->calendarProgressService->getProgress($user, $date);
         $couple = $this->coupleService->getInformation();
 
-        $upcomingEvents = $this->upcomingEventService->getClosestEvents($user);
+        $upcomingEvents = $this->closestEventService->getClosestUpcomingEvents($user);
         $todayEvents = $this->holidayService->getTodayHolidays($user);
 
         $measurementDays = 30 * $measurementMonths;

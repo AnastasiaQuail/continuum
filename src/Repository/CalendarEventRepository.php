@@ -35,6 +35,19 @@ final class CalendarEventRepository extends ServiceEntityRepository
     /**
      * @return list<CalendarEvent>
      */
+    public function findPreviousDays(DateTimeImmutable $date, int $days, DateTimeZone $timeZone): array
+    {
+        $date = new DateTimeImmutable($date->format('Y-m-d 00:00:00'), $timeZone);
+
+        return $this->findBetweenDates(
+            $date->modify(sprintf('-%d days', $days)),
+            $date->modify('-1 second')
+        );
+    }
+
+    /**
+     * @return list<CalendarEvent>
+     */
     public function findByYear(int $year, DateTimeZone $timeZone): array
     {
         return $this->findBetweenDates(
