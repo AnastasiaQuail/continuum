@@ -7,7 +7,7 @@ namespace Continuum\Controller\Calendar;
 use Continuum\Entity\User;
 use Continuum\Security\Authorization\Voter\CalendarVoter;
 use Continuum\Service\Calendar\CalendarEventService;
-use Continuum\Service\Calendar\UpcomingEventService;
+use Continuum\Service\Calendar\ClosestEventService;
 use Continuum\Service\RequestValidator;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +24,7 @@ final class IndexController extends AbstractController
         private readonly RequestValidator $requestValidator,
         #[Autowire(env: 'string:CALENDAR_DATE_START')]
         private readonly string $startDate,
-        private readonly UpcomingEventService $upcomingEventService,
+        private readonly ClosestEventService $closestEventService,
         private readonly CalendarEventService $calendarEventService,
     ) {}
 
@@ -41,7 +41,7 @@ final class IndexController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
-        $upcomingEvents = $this->upcomingEventService->getEvents($user);
+        $upcomingEvents = $this->closestEventService->getUpcomingEvents($user);
         $events = $this->calendarEventService->getByYear($user, $year);
 
         return $this->render('calendar/index.html.twig', [

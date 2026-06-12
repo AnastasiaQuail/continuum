@@ -2667,6 +2667,30 @@ textarea {
     }
 }
 
+.calendar-event-guesses {
+    padding: var(--gap-block) var(--gap-inline);
+    border-radius: var(--border-radius);
+    background-color: color-mix(in oklch, var(--color) 3%, transparent);
+
+    .calendar-event-guesses-body {
+        display: flex;
+        flex-wrap: wrap;
+        gap: calc(var(--gap-inline) / 4);
+    }
+
+    .calendar-event-guess {
+        --btn-color: var(--btn-general-color);
+        --btn-border-color-transparent: 25%;
+        --btn-background-color-transparent: 0%;
+        align-items: baseline;
+
+        &:hover {
+            --btn-border-color-transparent: 50%;
+            --btn-background-color-transparent: 15%;
+        }
+    }
+}
+
 #mood-chart-card {
     view-transition-name: mood-chart-card;
 }

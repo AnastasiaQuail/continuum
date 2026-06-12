@@ -9,6 +9,7 @@ use Continuum\Entity\User;
 use Continuum\Form\NewCalendarEventType;
 use Continuum\Security\Authorization\Voter\CalendarVoter;
 use Continuum\Service\Calendar\CalendarEventService;
+use Continuum\Service\Calendar\ClosestEventService;
 use Continuum\Service\HolidayService;
 use Continuum\Service\RequestValidator;
 use DateTimeImmutable;
@@ -26,6 +27,7 @@ final class DayController extends AbstractController
         private readonly RequestValidator $requestValidator,
         private readonly CalendarEventService $calendarEventService,
         private readonly HolidayService $holidayService,
+        private readonly ClosestEventService $closestEventService,
     ) {}
 
     #[Route(path: '/calendar/{day:date}', name: 'app_calendar_day', methods: ['GET', 'POST'])]
@@ -53,11 +55,13 @@ final class DayController extends AbstractController
 
         $events = $this->calendarEventService->getByDay($user, $day);
         $holidayEvents = $this->holidayService->getHolidays($day);
+        $previousEvents = $this->closestEventService->getPreviousEvents($user, $day);
 
         return $this->render('calendar/day.html.twig', [
             'day' => $day,
             'events' => $events,
             'holiday_events' => $holidayEvents,
+            'previous_events' => $previousEvents,
             'form' => $form,
         ]);
     }
