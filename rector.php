@@ -6,6 +6,7 @@ use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector;
 use Rector\Config\RectorConfig;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 
 return RectorConfig::configure()
@@ -32,6 +33,8 @@ return RectorConfig::configure()
         typeDeclarations: true,
         typeDeclarationDocblocks: true,
         privatization: true,
+        // wait fix by rector (shouldn't change @no-named-arguments)
+        // namedArgs: true,
         instanceOf: true,
         earlyReturn: true,
         rectorPreset: true,
@@ -46,6 +49,7 @@ return RectorConfig::configure()
         symfony: true,
     )
     ->withSkip([
+        AddSeeTestAnnotationRector::class,
         CatchExceptionNameMatchingTypeRector::class,
         FlipTypeControlToUseExclusiveTypeRector::class,
         NewlineBetweenClassLikeStmtsRector::class,

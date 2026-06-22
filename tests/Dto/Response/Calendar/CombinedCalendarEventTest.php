@@ -41,10 +41,7 @@ final class CombinedCalendarEventTest extends TestCase
 
     public function testConstructorEmpty(): void
     {
-        $dto = new CombinedCalendarEvent(
-            dayEvent: null,
-            hourEvents: [],
-        );
+        $dto = new CombinedCalendarEvent();
 
         self::assertNull($dto->dayEvent);
         self::assertSame([], $dto->hourEvents);

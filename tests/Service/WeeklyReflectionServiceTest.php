@@ -218,7 +218,7 @@ final class WeeklyReflectionServiceTest extends TestCase
             new WeeklyReflection(
                 date: $week,
                 joy: new TextField('joy_text'),
-                difficulty: new TextField('difficulty_text', true),
+                difficulty: new TextField('difficulty_text', isPrivate: true),
                 achievement: new TextField('---'),
             ),
         ];
@@ -235,9 +235,9 @@ final class WeeklyReflectionServiceTest extends TestCase
             ),
             new WeeklyReflection(
                 date: new DateTimeImmutable('2025-01-01'),
-                joy: new TextField('---', true),
+                joy: new TextField('---', isPrivate: true),
                 difficulty: new TextField('difficulty_text'),
-                achievement: new TextField('achievement_text', true),
+                achievement: new TextField('achievement_text', isPrivate: true),
             ),
         ];
 
@@ -255,7 +255,7 @@ final class WeeklyReflectionServiceTest extends TestCase
                 date: new DateTimeImmutable('2025-01-01'),
                 joy: new TextField('joy_text'),
                 difficulty: new TextField('other_text'),
-                achievement: new TextField('000', true),
+                achievement: new TextField('000', isPrivate: true),
             ),
         ];
     }

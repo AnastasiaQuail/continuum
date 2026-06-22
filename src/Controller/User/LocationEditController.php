@@ -23,7 +23,7 @@ final class LocationEditController extends AbstractController
     #[Route(path: '/profile/location', name: 'app_profile_location', methods: ['GET', 'POST'])]
     public function __invoke(#[CurrentUser] User $user, Request $request): Response
     {
-        $form = $this->createForm(EditLocationType::class, null, ['location' => $user->location]);
+        $form = $this->createForm(EditLocationType::class, options: ['location' => $user->location]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

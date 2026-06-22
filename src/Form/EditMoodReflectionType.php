@@ -30,7 +30,7 @@ final class EditMoodReflectionType extends AbstractImmutableType
                 'class' => MoodType::class,
                 'data' => null !== $moodReflection ? $moodReflection->type : MoodType::Okay,
             ])
-            ->add('text', null, [
+            ->add('text', options: [
                 'data' => null !== $moodReflection ? $moodReflection->text : '',
                 'attr' => [
                     'autocomplete' => 'off',
@@ -58,7 +58,7 @@ final class EditMoodReflectionType extends AbstractImmutableType
     #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('moodReflection', null);
+        $resolver->setDefault('moodReflection', value: null);
         $resolver->setAllowedTypes('moodReflection', ['null', MoodReflection::class]);
     }
 }

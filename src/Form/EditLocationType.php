@@ -50,7 +50,7 @@ final class EditLocationType extends AbstractImmutableType
     #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('location', null);
+        $resolver->setDefault('location', value: null);
         $resolver->setAllowedTypes('location', ['null', Location::class]);
     }
 

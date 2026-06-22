@@ -153,7 +153,7 @@ final readonly class DatabaseDumper
      */
     private function doBackup(): string
     {
-        if (!is_dir($this->backupDir) && !mkdir($this->backupDir, 0o755, true) && !is_dir($this->backupDir)) {
+        if (!is_dir($this->backupDir) && !mkdir($this->backupDir, 0o755, recursive: true) && !is_dir($this->backupDir)) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $this->backupDir));
         }
 

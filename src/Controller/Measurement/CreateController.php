@@ -26,7 +26,7 @@ final class CreateController extends AbstractController
     #[IsGranted(MeasurementVoter::CREATE)]
     public function __invoke(#[CurrentUser] User $user, Request $request): Response
     {
-        $form = $this->createForm(EditMeasurementType::class, null, [
+        $form = $this->createForm(EditMeasurementType::class, options: [
             'lastMeasurement' => $this->measurementService->getLastMeasurement(),
         ]);
         $form->handleRequest($request);
@@ -34,7 +34,7 @@ final class CreateController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var EditMeasurement $dto */
             $dto = $form->getData();
-            $measurement = $this->measurementService->save($user, null, $dto);
+            $measurement = $this->measurementService->save($user, $dto);
             $datetime = $measurement->datetime->setTimezone($user->timezone);
 
             $this->addFlash('success', sprintf('The "%s" measurement was created', $datetime->format('j F H:i')));

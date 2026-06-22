@@ -132,7 +132,7 @@ final class MoodReflectionServiceTest extends TestCase
         $dto = new EditMoodReflection(MoodType::Good, 'hello');
         $this->repository->expects($this->once())->method('save');
 
-        $found = $this->service->save($day, null, $dto);
+        $found = $this->service->save($day, $dto);
 
         self::assertSame($day->format('Y-m-d'), $found->date->format('Y-m-d'));
         self::assertSame(MoodType::Good, $found->type);
@@ -149,7 +149,7 @@ final class MoodReflectionServiceTest extends TestCase
         $dto = new EditMoodReflection(MoodType::Bad, 'new-text');
         $this->repository->expects($this->once())->method('save');
 
-        $found = $this->service->save($day, $existedMoodReflection, $dto);
+        $found = $this->service->save($day, $dto, $existedMoodReflection);
 
         self::assertSame($existedMoodReflection, $found);
         self::assertSame(MoodType::Bad, $found->type);

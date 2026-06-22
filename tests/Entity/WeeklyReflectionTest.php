@@ -18,9 +18,9 @@ final class WeeklyReflectionTest extends TestCase
     {
         $weeklyReflection = new WeeklyReflection(
             date: $date = new DateTimeImmutable('2020-01-01 00:00:00'),
-            joy: new TextField('joy text', true),
-            difficulty: new TextField('difficulty text', false),
-            achievement: new TextField('achievement text', true),
+            joy: new TextField('joy text', isPrivate: true),
+            difficulty: new TextField('difficulty text'),
+            achievement: new TextField('achievement text', isPrivate: true),
         );
 
         self::assertInstanceOf(UuidV7::class, $weeklyReflection->id);

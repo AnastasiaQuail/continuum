@@ -31,7 +31,7 @@ final class MeasurementVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::HISTORY, self::REPORT_VIEW, self::CREATE, self::EDIT], true);
+        return in_array($attribute, [self::VIEW, self::HISTORY, self::REPORT_VIEW, self::CREATE, self::EDIT], strict: true);
     }
 
     #[Override]

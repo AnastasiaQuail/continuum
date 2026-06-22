@@ -187,8 +187,8 @@ final class EditMeasurementType extends AbstractImmutableType
     #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('lastMeasurement', null);
-        $resolver->setDefault('measurement', null);
+        $resolver->setDefault('lastMeasurement', value: null);
+        $resolver->setDefault('measurement', value: null);
         $resolver->setAllowedTypes('lastMeasurement', ['null', LastMeasurement::class]);
         $resolver->setAllowedTypes('measurement', ['null', BodyMeasurement::class]);
     }

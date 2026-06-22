@@ -13,8 +13,8 @@ if ($application->getKernel()->isDebug()) {
 }
 
 if (isset($_SERVER['DATABASE_PREPARE'])) {
-    $application->setCatchExceptions(false);
-    $application->setAutoExit(false);
+    $application->setCatchExceptions(boolean: false);
+    $application->setAutoExit(boolean: false);
 
     $application->run(new ArrayInput(['command' => 'doctrine:database:drop', '--if-exists' => '1', '--force' => '1']));
     $application->run(new ArrayInput(['command' => 'doctrine:database:create']));

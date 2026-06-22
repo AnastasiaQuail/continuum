@@ -28,7 +28,7 @@ final class BackupVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::CREATE, self::DOWNLOAD], true);
+        return in_array($attribute, [self::VIEW, self::CREATE, self::DOWNLOAD], strict: true);
     }
 
     #[Override]
