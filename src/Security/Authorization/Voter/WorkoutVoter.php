@@ -53,7 +53,7 @@ final class WorkoutVoter extends Voter
                 self::SET_CREATE,
                 self::SET_DELETE,
             ],
-            true
+            strict: true
         );
     }
 

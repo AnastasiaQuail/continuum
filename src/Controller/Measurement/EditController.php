@@ -33,13 +33,13 @@ final class EditController extends AbstractController
     #[IsGranted(MeasurementVoter::EDIT, 'measurement')]
     public function __invoke(#[CurrentUser] User $user, Request $request, BodyMeasurement $measurement): Response
     {
-        $form = $this->createForm(EditMeasurementType::class, null, ['measurement' => $measurement]);
+        $form = $this->createForm(EditMeasurementType::class, options: ['measurement' => $measurement]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var EditMeasurement $dto */
             $dto = $form->getData();
-            $measurement = $this->measurementService->save($user, $measurement, $dto);
+            $measurement = $this->measurementService->save($user, $dto, $measurement);
             $datetime = $measurement->datetime->setTimezone($user->timezone);
 
             $this->addFlash('success', sprintf('The "%s" measurement was updated', $datetime->format('j F H:i')));

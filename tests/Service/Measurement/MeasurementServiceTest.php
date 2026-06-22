@@ -200,7 +200,7 @@ final class MeasurementServiceTest extends TestCase
 
         $this->repository->expects($this->once())->method('save');
 
-        $found = $this->service->save($user, null, $dto);
+        $found = $this->service->save($user, $dto);
 
         // GodUserService was initialized with birth date 2000-01-01, so age on 2025-01-15 is 25
         self::assertSame(25, $found->age);
@@ -242,7 +242,7 @@ final class MeasurementServiceTest extends TestCase
 
         $this->repository->expects($this->once())->method('save');
 
-        $found = $this->service->save($user, $existing, $dto);
+        $found = $this->service->save($user, $dto, $existing);
 
         self::assertSame($existing, $found);
         self::assertSame(28, $found->age);
@@ -274,7 +274,7 @@ final class MeasurementServiceTest extends TestCase
 
         $this->repository->expects($this->once())->method('save');
 
-        $found = $this->service->save($user, null, $dto);
+        $found = $this->service->save($user, $dto);
 
         self::assertSame(80.0, $found->weight);
         self::assertSame(38.5, $found->neck);
@@ -299,7 +299,7 @@ final class MeasurementServiceTest extends TestCase
 
         $this->repository->expects($this->once())->method('save');
 
-        $found = $this->service->save($user, null, $dto);
+        $found = $this->service->save($user, $dto);
 
         self::assertSame('UTC', $found->datetime->getTimezone()->getName());
         // Tokyo 19:30 = UTC 10:30

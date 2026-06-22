@@ -49,7 +49,7 @@ final class EditController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var EditMoodReflection $dto */
             $dto = $form->getData();
-            $moodReflection = $this->moodReflectionService->save($day, $moodReflection, $dto);
+            $moodReflection = $this->moodReflectionService->save($day, $dto, $moodReflection);
 
             $this->addFlash(
                 'success',

@@ -61,7 +61,7 @@ final readonly class MoodReflectionService
         return $this->repository->findOneLast();
     }
 
-    public function save(DateTimeImmutable $day, ?MoodReflection $mood, EditMoodReflection $dto): MoodReflection
+    public function save(DateTimeImmutable $day, EditMoodReflection $dto, ?MoodReflection $mood = null): MoodReflection
     {
         $mood ??= new MoodReflection($day);
         $mood->type = $dto->type;

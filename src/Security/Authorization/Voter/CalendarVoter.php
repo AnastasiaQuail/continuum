@@ -39,7 +39,7 @@ final class CalendarVoter extends Voter
                 self::EDIT,
                 self::EVENT_DELETE,
             ],
-            true
+            strict: true
         );
     }
 

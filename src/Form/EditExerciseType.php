@@ -67,7 +67,7 @@ final class EditExerciseType extends AbstractImmutableType
     #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('exercise', null);
+        $resolver->setDefault('exercise', value: null);
         $resolver->setAllowedTypes('exercise', ['null', Exercise::class]);
     }
 }

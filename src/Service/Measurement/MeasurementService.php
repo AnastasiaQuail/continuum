@@ -66,7 +66,7 @@ final readonly class MeasurementService
         return $this->repository->findOneLastByMonth($date, $user->timezone);
     }
 
-    public function save(User $user, ?BodyMeasurement $measurement, EditMeasurement $dto): BodyMeasurement
+    public function save(User $user, EditMeasurement $dto, ?BodyMeasurement $measurement = null): BodyMeasurement
     {
         if (null === $measurement) {
             $measurement = new BodyMeasurement(

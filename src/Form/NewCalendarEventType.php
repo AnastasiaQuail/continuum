@@ -26,7 +26,7 @@ final class NewCalendarEventType extends AbstractImmutableType
     {
         /** @var array{timezone: null|DateTimeZone} $options */
         $builder->setDataMapper($this)
-            ->add('title', null, [
+            ->add('title', options: [
                 'attr' => [
                     'autofocus' => true,
                     'autocomplete' => 'on',
@@ -67,7 +67,7 @@ final class NewCalendarEventType extends AbstractImmutableType
     #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('timezone', null);
+        $resolver->setDefault('timezone', value: null);
         $resolver->setAllowedTypes('timezone', ['null', DateTimeZone::class]);
     }
 }

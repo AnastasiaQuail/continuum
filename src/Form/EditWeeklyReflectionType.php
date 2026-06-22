@@ -90,7 +90,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
     #[Override]
     protected function configure(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('weeklyReflection', null);
+        $resolver->setDefault('weeklyReflection', value: null);
         $resolver->setAllowedTypes('weeklyReflection', ['null', WeeklyReflection::class]);
     }
 }

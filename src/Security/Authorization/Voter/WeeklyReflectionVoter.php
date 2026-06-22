@@ -30,7 +30,7 @@ final class WeeklyReflectionVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::REPORT_VIEW, self::PRIVATE, self::EDIT], true);
+        return in_array($attribute, [self::VIEW, self::REPORT_VIEW, self::PRIVATE, self::EDIT], strict: true);
     }
 
     #[Override]

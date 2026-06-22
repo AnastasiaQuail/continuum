@@ -59,11 +59,11 @@ final class MeasurementType extends NumberType
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefault('html5', true);
-        $resolver->setDefault('data-prev', null);
-        $resolver->setDefault('min', null);
-        $resolver->setDefault('max', null);
-        $resolver->setDefault('postfix', null);
+        $resolver->setDefault('html5', value: true);
+        $resolver->setDefault('data-prev', value: null);
+        $resolver->setDefault('min', value: null);
+        $resolver->setDefault('max', value: null);
+        $resolver->setDefault('postfix', value: null);
 
         $resolver->setAllowedTypes('data-prev', ['null', 'float']);
         $resolver->setAllowedTypes('min', ['null', 'int']);

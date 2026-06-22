@@ -29,7 +29,7 @@ final class ExerciseVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::CREATE, self::EDIT], true);
+        return in_array($attribute, [self::VIEW, self::CREATE, self::EDIT], strict: true);
     }
 
     #[Override]
