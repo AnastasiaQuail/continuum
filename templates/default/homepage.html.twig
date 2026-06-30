@@ -56,28 +56,14 @@
                 <span class="card-title-info">{{ couple.together }}</span>
             </div>
             <div class="card-couple">
-                <div class="couple-partner">
-                    <div>{{ couple.time.format('H:i') }}</div>
-                    <div class="couple-weather">
-                        <span>{{ couple.weather.code?.toEmoji }}</span>
-                        <span class="couple-temperature">{{ couple.weather.temperature }}</span>
-                        <span class="couple-temperature-type">°C</span>
-                    </div>
-                </div>
+                {{- _self.couple_partner(couple.time, couple.weather) -}}
                 <div class="couple-distance">
                     <div class="couple-line">
                         {{- ux_icon('lucide:chevron-right') }}{{ ux_icon('lucide:chevron-right') -}}
                     </div>
                     <span class="couple-distance-value">{{ couple.distance|round }} <small>km</small></span>
                 </div>
-                <div class="couple-partner">
-                    <div>{{ couple.partnerTime.format('H:i') }}</div>
-                    <div class="couple-weather">
-                        <span>{{ couple.partnerWeather.code?.toEmoji }}</span>
-                        <span class="couple-temperature">{{ couple.partnerWeather.temperature }}</span>
-                        <span class="couple-temperature-type">°C</span>
-                    </div>
-                </div>
+                {{- _self.couple_partner(couple.partnerTime, couple.partnerWeather) -}}
             </div>
         </section>
 
@@ -97,7 +83,9 @@
                     {%- endif -%}
                 </div>
 
-                {{- include('calendar/_upcoming_events.html.twig') -}}
+                {%- if upcoming_events is not empty -%}
+                    {{- include('calendar/_upcoming_events.html.twig') -}}
+                {%- endif -%}
             </section>
         {%- endif -%}
     </div>
@@ -188,6 +176,24 @@
         </section>
     {%- endif -%}
 {%- endblock %}
+
+{% macro couple_partner(datetime, weather) -%}
+    <div class="couple-partner">
+        <div>{{ datetime.format('H:i') }}</div>
+        <div class="couple-weather">
+            <div class="couple-temperature">
+                <span>{{ weather.code?.toEmoji }}</span>
+                <span class="couple-temperature-degrees">{{ weather.temperature }}</span>
+                <span class="couple-temperature-type">°C</span>
+            </div>
+            <div class="couple-wind">
+                <span>{{ weather.wind.direction.toEmoji }}</span>
+                <span>{{ weather.wind.speed }}</span>
+                <span>m/s</span>
+            </div>
+        </div>
+    </div>
+{%- endmacro %}
 
 {% macro card_title_dropdown(days, query, months) -%}
     <div class="card-title-dropdown">

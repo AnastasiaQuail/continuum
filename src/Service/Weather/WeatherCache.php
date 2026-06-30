@@ -6,6 +6,7 @@ namespace Continuum\Service\Weather;
 
 use Continuum\Component\Weather\Dto\Weather;
 use Continuum\Component\Weather\Dto\Wind;
+use Continuum\Component\Weather\WindDirection;
 use Continuum\Component\Weather\WmoCode;
 use Continuum\Entity\Location;
 use DateTimeImmutable;
@@ -22,11 +23,13 @@ final readonly class WeatherCache
         $item = $this->cache->getItem($this->getKey($location));
         $item->set([
             'temperature' => $weather->temperature,
-            'code' => $weather->code,
-            'wind' => [
-                'speed' => $weather->wind->speed,
-                'direction' => $weather->wind->direction,
-            ],
+            'code' => $weather->code?->value,
+            'wind' => null === $weather->wind
+                ? null
+                : [
+                    'speed' => $weather->wind->speed,
+                    'direction' => $weather->wind->direction->value,
+                ],
         ]);
         $item->expiresAt(new DateTimeImmutable('+15 minutes'));
 
@@ -38,7 +41,7 @@ final readonly class WeatherCache
         $item = $this->cache->getItem($this->getKey($location));
 
         /**
-         * @var null|array{temperature: float, code: null|WmoCode, wind: array{speed: float, direction: float}} $data
+         * @var null|array{temperature: float, code: null|int, wind: null|array{speed: float, direction: string}} $data
          */
         $data = $item->get();
 
@@ -48,11 +51,13 @@ final readonly class WeatherCache
 
         return new Weather(
             temperature: $data['temperature'],
-            code: $data['code'],
-            wind: new Wind(
-                speed: $data['wind']['speed'],
-                direction: $data['wind']['direction'],
-            ),
+            code: null === $data['code'] ? null : WmoCode::from($data['code']),
+            wind: null === $data['wind']
+                ? null
+                : new Wind(
+                    speed: $data['wind']['speed'],
+                    direction: WindDirection::from($data['wind']['direction']),
+                ),
         );
     }
 
