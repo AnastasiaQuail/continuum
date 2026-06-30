@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace Continuum\Tests\Component\Weather;
 
 use Continuum\Component\Weather\OpenMeteoClient;
+use Continuum\Component\Weather\WindDirection;
 use Continuum\Component\Weather\WmoCode;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Contracts\HttpClient\Exception\TimeoutExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -70,8 +73,9 @@ final class OpenMeteoClientTest extends TestCase
 
         self::assertSame(15.5, $result->temperature);
         self::assertSame(WmoCode::Sunny, $result->code);
-        self::assertSame(25.0, $result->wind->speed);
-        self::assertSame(180.0, $result->wind->direction);
+        self::assertNotNull($wind = $result->wind);
+        self::assertSame(6.9, $wind->speed);
+        self::assertSame(WindDirection::South, $wind->direction);
     }
 
     public function testGetCurrentThrowsExceptionOnHttpError404(): void
@@ -134,6 +138,19 @@ final class OpenMeteoClientTest extends TestCase
         $this->openMeteoClient->getCurrent($latitude, $longitude);
     }
 
+    public function testGetCurrentThrowsTimeoutException(): void
+    {
+        $this->client->expects($this->once())
+            ->method('request')
+            ->willThrowException(new class extends RuntimeException implements TimeoutExceptionInterface {});
+
+        $result = $this->openMeteoClient->getCurrent(123.0, 456.0);
+
+        self::assertSame(0.0, $result->temperature);
+        self::assertNull($result->code);
+        self::assertNull($result->wind);
+    }
+
     /**
      * @param array<string, mixed> $params
      * @param null|array<string, mixed> $responseData
@@ -149,7 +166,10 @@ final class OpenMeteoClientTest extends TestCase
 
         $this->client->expects($this->once())
             ->method('request')
-            ->with('GET', 'https://api.open-meteo.com/v1/forecast?' . http_build_query($params))
+            ->with('GET', 'https://api.open-meteo.com/v1/forecast?' . http_build_query($params), [
+                'timeout' => 5,
+                'max_connect_duration' => 1,
+            ])
             ->willReturn($response);
     }
 }

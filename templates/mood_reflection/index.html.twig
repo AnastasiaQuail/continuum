@@ -73,6 +73,12 @@
                             class="day {{- mood !== null ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day|is_weekend ? ' day-weekend' -}}"
                             {%- if mood !== null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
                             <span>{{ day_number }}</span>
+
+                            {%- if mood?.text -%}
+                                <div class="day-badges">
+                                    <span class="day-badge" data-general-type="{{ mood.type.color.value }}"></span>
+                                </div>
+                            {%- endif -%}
                         </{% if is_granted_day %}a{% else %}div{% endif %}>
                     {%- endfor -%}
                 </div>

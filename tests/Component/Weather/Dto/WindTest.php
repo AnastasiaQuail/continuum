@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Tests\Component\Weather\Dto;
 
 use Continuum\Component\Weather\Dto\Wind;
+use Continuum\Component\Weather\WindDirection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
@@ -14,7 +15,7 @@ final class WindTest extends TestCase
     public function testConstructor(): void
     {
         $speed = 15.5;
-        $direction = 180.2;
+        $direction = WindDirection::South;
 
         $wind = new Wind(
             speed: $speed,
@@ -28,7 +29,7 @@ final class WindTest extends TestCase
     public function testConstructorWithZeroValues(): void
     {
         $speed = 0.0;
-        $direction = 0.0;
+        $direction = WindDirection::NorthWest;
 
         $wind = new Wind(
             speed: $speed,
@@ -42,7 +43,7 @@ final class WindTest extends TestCase
     public function testConstructorWithNegativeValues(): void
     {
         $speed = -100.4;
-        $direction = -27.7;
+        $direction = WindDirection::East;
 
         $wind = new Wind(
             speed: $speed,

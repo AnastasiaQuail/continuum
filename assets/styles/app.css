@@ -2107,22 +2107,44 @@ textarea {
 
         &:last-child {
             justify-content: flex-end;
+
+            .couple-weather {
+                .couple-temperature,
+                .couple-wind {
+                    justify-content: flex-end;
+                }
+            }
         }
 
         .couple-weather {
             display: flex;
-            align-items: center;
-            gap: calc(var(--cp-gap) / 2);
+            flex-direction: column;
+            row-gap: calc(var(--cp-gap) / 3);
 
-            .couple-temperature,
-            .couple-temperature-type {
-                font-size: calc(var(--cp-font-size) * 0.75);
-                opacity: var(--transparent-color-tiny);
+            .couple-temperature {
+                display: flex;
+                align-items: center;
+                column-gap: calc(var(--cp-gap) / 2);
+
+                .couple-temperature-degrees,
+                .couple-temperature-type {
+                    font-size: calc(var(--cp-font-size) * 0.75);
+                    opacity: var(--transparent-color-tiny);
+                }
+
+                .couple-temperature-type {
+                    margin-left: calc(var(--cp-gap) / 3 * -1);
+                    font-weight: var(--font-weight-light);
+                }
             }
 
-            .couple-temperature-type {
-                margin-left: calc(var(--cp-gap) / 3 * -1);
+            .couple-wind {
+                display: flex;
+                align-items: center;
+                column-gap: calc(var(--cp-gap) / 4);
+                font-size: calc(var(--cp-font-size) * 0.4);
                 font-weight: var(--font-weight-light);
+                opacity: var(--transparent-color);
             }
         }
     }

@@ -11,7 +11,7 @@ final readonly class Weather
     public function __construct(
         // °C
         public float $temperature,
-        public ?WmoCode $code,
-        public Wind $wind,
+        public ?WmoCode $code = null,
+        public ?Wind $wind = null,
     ) {}
 }
