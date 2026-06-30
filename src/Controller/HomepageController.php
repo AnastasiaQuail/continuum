@@ -39,11 +39,11 @@ final class HomepageController extends AbstractController
     public function __invoke(
         #[CurrentUser]
         User $user,
-        #[MapQueryParameter('measurement', options: ['min_range' => 1])]
+        #[MapQueryParameter('measurement', options: ['min_range' => 4, 'max_range' => 10])]
         int $measurementMonths = 4,
-        #[MapQueryParameter('workout', options: ['min_range' => 1])]
-        int $workoutMonths = 3,
-        #[MapQueryParameter('mood', options: ['min_range' => 1])]
+        #[MapQueryParameter('workout', options: ['min_range' => 4, 'max_range' => 8])]
+        int $workoutMonths = 4,
+        #[MapQueryParameter('mood', options: ['min_range' => 4, 'max_range' => 10])]
         int $moodReflectionMonths = 4,
     ): Response {
         $date = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);

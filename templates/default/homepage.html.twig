@@ -109,7 +109,7 @@
                         </span>
                     {%- endif -%}
 
-                    {{- _self.card_title_dropdown(measurement_days, 'measurement', [1, 2, 3, 4, 6]) -}}
+                    {{- _self.card_title_dropdown(measurement_days, 'measurement', [4, 6, 8, 10]) -}}
                 </div>
 
                 <div class="card-panel-body chart-panel"
@@ -122,7 +122,7 @@
             <section id="workouts-card" class="card card-panel">
                 <div class="card-title card-title-controls">
                     <h2 id="workouts-title">Workouts</h2>
-                    {{- _self.card_title_dropdown(workout_days, 'workout', [2, 3, 4]) -}}
+                    {{- _self.card_title_dropdown(workout_days, 'workout', [4, 6, 8]) -}}
                 </div>
 
                 <div class="card-panel-body calendar-heatmap-workout-container">
@@ -167,7 +167,7 @@
         <section id="mood-chart-card" class="card card-panel">
             <div class="card-title card-title-controls">
                 <h2 id="mood-chart-title">Mood trend</h2>
-                {{- _self.card_title_dropdown(mood_reflection_days, 'mood', [3, 4, 6]) -}}
+                {{- _self.card_title_dropdown(mood_reflection_days, 'mood', [4, 6, 8, 10]) -}}
             </div>
 
             <div class="card-panel-body chart-panel"

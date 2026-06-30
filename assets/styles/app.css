@@ -2234,6 +2234,9 @@ textarea {
             --workout-day-bg-color-transparent: 10%;
             --workout-row: 1;
 
+            container-type: size;
+            container-name: calendar-workout-day;
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2266,17 +2269,13 @@ textarea {
                 flex-wrap: wrap;
                 align-items: center;
                 justify-content: center;
-                gap: 1px;
+                gap: 3cqmax;
 
                 & > span {
-                    width: 2px;
+                    width: 12cqmax;
                     aspect-ratio: 1;
                     border-radius: 50%;
                     background-color: var(--general-color);
-
-                    @media (width >= 992px) {
-                        width: 3px;
-                    }
                 }
             }
         }
