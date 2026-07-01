@@ -10,6 +10,7 @@ use Continuum\Service\Measurement\MeasurementService;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -22,15 +23,22 @@ final class HistoryController extends AbstractController
 
     #[Route(path: '/measurements/history', name: 'app_measurements_history', methods: ['GET'])]
     #[IsGranted(MeasurementVoter::HISTORY)]
-    public function __invoke(#[CurrentUser] User $user): Response
-    {
+    public function __invoke(
+        #[CurrentUser]
+        User $user,
+        #[MapQueryParameter(options: ['min_range' => 4, 'max_range' => 10])]
+        int $months = 4,
+    ): Response {
         $day = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);
-        $prevDay = $day->modify(sprintf('-%s days', 150));
+
+        $measurementDays = 30 * $months;
+        $prevDay = $day->modify(sprintf('-%s days', $measurementDays));
 
         $measurements = $this->measurementService->getByRange($user, $prevDay, $day);
 
         return $this->render('measurement/history.html.twig', [
             'measurements' => $measurements,
+            'measurement_days' => $measurementDays,
         ]);
     }
 }
