@@ -227,7 +227,7 @@ function initMeasurementChangeChart(element, data) {
 
     const calculator = new DimensionCalculator();
     const xAxis = calculator.getExpandedBoundaries(
-        currentTime - 150 * 86400,
+        currentTime - element.dataset.days * 86400,
         currentTime,
         0
     );
