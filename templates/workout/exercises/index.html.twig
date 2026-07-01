@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% import 'default/_filters.html.twig' as filters %}
+
 {%- block javascripts -%}
     {{ parent() }}
     <script src="{{ asset('js/echarts.min.js') }}"></script>
@@ -22,6 +24,8 @@
         {{ ux_icon('lucide:plus') }}
         <span>Create exercise</span>
     </{% if is_granted %}a{% else %}button{% endif %}>
+
+    {{- filters.months(exercise_days, path('app_exercises', {months: '###'}), [4, 6, 8, 10]) -}}
 {%- endblock %}
 
 {% block main -%}
@@ -50,7 +54,7 @@
                     {%- if exercise_progress_map[exercise_id] is defined -%}
                         <div class="exercise-progress">
                             <div class="exercise-progress-chart" data-chart="exercise-progress"
-                                 data-days="120" data-color="{{ exercise.group.color.value }}"
+                                 data-days="{{ exercise_days }}" data-color="{{ exercise.group.color.value }}"
                                  data-values="{{ exercise_progress_map[exercise_id]|json_encode }}"></div>
                         </div>
                     {%- endif -%}

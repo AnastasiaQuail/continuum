@@ -9,15 +9,12 @@ use Continuum\Entity\User;
 use Continuum\Entity\Workout;
 use Continuum\Entity\WorkoutExercise;
 use Continuum\Enum\Change;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class WorkoutProgressService
 {
     public function __construct(
         private WorkoutExerciseService $workoutExerciseService,
         private WorkoutExerciseScoreService $workoutExerciseScoreService,
-        #[Autowire(param: 'app.workouts.exercise_progress.days')]
-        private int $exerciseProgressDays,
     ) {}
 
     /**
@@ -75,9 +72,9 @@ final readonly class WorkoutProgressService
     /**
      * @return array<non-empty-string, list<array{score: float, date: int}>>
      */
-    public function getScoreProgresses(User $user): array
+    public function getScoreProgresses(User $user, int $previousDays): array
     {
-        $workoutExerciseMap = $this->workoutExerciseService->getPreviousDays($this->exerciseProgressDays, $user);
+        $workoutExerciseMap = $this->workoutExerciseService->getPreviousDays($previousDays, $user);
         $data = [];
 
         foreach ($workoutExerciseMap as $exerciseId => $workoutExercises) {

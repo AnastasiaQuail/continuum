@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% import 'default/_filters.html.twig' as filters %}
+
 {%- block javascripts -%}
     {{ parent() }}
     <script src="{{ asset('js/echarts.min.js') }}"></script>
@@ -14,6 +16,10 @@
     {label: 'History'},
 ] %}
 
+{% block page_links -%}
+    {{- filters.months(measurement_days, path('app_measurements_history', {months: '###'}), [4, 6, 8, 10]) -}}
+{%- endblock %}
+
 {% block main -%}
     {%- if measurements is empty -%}
         <section class="card">
@@ -24,30 +30,30 @@
         </section>
     {%- else -%}
         <div class="row row-sm-2">
-            {{- _self.measurent_chart(measurements, 'fatDeurenberg', 'Fat Deurenberg', '%') -}}
-            {{- _self.measurent_chart(measurements, 'fatUsNavy', 'Fat US Navy', '%') -}}
+            {{- _self.measurent_chart(_context, 'fatDeurenberg', 'Fat Deurenberg', '%') -}}
+            {{- _self.measurent_chart(_context, 'fatUsNavy', 'Fat US Navy', '%') -}}
         </div>
 
         <div class="row row-sm-2 row-xl-3">
-            {{- _self.measurent_chart(measurements, 'weight', 'Weight', 'kg') -}}
-            {{- _self.measurent_chart(measurements, 'neck', 'Neck') -}}
-            {{- _self.measurent_chart(measurements, 'waist', 'Waist') -}}
-            {{- _self.measurent_chart(measurements, 'chest', 'Chest') -}}
-            {{- _self.measurent_chart(measurements, 'shoulders', 'Shoulders') -}}
-            {{- _self.measurent_chart(measurements, 'flexedBiceps', 'Biceps') -}}
-            {{- _self.measurent_chart(measurements, 'hips', 'Hips') -}}
-            {{- _self.measurent_chart(measurements, 'thigh', 'Thigh') -}}
-            {{- _self.measurent_chart(measurements, 'calf', 'Calf') -}}
+            {{- _self.measurent_chart(_context, 'weight', 'Weight', 'kg') -}}
+            {{- _self.measurent_chart(_context, 'neck', 'Neck') -}}
+            {{- _self.measurent_chart(_context, 'waist', 'Waist') -}}
+            {{- _self.measurent_chart(_context, 'chest', 'Chest') -}}
+            {{- _self.measurent_chart(_context, 'shoulders', 'Shoulders') -}}
+            {{- _self.measurent_chart(_context, 'flexedBiceps', 'Biceps') -}}
+            {{- _self.measurent_chart(_context, 'hips', 'Hips') -}}
+            {{- _self.measurent_chart(_context, 'thigh', 'Thigh') -}}
+            {{- _self.measurent_chart(_context, 'calf', 'Calf') -}}
         </div>
     {%- endif -%}
 {%- endblock %}
 
-{% macro measurent_chart(measurements, field, name, type = 'cm') -%}
+{% macro measurent_chart(context, field, name, type = 'cm') -%}
     {%- set values = [] -%}
     {%- set min = 999999 -%}
     {%- set max = 0 -%}
 
-    {%- for measurement in measurements -%}
+    {%- for measurement in context.measurements -%}
         {%- set value = attribute(measurement, field) -%}
 
         {%- if value is not null -%}
@@ -85,7 +91,7 @@
             <div class="collection-empty">No values</div>
         {%- else -%}
             <div class="chart-panel" data-chart="measurement-change" data-type="{{ type }}"
-                 data-values="{{ values|json_encode }}"></div>
+                 data-days="{{ context.measurement_days }}" data-values="{{ values|json_encode }}"></div>
         {%- endif -%}
     </section>
 {%- endmacro %}
