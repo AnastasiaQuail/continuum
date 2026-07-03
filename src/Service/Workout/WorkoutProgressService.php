@@ -83,6 +83,7 @@ final readonly class WorkoutProgressService
             foreach ($workoutExercises as $workoutExercise) {
                 $data[$exerciseId][] = [
                     'score' => $this->workoutExerciseScoreService->getScore($workoutExercise),
+                    'sets' => $workoutExercise->sets,
                     'date' => $workoutExercise->workout->date->getTimestamp(),
                 ];
             }

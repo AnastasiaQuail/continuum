@@ -3863,7 +3863,7 @@ form {
 .exercises {
     display: flex;
     flex-direction: column;
-    row-gap: calc(var(--container-gap-block) / 4);
+    row-gap: var(--container-gap-block);
 
     .exercise {
         display: flex;
@@ -3871,10 +3871,21 @@ form {
         text-decoration: none;
         color: var(--color);
         border-radius: var(--border-radius);
-        background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
         animation: fader 1s ease-out;
         animation-timeline: view();
         animation-range: entry 0% cover 20%;
+
+        @media (width >= 768px) {
+            max-width: 55vw;
+        }
+
+        @media (width >= 992px) {
+            max-width: 50vw;
+        }
+
+        @media (width >= 1200px) {
+            max-width: 45vw;
+        }
 
         .exercise-body {
             display: flex;
@@ -3946,6 +3957,50 @@ form {
         .exercise-progress {
             padding: calc(var(--gap-block) / 1.5) calc(var(--gap-inline) / 2);
 
+            .exercise-progress-values {
+                display: flex;
+                flex-wrap: wrap;
+                gap: calc(var(--gap-block) / 2) var(--gap-inline);
+                margin-bottom: calc(var(--gap-block) / 1.5);
+                justify-content: space-between;
+
+                .exercise-progress-sets {
+                    display: flex;
+                    flex-wrap: wrap;
+                    column-gap: calc(var(--gap-inline) / 4);
+                    align-items: center;
+                    font-size: var(--font-size-small);
+
+                    .exercise-progress-set {
+                        display: flex;
+                        flex-wrap: nowrap;
+                        white-space: nowrap;
+                        column-gap: calc(var(--gap-inline) / 6);
+                        padding: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
+                        border-radius: calc(var(--border-radius) / 2);
+                        background-color: color-mix(in oklch, var(--general-color) 8%, transparent);
+                        opacity: var(--transparent-color);
+
+                        small {
+                            font-size: calc(var(--font-size-extra-small) * 0.5);
+                            font-weight: var(--font-weight-light);
+                            opacity: var(--transparent-color);
+                        }
+
+                        & > span:last-child {
+                            small {
+                                font-size: var(--font-size-extra-small);
+                            }
+                        }
+
+                        &.set-description {
+                            background-color: transparent;
+                            opacity: 20%;
+                        }
+                    }
+                }
+            }
+
             .exercise-progress-chart {
                 height: 70px;
                 animation: fader 1s ease-out;
@@ -3954,17 +4009,14 @@ form {
 
                 @media (width >= 768px) {
                     height: 80px;
-                    max-width: 50vw;
                 }
 
                 @media (width >= 992px) {
                     height: 90px;
-                    max-width: 45vw;
                 }
 
                 @media (width >= 1200px) {
                     height: 100px;
-                    max-width: 40vw;
                 }
             }
         }
