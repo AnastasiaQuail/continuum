@@ -8,7 +8,9 @@ use Continuum\Dto\Response\Workout\ExerciseProgress;
 use Continuum\Entity\User;
 use Continuum\Entity\Workout;
 use Continuum\Entity\WorkoutExercise;
+use Continuum\Entity\WorkoutSet;
 use Continuum\Enum\Change;
+use Doctrine\Common\Collections\Collection;
 
 final readonly class WorkoutProgressService
 {
@@ -70,7 +72,7 @@ final readonly class WorkoutProgressService
     }
 
     /**
-     * @return array<non-empty-string, list<array{score: float, date: int}>>
+     * @return array<non-empty-string, list<array{score: float, sets: Collection<int, WorkoutSet>, date: int}>>
      */
     public function getScoreProgresses(User $user, int $previousDays): array
     {
