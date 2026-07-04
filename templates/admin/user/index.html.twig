@@ -26,10 +26,7 @@
                         {%- endfor -%}
                     </div>
 
-                    <div class="user-geo">
-                        <div>{{ user.timezone.name }}</div>
-                        <div class="user-location">({{ user.location.latitude }}:{{ user.location.longitude }})</div>
-                    </div>
+                    <div class="user-geo">{{ user.timezone.name }}</div>
 
                     <div class="user-last-visited">
                         {{- user.lastVisitedAt.setTimezone(app.user.timezone).format('j F Y, H:i') -}}

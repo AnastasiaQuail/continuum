@@ -52,10 +52,20 @@
                     </div>
 
                     {%- if exercise_progress_map[exercise_id] is defined -%}
+                        {%- set exercise_map = exercise_progress_map[exercise_id] -%}
+
                         <div class="exercise-progress">
+                            <div class="exercise-progress-values">
+                                {{- _self.exercise_progress_sets('From', exercise_map|first.sets) -}}
+
+                                {%- if exercise_map|length > 1 -%}
+                                    {{- _self.exercise_progress_sets('To', exercise_map|last.sets) -}}
+                                {%- endif -%}
+                            </div>
+
                             <div class="exercise-progress-chart" data-chart="exercise-progress"
                                  data-days="{{ exercise_days }}" data-color="{{ exercise.group.color.value }}"
-                                 data-values="{{ exercise_progress_map[exercise_id]|json_encode }}"></div>
+                                 data-values="{{ exercise_map|json_encode }}"></div>
                         </div>
                     {%- endif -%}
                 </{% if is_granted %}a{% else %}span{% endif %}>
@@ -63,3 +73,17 @@
         </div>
     </section>
 {%- endblock %}
+
+{% macro exercise_progress_sets(description, sets) -%}
+    <div class="exercise-progress-sets">
+        <div class="exercise-progress-set set-description">{{ description }}:</div>
+        {%- for set in sets|filter(set => not set.isWarmup) -%}
+            <div class="exercise-progress-set">
+                {%- if set.weight > 0 -%}
+                    <span>{{ set.weight }}<small>kg</small></span>
+                {%- endif -%}
+                <span><small>x</small>{{ set.reps }}</span>
+            </div>
+        {%- endfor -%}
+    </div>
+{%- endmacro %}

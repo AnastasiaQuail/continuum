@@ -36,9 +36,12 @@
     --color-light: oklch(0.982 0 89.876);
     --color-dark: oklch(0.262 0.009 248.19);
 
+    --general-color: var(--color);
     --color: var(--color-dark);
     --color-inverse: var(--color-light);
-    --general-color: var(--color);
+    --color-secondary: color-mix(in srgb, var(--color) 75%, var(--color-inverse));
+    --color-tertiary: color-mix(in srgb, var(--color) 50%, var(--color-inverse));
+    --color-quaternary: color-mix(in srgb, var(--color) 25%, var(--color-inverse));
 
     --body-background-color: var(--color-inverse);
     --background-color: #fff;
@@ -62,17 +65,20 @@
 
     --gap-block: var(--gap-inline);
     --gap-inline: 1rem;
-    --body-gap-block: calc(var(--gap-block) * 1.125);
-    --body-gap-inline: calc(var(--gap-inline) * 0.5);
-    --container-gap-block: var(--gap-inline);
-    --container-gap-inline: calc(var(--gap-inline) * 0.75);
+    --body-gap-block: calc(var(--gap-block) * 1.25);
+    --body-gap-inline: var(--gap-inline);
+    --container-gap-block: calc(var(--gap-inline) * 1.125);
+    --container-gap-inline: var(--gap-inline);
 
     --border-width: 1px;
-    --border-color: oklch(0.911 0.007 247.901);
-    --border-radius: .5rem;
     --body-border-width: var(--border-width);
-    --body-border-color: color-mix(in oklch, var(--border-color) 50%, transparent);
-    --body-border-radius: calc(var(--border-radius) * 2);
+    --border-color: oklch(0.927 0.007 260.732);
+    --border-color-light: color-mix(in srgb, var(--border-color) 60%, var(--color-inverse));
+    --body-border-color: color-mix(in srgb, var(--border-color) 40%, var(--color-inverse));
+    --border-radius: 1rem;
+    --border-radius-internal: calc(var(--border-radius) * 0.75);
+    --border-radius-badge: calc(var(--border-radius) * 0.5);
+    --body-border-radius: calc(var(--border-radius) * 1.5);
 
     --control-padding-inline: .75rem;
     --control-padding-block: calc(var(--control-padding-inline) / 2);
@@ -83,10 +89,6 @@
 
     @media (width >= 576px) {
         --h-font-size-coefficient: 0.375;
-        --body-gap-block: calc(var(--gap-block) * 1.25);
-        --body-gap-inline: calc(var(--gap-inline) * 0.75);
-        --container-gap-block: calc(var(--gap-inline) * 1.125);
-        --container-gap-inline: calc(var(--gap-inline) * 0.875);
     }
 
     @media (width >= 768px) {
@@ -122,15 +124,16 @@
 [data-theme="dark"] {
     --color-green: oklch(72.3% 0.219 149.579);
     --color-light: oklch(0.911 0.007 247.901);
-
     --color: var(--color-light);
-    --color-inverse: var(--color-dark);
+    --color-inverse: oklch(0 0 none);
+    --background-color: oklch(0.222 0.004 264.483);
+    --border-color: oklch(0.344 0.013 267.163);
+    --body-border-color: transparent;
 
-    --background-color: color-mix(in srgb, var(--body-background-color) 98%, #fff);
-
-    --border-color: oklch(0.345 0.013 248.212);
-
-    --control-border-color: oklch(0.428 0.015 248.172);
+    @media (width >= 768px) {
+        --color-inverse: oklch(0.173 0 none);
+        --background-color: color-mix(in srgb, var(--body-background-color) 96%, var(--color-light));
+    }
 }
 
 [data-general-type="red"] {
@@ -602,7 +605,7 @@ textarea {
         .header-divider {
             height: calc(var(--header-height) / 2);
             margin-inline: calc(var(--container-gap-inline) / 4);
-            border-left: var(--border-width) solid var(--body-border-color);
+            border-left: var(--border-width) solid var(--border-color-light);
         }
 
         .header-events {
@@ -630,7 +633,7 @@ textarea {
                     content: '';
                     inset: 0;
                     top: var(--dropdown-offset);
-                    border: var(--body-border-width) solid var(--body-border-color);
+                    border: var(--body-border-width) solid var(--border-color-light);
                     border-radius: var(--body-border-radius);
                     background-color: var(--background-color);
                 }
@@ -642,8 +645,8 @@ textarea {
                     top: calc(var(--dropdown-offset) / 2);
                     width: var(--dropdown-offset);
                     height: var(--dropdown-offset);
-                    border-top: var(--body-border-width) solid var(--body-border-color);
-                    border-right: var(--body-border-width) solid var(--body-border-color);
+                    border-top: var(--body-border-width) solid var(--border-color-light);
+                    border-right: var(--body-border-width) solid var(--border-color-light);
                     background-color: var(--background-color);
                     transform: rotate(-45deg) skew(-10deg, -10deg);
                 }
@@ -907,7 +910,7 @@ textarea {
                             content: '';
                             inset: 0;
                             left: .5rem;
-                            border: var(--body-border-width) solid var(--body-border-color);
+                            border: var(--body-border-width) solid var(--border-color-light);
                             border-radius: var(--body-border-radius);
                             background-color: var(--background-color);
                         }
@@ -919,8 +922,8 @@ textarea {
                             left: 3px;
                             width: .6rem;
                             height: .6rem;
-                            border-top: var(--body-border-width) solid var(--body-border-color);
-                            border-left: var(--body-border-width) solid var(--body-border-color);
+                            border-top: var(--body-border-width) solid var(--border-color-light);
+                            border-left: var(--body-border-width) solid var(--border-color-light);
                             background-color: var(--background-color);
                             transform: rotate(-45deg);
                         }
@@ -1081,7 +1084,7 @@ textarea {
         align-items: center;
         padding: var(--body-gap-block) var(--body-gap-inline);
         font-size: var(--font-size-small);
-        color: color-mix(in srgb, var(--color) 25%, var(--color-inverse));
+        color: var(--color-quaternary);
 
         @media (width >= 768px) {
             padding-left: 0;
@@ -1139,14 +1142,14 @@ textarea {
     }
 
     .page-links {
-        --pl-size: 1;
+        --pl-size: 1.2;
         --pl-padding-block: calc(var(--control-padding-block) / (1.5 / var(--pl-size)));
         --pl-padding-inline: calc(var(--control-padding-inline) / (1.5 / var(--pl-size)));
         --pl-gap: calc(var(--control-padding-block) / (2 / var(--pl-size)));
         --pl-font-size: var(--font-size-small);
 
         @media (width >= 576px) {
-            --pl-size: 1.2;
+            --pl-size: 1.35;
             --pl-font-size: var(--font-size-medium);
         }
 
@@ -1201,10 +1204,14 @@ textarea {
             padding-right: calc(var(--gap-inline) / 3);
         }
 
+        &,
+        & + &::before {
+            color: var(--color-tertiary);
+        }
+
         & + &::before,
         &:not(:last-child) {
             font-weight: var(--font-weight-light);
-            color: color-mix(in oklch, var(--color) 70%, transparent);
         }
 
         a {
@@ -1226,7 +1233,7 @@ textarea {
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-badge);
     background-color: color-mix(in oklch, var(--general-color) 20%, transparent);
 
     [data-theme="dark"] & {
@@ -1238,12 +1245,12 @@ textarea {
     display: inline-block;
     margin-bottom: calc(var(--gap-block) / 2);
     font-size: var(--font-size-medium);
-    color: color-mix(in oklch, var(--color) 70%, transparent);
+    color: var(--color-secondary);
 }
 
 .form-control {
     --form-control-color: var(--color);
-    --form-control-placeholder-color: color-mix(in oklch, var(--color) 25%, transparent);
+    --form-control-placeholder-color: var(--color-quaternary);
 
     display: block;
     width: 100%;
@@ -1301,14 +1308,6 @@ textarea {
             padding-block: var(--control-padding-block);
             column-gap: calc(var(--gap-inline) / 3);
         }
-
-        &:is(hr) {
-            grid-column: 1 / 3;
-            width: 100%;
-            margin-block: calc(var(--container-gap-block) / 2);
-            border: none;
-            border-top: var(--border-width) solid var(--body-border-color);
-        }
     }
 
     .form-field {
@@ -1337,7 +1336,7 @@ textarea {
     print-color-adjust: exact;
 
     &[type=checkbox] {
-        border-radius: calc(var(--border-radius) / 2);
+        border-radius: calc(var(--border-radius) / 4);
     }
 
     &[type=radio] {
@@ -1449,7 +1448,8 @@ textarea {
             padding-block: calc(var(--font-size) / 8);
             font-weight: var(--font-weight-light);
             font-size: var(--font-size-small);
-            opacity: .6;
+            color: var(--color-secondary);
+            opacity: 1;
         }
     }
 }
@@ -1457,7 +1457,7 @@ textarea {
 .form-text {
     margin-top: calc(var(--gap-block) / 4);
     font-size: var(--font-size-small);
-    color: color-mix(in oklch, var(--color) 40%, transparent);
+    color: var(--color-tertiary);
 }
 
 .invalid-feedback {
@@ -1477,7 +1477,7 @@ textarea {
 
 .text-footer {
     font-size: var(--font-size-extra-small);
-    color: color-mix(in oklch, var(--color) 40%, transparent);
+    color: var(--color-tertiary);
 }
 
 .btn {
@@ -1559,12 +1559,12 @@ textarea {
     }
 
     &.btn-secondary {
-        --btn-general-color: color-mix(in srgb, var(--color) 50%, var(--background-color));
+        --btn-general-color: var(--color-tertiary);
 
         &.btn-outline:not(:hover),
         &.btn-transparent,
         &.btn-link {
-            --btn-color: color-mix(in srgb, var(--color) 70%, var(--background-color));
+            --btn-color: var(--color-secondary);
         }
     }
 
@@ -1589,7 +1589,7 @@ textarea {
 
     &.btn-action {
         &:not(:hover):not(:focus) {
-            --btn-color: color-mix(in srgb, var(--color) var(--transparent-color-tiny), var(--background-color));
+            --btn-color: var(--color-secondary);
             --btn-border-color: var(--color);
             --btn-border-color-transparent: var(--transparent-color);
             --btn-background-color-transparent: 0%;
@@ -1697,7 +1697,7 @@ textarea {
     display: inline-flex;
     align-items: center;
     font-size: var(--cti-font-size);
-    color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+    color: var(--color-secondary);
     cursor: default;
     transition: color .15s;
 
@@ -1726,7 +1726,7 @@ textarea {
         padding-top: calc(var(--cti-font-size) + var(--cti-gap-block) * 5);
         font-size: calc(var(--cti-font-size) * 0.875);
         list-style: none;
-        border: var(--border-width) solid var(--body-border-color);
+        border: var(--border-width) solid var(--border-color-light);
         border-radius: calc(var(--cti-border-radius) + var(--cti-gap-inline));
         background-color: color-mix(in oklch, var(--color) 2%, transparent);
         backdrop-filter: blur(3px);
@@ -1743,13 +1743,14 @@ textarea {
             transition: color .15s;
 
             &:not(:hover) {
-                color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+                color: var(--color-secondary);
             }
         }
     }
 
-    &:hover {
-        color: var(--color);
+    &:hover,
+    &:focus-visible {
+        color: var(--color) !important;
 
         & > span {
             border-color: transparent;
@@ -1825,7 +1826,7 @@ textarea {
             column-gap: calc(var(--gap-inline) / 2);
             font-size: var(--font-size-extra-small);
             font-weight: var(--font-weight-light);
-            color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
+            color: var(--color-tertiary);
             cursor: default;
 
             &.card-today-events {
@@ -1866,7 +1867,7 @@ textarea {
                 word-spacing: -4px;
                 white-space: nowrap;
                 color: var(--label-color);
-                border-radius: var(--border-radius);
+                border-radius: var(--border-radius-badge);
                 background-color: color-mix(in oklch, var(--label-color) 10%, transparent);
 
                 @media (width >= 992px) {
@@ -1893,7 +1894,6 @@ textarea {
                 --cti-border-radius: calc(var(--border-radius) / 2);
 
                 font-weight: var(--font-weight-light);
-                color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
 
                 & > span {
                     border: none;
@@ -1909,30 +1909,27 @@ textarea {
             .calendar-pagination {
                 display: flex;
                 align-items: center;
-                column-gap: calc(var(--container-gap-inline) / 2);
 
                 .page-link {
                     --pl-color-transparent: 3%;
 
                     display: inline-flex;
-                    padding: calc(var(--gap-block) / 3) calc(var(--gap-inline) / 2);
-                    font-size: var(--font-size-extra-small);
+                    padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
+                    font-size: var(--font-size-small);
                     text-decoration: none;
                     color: var(--color);
+                    border: var(--border-width) solid var(--border-color-light);
                     border-radius: var(--border-radius);
                     background-color: color-mix(in oklch, var(--color) var(--pl-color-transparent), transparent);
                     transition: color .15s, background-color .15s;
-
-                    @media (width >= 576px) {
-                        font-size: var(--font-size-small);
-                    }
 
                     @media (width >= 992px) {
                         font-size: var(--font-size-medium);
                     }
 
                     &.page-link-prev {
-                        padding-left: calc(var(--gap-inline) / 3);
+                        border-top-right-radius: 0;
+                        border-bottom-right-radius: 0;
 
                         & > svg {
                             transform: rotate(180deg);
@@ -1940,7 +1937,9 @@ textarea {
                     }
 
                     &.page-link-next {
-                        padding-right: calc(var(--gap-inline) / 3);
+                        margin-left: calc(var(--border-width) * -1);
+                        border-top-left-radius: 0;
+                        border-bottom-left-radius: 0;
                     }
 
                     &:not(.page-link-disabled):hover {
@@ -1999,6 +1998,11 @@ textarea {
 
     .card-submit {
         margin-top: var(--container-gap-block);
+        text-align: center;
+
+        @media (width >= 768px) {
+            text-align: left;
+        }
     }
 }
 
@@ -2014,13 +2018,13 @@ textarea {
 .collection-empty {
     display: flex;
     column-gap: calc(var(--gap-inline) / 2);
-    color: color-mix(in oklch, var(--color) 40%, transparent);
-    border: var(--border-width) dashed color-mix(in oklch, var(--color) 20%, transparent);
+    color: var(--color-tertiary);
+    border: var(--border-width) dashed var(--border-color);
     user-select: none;
 
     &:is(:not(.card)) {
         padding: var(--gap-block) var(--gap-inline);
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius-internal);
     }
 }
 
@@ -2031,7 +2035,7 @@ textarea {
     --progress-color-transparent: 10%;
     --progress-bar-color-transparent: var(--transparent-color);
     --progress-border-width: var(--border-width);
-    --progress-border-radius: calc(var(--border-radius) / 2);
+    --progress-border-radius: calc(var(--border-radius) / 4);
 
     display: flex;
     height: var(--progress-height);
@@ -2079,16 +2083,16 @@ textarea {
 
     .progress-text {
         font-size: var(--font-size-medium);
+        color: var(--color-tertiary);
         white-space: nowrap;
         user-select: none;
-        opacity: .5;
     }
 }
 
 .progress-description {
     margin-top: calc(var(--gap-block) / 2);
     font-size: var(--font-size-small);
-    color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
+    color: var(--color-secondary);
 }
 
 #the-wait-card {
@@ -2156,7 +2160,7 @@ textarea {
         .couple-weather {
             display: flex;
             flex-direction: column;
-            row-gap: calc(var(--cp-gap) / 3);
+            row-gap: calc(var(--cp-gap) / 2.5);
 
             .couple-temperature {
                 display: flex;
@@ -2166,7 +2170,7 @@ textarea {
                 .couple-temperature-degrees,
                 .couple-temperature-type {
                     font-size: calc(var(--cp-font-size) * 0.75);
-                    opacity: var(--transparent-color-tiny);
+                    color: var(--color-secondary);
                 }
 
                 .couple-temperature-type {
@@ -2181,7 +2185,7 @@ textarea {
                 column-gap: calc(var(--cp-gap) / 4);
                 font-size: calc(var(--cp-font-size) * 0.4);
                 font-weight: var(--font-weight-light);
-                opacity: var(--transparent-color);
+                color: var(--color-tertiary);
             }
         }
     }
@@ -2235,7 +2239,7 @@ textarea {
         .couple-distance-value {
             padding-inline: calc(var(--gap-inline) / 2);
             background-color: var(--background-color);
-            color: color-mix(in oklch, var(--color) 40%, transparent);
+            color: var(--color-tertiary);
             z-index: 0;
         }
     }
@@ -2267,7 +2271,7 @@ textarea {
         transform: rotateX(180deg);
 
         .calendar-workout-day {
-            --workout-day-bg-color: color-mix(in oklch, var(--color) 20%, transparent);
+            --workout-day-bg-color: var(--color-quaternary);
             --workout-day-bg-color-transparent: 10%;
             --workout-row: 1;
 
@@ -2278,8 +2282,8 @@ textarea {
             align-items: center;
             justify-content: center;
             font-size: calc(var(--font-size) / 4);
-            color: color-mix(in srgb, var(--color) 30%, transparent);
-            border-radius: calc(var(--border-radius) / 4);
+            color: var(--color-quaternary);
+            border-radius: calc(var(--border-radius) / 6);
             background-color: color-mix(in oklch, var(--workout-day-bg-color) var(--workout-day-bg-color-transparent), transparent);
             transform: rotateX(180deg);
             overflow: hidden;
@@ -2327,7 +2331,7 @@ textarea {
             display: flex;
             align-items: center;
             font-size: var(--font-size-extra-small);
-            opacity: .2;
+            color: var(--color-quaternary);
 
             &:nth-of-type(even) {
                 opacity: 0;
@@ -2384,7 +2388,7 @@ textarea {
             font-size: var(--font-size-medium);
             font-weight: var(--font-weight-light);
             text-align: center;
-            opacity: .4;
+            color: var(--color-tertiary);
             cursor: default;
             user-select: none;
 
@@ -2477,7 +2481,7 @@ textarea {
         }
 
         &.day-inactive {
-            color: color-mix(in oklch, var(--day-color) 60%, transparent);
+            color: color-mix(in oklch, var(--day-color) 50%, transparent);
             opacity: .5;
         }
 
@@ -2515,7 +2519,7 @@ textarea {
                 /* current and future weekend days */
 
                 &:not(.day-current) {
-                    --day-color: color-mix(in oklch, var(--color) 60%, transparent);
+                    --day-color: var(--color-tertiary);
                 }
 
                 --day-background-color-transparent: 4%;
@@ -2548,7 +2552,7 @@ textarea {
     .card-calendar-mood & {
         --gap-month-days: calc(var(--gap-inline) / 4);
         --day-font-size: var(--font-size-medium);
-        --day-border-radius: var(--border-radius);
+        --day-border-radius: var(--border-radius-internal);
 
         display: block;
 
@@ -2610,7 +2614,7 @@ textarea {
             display: inline-flex;
             padding: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 2);
             color: var(--general-color);
-            border-radius: calc(var(--border-radius) * 1.5);
+            border-radius: var(--border-radius-badge);
             background-color: color-mix(in srgb, var(--general-color) var(--ue-background-color-transparent), var(--background-color));
 
             [data-theme="dark"] & {
@@ -2660,7 +2664,7 @@ textarea {
                         --ue-background-color-transparent: 50%;
 
                         padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
-                        border: calc(var(--border-width) * 2) solid var(--background-color);
+                        border: var(--border-width) solid var(--background-color);
                     }
                 }
 
@@ -2680,7 +2684,7 @@ textarea {
 
 .calendar-event {
     padding: calc(var(--gap-block) / 2) var(--gap-inline);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-internal);
     background-color: color-mix(in oklch, var(--general-color) 10%, transparent);
 
     & + & {
@@ -2697,7 +2701,7 @@ textarea {
             padding: calc(var(--control-padding-block) / 1.5) calc(var(--control-padding-inline) / 1.5);
             color: var(--color-light);
             font-weight: var(--font-weight-bold);
-            border-radius: calc(var(--border-radius) / 2);
+            border-radius: var(--border-radius-badge);
             background-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
         }
 
@@ -2717,7 +2721,7 @@ textarea {
         --general-color: color-mix(in oklch, var(--color) 30%, transparent);
 
         font-size: var(--font-size-small);
-        color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+        color: var(--color-secondary);
 
         & + & {
             margin-top: calc(var(--gap-block) / 4);
@@ -2727,7 +2731,7 @@ textarea {
 
 .calendar-event-guesses {
     padding: var(--gap-block) var(--gap-inline);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-internal);
     background-color: color-mix(in oklch, var(--color) 3%, transparent);
 
     .calendar-event-guesses-body {
@@ -2873,7 +2877,7 @@ textarea {
 
                 &:is(span),
                 &:is(a):not(:hover) {
-                    color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+                    color: var(--color-secondary);
                 }
 
                 .week-edit {
@@ -2896,6 +2900,7 @@ textarea {
         grid-template-rows: auto 1fr;
         margin-bottom: 0;
         border-width: 0;
+        border-radius: var(--border-radius-internal);
         overflow: hidden;
         animation: fader 1s ease-out;
         animation-timeline: view();
@@ -2921,7 +2926,7 @@ textarea {
                     content: '';
                     position: absolute;
                     inset: calc(-1 * var(--font-size) / 8);
-                    border-radius: calc(var(--border-radius) / 2);
+                    border-radius: calc(var(--border-radius-internal) / 2);
                     background-color: color-mix(in oklch, var(--alert-color) calc(var(--alert-background-color-transparent) - 5%), transparent);
                     transition: background-color .15s;
                 }
@@ -2941,7 +2946,7 @@ textarea {
                 min-height: var(--font-size);
                 justify-content: center;
                 color: color-mix(in srgb, var(--alert-color) 30%, var(--color) 10%);
-                border-radius: calc(var(--border-radius) / 2);
+                border-radius: calc(var(--border-radius-internal) / 2);
                 background-color: color-mix(in oklch, var(--alert-color) 10%, transparent);
                 box-shadow: 0 0 10px color-mix(in oklch, var(--alert-color) 20%, transparent);
             }
@@ -2950,8 +2955,7 @@ textarea {
         &.alert-empty {
             --alert-background-color-transparent: 3%;
 
-            border-width: var(--border-width);
-            border-style: dashed;
+            border: var(--border-width) dashed var(--border-color);
 
             .alert-body {
                 min-height: var(--font-size);
@@ -2963,8 +2967,6 @@ textarea {
         flex-direction: column;
 
         .alert {
-            gap: calc(var(--gap-block) / 1.5);
-
             .alert-body {
                 flex-direction: column;
                 align-items: flex-start;
@@ -2974,6 +2976,10 @@ textarea {
                     width: 100%;
                 }
 
+                .form-control {
+                    border-radius: calc(var(--border-radius-internal) / 2);
+                }
+
                 .form-control,
                 .form-check-input:not(:checked) {
                     background-color: color-mix(in oklch, var(--background-color) 40%, transparent);
@@ -2981,6 +2987,7 @@ textarea {
 
                 .form-check-label {
                     font-size: var(--font-size-small);
+                    color: var(--color-secondary);
                 }
             }
         }
@@ -3039,7 +3046,6 @@ textarea {
         font-size: var(--font-size-extra-small);
         line-height: 1;
         white-space: break-spaces;
-        color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
 
         @media (width >= 576px) {
             order: 0;
@@ -3061,7 +3067,7 @@ textarea {
         word-spacing: -4px;
         white-space: nowrap;
         color: var(--wcr-color);
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius-badge);
         background-color: color-mix(in oklch, var(--wcr-color) 10%, transparent);
 
         @media (width >= 576px) {
@@ -3083,7 +3089,7 @@ textarea {
         gap: calc(var(--gap-inline) / 2);
         font-size: var(--font-size-small);
         word-spacing: -1px;
-        color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
+        color: var(--color-secondary);
         white-space: nowrap;
 
         & > span {
@@ -3096,8 +3102,8 @@ textarea {
     min-height: 70px;
 
     &:not([data-chart]) {
-        border: var(--border-width) dashed var(--body-border-color);
-        border-radius: var(--border-radius);
+        border: var(--border-width) dashed var(--border-color);
+        border-radius: var(--border-radius-internal);
     }
 }
 
@@ -3129,7 +3135,7 @@ textarea {
 
             &:is(span),
             &:is(a):not(:hover) {
-                color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+                color: var(--color-secondary);
             }
         }
     }
@@ -3142,11 +3148,11 @@ textarea {
     }
 
     .measurement-values {
-        --measurement-color: color-mix(in srgb, var(--color) var(--transparent-color-tiny), var(--color-inverse));
+        --measurement-color: var(--color-secondary);
         --measurement-color-transparent: 10%;
 
         padding: calc(var(--gap-block) * 0.75) var(--gap-inline);
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius-internal);
         background-color: color-mix(in oklch, var(--color) 2%, transparent);
 
         .measurement-values-fat {
@@ -3161,7 +3167,7 @@ textarea {
 
             display: inline-flex;
             border: var(--border-width) solid var(--measurement-background-color);
-            border-radius: calc(var(--border-radius) / 2);
+            border-radius: var(--border-radius-badge);
             overflow: hidden;
 
             .measurement-label,
@@ -3190,7 +3196,7 @@ textarea {
 
                 & > span:last-child {
                     font-size: var(--font-size-extra-small);
-                    opacity: .6;
+                    color: var(--color-tertiary);
                 }
             }
         }
@@ -3271,7 +3277,7 @@ textarea {
         }
 
         .error-description {
-            color: color-mix(in oklch, var(--color) 80%, transparent);
+            color: var(--color-secondary);
         }
 
         & > * {
@@ -3345,12 +3351,12 @@ form {
 
                 & > *:last-child {
                     font-size: var(--font-size-extra-small);
-                    opacity: var(--transparent-color);
+                    color: var(--color-tertiary);
                 }
 
                 &:is(div),
                 &:is(a):not(:hover) {
-                    color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
+                    color: var(--color-secondary);
                 }
             }
         }
@@ -3370,7 +3376,7 @@ form {
                 gap: calc(var(--gap-block) / 3) var(--gap-inline);
                 align-items: center;
                 padding: calc(var(--gap-block) / 2) var(--gap-inline);
-                border-radius: var(--border-radius);
+                border-radius: var(--border-radius-internal);
                 background-color: color-mix(in oklch, var(--exercise-color) var(--exercise-background-color-transparent), transparent);
                 animation: fader 1s ease-out;
                 animation-timeline: view();
@@ -3425,7 +3431,7 @@ form {
 
                     .workout-exercise-duration {
                         font-size: 0;
-                        color: var(--color);
+                        color: var(--color-tertiary);
                         opacity: 0;
                         transition: all .3s ease-in;
                     }
@@ -3436,7 +3442,7 @@ form {
                         .workout-exercise-duration {
                             margin-top: calc(var(--gap-block) / 8);
                             font-size: calc(var(--font-size) / 2);
-                            opacity: .4;
+                            opacity: 1;
                             transition: all .15s ease-out;
                         }
                     }
@@ -3452,7 +3458,7 @@ form {
                         align-items: baseline;
                         padding: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 2);
                         border: var(--border-width) solid var(--border-color);
-                        border-radius: var(--border-radius);
+                        border-radius: calc(var(--border-radius-internal) / 2);
                         background-color: color-mix(in oklch, var(--background-color) var(--transparent-color), transparent);
 
                         .workout-exercise-set-field {
@@ -3460,14 +3466,14 @@ form {
 
                             & > span:last-child {
                                 font-size: calc(var(--font-size) / 2);
-                                opacity: .4;
+                                color: var(--color-tertiary);
                             }
 
                             &.set-weight {
                                 column-gap: calc(var(--gap-inline) / 6);
                                 padding-right: calc(var(--gap-inline) / 3);
                                 margin-right: calc(var(--gap-inline) / 3);
-                                border-right: var(--border-width) solid var(--body-border-color);
+                                border-right: var(--border-width) solid var(--border-color-light);
                             }
 
                             &.set-reps {
@@ -3481,7 +3487,7 @@ form {
                             .workout-exercise-set-field {
                                 & > span:first-child {
                                     font-weight: var(--font-weight-light);
-                                    opacity: var(--transparent-color-tiny);
+                                    color: var(--color-secondary);
                                 }
                             }
                         }
@@ -3534,7 +3540,7 @@ form {
             padding: calc(var(--gap-block) / 4) var(--gap-inline);
             padding-right: calc(var(--gap-inline) / 2);
             font-size: var(--font-size-medium);
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-internal);
             background-color: color-mix(in oklch, var(--exercise-color) var(--exercise-background-color-transparent), transparent);
 
             .exercise-name {
@@ -3575,7 +3581,7 @@ form {
                     }
 
                     .form-control {
-                        --form-control-color: color-mix(in srgb, var(--color) var(--transparent-color), transparent);
+                        --form-control-color: var(--color-secondary);
 
                         font-size: var(--font-size-small);
                         border-style: dashed;
@@ -3620,7 +3626,7 @@ form {
                     width: 100%;
                     margin-bottom: calc(var(--gap-block) / 3);
                     font-size: var(--font-size-small);
-                    opacity: var(--transparent-color);
+                    color: var(--color-secondary);
                 }
 
                 .exercise-tabs {
@@ -3717,9 +3723,9 @@ form {
 
                 .workout-exercise-set-warmup {
                     display: flex;
-                    padding: var(--control-padding-block);
+                    padding-inline: min(var(--control-padding-block), var(--control-padding-inline));
                     font-size: var(--font-size-medium);
-                    opacity: var(--transparent-color);
+                    color: var(--color-tertiary);
                 }
 
                 .workout-exercise-set-controls {
@@ -3735,14 +3741,18 @@ form {
                             gap: calc(var(--gap-inline) / 4);
                             align-items: baseline;
                             padding: var(--control-padding-block) var(--control-padding-inline);
-                            color: color-mix(in oklch, var(--color) var(--transparent-color-tiny), transparent);
-                            border: var(--border-width) dotted var(--control-border-color);
-                            border-radius: var(--border-radius);
+                            color: var(--color-secondary);
+                            border-radius: var(--border-radius-badge);
+                            background-color: color-mix(in srgb, var(--color) 3%, transparent);
 
                             & > span:nth-child(2) {
                                 font-weight: var(--font-weight-light);
                                 font-size: var(--font-size-extra-small);
-                                opacity: var(--transparent-color);
+                                color: var(--color-tertiary);
+                            }
+
+                            &:last-child {
+                                margin-left: var(--border-width);
                             }
                         }
                     }
@@ -3760,7 +3770,6 @@ form {
 
                     &:not(:first-child) {
                         padding-top: calc(var(--gap-block) / 3);
-                        border-top: var(--border-width) dashed var(--body-border-color);
                     }
 
                     & > form {
@@ -3822,7 +3831,6 @@ form {
                     flex-wrap: wrap;
                     gap: calc(var(--gap-block) / 3) calc(var(--gap-inline) / 1.5);
                     padding-top: calc(var(--gap-block) / 3);
-                    border-top: var(--border-width) dashed var(--body-border-color);
                     font-size: var(--font-size-small);
 
                     .workout-exercise-prev {
@@ -3830,7 +3838,7 @@ form {
                         flex-wrap: nowrap;
                         white-space: nowrap;
                         column-gap: calc(var(--gap-inline) / 6);
-                        opacity: 40%;
+                        color: var(--color-tertiary);
 
                         small {
                             font-size: calc(var(--font-size-extra-small) * 0.5);
@@ -3845,7 +3853,7 @@ form {
                         }
 
                         &.prev-warmup {
-                            opacity: 20%;
+                            opacity: var(--transparent-color);
                         }
 
                         &.prev-description {
@@ -3863,7 +3871,7 @@ form {
 .exercises {
     display: flex;
     flex-direction: column;
-    row-gap: calc(var(--container-gap-block) / 4);
+    row-gap: var(--container-gap-block);
 
     .exercise {
         display: flex;
@@ -3871,17 +3879,28 @@ form {
         text-decoration: none;
         color: var(--color);
         border-radius: var(--border-radius);
-        background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
         animation: fader 1s ease-out;
         animation-timeline: view();
         animation-range: entry 0% cover 20%;
+
+        @media (width >= 768px) {
+            max-width: 55vw;
+        }
+
+        @media (width >= 992px) {
+            max-width: 50vw;
+        }
+
+        @media (width >= 1200px) {
+            max-width: 45vw;
+        }
 
         .exercise-body {
             display: flex;
             align-items: center;
             gap: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 2);
             padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
-            border-radius: var(--border-radius);
+            border-radius: var(--border-radius-internal);
             background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
             transition: background-color .15s;
 
@@ -3892,7 +3911,7 @@ form {
                 .badge {
                     flex: none;
                     font-size: var(--font-size-small);
-                    border-radius: calc(var(--border-radius) / 2);
+                    border-radius: var(--border-radius-badge);
 
                     @media (width >= 576px) {
                         font-size: var(--font-size-medium);
@@ -3932,7 +3951,7 @@ form {
                 .exercise-usages {
                     font-size: var(--font-size-extra-small);
                     font-weight: var(--font-weight-light);
-                    opacity: var(--transparent-color);
+                    color: var(--color-tertiary);
                 }
             }
         }
@@ -3944,7 +3963,51 @@ form {
         }
 
         .exercise-progress {
-            padding: calc(var(--gap-block) / 1.5) calc(var(--gap-inline) / 2);
+            padding-block: calc(var(--gap-block) / 1.5);
+
+            .exercise-progress-values {
+                display: flex;
+                flex-wrap: wrap;
+                gap: calc(var(--gap-block) / 2) var(--gap-inline);
+                margin-bottom: calc(var(--gap-block) / 1.5);
+                justify-content: space-between;
+
+                .exercise-progress-sets {
+                    display: flex;
+                    flex-wrap: wrap;
+                    column-gap: calc(var(--gap-inline) / 4);
+                    align-items: center;
+                    font-size: var(--font-size-small);
+
+                    .exercise-progress-set {
+                        display: flex;
+                        flex-wrap: nowrap;
+                        white-space: nowrap;
+                        column-gap: calc(var(--gap-inline) / 6);
+                        padding: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
+                        color: var(--color-tertiary);
+                        border-radius: calc(var(--border-radius-badge) / 2);
+                        background-color: color-mix(in oklch, var(--general-color) 8%, transparent);
+
+                        small {
+                            font-size: calc(var(--font-size-extra-small) * 0.5);
+                            font-weight: var(--font-weight-light);
+                            opacity: var(--transparent-color);
+                        }
+
+                        & > span:last-child {
+                            small {
+                                font-size: var(--font-size-extra-small);
+                            }
+                        }
+
+                        &.set-description {
+                            background-color: transparent;
+                            color: var(--color-quaternary);
+                        }
+                    }
+                }
+            }
 
             .exercise-progress-chart {
                 height: 70px;
@@ -3954,17 +4017,14 @@ form {
 
                 @media (width >= 768px) {
                     height: 80px;
-                    max-width: 50vw;
                 }
 
                 @media (width >= 992px) {
                     height: 90px;
-                    max-width: 45vw;
                 }
 
                 @media (width >= 1200px) {
                     height: 100px;
-                    max-width: 40vw;
                 }
             }
         }
@@ -3991,7 +4051,7 @@ form {
         justify-content: space-between;
         gap: calc(var(--container-gap-inline) / 1.5);
         padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius-internal);
         background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
 
         @media (width >= 576px) {
@@ -4058,21 +4118,18 @@ form {
             gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
             padding-inline: calc(var(--gap-inline) / 8);
             font-size: var(--font-size-medium);
+            font-weight: var(--font-weight-light);
+            color: var(--color-tertiary);
 
             @media (width >= 576px) {
                 justify-content: center;
-            }
-
-            .user-location {
-                font-size: var(--font-size-extra-small);
-                color: color-mix(in oklch, var(--color) 40%, transparent);
             }
         }
 
         .user-last-visited {
             padding-inline: calc(var(--gap-inline) / 8);
             font-size: var(--font-size-small);
-            opacity: var(--transparent-color-tiny);
+            color: var(--color-secondary);
 
             @media (width >= 576px) {
                 text-align: right;
@@ -4113,7 +4170,7 @@ form {
             gap: calc(var(--container-gap-inline) / 2);
             margin-top: calc(var(--container-gap-inline) / 6);
             font-size: var(--font-size-extra-small);
-            opacity: var(--transparent-color);
+            color: var(--color-tertiary);
         }
     }
 }
