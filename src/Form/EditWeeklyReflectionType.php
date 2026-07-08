@@ -31,6 +31,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
                 'attr' => [
                     'autofocus' => true,
                     'autocomplete' => 'off',
+                    'rows' => 5,
                 ],
             ])
             ->add('isJoyPrivate', CheckboxType::class, [
@@ -42,6 +43,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
                 'data' => $weeklyReflection?->difficulty->text,
                 'attr' => [
                     'autocomplete' => 'off',
+                    'rows' => 5,
                 ],
             ])
             ->add('isDifficultyPrivate', CheckboxType::class, [
@@ -53,6 +55,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
                 'data' => $weeklyReflection?->achievement->text,
                 'attr' => [
                     'autocomplete' => 'off',
+                    'rows' => 5,
                 ],
             ])
             ->add('isAchievementPrivate', CheckboxType::class, [

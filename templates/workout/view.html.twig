@@ -98,7 +98,7 @@
                                                 class="btn btn-danger btn-link"
                                                 {% if is_granted('WORKOUT_SET_DELETE', workout_set) %}type="submit"
                                                 {% else %}disabled{% endif %}>
-                                                {{- ux_icon('lucide:trash') -}}
+                                                {{- ux_icon('lucide:x') -}}
                                                 {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
                                             </button>
                                         </form>
@@ -132,17 +132,17 @@
                                         <input class="form-control" type="number" id="weight" name="weight"
                                                value="{{ last_set?.weight ?? 0 }}" autocomplete="off"
                                                {%- if is_autofocus -%}autofocus="autofocus"{%- endif -%}
-                                               min="0" max="199" step="0.1" required="required" data-mask="postfix"
-                                               data-postfix="kg">
+                                               inputmode="decimal" min="0" max="199" step="0.1" required="required"
+                                               data-mask="postfix" data-postfix="kg">
                                         <input class="form-control" type="number" id="reps" name="reps"
                                                value="{{ last_set?.reps ?? 1 }}" autocomplete="off"
-                                               min="1" max="99" step="1" required="required">
+                                               inputmode="number" min="1" max="99" step="1" required="required">
                                     </div>
                                     <div class="workout-exercise-set-warmup form-control-choose-type-group">
                                         <label class="form-control-choose-type">
                                             <input type="checkbox" name="warmup"
                                                 {% if last_set?.isWarmup ?? false %} checked="checked"{% endif %}>
-                                            <span class="btn">
+                                            <span class="btn" tabindex="0">
                                             {{- ux_icon('lucide:battery-charging') -}}
                                             <span>Is warmup</span>
                                         </span>

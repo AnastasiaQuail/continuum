@@ -89,7 +89,7 @@
             </div>
         {%- else -%}
             <div class="card-body-measurements">
-                {%- for measurement in measurements -%}
+                {%- for measurement in measurements|reverse -%}
                     <div class="body-measurement">
                         <div class="measurement-date">
                             {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
