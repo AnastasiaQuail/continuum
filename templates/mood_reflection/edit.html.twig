@@ -39,7 +39,7 @@
                                value="{{ choice.value }}"
                                {% if form.type.vars.required %}required="required"{% endif %}
                             {% if choice.value === form.type.vars.value %}checked{% endif %}>
-                        <span class="btn">
+                        <span class="btn" tabindex="0">
                             {%- if choice.value === 'terrible' -%}
                                 {{- ux_icon('lucide:angry') -}}
                             {%- elseif choice.value === 'bad' -%}

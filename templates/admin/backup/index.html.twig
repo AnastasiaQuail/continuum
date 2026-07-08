@@ -28,7 +28,7 @@
 
     <section class="card">
         <div class="backups">
-            {%- for backup in backups -%}
+            {%- for backup in backups|reverse -%}
                 <div class="backup">
                     {%- set backup_date = backup.date.setTimezone(app.user.timezone).format('j F Y, H:i') -%}
 

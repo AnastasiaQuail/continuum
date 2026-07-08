@@ -24,7 +24,7 @@
                                value="{{ choice.value }}"
                                {% if form.status.vars.required %}required="required"{% endif %}
                             {% if choice.value === form.status.vars.value %}checked{% endif %}>
-                        <span class="btn">{{ choice.label }}</span>
+                        <span class="btn" tabindex="0">{{ choice.label }}</span>
                     </label>
                 {%- endfor -%}
             </div>

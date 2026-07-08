@@ -36,7 +36,7 @@
 .report-title {
     text-align: center;
     font-weight: var(--font-weight-light);
-    opacity: var(--transparent-color-tiny);
+    color: var(--color-secondary);
 
     .card + & {
         margin-top: calc(var(--body-gap-block) * 1.5);
@@ -50,7 +50,7 @@
         margin-block: calc(var(--container-gap-block) / 1.5);
         width: 100%;
         border: 0;
-        border-bottom: var(--border-width) solid var(--body-border-color);
+        border-bottom: var(--border-width) solid var(--border-color-divider);
     }
 
     .card-title {
@@ -79,7 +79,6 @@
 
                 .progress-text {
                     font-size: inherit;
-                    opacity: 1;
                 }
             }
         }
@@ -111,7 +110,7 @@
             right: calc(-1 * var(--ueb-size) / 1.5);
             padding: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
             font-size: var(--ueb-size);
-            color: color-mix(in oklch, var(--color) var(--transparent-color), transparent);
+            color: var(--color-tertiary);
             border: var(--border-width) solid color-mix(in srgb, var(--general-color) var(--ue-background-color-transparent), transparent);
             border-radius: var(--ueb-size);
             background-color: color-mix(in oklch, var(--background-color) 10%, transparent);
@@ -187,7 +186,7 @@
         padding: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 1.5);
         font-size: var(--font-size-extra-small);
         font-weight: var(--font-weight-light);
-        color: color-mix(in srgb, var(--color) var(--transparent-color-tiny), transparent);
+        color: var(--color-secondary);
         border-left: calc(var(--border-width) * 2) solid var(--color-green);
         border-radius: calc(var(--border-radius) / 4);
 
@@ -274,7 +273,7 @@
         padding: calc(var(--gap-block) / 3) calc(var(--gap-inline) / 2);
         font-size: var(--font-size-small);
         text-decoration: none;
-        color: color-mix(in srgb, var(--color) var(--transparent-color), var(--color-inverse));
+        color: var(--color-secondary);
         border-radius: var(--border-radius);
         transition: color .15s, background-color .15s;
 

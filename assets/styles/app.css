@@ -73,7 +73,7 @@
     --border-width: 1px;
     --body-border-width: var(--border-width);
     --border-color: oklch(0.927 0.007 260.732);
-    --border-color-light: color-mix(in srgb, var(--border-color) 60%, var(--color-inverse));
+    --border-color-divider: color-mix(in srgb, var(--border-color) 60%, var(--color-inverse));
     --body-border-color: color-mix(in srgb, var(--border-color) 40%, var(--color-inverse));
     --border-radius: 1rem;
     --border-radius-internal: calc(var(--border-radius) * 0.75);
@@ -605,7 +605,7 @@ textarea {
         .header-divider {
             height: calc(var(--header-height) / 2);
             margin-inline: calc(var(--container-gap-inline) / 4);
-            border-left: var(--border-width) solid var(--border-color-light);
+            border-left: var(--border-width) solid var(--border-color-divider);
         }
 
         .header-events {
@@ -613,6 +613,7 @@ textarea {
 
             .dropdown-menu {
                 --dropdown-offset: calc(var(--container-gap-block) / 2);
+                --dropdown-border: var(--body-border-width) solid var(--border-color-divider);
 
                 position: absolute;
                 top: -100vw;
@@ -633,7 +634,7 @@ textarea {
                     content: '';
                     inset: 0;
                     top: var(--dropdown-offset);
-                    border: var(--body-border-width) solid var(--border-color-light);
+                    border: var(--dropdown-border);
                     border-radius: var(--body-border-radius);
                     background-color: var(--background-color);
                 }
@@ -645,8 +646,8 @@ textarea {
                     top: calc(var(--dropdown-offset) / 2);
                     width: var(--dropdown-offset);
                     height: var(--dropdown-offset);
-                    border-top: var(--body-border-width) solid var(--border-color-light);
-                    border-right: var(--body-border-width) solid var(--border-color-light);
+                    border-top: var(--dropdown-border);
+                    border-right: var(--dropdown-border);
                     background-color: var(--background-color);
                     transform: rotate(-45deg) skew(-10deg, -10deg);
                 }
@@ -684,8 +685,7 @@ textarea {
                         height: 0;
                         margin-block: calc(var(--gap-block) / 3);
                         border: 0;
-                        border-top: var(--border-width) solid var(--border-color);
-                        opacity: .5;
+                        border-top: var(--border-width) solid var(--border-color-divider);
                     }
                 }
             }
@@ -846,8 +846,7 @@ textarea {
                 height: 0;
                 margin-block: calc(var(--gap-block) / 2);
                 border: 0;
-                border-top: var(--border-width) solid var(--border-color);
-                opacity: .5;
+                border-top: var(--border-width) solid var(--border-color-divider);
                 overflow: hidden;
             }
         }
@@ -888,6 +887,8 @@ textarea {
                     }
 
                     .nav-dropdown {
+                        --nav-dropdown-border: var(--body-border-width) solid var(--border-color-divider);
+
                         position: absolute;
                         display: inherit;
                         left: -100vw;
@@ -910,7 +911,7 @@ textarea {
                             content: '';
                             inset: 0;
                             left: .5rem;
-                            border: var(--body-border-width) solid var(--border-color-light);
+                            border: var(--nav-dropdown-border);
                             border-radius: var(--body-border-radius);
                             background-color: var(--background-color);
                         }
@@ -922,8 +923,8 @@ textarea {
                             left: 3px;
                             width: .6rem;
                             height: .6rem;
-                            border-top: var(--body-border-width) solid var(--border-color-light);
-                            border-left: var(--body-border-width) solid var(--border-color-light);
+                            border-top: var(--nav-dropdown-border);
+                            border-left: var(--nav-dropdown-border);
                             background-color: var(--background-color);
                             transform: rotate(-45deg);
                         }
@@ -1266,7 +1267,7 @@ textarea {
     border-radius: var(--border-radius);
     transition: border-color .15s, box-shadow .15s;
 
-    &:focus {
+    &:focus-visible {
         color: var(--form-control-color);
         background-color: var(--background-color);
         border-color: color-mix(in oklch, var(--primary-color) var(--transparent-color), transparent);
@@ -1343,7 +1344,7 @@ textarea {
         border-radius: 50%;
     }
 
-    &:focus {
+    &:focus-visible {
         border-color: color-mix(in oklch, var(--primary-color) var(--transparent-color), transparent);
         outline: 0;
         box-shadow: 0 0 0 0.25rem color-mix(in oklch, var(--primary-color) 20%, transparent);
@@ -1397,7 +1398,8 @@ textarea {
             --btn-border-color-transparent: 0%;
             --btn-background-color-transparent: 15%;
 
-            &:hover {
+            &:hover,
+            &:focus-visible {
                 --btn-border-color-transparent: 50%;
             }
         }
@@ -1419,7 +1421,8 @@ textarea {
         --btn-color: var(--btn-general-color);
         padding-inline: var(--control-padding-block);
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
             --btn-general-color: var(--primary-color);
             --btn-background-color-transparent: 5%;
         }
@@ -1561,7 +1564,7 @@ textarea {
     &.btn-secondary {
         --btn-general-color: var(--color-tertiary);
 
-        &.btn-outline:not(:hover),
+        &.btn-outline:not(:hover, :focus-visible),
         &.btn-transparent,
         &.btn-link {
             --btn-color: var(--color-secondary);
@@ -1571,7 +1574,7 @@ textarea {
     &.btn-outline {
         --btn-border-color-transparent: var(--transparent-color);
 
-        &:not(:hover) {
+        &:not(:hover, :focus-visible) {
             --btn-color: var(--btn-general-color);
             --btn-background-color-transparent: 0%;
         }
@@ -1582,13 +1585,14 @@ textarea {
         --btn-border-color-transparent: 0%;
         --btn-background-color-transparent: 15%;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
             --btn-background-color-transparent: 25%;
         }
     }
 
     &.btn-action {
-        &:not(:hover):not(:focus) {
+        &:not(:hover, :focus-visible) {
             --btn-color: var(--color-secondary);
             --btn-border-color: var(--color);
             --btn-border-color-transparent: var(--transparent-color);
@@ -1596,7 +1600,7 @@ textarea {
         }
 
         &:hover,
-        &:focus {
+        &:focus-visible {
             --btn-color: var(--btn-general-color);
             --btn-border-color-transparent: 0%;
             --btn-background-color-transparent: 15%;
@@ -1608,7 +1612,8 @@ textarea {
         --btn-border-color-transparent: 0%;
         --btn-background-color-transparent: 0%;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
             --btn-background-color-transparent: 5%;
         }
     }
@@ -1726,7 +1731,7 @@ textarea {
         padding-top: calc(var(--cti-font-size) + var(--cti-gap-block) * 5);
         font-size: calc(var(--cti-font-size) * 0.875);
         list-style: none;
-        border: var(--border-width) solid var(--border-color-light);
+        border: var(--border-width) solid var(--border-color-divider);
         border-radius: calc(var(--cti-border-radius) + var(--cti-gap-inline));
         background-color: color-mix(in oklch, var(--color) 2%, transparent);
         backdrop-filter: blur(3px);
@@ -1826,7 +1831,7 @@ textarea {
             column-gap: calc(var(--gap-inline) / 2);
             font-size: var(--font-size-extra-small);
             font-weight: var(--font-weight-light);
-            color: var(--color-tertiary);
+            color: var(--color-secondary);
             cursor: default;
 
             &.card-today-events {
@@ -1918,7 +1923,7 @@ textarea {
                     font-size: var(--font-size-small);
                     text-decoration: none;
                     color: var(--color);
-                    border: var(--border-width) solid var(--border-color-light);
+                    border: var(--border-width) solid var(--border-color-divider);
                     border-radius: var(--border-radius);
                     background-color: color-mix(in oklch, var(--color) var(--pl-color-transparent), transparent);
                     transition: color .15s, background-color .15s;
@@ -2083,7 +2088,7 @@ textarea {
 
     .progress-text {
         font-size: var(--font-size-medium);
-        color: var(--color-tertiary);
+        color: var(--color-secondary);
         white-space: nowrap;
         user-select: none;
     }
@@ -2191,6 +2196,8 @@ textarea {
     }
 
     .couple-distance {
+        --couple-line-color: var(--border-color);
+
         position: relative;
         display: flex;
         align-items: center;
@@ -2216,7 +2223,7 @@ textarea {
             position: absolute;
             top: 50%;
             width: 100%;
-            border-top: var(--border-width) dashed var(--border-color);
+            border-top: var(--border-width) dashed var(--couple-line-color);
         }
 
         .couple-line {
@@ -2227,7 +2234,7 @@ textarea {
             justify-content: space-between;
 
             svg {
-                color: var(--border-color);
+                color: var(--couple-line-color);
                 background-color: var(--background-color);
 
                 &:first-child {
@@ -2746,7 +2753,9 @@ textarea {
         --btn-background-color-transparent: 0%;
         align-items: baseline;
 
-        &:hover {
+
+        &:hover,
+        &:focus-visible {
             --btn-border-color-transparent: 50%;
             --btn-background-color-transparent: 15%;
         }
@@ -2850,7 +2859,7 @@ textarea {
 
 .weekly-reflection {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: var(--container-gap-block);
 
     .week {
@@ -3115,7 +3124,7 @@ textarea {
 
 .card-body-measurements {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: calc(var(--container-gap-block) / 1.5);
 }
 
@@ -3330,7 +3339,7 @@ form {
 
 .workouts {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: var(--body-gap-block);
 
     .workout {
@@ -3473,7 +3482,7 @@ form {
                                 column-gap: calc(var(--gap-inline) / 6);
                                 padding-right: calc(var(--gap-inline) / 3);
                                 margin-right: calc(var(--gap-inline) / 3);
-                                border-right: var(--border-width) solid var(--border-color-light);
+                                border-right: var(--border-width) solid var(--border-color-divider);
                             }
 
                             &.set-reps {
@@ -3588,7 +3597,6 @@ form {
                         background-color: color-mix(in srgb, var(--background-color) var(--transparent-color), transparent);
                         transition: color .15s;
 
-                        &:focus,
                         &:focus-visible {
                             --form-control-color: var(--color);
                         }
@@ -3612,7 +3620,7 @@ form {
         &.workout-exercise-new {
             &:not(:first-child) {
                 padding-top: calc(var(--container-gap-block) / 1.25);
-                border-top: var(--border-width) dashed var(--border-color);
+                border-top: var(--border-width) dashed var(--border-color-divider);
             }
 
             .exercise {
@@ -3801,7 +3809,8 @@ form {
                             --btn-border-color-transparent: 0%;
                             --btn-background-color-transparent: 0%;
 
-                            &:hover {
+                            &:hover,
+                            &:focus-visible {
                                 --btn-color: color-mix(in srgb, var(--general-color) 40%, var(--color-inverse));
                                 --btn-border-color-transparent: 0%;
                                 --btn-background-color-transparent: 3%;
@@ -4140,13 +4149,13 @@ form {
 
 .backups {
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
 
     .backup {
         & + & {
-            padding-bottom: calc(var(--container-gap-block) / 2);
-            margin-bottom: calc(var(--container-gap-block) / 2);
-            border-bottom: var(--border-width) solid color-mix(in oklch, var(--border-color) 40%, transparent);
+            padding-top: calc(var(--container-gap-block) / 2);
+            margin-top: calc(var(--container-gap-block) / 2);
+            border-top: var(--border-width) solid var(--border-color-divider);
         }
 
         .backup-date {
@@ -4168,7 +4177,7 @@ form {
         .backup-information {
             display: flex;
             gap: calc(var(--container-gap-inline) / 2);
-            margin-top: calc(var(--container-gap-inline) / 6);
+            margin-top: calc(var(--container-gap-block) / 4);
             font-size: var(--font-size-extra-small);
             color: var(--color-tertiary);
         }

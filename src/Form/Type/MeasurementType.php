@@ -24,6 +24,10 @@ final class MeasurementType extends NumberType
             $view->vars['attr']['step'] = 0.5;
         }
 
+        if (!isset($view->vars['attr']['inputmode'])) {
+            $view->vars['attr']['inputmode'] = 'decimal';
+        }
+
         if (!isset($view->vars['attr']['autocomplete'])) {
             $view->vars['attr']['autocomplete'] = 'off';
         }

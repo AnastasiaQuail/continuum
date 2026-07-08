@@ -1,5 +1,5 @@
 {% macro months(days, path, months) -%}
-    <div class="page-filter-dropdown">
+    <div class="page-filter-dropdown" tabindex="0">
         {%- set months_count = (days / 30)|round -%}
         {%- set patch = '###'|url_encode -%}
 
