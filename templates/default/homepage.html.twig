@@ -188,11 +188,13 @@
                 <span class="couple-temperature-degrees">{{ weather.temperature }}</span>
                 <span class="couple-temperature-type">°C</span>
             </div>
-            <div class="couple-wind">
-                <span>{{ weather.wind.direction.toEmoji }}</span>
-                <span>{{ weather.wind.speed }}</span>
-                <span>m/s</span>
-            </div>
+            {%- if weather.wind -%}
+                <div class="couple-wind">
+                    <span>{{ weather.wind.direction.toEmoji }}</span>
+                    <span>{{ weather.wind.speed }}</span>
+                    <span>m/s</span>
+                </div>
+            {%- endif -%}
         </div>
     </div>
 {%- endmacro %}

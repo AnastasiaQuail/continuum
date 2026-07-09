@@ -3,11 +3,14 @@
 }
 
 .header {
-    padding: var(--header-gap-block) var(--body-gap-inline);
+    @media (width >= 768px) {
+        padding-left: var(--body-gap-inline);
+    }
 
     .header-container {
         padding-inline: 0;
         background-color: transparent;
+        backdrop-filter: none;
         border: none;
 
         & .header-logo {
