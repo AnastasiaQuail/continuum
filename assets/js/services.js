@@ -299,18 +299,8 @@ export class TabToggler {
 export class EasterEggs {
     apply() {
         document.addEventListener('DOMContentLoaded', () => {
-            this.#bird();
             this.#dog();
         });
-    }
-
-    #bird() {
-        document.getElementById('footer-bird')?.addEventListener('click', () => {
-            const data = document.documentElement.dataset;
-            const number = Number(data.eggBird ?? 0) + 1;
-
-            data.eggBird = number > 3 ? '0' : number.toString();
-        })
     }
 
     /**

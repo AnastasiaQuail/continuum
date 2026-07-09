@@ -273,15 +273,16 @@
             <footer class="footer-container">
                 <div class="footer-controls">
                     {%- if app.debug and is_granted('ROLE_SUPER_ADMIN') -%}
-                        <div class="footer-control" id="footer-toolbar">
+                        <div class="footer-control footer-control-link" id="footer-toolbar">
                             {{- ux_icon('lucide:database') -}}
                             <span>0</span>
                         </div>
                     {%- endif -%}
-                    <div class="footer-control" id="footer-dog" data-href="{{ path('app_easter_egg_dog') }}">
+                    <div class="footer-control footer-control-link" id="footer-dog"
+                         data-href="{{ path('app_easter_egg_dog') }}">
                         {{- ux_icon('lucide:dog') -}}
                     </div>
-                    <div class="footer-control footer-control-bird" id="footer-bird">
+                    <div class="footer-control footer-control-bird">
                         {{- ux_icon('lucide:bird') }}{{ bird_name() -}}
                     </div>
                 </div>
