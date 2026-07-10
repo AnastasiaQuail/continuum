@@ -11,10 +11,7 @@
 {% block title %}Measurement history{% endblock %}
 {% block body_id %}body-measurement-history{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Measurements', url: path('app_measurements')},
-    {label: 'History'},
-] %}
+{% set back_path = path('app_measurements') %}
 
 {% block page_links -%}
     {{- filters.months(measurement_days, path('app_measurements_history', {months: '###'}), [4, 6, 8, 10]) -}}
@@ -73,12 +70,12 @@
 
                 {%- if result !== 0.0 -%}
                     {%- if type !== 'cm' or field === 'waist' or field === 'hips' -%}
-                        {%- set label_type = result > 0 ? 'value-bad' : 'value-good' -%}
+                        {%- set badge_type = result > 0 ? 'badge-bad' : 'badge-good' -%}
                     {%- else -%}
-                        {%- set label_type = result > 0 ? 'value-good' : 'value-bad' -%}
+                        {%- set badge_type = result > 0 ? 'badge-good' : 'badge-bad' -%}
                     {%- endif -%}
 
-                    <span class="card-title-label {{ label_type }}">
+                    <span class="badge {{ badge_type }}">
                         <span>{{ result > 0 ? '+' ~ result : result }}</span><span>{{ type }}</span>
                     </span>
                 {%- endif -%}

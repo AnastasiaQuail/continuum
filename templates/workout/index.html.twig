@@ -3,10 +3,6 @@
 {% block title %}Workouts{% endblock %}
 {% block body_id %}workouts{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Workouts'},
-] %}
-
 {% block page_links -%}
     <form method="post" action="{{ path('app_workout_create') }}">
         <button

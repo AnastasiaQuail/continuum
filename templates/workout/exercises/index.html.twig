@@ -11,10 +11,7 @@
 {% block title %}Exercises{% endblock %}
 {% block body_id %}exercises{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Workouts', url: path('app_workouts')},
-    {label: 'Exercises'},
-] %}
+{% set back_path = path('app_workouts') %}
 
 {% block page_links -%}
     {%- set is_granted = is_granted('EXERCISE_CREATE') -%}
@@ -42,7 +39,7 @@
                         <div class="exercise-badges">
                             <div class="badge badge-group">{{ exercise.group.name }}</div>
                             {%- if not exercise.isActive -%}
-                                <div class="badge badge-disabled">{{ ux_icon('lucide:eye-off') }}</div>
+                                <div class="badge badge-bad">{{ ux_icon('lucide:eye-off') }}</div>
                             {%- endif -%}
                         </div>
                         <div class="exercise-title {{ not exercise.isActive ? 'exercise-disabled' }}">

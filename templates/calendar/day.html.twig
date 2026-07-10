@@ -9,10 +9,7 @@
 {% block page_title %}{{ day.format('j F Y') }}, <small>{{ day.format('l') }}</small>{% endblock %}
 {% block body_id %}calendar-date{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Calendar', url: path('app_calendar', {year: day.format('Y')})},
-    {label: 'Edit'},
-] %}
+{% set back_path = path('app_calendar', {year: day.format('Y')}) %}
 
 {% block main -%}
     <section class="card">
@@ -38,7 +35,7 @@
         {%- for event in events -%}
             <div class="calendar-event" data-general-type="{{ event.type.value }}">
                 <div class="calendar-event-body">
-                    <span class="calendar-event-type">{{ event.title }}</span>
+                    <span class="badge badge-fill">{{ event.title }}</span>
                     {%- if not event.allDay -%}
                         <span> at {{ event.getUserDatetime(app.user).format('H:i') }}</span>
                     {%- endif -%}

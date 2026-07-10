@@ -11,10 +11,7 @@
 {% block page_title %}{{ date.format('j F Y, H:i') }}{% endblock %}
 {% block body_id %}workout-view{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Workouts', url: path('app_workouts', {month: date.format('Y-m')})},
-    {label: 'Edit'},
-] %}
+{% set back_path = path('app_workouts', {month: date.format('Y-m')}) %}
 
 {% block main -%}
     <section class="card">

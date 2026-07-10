@@ -11,10 +11,7 @@
 {% block page_title %}{{ current_title }}{% endblock %}
 {% block body_id %}weekly-reflection-edit{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Weekly reflection', url: path('app_weekly_reflections', {month: week.format('Y-m')})},
-    {label: 'Edit'},
-] %}
+{% set back_path = path('app_weekly_reflections', {month: week.format('Y-m')}) %}
 
 {% block main -%}
     <section class="card">

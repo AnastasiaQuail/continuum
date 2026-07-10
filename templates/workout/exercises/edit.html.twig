@@ -3,11 +3,7 @@
 {% block title %}{{ exercise ? 'Edit exercise' : 'Create exercise' }}{% endblock %}
 {% block body_id %}exercise-edit{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Workouts', url: path('app_workouts')},
-    {label: 'Exercises', url: path('app_exercises')},
-    {label: exercise ? 'Edit' : 'Create'},
-] %}
+{% set back_path = path('app_exercises') %}
 
 {% block main -%}
     <section class="card">

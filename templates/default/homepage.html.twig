@@ -61,7 +61,7 @@
                 {{- _self.couple_partner(couple.time, couple.weather) -}}
                 <div class="couple-distance">
                     <div class="couple-line">
-                        {{- ux_icon('lucide:chevron-right') }}{{ ux_icon('lucide:chevron-right') -}}
+                        {{- ux_icon('lucide:chevron-left') }}{{ ux_icon('lucide:chevron-right') -}}
                     </div>
                     <span class="couple-distance-value">{{ couple.distance|round }} <small>km</small></span>
                 </div>
@@ -106,7 +106,7 @@
                     <h2 id="weight-change-title">Body fat</h2>
                     {%- if result !== 0.0 -%}
                         <span id="weight-change-label"
-                              class="card-title-label {{ result > 0 ? 'value-bad' : 'value-good' }}">
+                              class="badge {{ result > 0 ? 'badge-bad' : 'badge-good' }}">
                             <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
                         </span>
                     {%- endif -%}

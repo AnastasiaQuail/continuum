@@ -3,10 +3,6 @@
 {% block title %}Mood reflection{% endblock %}
 {% block body_id %}mood-reflection{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Reflection'},
-] %}
-
 {% set is_granted = is_granted('MOOD_REFLECTION_EDIT') %}
 
 {% block showcase -%}

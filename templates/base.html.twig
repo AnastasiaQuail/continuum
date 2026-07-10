@@ -39,6 +39,25 @@
     {%- block header -%}
         <header class="header">
             <nav class="header-container">
+                {%- set back_path = back_path|default -%}
+                {%- set sidebar_show = sidebar_show|default !== 'hide' -%}
+
+                {%- if back_path or sidebar_show -%}
+                    <div class="btn-group-glass">
+                        {%- if back_path -%}
+                            <a class="btn btn-glass btn-header" href="{{ back_path }}">
+                                {{- ux_icon('lucide:chevron-left', {class: 'icon-fix-scale'}) -}}
+                            </a>
+                        {%- endif -%}
+                        {%- if sidebar_show -%}
+                            <button id="sidebar-toggler" class="btn btn-glass btn-header">
+                                {{- ux_icon('lucide:menu', {class: 'icon-menu-open'}) -}}
+                                {{- ux_icon('lucide:x', {class: 'icon-menu-close'}) -}}
+                            </button>
+                        {%- endif -%}
+                    </div>
+                {%- endif -%}
+
                 {%- if logo_show|default !== 'hide' -%}
                     <div class="header-logo">
                         <a class="header-logo-link" href="{{ path('app_homepage') }}">
@@ -49,17 +68,11 @@
                         </a>
                     </div>
                 {%- endif -%}
-                {%- if sidebar_show|default !== 'hide' -%}
-                    <button id="sidebar-toggler" class="header-button">
-                        {{- ux_icon('lucide:menu', {class: 'icon-menu-open'}) -}}
-                        {{- ux_icon('lucide:x', {class: 'icon-menu-close'}) -}}
-                    </button>
-                {%- endif -%}
 
                 <div class="header-controls">
-                    {%- block header_events -%}
-                        <div class="header-events">
-                            <button class="header-button">{{ ux_icon('lucide:plus') }}</button>
+                    <div class="btn-header btn-dropdown">
+                        <div class="btn btn-glass">
+                            <span class="dropdown-icon">{{ ux_icon('lucide:ellipsis-vertical') }}</span>
                             <ul class="dropdown-menu">
                                 {%- if is_granted('CALENDAR_EDIT') -%}
                                     <li class="dropdown-item">
@@ -101,7 +114,7 @@
                                 {%- endif -%}
                             </ul>
                         </div>
-                    {%- endblock -%}
+                    </div>
                 </div>
             </nav>
         </header>
@@ -244,25 +257,6 @@
 
         {%- block body -%}
             <main class="body-container">
-                {%- block breadcrumb -%}
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item">
-                                <a href="{{ path('app_homepage') }}">{{ ux_icon('lucide:house') }}</a>
-                            </li>
-                            {%- for crumb in breadcrumbs|default([{label: 'Homepage'}]) -%}
-                                <li class="breadcrumb-item {% if loop.last %}active{% endif %}">
-                                    {%- if crumb.url is defined -%}
-                                        <a href="{{ crumb.url }}">{{ crumb.label }}</a>
-                                    {%- else -%}
-                                        {{- crumb.label -}}
-                                    {%- endif -%}
-                                </li>
-                            {%- endfor -%}
-                        </ol>
-                    </nav>
-                {%- endblock -%}
-
                 {%- block showcase %}{% endblock -%}
 
                 {%- block body_title -%}
@@ -298,22 +292,3 @@
     </div>
 </body>
 </html>
-
-{%- macro sidebar_link(path, related_paths, icon, name, is_granted = true, alert = {}) -%}
-    {%- set is_active = false -%}
-    {%- for related_path in [path, ...related_paths] -%}
-        {%- if app.current_route === related_path -%}
-            {%- set is_active = true -%}
-        {%- endif -%}
-    {%- endfor -%}
-
-    <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path(path) }}"{% else %} disabled{% endif %}
-        class="nav-link {{ is_active ? 'active' }}">
-        {{- icon|raw -}}
-        <span>{{ name }}</span>
-        {%- if alert -%}
-            <span class="nav-icon" data-general-type="{{ alert.type }}">{{ alert.icon|raw }}</span>
-        {%- endif -%}
-    </{% if is_granted %}a{% else %}button{% endif %}>
-{%- endmacro -%}

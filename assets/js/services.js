@@ -9,7 +9,7 @@ export class SidebarToggler extends ToggleStorage {
      * @param {Event} event
      */
     onClick(event) {
-        const type = getComputedStyle(event.currentTarget).getPropertyValue('--sidebar-toggler');
+        const type = getComputedStyle(document.documentElement).getPropertyValue('--device-type');
 
         if ("'desktop'" === type || '"desktop"' === type) {
             super.onClick(event);
