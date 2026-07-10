@@ -11,6 +11,8 @@
 
 {%- set body_id = block('body_id') -%}
 
+{% import 'default/_sidebar.html.twig' as sidebar %}
+
 <!DOCTYPE html>
 <html lang="en" data-timezone="{{ app.user?.timezone.name }}" {{ html_data_day }}>
 <head>
@@ -99,17 +101,7 @@
                                 {%- endif -%}
                             </ul>
                         </div>
-                        <div class="header-divider"></div>
                     {%- endblock -%}
-
-                    <button id="theme-toggler" class="header-button">
-                        <span class="theme-light">{{ ux_icon('lucide:sun') }}</span>
-                        <span class="theme-dark">{{ ux_icon('lucide:moon') }}</span>
-                    </button>
-
-                    {%- if logout_show|default !== 'hide' and is_granted('ROLE_USER') -%}
-                        <a class="header-button" href="{{ logout_path() }}">{{ ux_icon('lucide:log-out') }}</a>
-                    {%- endif -%}
                 </div>
             </nav>
         </header>
@@ -120,7 +112,7 @@
             <nav class="navbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        {{- _self.sidebar_link(
+                        {{- sidebar.item(
                             'app_calendar',
                             ['app_calendar_day'],
                             ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}),
@@ -129,11 +121,9 @@
                         ) -}}
                     </li>
 
-                    <li>
-                        <span class="nav-title-divider">Reflection</span>
-                    </li>
+                    <li>{{ sidebar.divider('Reflection') }}</li>
                     <li class="nav-item">
-                        {{- _self.sidebar_link(
+                        {{- sidebar.item(
                             'app_mood_reflections',
                             ['app_mood_reflection_edit'],
                             ux_icon('lucide:smile-plus'),
@@ -142,7 +132,7 @@
                         ) -}}
                     </li>
                     <li class="nav-item">
-                        {{- _self.sidebar_link(
+                        {{- sidebar.item(
                             'app_weekly_reflections',
                             ['app_weekly_reflection_edit'],
                             ux_icon('lucide:star'),
@@ -151,11 +141,9 @@
                         ) -}}
                     </li>
 
-                    <li>
-                        <span class="nav-title-divider">Health</span>
-                    </li>
+                    <li>{{ sidebar.divider('Health') }}</li>
                     <li class="nav-item">
-                        {{- _self.sidebar_link(
+                        {{- sidebar.item(
                             'app_measurements',
                             ['app_measurement_create', 'app_measurement_edit', 'app_measurements_history'],
                             ux_icon('lucide:ruler-dimension-line'),
@@ -164,7 +152,7 @@
                         ) -}}
                     </li>
                     <li class="nav-item">
-                        {{- _self.sidebar_link(
+                        {{- sidebar.item(
                             'app_workouts',
                             ['app_workouts_view', 'app_exercises', 'app_exercise_create', 'app_exercise_edit'],
                             ux_icon('lucide:dumbbell'),
@@ -173,11 +161,9 @@
                         ) -}}
                     </li>
 
-                    <li>
-                        <span class="nav-title-divider">Settings</span>
-                    </li>
+                    <li>{{ sidebar.divider('Settings') }}</li>
                     <li class="nav-item">
-                        {{- _self.sidebar_link(
+                        {{- sidebar.item(
                             'app_profile',
                             ['app_profile_location', 'app_profile_password'],
                             ux_icon('lucide:user'),
@@ -186,7 +172,7 @@
                     </li>
                     {%- if is_granted('REPORT_MONTH_VIEW') -%}
                         <li class="nav-item" data-general-type="red">
-                            {{- _self.sidebar_link(
+                            {{- sidebar.item(
                                 'app_report_month',
                                 [],
                                 ux_icon('lucide:chart-bar-big'),
@@ -198,7 +184,7 @@
                     {%- endif -%}
                     {%- if is_granted('ADMIN_USER_VIEW') -%}
                         <li class="nav-item">
-                            {{- _self.sidebar_link(
+                            {{- sidebar.item(
                                 'app_admin_users',
                                 ['app_admin_user_edit'],
                                 ux_icon('lucide:users'),
@@ -208,13 +194,34 @@
                     {%- endif -%}
                     {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
                         <li class="nav-item">
-                            {{- _self.sidebar_link(
+                            {{- sidebar.item(
                                 'app_admin_backups',
                                 [],
                                 ux_icon('lucide:database-backup'),
                                 'Backups',
                                 true,
                                 has_backup_alert() ? {icon: ux_icon('lucide:triangle-alert'), type: 'red'} : null,
+                            ) -}}
+                        </li>
+                    {%- endif -%}
+                </ul>
+            </nav>
+
+            <nav class="navbar navbar-footer">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        {{- sidebar.action_button(
+                            ux_icon('lucide:sun', {class: 'theme-light'}) ~ ux_icon('lucide:moon', {class: 'theme-dark'}),
+                            'Appearance',
+                            'theme-toggler',
+                        ) -}}
+                    </li>
+                    {%- if logout_show|default !== 'hide' and is_granted('ROLE_USER') -%}
+                        <li class="nav-item nav-item-logout">
+                            {{- sidebar.link(
+                                logout_path(),
+                                ux_icon('lucide:log-out'),
+                                'Logout',
                             ) -}}
                         </li>
                     {%- endif -%}
