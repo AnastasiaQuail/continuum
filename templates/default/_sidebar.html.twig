@@ -1,0 +1,40 @@
+{%- macro divider(name) -%}
+    <div class="nav-title-divider">
+        <span>{{ name }}</span>
+    </div>
+{%- endmacro -%}
+
+{%- macro item(path, related_paths, icon, name, is_granted = true, alert = {}) -%}
+    {%- if is_granted -%}
+        {%- set is_active = false -%}
+        {%- for related_path in [path, ...related_paths] -%}
+            {%- if app.current_route === related_path -%}
+                {%- set is_active = true -%}
+            {%- endif -%}
+        {%- endfor -%}
+
+        {{- _self.link(path(path), icon, name, is_active, alert) -}}
+    {%- else -%}
+        {{- _self.disabled_button(icon, name, alert) -}}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro link(path, icon, name, is_active, alert = {}) -%}
+    <a class="nav-link {{ is_active ? 'active' }}" href="{{ path }}">{{ _self._body(icon, name, alert) }}</a>
+{%- endmacro -%}
+
+{%- macro disabled_button(icon, name, alert = {}) -%}
+    <button class="nav-link" disabled>{{ _self._body(icon, name, alert) }}</button>
+{%- endmacro -%}
+
+{%- macro action_button(icon, name, id) -%}
+    <button class="nav-link" id="{{ id }}">{{ _self._body(icon, name) }}</button>
+{%- endmacro -%}
+
+{%- macro _body(icon, name, alert = {}) -%}
+    <span class="nav-logo">{{ icon|raw }}</span>
+    <span class="nav-text">{{ name }}</span>
+    {%- if alert -%}
+        <span class="nav-icon" data-general-type="{{ alert.type }}">{{ alert.icon|raw }}</span>
+    {%- endif -%}
+{%- endmacro -%}

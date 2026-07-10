@@ -128,7 +128,9 @@ function initChart(element, options, listenerOptions) {
     });
 
     document.addEventListener('app:root-data:sidebar', () => {
-        myChart.resize();
+        for (const timeout of [50, 100, 150]) {
+            setTimeout(() => myChart.resize(), timeout);
+        }
     });
 }
 
