@@ -22,10 +22,6 @@ return [
         'path' => './assets/error.js',
         'entrypoint' => true,
     ],
-    'report' => [
-        'path' => './assets/report.js',
-        'entrypoint' => true,
-    ],
     'app' => [
         'path' => './assets/app.js',
         'entrypoint' => true,

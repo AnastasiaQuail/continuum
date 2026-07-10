@@ -1,18 +1,39 @@
-{% extends 'report.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Month report{% endblock %}
 {% block body_id %}report-month{% endblock %}
+{% block body_title %}{% endblock %}
 
 {% block main -%}
+    <div class="body-navigation navigation-pagination">
+        {%- set prev_month = month.modify('last day of previous month') -%}
+        {%- set is_prev_granted = prev_month.format('Y') >= app_year_min and is_granted('REPORT_MONTH_VIEW', prev_month) -%}
+
+        <{% if is_prev_granted %}a{% else %}span{% endif %} class="btn btn-glass pagination-prev"
+            {% if is_prev_granted %}href="{{ path('app_report_month', {month: prev_month.format('Y-m')}) }}"{% else %} disabled{% endif %}>
+            {{- ux_icon('lucide:chevron-left') -}}
+            <span>{{ prev_month.format('F') }}</span>
+        </{% if is_prev_granted %}a{% else %}span{% endif %}>
+
+        {%- set next_month = month.modify('last day of next month') -%}
+        {%- set is_next_granted = is_granted('REPORT_MONTH_VIEW', next_month) -%}
+
+        <{% if is_next_granted %}a{% else %}span{% endif %} class="btn btn-glass pagination-next"
+            {% if is_next_granted %}href="{{ path('app_report_month', {month: next_month.format('Y-m')}) }}"{% else %} disabled{% endif %}>
+            <span>{{ next_month.format('F') }}</span>
+            {{- ux_icon('lucide:chevron-right') -}}
+        </{% if is_next_granted %}a{% else %}span{% endif %}>
+    </div>
+
     {%- set progress_offset = progress.offset -%}
     {%- set couple_together_info = couple_together ~ '' -%}
 
     {%- if progress_offset > 0 or couple_together_info !== '' -%}
-        <section id="the-wait-card" class="card">
+        <section id="the-wait-card" class="card card-report">
             {%- if progress_offset > 0 -%}
                 <div class="card-title card-title-controls">
                     <h3 id="the-wait-title">The Wait</h3>
-                    <div class="card-title-label value-good">
+                    <div class="badge badge-good">
                         <span>+{{ progress_offset }}</span><span>%</span>
                     </div>
 
@@ -34,7 +55,7 @@
             {%- if couple_together_info !== '' -%}
                 <div id="love-story" class="card-title card-title-controls">
                     <h3>Love story</h3>
-                    <div class="card-title-label value-good">
+                    <div class="badge badge-good">
                         <span>+{{ couple_progress_days }}</span><span>days</span>
                     </div>
                     <div class="card-title-info">{{ couple_together_info }}</div>
@@ -49,7 +70,7 @@
     {%- endif -%}
 
     {%- if (calendar_events is not empty) and is_granted('CALENDAR_REPORT_VIEW') -%}
-        <section id="calendar-card" class="card">
+        <section id="calendar-card" class="card card-report">
             <div class="card-title card-title-controls">
                 <h3 id="calendar-title">Calendar</h3>
                 <div class="card-title-info">
@@ -62,12 +83,12 @@
                 </div>
             </div>
 
-            <div class="upcoming-events-body upcoming-events-report">
+            <div class="upcoming-events-body report-upcoming-events">
                 {%- for calendar_event in calendar_events -%}
-                    <div class="upcoming-event-text" data-general-type="{{ calendar_event.type.value }}">
+                    <div class="badge" data-general-type="{{ calendar_event.type.value }}">
                         <strong>{{ calendar_event.title }}</strong>
                         {%- if calendar_event.count > 1 -%}
-                            <span class="upcoming-event-badge">{{ calendar_event.count }}</span>
+                            <span class="badge-count">{{ calendar_event.count }}</span>
                         {%- endif -%}
                     </div>
                 {%- endfor -%}
@@ -79,9 +100,9 @@
     {%- set is_weekly_reflection_granted = (weekly_reflections is not empty) and is_granted('WEEKLY_REFLECTION_REPORT_VIEW', month) -%}
 
     {%- if is_mood_reflection_granted or is_weekly_reflection_granted -%}
-        <h2 class="report-title">Reflection</h2>
+        <h2>Reflection</h2>
 
-        <section id="mood-chart-card" class="card">
+        <section id="mood-chart-card" class="card card-report">
             {%- if is_mood_reflection_granted -%}
                 {%- set total_days = month.format('t') -%}
 
@@ -89,7 +110,7 @@
                     <h3 id="mood-chart-title">Mood trend</h3>
 
                     <div class="card-title-info">
-                        <div class="mood-reflections">
+                        <div class="report-mood-reflection-chart">
                             {%- for day_number in 1..total_days -%}
                                 {%- set day = month.format('Y-m-') ~ (day_number < 10 ? '0') ~ day_number -%}
 
@@ -126,7 +147,7 @@
                     {%- endif -%}
                 {%- endfor -%}
 
-                <div class="mood-reflection-messages">
+                <div class="report-mood-reflection-messages">
                     {%- if great_days > 0 -%}
                         <div class="mood-reflection-message" data-general-type="{{ great_color }}">
                             More than
@@ -159,7 +180,7 @@
                     <h3 id="joy-of-weeks-title">Joy of weeks</h3>
                 </div>
 
-                <div class="weekly-reflections">
+                <div class="report-weekly-reflections">
                     {%- for weekly_reflection in weekly_reflections -%}
                         {%- set is_private = weekly_reflection.joy.isPrivate -%}
                         {%- set is_secure = is_private and not is_granted('WEEKLY_REFLECTION_PRIVATE') -%}
@@ -180,14 +201,14 @@
     {%- set is_workout_granted = workout_report.count > 0 and is_granted('WORKOUT_REPORT_VIEW') -%}
 
     {%- if is_weight_change_granted or is_workout_granted -%}
-        <h2 class="report-title">Health</h2>
+        <h2>Health</h2>
 
-        <section id="workouts-card" class="card">
+        <section id="workouts-card" class="card card-report">
             {%- if is_weight_change_granted -%}
                 <div class="card-title card-title-controls">
                     <h3 id="weight-change-title">Weight change</h3>
                     <div id="weight-change-label"
-                         class="card-title-label {{ weight_change > 0 ? 'value-bad' : 'value-good' }}">
+                         class="badge {{ weight_change > 0 ? 'badge-bad' : 'badge-good' }}">
                         <span>{{ weight_change > 0 ? '+' ~ weight_change : weight_change }}</span>
                         <span>kg</span>
                     </div>
@@ -208,22 +229,22 @@
 
                 <div class="card-title card-title-controls">
                     <h3 id="workouts-title">Workouts</h3>
-                    <div class="card-title-label value-good">
+                    <div class="badge badge-good">
                         <span>+{{ workout_report.count }}</span>
                         <span>{{ workout_report.count > 1 ? 'workouts' : 'workout' }}</span>
                     </div>
                     <div class="card-title-info">{{ (workout_report.duration / 3600)|round ~ '+ hours' }}</div>
                 </div>
 
-                <div class="workouts-report">
+                <div class="report-workouts">
                     {%- for workout_progress in workout_report.progresses -%}
-                        <div class="workout-exercise-report"
+                        <div class="badge"
                              data-general-type="{{ workout_progress.exercise.group.color.value }}">
                             <span>{{ workout_progress.exercise.name }}</span>
                             {%- if workout_progress.progress is null -%}
-                                <span class="exercise-progress">NEW</span>
+                                <span class="badge-progress">NEW</span>
                             {%- else -%}
-                                <span class="exercise-progress"
+                                <span class="badge-progress"
                                       data-change="{{ workout_progress.progress.change.value }}">
                                     {{- workout_progress.progress.percent -}}%
                                     {{- ux_icon('lucide:trending-up') -}}
@@ -236,28 +257,3 @@
         </section>
     {%- endif -%}
 {%- endblock %}
-
-{% block footer %}
-    <footer class="footer-container">
-        <div class="report-navigation">
-            {%- set prev_month = month.modify('last day of previous month') -%}
-            {%- set next_month = month.modify('last day of next month') -%}
-            {%- set is_prev_granted = prev_month.format('Y') >= app_year_min and is_granted('REPORT_MONTH_VIEW', prev_month) -%}
-            {%- set is_next_granted = is_granted('REPORT_MONTH_VIEW', next_month) -%}
-
-            <{% if is_prev_granted %}a{% else %}span{% endif %}
-                {% if is_prev_granted %}href="{{ path('app_report_month', {month: prev_month.format('Y-m')}) }}"{% endif %}
-                class="page-link page-link-prev {% if not is_prev_granted %}page-link-disabled{% endif %}">
-                {{- ux_icon('lucide:chevron-right') -}}
-                <span>{{ prev_month.format('F') }}</span>
-            </{% if is_prev_granted %}a{% else %}span{% endif %}>
-
-            <{% if is_next_granted %}a{% else %}span{% endif %}
-                {% if is_next_granted %}href="{{ path('app_report_month', {month: next_month.format('Y-m')}) }}"{% endif %}
-                class="page-link page-link-next {% if not is_next_granted %}page-link-disabled{% endif %}">
-                <span>{{ next_month.format('F') }}</span>
-                {{- ux_icon('lucide:chevron-right') -}}
-            </{% if is_next_granted %}a{% else %}span{% endif %}>
-        </div>
-    </footer>
-{% endblock %}

@@ -4,10 +4,7 @@
 {% block page_title %}{{ day.format('j F Y') }}{% endblock %}
 {% block body_id %}mood-reflection-day{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Mood reflection', url: path('app_mood_reflections', {month: day.format('Y-m')})},
-    {label: 'Edit'},
-] %}
+{% set back_path = path('app_mood_reflections', {month: day.format('Y-m')}) %}
 
 {% block main -%}
     {%- set mood_day = day.format('Y-m-d') -%}

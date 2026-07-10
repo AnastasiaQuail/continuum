@@ -3,10 +3,7 @@
 {% block title %}Edit user{% endblock %}
 {% block body_id %}admin-user-edit{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Users', url: path('app_admin_users')},
-    {label: 'Edit'},
-] %}
+{% set back_path = path('app_admin_users') %}
 
 {% block main -%}
     <section class="card">

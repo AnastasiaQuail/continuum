@@ -1,17 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Personal location{% endblock %}
-{% block body_id %}profile-location{% endblock %}
-
 {%- block javascripts -%}
     {{ parent() }}
     <script src="{{ asset('js/profile.js') }}"></script>
 {%- endblock -%}
 
-{% set breadcrumbs = [
-    {label: 'Profile', url: path('app_profile')},
-    {label: 'Location'},
-] %}
+{% block title %}Personal location{% endblock %}
+{% block body_id %}profile-location{% endblock %}
+
+{% set back_path = path('app_profile') %}
 
 {% block main -%}
     <section id="profile-location-card" class="card">

@@ -2,7 +2,7 @@
     <{% if prev.is_granted -%}a{% else %}span{% endif %}
         class="page-link page-link-prev {% if not prev.is_granted -%}page-link-disabled{% endif %}"
         {% if prev.is_granted -%}href="{{ prev.url }}"{% endif %}>
-        {{- ux_icon('lucide:chevron-right') -}}
+        {{- ux_icon('lucide:chevron-left') -}}
         <span>{{ prev.label }}</span>
     </{% if prev.is_granted %}a{% else %}span{% endif %}>
 

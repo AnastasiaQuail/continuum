@@ -3,10 +3,6 @@
 {% block title %}Database backups{% endblock %}
 {% block body_id %}admin-backups{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Backups'},
-] %}
-
 {% block page_links -%}
     <form method="post" action="{{ path('app_admin_backup_create') }}">
         <button

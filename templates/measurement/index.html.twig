@@ -11,10 +11,6 @@
 {% block title %}Body measurements{% endblock %}
 {% block body_id %}body-measurements{% endblock %}
 
-{% set breadcrumbs = [
-    {label: 'Measurements'},
-] %}
-
 {% block page_links -%}
     {%- set is_granted = is_granted('BODY_MEASUREMENT_CREATE') -%}
 
@@ -40,7 +36,7 @@
             <h2 id="weight-change-title" class="weight-change-title">Weight Change</h2>
             {%- set change = offset_measurement.offset -%}
             <div id="weight-change-label"
-                 class="weight-change-result {{ change > 0 ? 'value-bad' }}{{ change < 0 ? 'value-good' }}">
+                 class="badge {{ change > 0 ? 'badge-bad' }}{{ change < 0 ? 'badge-good' }}">
                 <span>{{ change > 0 ? '+' ~ change : change }}</span>
                 <span>kg</span>
             </div>
@@ -124,7 +120,7 @@
 {% macro measurent_value(value, name, description = 'cm') -%}
     {%- if value -%}
         <div class="measurement-value">
-            <div class="measurement-label">{{ name }}</div>
+            <div class="badge">{{ name }}</div>
             <div class="measurement-body">
                 <span>{{ value }}</span><span>{{ description }}</span>
             </div>
