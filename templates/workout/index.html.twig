@@ -3,16 +3,19 @@
 {% block title %}Workouts{% endblock %}
 {% block body_id %}workouts{% endblock %}
 
-{% block page_links -%}
+{% block header_actions -%}
     <form method="post" action="{{ path('app_workout_create') }}">
         <button
-            class="btn btn-primary btn-outline"
-            {% if is_granted('WORKOUT_CREATE') %}type="submit" {% else %}disabled{% endif %}>
-            {{- ux_icon('lucide:biceps-flexed') -}}
-            <span>Start workout</span>
+            class="btn btn-glass btn-header"
+            {% if is_granted('WORKOUT_CREATE') %}type="submit"{% else %} disabled{% endif %}>
+            {{- ux_icon('lucide:plus') -}}
         </button>
     </form>
 
+    {{ parent() }}
+{%- endblock %}
+
+{% block page_links -%}
     {%- set is_granted = is_granted('EXERCISE_VIEW') -%}
 
     <{% if is_granted %}a{% else %}button{% endif %}

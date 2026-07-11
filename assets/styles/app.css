@@ -512,26 +512,10 @@ textarea {
                             transition: opacity .15s;
                         }
                     }
-
-                    .logo-bug {
-                        position: absolute;
-                        top: calc(-1 * (var(--logo-font-size) / 8));
-                        right: calc(-1 * (var(--logo-font-size) / 2));
-                        font-size: calc(var(--logo-font-size) * 0.75);
-                        color: var(--primary-color);
-                        filter: drop-shadow(0 0 3px var(--body-background-color));
-                        transform: rotate(-30deg);
-                        transition: opacity .5s ease-in;
-                    }
                 }
 
                 &:hover {
                     color: var(--primary-color);
-
-                    .logo-bug {
-                        opacity: 0;
-                        transition: opacity .15s ease-out;
-                    }
                 }
             }
         }
@@ -947,6 +931,12 @@ textarea {
             margin-bottom: calc(var(--body-gap-block) / 1.5);
             line-height: 1;
             color: var(--color-secondary);
+        }
+
+        & > .alert {
+            [data-theme="dark"] & {
+                --alert-border-color-transparent: 0%;
+            }
         }
     }
 
@@ -1614,6 +1604,7 @@ textarea {
 
 .btn-group-glass {
     position: relative;
+    display: flex;
 
     &:before {
         position: absolute;
@@ -1627,24 +1618,43 @@ textarea {
         transition: border-color .15s, background-color .15s, backdrop-filter 1s, transform .3s;
     }
 
-    &:has(.btn-glass:not([disabled]):hover):before,
-    &:has(.btn-glass:not([disabled]):focus-visible):before {
-        border-color: var(--glass-border-color-active);
+    &:has(.btn-glass:not([disabled]):hover),
+    &:has(.btn-glass:not([disabled]):focus-visible) {
+        &:before {
+            border-color: var(--glass-border-color-active);
+        }
     }
 
-    &:has(.btn-glass:not([disabled]):active):before {
-        backdrop-filter: var(--glass-backdrop-filter-active);
-        transform: scale(1.2);
-        transition: none;
+    &:has(.btn-glass:not([disabled]):active) {
+        &:before {
+            backdrop-filter: var(--glass-backdrop-filter-active);
+            transform: scale(1.2);
+            transition: none;
+        }
     }
 
-    .btn-glass {
-        border: none;
+    & > .btn-glass,
+    & > form > .btn-glass,
+    & > .btn-dropdown > .btn-glass:not(:hover, :focus-visible) {
+        border-color: transparent !important;
         background-color: transparent;
-        backdrop-filter: none;
+        backdrop-filter: blur(0px);
 
         &:not([disabled]):active {
             backdrop-filter: none;
+        }
+    }
+
+    &:has(.btn-dropdown > .btn-glass:is(:hover, :focus-visible)) {
+        &:before {
+            border-color: transparent;
+            background-color: transparent;
+            backdrop-filter: none;
+        }
+
+        & > .btn-glass,
+        & > form > .btn-glass {
+            opacity: 0;
         }
     }
 }
@@ -1673,7 +1683,7 @@ textarea {
             margin: 0;
             padding: 0;
             list-style: none;
-            display: none;
+            opacity: 0;
 
             .dropdown-item {
                 white-space: nowrap;
@@ -1710,8 +1720,8 @@ textarea {
             }
         }
 
-        &:has(.dropdown-menu:not(:empty)):hover,
-        &:has(.dropdown-menu:not(:empty)):focus-visible {
+        &:hover,
+        &:focus-visible {
             height: fit-content;
             width: fit-content;
 
@@ -1720,7 +1730,7 @@ textarea {
             }
 
             .dropdown-menu {
-                display: block;
+                opacity: 1;
 
                 .dropdown-item {
                     .dropdown-link {
@@ -1735,11 +1745,6 @@ textarea {
             }
         }
 
-        &:has(.dropdown-menu:empty) {
-            color: var(--color-tertiary);
-            cursor: not-allowed;
-        }
-
         &.btn-glass:not([disabled]):active {
             transform: none;
         }
@@ -1748,13 +1753,14 @@ textarea {
 
 .alert {
     --alert-color: var(--color);
+    --alert-border-color-transparent: 12%;
     --alert-background-color-transparent: 10%;
 
     position: relative;
     padding: calc(var(--gap-block) * 0.75) var(--gap-inline);
     margin-bottom: var(--gap-block);
     color: var(--alert-color);
-    border: var(--border-width) solid color-mix(in oklch, var(--alert-color) 20%, transparent);
+    border: var(--border-width) solid color-mix(in oklch, var(--alert-color) var(--alert-border-color-transparent), transparent);
     border-radius: var(--border-radius);
     background-color: color-mix(in srgb, var(--alert-color) var(--alert-background-color-transparent), var(--background-color));
 
