@@ -3,15 +3,15 @@
 {% set date = measurement ? measurement.datetime.setTimezone(app.user.timezone) : user_date() %}
 
 {% block title %}Measurement on {{ date.format('j F Y') }}{% endblock %}
-{% block page_title %}{{ date.format('j F Y, H:i') }}{% endblock %}
+{% block page_title %}{{ measurement ? 'Edit measurement' : 'Add measurement' }}{% endblock %}
 {% block body_id %}body-measurement-edit{% endblock %}
 
 {% set back_path = path('app_measurements', {month: date.format('Y-m')}) %}
 
 {% block main -%}
-    <section class="card">
-        <h2 class="card-title">{{ measurement ? 'Edit measurement' : 'Add measurement' }}</h2>
+    <h2>{{ date.format('j F Y, H:i') }}</h2>
 
+    <section class="card">
         {{- form_start(form) -}}
 
         {{ form_row(form.datetime) }}

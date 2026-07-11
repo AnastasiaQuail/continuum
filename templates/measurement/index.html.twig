@@ -8,7 +8,7 @@
     {%- endif -%}
 {%- endblock -%}
 
-{% block title %}Body measurements{% endblock %}
+{% block title %}Measurements{% endblock %}
 {% block body_id %}body-measurements{% endblock %}
 
 {% block header_actions -%}
@@ -23,17 +23,47 @@
     {{ parent() }}
 {%- endblock %}
 
-{% block page_links -%}
-    {%- set is_granted = is_granted('BODY_MEASUREMENT_HISTORY') -%}
+{% block header_actions_shortcut -%}
+    <li class="dropdown-item">
+        {%- set is_granted = is_granted('BODY_MEASUREMENT_HISTORY') -%}
 
-    <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path('app_measurements_history') }}"{% else %} disabled{% endif %}
-        class="btn btn-primary btn-action">
-        <span>History</span>
-    </{% if is_granted %}a{% else %}button{% endif %}>
+        <{% if is_granted %}a{% else %}button{% endif %}
+            {% if is_granted %} href="{{ path('app_measurements_history') }}"{% else %} disabled{% endif %}
+            class="dropdown-link">
+            {{- ux_icon('lucide:history') -}}
+            <span>History</span>
+        </{% if is_granted %}a{% else %}button{% endif %}>
+    </li>
+    <li class="dropdown-item">
+        <hr class="dropdown-divider">
+    </li>
+
+    {{ parent() }}
+{%- endblock %}
+
+{% block body_actions -%}
+    <div class="body-actions actions-pagination">
+        {% set prev_month = month.modify('-1 month') %}
+        {% set next_month = month.modify('+1 month') %}
+
+        {{ include('default/_pagination.html.twig', {
+            prev: {
+                url: path('app_measurements', {month: prev_month.format('Y-m')}),
+                label: prev_month.format('F'),
+                is_granted: prev_month.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prev_month),
+            },
+            next: {
+                url: path('app_measurements', {month: next_month.format('Y-m')}),
+                label: next_month.format('F'),
+                is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
+            },
+        }) }}
+    </div>
 {%- endblock %}
 
 {% block main -%}
+    <h2>{{ month.format('F Y') }}</h2>
+
     <section id="weight-change-chart" class="card card-weight-result">
         <div class="weight-change">
             <h2 id="weight-change-title" class="weight-change-title">Weight Change</h2>
@@ -62,25 +92,6 @@
     </section>
 
     <section class="card">
-        <div class="card-title card-title-controls">
-            <h2>{{ month.format('F Y') }}</h2>
-
-            {% set prev_month = month.modify('-1 month') %}
-            {% set next_month = month.modify('+1 month') %}
-            {{ include('default/_pagination.html.twig', {
-                prev: {
-                    url: path('app_measurements', {month: prev_month.format('Y-m')}),
-                    label: prev_month.format('F'),
-                    is_granted: prev_month.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prev_month),
-                },
-                next: {
-                    url: path('app_measurements', {month: next_month.format('Y-m')}),
-                    label: next_month.format('F'),
-                    is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
-                },
-            }) }}
-        </div>
-
         {%- if measurements is empty -%}
             <div class="collection-empty">
                 {{- ux_icon('lucide:frown') -}}

@@ -26,27 +26,30 @@
     </section>
 {%- endblock %}
 
+{% block body_actions -%}
+    <div class="body-actions actions-pagination">
+        {% set prev_month = month.modify('-1 month') %}
+        {% set next_month = month.modify('+1 month') %}
+
+        {{ include('default/_pagination.html.twig', {
+            prev: {
+                url: path('app_mood_reflections', {month: prev_month.format('Y-m')}),
+                label: prev_month.format('F'),
+                is_granted: prev_month.format('Y') >= app_year_min and is_granted('MOOD_REFLECTION_VIEW', prev_month),
+            },
+            next: {
+                url: path('app_mood_reflections', {month: next_month.format('Y-m')}),
+                label: next_month.format('F'),
+                is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
+            },
+        }) }}
+    </div>
+{%- endblock %}
+
 {% block main -%}
+    <h2>{{ month.format('F Y') }}</h2>
+
     <section class="card card-calendar-mood">
-        <div class="card-title card-title-controls">
-            <h2>{{ month.format('F Y') }}</h2>
-
-            {% set prev_month = month.modify('-1 month') %}
-            {% set next_month = month.modify('+1 month') %}
-            {{ include('default/_pagination.html.twig', {
-                prev: {
-                    url: path('app_mood_reflections', {month: prev_month.format('Y-m')}),
-                    label: prev_month.format('F'),
-                    is_granted: prev_month.format('Y') >= app_year_min and is_granted('MOOD_REFLECTION_VIEW', prev_month),
-                },
-                next: {
-                    url: path('app_mood_reflections', {month: next_month.format('Y-m')}),
-                    label: next_month.format('F'),
-                    is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
-                },
-            }) }}
-        </div>
-
         <div class="calendar">
             <article class="month">
                 {%- set current = user_date().format('Y-m-d') -%}

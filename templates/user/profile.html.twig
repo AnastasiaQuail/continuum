@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Personal information{% endblock %}
+{% block title %}Profile{% endblock %}
 {% block body_id %}profile{% endblock %}
 
 {% block main -%}
@@ -26,9 +26,9 @@
         </div>
     </section>
 
-    <section id="profile-location-card" class="card">
-        <h2 class="card-title">Geoposition</h2>
+    <h2>Geoposition</h2>
 
+    <section id="profile-location-card" class="card">
         <div class="form-plain">
             <label class="form-label">{{ ux_icon('lucide:clock') }} Timezone</label>
             <div class="form-field">{{ app.user.timezone.name }}</div>

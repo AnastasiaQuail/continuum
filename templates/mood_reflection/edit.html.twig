@@ -1,12 +1,12 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Mood on {{ day.format('j F Y') }}{% endblock %}
-{% block page_title %}{{ day.format('j F Y') }}{% endblock %}
+{% block page_title %}Mood of the day{% endblock %}
 {% block body_id %}mood-reflection-day{% endblock %}
 
 {% set back_path = path('app_mood_reflections', {month: day.format('Y-m')}) %}
 
-{% block main -%}
+{% block showcase -%}
     {%- set mood_day = day.format('Y-m-d') -%}
     {%- set current_date = user_date() -%}
 
@@ -20,10 +20,12 @@
             <span>You are rating a past day</span>
         </div>
     {%- endif -%}
+{%- endblock %}
+
+{% block main -%}
+    <h2 class="card-title">{{ day.format('j F Y') }}</h2>
 
     <section class="card">
-        <h2 class="card-title">Mood of the day</h2>
-
         {{- form_start(form) -}}
 
         <div class="mb-3">

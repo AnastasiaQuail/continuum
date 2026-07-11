@@ -16,25 +16,27 @@
     {%- endif -%}
 {%- endblock %}
 
+{% block body_actions -%}
+    <div class="body-actions actions-pagination">
+        {{ include('default/_pagination.html.twig', {
+            prev: {
+                url: path('app_calendar', {year: year - 1}),
+                label: year - 1,
+                is_granted: year > app_year_min,
+            },
+            next: {
+                url: path('app_calendar', {year: year + 1}),
+                label: year + 1,
+                is_granted: year < app_year_max,
+            },
+        }) }}
+    </div>
+{%- endblock %}
+
 {% block main -%}
+    <h2>{{ year }} year</h2>
+
     <section class="card card-calendar">
-        <div class="card-title card-title-controls">
-            <h2>{{ year }}</h2>
-
-            {{ include('default/_pagination.html.twig', {
-                prev: {
-                    url: path('app_calendar', {year: year - 1}),
-                    label: year - 1,
-                    is_granted: year > app_year_min,
-                },
-                next: {
-                    url: path('app_calendar', {year: year + 1}),
-                    label: year + 1,
-                    is_granted: year < app_year_max,
-                },
-            }) }}
-        </div>
-
         <div class="calendar">
             {%- set start_date = start_day.format('Y-m-d') -%}
             {%- set current_date = user_date() -%}

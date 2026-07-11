@@ -6,9 +6,9 @@
 {% set back_path = path('app_admin_users') %}
 
 {% block main -%}
-    <section class="card">
-        <h2 class="card-title">{{ user.userIdentifier }}</h2>
+    <h2>{{ user.userIdentifier }}</h2>
 
+    <section class="card">
         {{- form_start(form) -}}
 
         <div class="mb-3">
