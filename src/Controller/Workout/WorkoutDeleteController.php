@@ -19,7 +19,7 @@ final class WorkoutDeleteController extends AbstractController
     ) {}
 
     #[Route(path: '/workouts/{id}', name: 'app_workout_delete', methods: ['DELETE'])]
-    #[IsGranted(WorkoutVoter::EXERCISE_DELETE, 'workout')]
+    #[IsGranted(WorkoutVoter::DELETE, 'workout')]
     public function __invoke(Workout $workout): RedirectResponse
     {
         $this->workoutService->delete($workout);
