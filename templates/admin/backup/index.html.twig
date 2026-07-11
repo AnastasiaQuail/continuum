@@ -3,15 +3,16 @@
 {% block title %}Database backups{% endblock %}
 {% block body_id %}admin-backups{% endblock %}
 
-{% block page_links -%}
+{% block header_actions -%}
     <form method="post" action="{{ path('app_admin_backup_create') }}">
         <button
-            class="btn btn-primary btn-outline"
+            class="btn btn-glass btn-header"
             {% if is_granted('ADMIN_BACKUP_CREATE') %}type="submit" {% else %}disabled{% endif %}>
-            {{- ux_icon('lucide:plus') -}}
-            <span>Create Backup</span>
+            {{ ux_icon('lucide:plus') }}
         </button>
     </form>
+
+    {{ parent() }}
 {%- endblock %}
 
 {% block main -%}

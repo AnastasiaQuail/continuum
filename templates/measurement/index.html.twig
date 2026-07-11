@@ -11,16 +11,19 @@
 {% block title %}Body measurements{% endblock %}
 {% block body_id %}body-measurements{% endblock %}
 
-{% block page_links -%}
+{% block header_actions -%}
     {%- set is_granted = is_granted('BODY_MEASUREMENT_CREATE') -%}
 
     <{% if is_granted %}a{% else %}button{% endif %}
         {% if is_granted %} href="{{ path('app_measurement_create') }}"{% else %} disabled{% endif %}
-        class="btn btn-primary btn-outline">
-        {{ ux_icon('lucide:plus') }}
-        <span>Measure</span>
+        class="btn btn-glass btn-header">
+        {{- ux_icon('lucide:plus') -}}
     </{% if is_granted %}a{% else %}button{% endif %}>
 
+    {{ parent() }}
+{%- endblock %}
+
+{% block page_links -%}
     {%- set is_granted = is_granted('BODY_MEASUREMENT_HISTORY') -%}
 
     <{% if is_granted %}a{% else %}button{% endif %}
