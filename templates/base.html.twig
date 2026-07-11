@@ -43,9 +43,9 @@
                 {%- set sidebar_show = sidebar_show|default !== 'hide' -%}
 
                 {%- if back_path or sidebar_show -%}
-                    <div class="btn-group-glass">
+                    <div class="btn-group-glass btn-group-header-controls">
                         {%- if back_path -%}
-                            <a class="btn btn-glass btn-header" href="{{ back_path }}">
+                            <a id="previous-page-button" class="btn btn-glass btn-header" href="{{ back_path }}">
                                 {{- ux_icon('lucide:chevron-left', {class: 'icon-fix-scale'}) -}}
                             </a>
                         {%- endif -%}
@@ -58,61 +58,65 @@
                     </div>
                 {%- endif -%}
 
-                {%- if logo_show|default !== 'hide' -%}
-                    <div class="header-logo">
-                        <a class="header-logo-link" href="{{ path('app_homepage') }}">
-                            {{- ux_icon('hugeicons:infinity-02') -}}
-                            <span class="logo-text">Continuum</span>
-                        </a>
-                    </div>
-                {%- endif -%}
+                <div class="header-logo">
+                    <a class="header-logo-link" href="{{ path('app_homepage') }}">
+                        {{- ux_icon('hugeicons:infinity-02') -}}
+                        <span class="logo-text">Continuum</span>
+                    </a>
+                </div>
 
-                <div class="header-controls">
-                    <div class="btn-group-glass">
+                <div class="header-title">
+                    <h1 id="page-title-{{ body_id }}">{% block page_title %}{{ block('title') }}{% endblock %}</h1>
+                </div>
+
+                <div class="header-actions">
+                    <div class="btn-group-glass btn-group-header-actions">
                         {%- block header_actions -%}
                             <div class="btn-header btn-dropdown">
-                                <div class="btn btn-glass" tabindex="0">
+                                <div id="shortcut-links-button" class="btn btn-glass" tabindex="0">
                                     <span class="dropdown-icon">{{ ux_icon('lucide:ellipsis-vertical') }}</span>
                                     <ul class="dropdown-menu">
-                                        {%- if is_granted('CALENDAR_EDIT') -%}
-                                            <li class="dropdown-item">
-                                                <a class="dropdown-link"
-                                                   href="{{ path('app_calendar_day', {day: user_date('+1 day').format('Y-m-d')}) }}">
-                                                    {{- ux_icon('lucide:calendar-plus') -}}
-                                                    <span>New event</span>
-                                                </a>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                        {%- endif -%}
-                                        {%- if is_granted('MOOD_REFLECTION_EDIT') -%}
-                                            <li class="dropdown-item">
-                                                <a class="dropdown-link"
-                                                   href="{{ path('app_mood_reflection_last_unfilled') }}">
-                                                    {{- ux_icon('lucide:scan-face') -}}
-                                                    <span>Track mood</span>
-                                                </a>
-                                            </li>
-                                        {%- endif -%}
-                                        {%- if is_granted('BODY_MEASUREMENT_CREATE') -%}
-                                            <li class="dropdown-item">
-                                                <a class="dropdown-link" href="{{ path('app_measurement_create') }}">
-                                                    {{- ux_icon('lucide:ruler') -}}
-                                                    <span>Add measurement</span>
-                                                </a>
-                                            </li>
-                                        {%- endif -%}
-                                        {%- if is_granted('WORKOUT_CREATE') -%}
-                                            <li class="dropdown-item">
-                                                <form method="post" action="{{ path('app_workout_create') }}">
-                                                    <button class="dropdown-link" type="submit">
-                                                        {{- ux_icon('lucide:biceps-flexed') -}}
-                                                        <span>Start workout</span>
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        {%- endif -%}
+                                        {%- block header_actions_shortcut -%}
+                                            {%- if is_granted('CALENDAR_EDIT') -%}
+                                                <li class="dropdown-item">
+                                                    <a class="dropdown-link"
+                                                       href="{{ path('app_calendar_day', {day: user_date('+1 day').format('Y-m-d')}) }}">
+                                                        {{- ux_icon('lucide:calendar-plus') -}}
+                                                        <span>New event</span>
+                                                    </a>
+                                                </li>
+                                                <li class="dropdown-item">
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                            {%- endif -%}
+                                            {%- if is_granted('MOOD_REFLECTION_EDIT') -%}
+                                                <li class="dropdown-item">
+                                                    <a class="dropdown-link"
+                                                       href="{{ path('app_mood_reflection_last_unfilled') }}">
+                                                        {{- ux_icon('lucide:scan-face') -}}
+                                                        <span>Track mood</span>
+                                                    </a>
+                                                </li>
+                                            {%- endif -%}
+                                            {%- if is_granted('BODY_MEASUREMENT_CREATE') -%}
+                                                <li class="dropdown-item">
+                                                    <a class="dropdown-link" href="{{ path('app_measurement_create') }}">
+                                                        {{- ux_icon('lucide:ruler') -}}
+                                                        <span>Add measurement</span>
+                                                    </a>
+                                                </li>
+                                            {%- endif -%}
+                                            {%- if is_granted('WORKOUT_CREATE') -%}
+                                                <li class="dropdown-item">
+                                                    <form method="post" action="{{ path('app_workout_create') }}">
+                                                        <button class="dropdown-link" type="submit">
+                                                            {{- ux_icon('lucide:biceps-flexed') -}}
+                                                            <span>Start workout</span>
+                                                        </button>
+                                                    </form>
+                                                </li>
+                                            {%- endif -%}
+                                        {%- endblock -%}
                                     </ul>
                                 </div>
                             </div>
@@ -262,12 +266,7 @@
             <main class="body-container">
                 {%- block showcase %}{% endblock -%}
 
-                {%- block body_title -%}
-                    <div class="page-title">
-                        <h1 id="page-title-{{ body_id }}">{% block page_title %}{{ block('title') }}{% endblock %}</h1>
-                        <div class="page-links">{% block page_links %}{% endblock %}</div>
-                    </div>
-                {%- endblock -%}
+                {%- block body_actions -%}{%- endblock -%}
 
                 {%- block main %}{% endblock -%}
             </main>

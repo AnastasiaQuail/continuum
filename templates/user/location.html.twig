@@ -5,15 +5,14 @@
     <script src="{{ asset('js/profile.js') }}"></script>
 {%- endblock -%}
 
-{% block title %}Personal location{% endblock %}
+{% block title %}Edit location{% endblock %}
+{% block page_title %}Location{% endblock %}
 {% block body_id %}profile-location{% endblock %}
 
 {% set back_path = path('app_profile') %}
 
 {% block main -%}
     <section id="profile-location-card" class="card">
-        <h2 class="card-title">Edit location</h2>
-
         {{- form_start(form) -}}
 
         <div class="row row-sm-2 row-md-3">

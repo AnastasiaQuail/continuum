@@ -2,29 +2,28 @@
 
 {% block title %}Month report{% endblock %}
 {% block body_id %}report-month{% endblock %}
-{% block body_title %}{% endblock %}
+
+{% block body_actions -%}
+    <div class="body-actions actions-pagination">
+        {%- set prev_month = month.modify('last day of previous month') -%}
+        {%- set next_month = month.modify('last day of next month') -%}
+
+        {{ include('default/_pagination.html.twig', {
+            prev: {
+                url: path('app_report_month', {month: prev_month.format('Y-m')}),
+                label: prev_month.format('F'),
+                is_granted: prev_month.format('Y') >= app_year_min and is_granted('REPORT_MONTH_VIEW', prev_month),
+            },
+            next: {
+                url: path('app_report_month', {month: next_month.format('Y-m')}),
+                label: next_month.format('F'),
+                is_granted: is_granted('REPORT_MONTH_VIEW', next_month),
+            },
+        }) }}
+    </div>
+{%- endblock %}
 
 {% block main -%}
-    <div class="body-navigation navigation-pagination">
-        {%- set prev_month = month.modify('last day of previous month') -%}
-        {%- set is_prev_granted = prev_month.format('Y') >= app_year_min and is_granted('REPORT_MONTH_VIEW', prev_month) -%}
-
-        <{% if is_prev_granted %}a{% else %}span{% endif %} class="btn btn-glass pagination-prev"
-            {% if is_prev_granted %}href="{{ path('app_report_month', {month: prev_month.format('Y-m')}) }}"{% else %} disabled{% endif %}>
-            {{- ux_icon('lucide:chevron-left') -}}
-            <span>{{ prev_month.format('F') }}</span>
-        </{% if is_prev_granted %}a{% else %}span{% endif %}>
-
-        {%- set next_month = month.modify('last day of next month') -%}
-        {%- set is_next_granted = is_granted('REPORT_MONTH_VIEW', next_month) -%}
-
-        <{% if is_next_granted %}a{% else %}span{% endif %} class="btn btn-glass pagination-next"
-            {% if is_next_granted %}href="{{ path('app_report_month', {month: next_month.format('Y-m')}) }}"{% else %} disabled{% endif %}>
-            <span>{{ next_month.format('F') }}</span>
-            {{- ux_icon('lucide:chevron-right') -}}
-        </{% if is_next_granted %}a{% else %}span{% endif %}>
-    </div>
-
     {%- set progress_offset = progress.offset -%}
     {%- set couple_together_info = couple_together ~ '' -%}
 

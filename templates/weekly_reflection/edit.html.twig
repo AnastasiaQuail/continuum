@@ -8,15 +8,15 @@
 {% endif %}
 
 {% block title %}Reflection on {{ current_title }}{% endblock %}
-{% block page_title %}{{ current_title }}{% endblock %}
+{% block page_title %}Mood of the week{% endblock %}
 {% block body_id %}weekly-reflection-edit{% endblock %}
 
 {% set back_path = path('app_weekly_reflections', {month: week.format('Y-m')}) %}
 
 {% block main -%}
-    <section class="card">
-        <h2 class="card-title">What happened this week?</h2>
+    <h2>{{ current_title }}</h2>
 
+    <section class="card">
         {{- form_start(form) -}}
 
         <div class="weekly-reflection weekly-reflection-form">

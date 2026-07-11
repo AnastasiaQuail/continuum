@@ -6,32 +6,35 @@
 {%- endblock -%}
 
 {% block title %}Events on {{ day.format('j F Y') }}{% endblock %}
-{% block page_title %}{{ day.format('j F Y') }}, <small>{{ day.format('l') }}</small>{% endblock %}
+{% block page_title %}{{ day.format('j F Y') }}{% endblock %}
 {% block body_id %}calendar-date{% endblock %}
 
 {% set back_path = path('app_calendar', {year: day.format('Y')}) %}
 
+{% block body_actions -%}
+    <div class="body-actions actions-pagination">
+        {%- set prev_day = day.modify('-1 day') -%}
+        {%- set next_day = day.modify('+1 day') -%}
+
+        {{ include('default/_pagination.html.twig', {
+            prev: {
+                url: path('app_calendar_day', {day: prev_day.format('Y-m-d')}),
+                label: prev_day.format('j F'),
+                is_granted: prev_day.format('Y') > app_year_min,
+            },
+            next: {
+                url: path('app_calendar_day', {day: next_day.format('Y-m-d')}),
+                label: next_day.format('j F'),
+                is_granted: next_day.format('Y') < app_year_max,
+            },
+        }) }}
+    </div>
+{%- endblock %}
+
 {% block main -%}
+    <h2>Events of the day</h2>
+
     <section class="card">
-        <div class="card-title card-title-controls">
-            <h2>Events of the day</h2>
-
-            {%- set prev_day = day.modify('-1 day') -%}
-            {%- set next_day = day.modify('+1 day') -%}
-            {{ include('default/_pagination.html.twig', {
-                prev: {
-                    url: path('app_calendar_day', {day: prev_day.format('Y-m-d')}),
-                    label: prev_day.format('j F'),
-                    is_granted: prev_day.format('Y') > app_year_min,
-                },
-                next: {
-                    url: path('app_calendar_day', {day: next_day.format('Y-m-d')}),
-                    label: next_day.format('j F'),
-                    is_granted: next_day.format('Y') < app_year_max,
-                },
-            }) }}
-        </div>
-
         {%- for event in events -%}
             <div class="calendar-event" data-general-type="{{ event.type.value }}">
                 <div class="calendar-event-body">
@@ -62,9 +65,9 @@
         {%- endfor -%}
     </section>
 
-    <section class="card">
-        <h2 class="card-title">Add new event</h2>
+    <h2 class="card-title">Add new event</h2>
 
+    <section class="card">
         {{- form_start(form) -}}
 
         {{- form_row(form.title) -}}

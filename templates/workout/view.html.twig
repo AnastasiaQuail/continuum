@@ -8,15 +8,15 @@
 {% set date = workout.date.setTimezone(app.user.timezone) %}
 
 {% block title %}Workout on {{ date.format('j F Y') }}{% endblock %}
-{% block page_title %}{{ date.format('j F Y, H:i') }}{% endblock %}
+{% block page_title %}Workout exercises{% endblock %}
 {% block body_id %}workout-view{% endblock %}
 
 {% set back_path = path('app_workouts', {month: date.format('Y-m')}) %}
 
 {% block main -%}
-    <section class="card">
-        <h2 class="card-title">Workout exercises</h2>
+    <h2>{{ date.format('j F Y, H:i') }}</h2>
 
+    <section class="card">
         <div class="workout-exercises-edit">
             {%- set is_autofocused = false -%}
 
