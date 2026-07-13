@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% set is_current_year = month.format('Y') === user_date().format('Y') %}
+
 {% block title %}Mood reflection{% endblock %}
+{% block page_subtitle %}{{ is_current_year ? month.format('F') : month.format('F Y') }}{% endblock %}
 {% block body_id %}mood-reflection{% endblock %}
 
 {% set is_granted = is_granted('MOOD_REFLECTION_EDIT') %}
@@ -47,8 +50,6 @@
 {%- endblock %}
 
 {% block main -%}
-    <h2>{{ month.format('F Y') }}</h2>
-
     <section class="card card-calendar-mood">
         <div class="calendar">
             <article class="month">

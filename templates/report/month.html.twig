@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Month report{% endblock %}
+{% set is_current_year = month.format('Y') === user_date().format('Y') %}
+
+{% block title %}Monthly report{% endblock %}
+{% block page_subtitle %}{{ is_current_year ? month.format('F') : month.format('F Y') }}{% endblock %}
 {% block body_id %}report-month{% endblock %}
 
 {% block body_actions -%}

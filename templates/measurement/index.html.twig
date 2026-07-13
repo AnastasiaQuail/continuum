@@ -8,7 +8,10 @@
     {%- endif -%}
 {%- endblock -%}
 
+{% set is_current_year = month.format('Y') === user_date().format('Y') %}
+
 {% block title %}Measurements{% endblock %}
+{% block page_subtitle %}{{ is_current_year ? month.format('F') : month.format('F Y') }}{% endblock %}
 {% block body_id %}body-measurements{% endblock %}
 
 {% block header_actions -%}
@@ -62,8 +65,6 @@
 {%- endblock %}
 
 {% block main -%}
-    <h2>{{ month.format('F Y') }}</h2>
-
     <section id="weight-change-chart" class="card card-weight-result">
         <div class="weight-change">
             <h2 id="weight-change-title" class="weight-change-title">Weight Change</h2>

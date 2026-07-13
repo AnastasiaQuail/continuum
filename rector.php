@@ -39,6 +39,8 @@ return RectorConfig::configure()
         earlyReturn: true,
         rectorPreset: true,
         phpunitCodeQuality: true,
+        phpunitNarrowAsserts: true,
+        phpunitMockToStub: true,
         doctrineCodeQuality: true,
         symfonyCodeQuality: true,
     )

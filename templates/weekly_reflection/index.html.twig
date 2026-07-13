@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% set is_current_year = month.format('Y') === user_date().format('Y') %}
+
 {% block title %}Weekly reflection{% endblock %}
+{% block page_subtitle %}{{ is_current_year ? month.format('F') : month.format('F Y') }}{% endblock %}
 {% block body_id %}weekly-reflection{% endblock %}
 
 {% block body_actions -%}
@@ -24,8 +27,6 @@
 {%- endblock %}
 
 {% block main -%}
-    <h2>{{ month.format('F Y') }}</h2>
-
     {%- for date, reflection in weekly_reflections|reverse -%}
         <section class="card">
             <div class="weekly-reflection weekly-reflection-week">

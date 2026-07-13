@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
 
+{% set is_current_year = day.format('Y') === user_date().format('Y') %}
+
 {% block title %}Mood on {{ day.format('j F Y') }}{% endblock %}
 {% block page_title %}Mood of the day{% endblock %}
+{% block page_subtitle %}{{ is_current_year ? day.format('j F') : day.format('j F Y') }}{% endblock %}
 {% block body_id %}mood-reflection-day{% endblock %}
 
 {% set back_path = path('app_mood_reflections', {month: day.format('Y-m')}) %}
@@ -23,8 +26,6 @@
 {%- endblock %}
 
 {% block main -%}
-    <h2 class="card-title">{{ day.format('j F Y') }}</h2>
-
     <section class="card">
         {{- form_start(form) -}}
 

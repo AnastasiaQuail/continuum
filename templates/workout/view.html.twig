@@ -6,16 +6,16 @@
 {%- endblock -%}
 
 {% set date = workout.date.setTimezone(app.user.timezone) %}
+{% set is_current_year = date.format('Y') === user_date().format('Y') %}
 
 {% block title %}Workout on {{ date.format('j F Y') }}{% endblock %}
-{% block page_title %}Workout exercises{% endblock %}
+{% block page_title %}Workout{% endblock %}
+{% block page_subtitle %}{{ is_current_year ? date.format('j F, H:i') : date.format('j F Y, H:i') }}{% endblock %}
 {% block body_id %}workout-view{% endblock %}
 
 {% set back_path = path('app_workouts', {month: date.format('Y-m')}) %}
 
 {% block main -%}
-    <h2>{{ date.format('j F Y, H:i') }}</h2>
-
     <section class="card">
         <div class="workout-exercises-edit">
             {%- set is_autofocused = false -%}
