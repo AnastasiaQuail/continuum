@@ -55,17 +55,18 @@ export class Sidebar {
         // mobile sidebar handle
 
         const handle = document.querySelector('#sidebar-handle');
+        const height = window.innerHeight;
 
         let dragging = false;
         let startHeight = 0;
-        let currentPercent = 0;
+        let currentPercent = 100;
 
         handle.addEventListener('pointerdown', (e) => {
             dragging = true;
             startHeight = e.clientY;
 
             handle.setPointerCapture(e.pointerId);
-            handle.classList.add('sidebar-handle-active');
+            sidebar.classList.add('sidebar-dragging');
         });
 
         handle.addEventListener('pointermove', (e) => {
@@ -73,7 +74,7 @@ export class Sidebar {
                 return;
             }
 
-            currentPercent = (window.innerHeight + startHeight - e.clientY) / window.innerHeight * 100;
+            currentPercent = (height + startHeight - e.clientY) / height * 100;
 
             document.body.style.setProperty('--sidebar-view-offset', currentPercent.toString());
         });
@@ -89,7 +90,7 @@ export class Sidebar {
                 document.dispatchEvent(new CustomEvent('app:root-click:sidebar-view'));
             }
 
-            handle.classList.remove('sidebar-handle-active');
+            sidebar.classList.remove('sidebar-dragging');
             document.body.style.removeProperty('--sidebar-view-offset');
         }
 

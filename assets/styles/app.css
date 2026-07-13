@@ -648,7 +648,6 @@ textarea {
     overflow-x: hidden;
     z-index: 50;
     transition: transform .3s;
-    touch-action: none;
     will-change: transform;
 
     body.sidebar-toggling & {
@@ -667,33 +666,39 @@ textarea {
     }
 
     .sidebar-handle {
+        --sidebar-handle-size: calc(var(--body-gap-block) / 5);
+        --sidebar-handle-transparent: 30%;
+
         position: sticky;
         inset: 0 0 auto;
         padding: var(--body-gap-block);
         background-color: var(--body-background-color-secondary);
+        touch-action: none;
         z-index: 1;
 
         &:after {
-            --sidebar-handle-size: calc(var(--body-gap-block) / 5);
-
             position: absolute;
             content: '';
             top: calc(var(--sidebar-handle-size) * 2);
             left: 50%;
             height: var(--sidebar-handle-size);
             width: calc(var(--sidebar-handle-size) * 15);
-            background-color: color-mix(in srgb, var(--color) 30%, var(--background-color));
+            background-color: color-mix(in srgb, var(--color) var(--sidebar-handle-transparent), var(--background-color));
             border-radius: calc(var(--sidebar-handle-size) / 2);
             transform: translateX(-50%);
             transition: background-color .15s;
         }
 
-        &.sidebar-handle-active:after {
-            background-color: color-mix(in srgb, var(--color) 45%, var(--background-color));
-        }
-
         @media (width >= 768px) {
             display: none;
+        }
+    }
+
+    &.sidebar-dragging {
+        transition: none;
+
+        .sidebar-handle {
+            --sidebar-handle-transparent: 45%;
         }
     }
 
