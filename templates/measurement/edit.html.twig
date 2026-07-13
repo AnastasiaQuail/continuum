@@ -1,16 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% set date = measurement ? measurement.datetime.setTimezone(app.user.timezone) : user_date() %}
+{% set is_current_year = date.format('Y') === user_date().format('Y') %}
 
 {% block title %}Measurement on {{ date.format('j F Y') }}{% endblock %}
-{% block page_title %}{{ measurement ? 'Edit measurement' : 'Add measurement' }}{% endblock %}
+{% block page_title %}Measurement{% endblock %}
+{% block page_subtitle %}{{ is_current_year ? date.format('j F, H:i') : date.format('j F Y, H:i') }}{% endblock %}
 {% block body_id %}body-measurement-edit{% endblock %}
 
 {% set back_path = path('app_measurements', {month: date.format('Y-m')}) %}
 
 {% block main -%}
-    <h2>{{ date.format('j F Y, H:i') }}</h2>
-
     <section class="card">
         {{- form_start(form) -}}
 

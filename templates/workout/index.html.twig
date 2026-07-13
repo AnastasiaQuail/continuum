@@ -1,6 +1,9 @@
 {% extends 'base.html.twig' %}
 
+{% set is_current_year = month.format('Y') === user_date().format('Y') %}
+
 {% block title %}Workouts{% endblock %}
+{% block page_subtitle %}{{ is_current_year ? month.format('F') : month.format('F Y') }}{% endblock %}
 {% block body_id %}workouts{% endblock %}
 
 {% block header_actions -%}
@@ -54,8 +57,6 @@
 {%- endblock %}
 
 {% block main -%}
-    <h2>{{ month.format('F Y') }}</h2>
-
     <section id="workouts-card" class="card">
         <div class="workouts">
             {%- if workouts is empty -%}

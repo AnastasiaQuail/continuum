@@ -568,11 +568,16 @@ textarea {
             position: absolute;
             left: 50%;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: calc(var(--gap-block) / 4) var(--container-gap-inline);
             transform: translateX(-50%);
 
             @media (width >= 768px) {
                 position: inherit;
                 left: 0;
+                flex-direction: row;
+                align-items: baseline;
                 transform: none;
             }
 
@@ -580,6 +585,17 @@ textarea {
                 margin-bottom: 0;
                 font-size: clamp(var(--font-size), calc(var(--font-size-small) + 1vw), calc(var(--font-size) * 1.5));
                 line-height: 1;
+            }
+
+            .header-subtitle {
+                margin-bottom: 0;
+                font-size: clamp(var(--font-size-small), calc(var(--font-size-extra-small) + 1vw), calc(var(--font-size) * 1.2));
+                font-weight: var(--font-weight);
+                color: var(--color-secondary);
+
+                &:empty {
+                    display: none;
+                }
             }
         }
 
@@ -826,6 +842,19 @@ textarea {
                         --nav-link-background-color-transparent: 5%;
                     }
 
+                    &:is([disabled]) {
+                        color: var(--color-tertiary);
+                        pointer-events: none;
+                        cursor: not-allowed;
+                    }
+
+                    &.loading {
+                        --loader-size: calc(var(--font-size) * 1.25);
+                        --loader-position-right: var(--nav-link-padding);
+
+                        pointer-events: none;
+                    }
+
                     @media (width >= 768px) {
                         &.active {
                             --nav-link-background-color: var(--primary-color);
@@ -833,12 +862,6 @@ textarea {
 
                             color: var(--primary-color);
                         }
-                    }
-
-                    &:is([disabled]) {
-                        color: var(--color-tertiary);
-                        pointer-events: none;
-                        cursor: not-allowed;
                     }
 
                     .nav-logo {
@@ -1160,7 +1183,9 @@ textarea {
             }
         }
 
-        &.is-loading {
+        &.loading {
+            --loader-size: calc(var(--font-size) * 2.5);
+
             &::before {
                 content: '';
                 position: absolute;
@@ -1171,20 +1196,7 @@ textarea {
             }
 
             &::after {
-                --loader-size: 40px;
-
-                content: '';
-                position: absolute;
-                top: calc(50% - var(--loader-size) / 2);
-                right: calc(50% - var(--loader-size) / 2);
-                width: var(--loader-size);
-                height: var(--loader-size);
                 margin: auto;
-                border: calc(var(--loader-size) / 10) solid color-mix(in srgb, var(--color) 10%, transparent);
-                border-top-color: var(--primary-color);
-                border-radius: 50%;
-                animation: spin 1s linear infinite;
-                z-index: 1;
             }
         }
 
@@ -1317,7 +1329,33 @@ textarea {
     }
 }
 
-@keyframes spin {
+.loading {
+    --loader-size: var(--font-size);
+    --loader-width: calc(var(--loader-size) / 8);
+    --loader-position-top: calc(50% - var(--loader-size) / 2);
+    --loader-position-right: var(--loader-position-top);
+    --loader-color: var(--primary-color);
+    --loader-background-color: color-mix(in srgb, var(--color) 10%, transparent);
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: var(--loader-position-top);
+        right: var(--loader-position-right);
+        width: var(--loader-size);
+        height: var(--loader-size);
+        border: var(--loader-width) solid var(--loader-background-color);
+        border-top-color: var(--loader-color);
+        border-radius: 50%;
+        animation: load_spinner 1s linear infinite;
+        z-index: 1;
+    }
+}
+
+@keyframes load_spinner {
+    from {
+        transform: rotate(0deg);
+    }
     to {
         transform: rotate(360deg);
     }
@@ -1351,6 +1389,8 @@ textarea {
     }
 
     &.actions-pagination {
+        justify-content: start;
+
         @media (width < 768px) {
             justify-content: space-between;
         }
@@ -3690,15 +3730,6 @@ textarea {
         & > * {
             animation: error_page_bottom calc(0.4s + sibling-index() * .1s) ease-out;
         }
-    }
-}
-
-@keyframes load_spinner {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
     }
 }
 

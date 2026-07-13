@@ -6,6 +6,7 @@
 {%- endblock -%}
 
 {% block title %}Calendar{% endblock %}
+{% block page_subtitle %}{{ year }}{% endblock %}
 {% block body_id %}calendar{% endblock %}
 
 {% block showcase -%}
@@ -34,8 +35,6 @@
 {%- endblock %}
 
 {% block main -%}
-    <h2>{{ year }} year</h2>
-
     <section class="card card-calendar">
         <div class="calendar">
             {%- set start_date = start_day.format('Y-m-d') -%}

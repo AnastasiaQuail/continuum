@@ -7,15 +7,18 @@
     {% set current_title = monday.format('j') ~ ' - ' ~ week.format('j F') %}
 {% endif %}
 
+{% if week.format('Y') !== user_date().format('Y') %}
+    {% set current_title = current_title ~ ' ' ~ week.format('Y') %}
+{% endif %}
+
 {% block title %}Reflection on {{ current_title }}{% endblock %}
 {% block page_title %}Mood of the week{% endblock %}
+{% block page_subtitle %}{{ current_title }}{% endblock %}
 {% block body_id %}weekly-reflection-edit{% endblock %}
 
 {% set back_path = path('app_weekly_reflections', {month: week.format('Y-m')}) %}
 
 {% block main -%}
-    <h2>{{ current_title }}</h2>
-
     <section class="card">
         {{- form_start(form) -}}
 

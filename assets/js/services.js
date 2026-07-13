@@ -52,6 +52,10 @@ export class Sidebar {
             body.classList.toggle('sidebar-toggling');
         });
 
+        sidebar.querySelectorAll('a.nav-link').forEach(element => {
+            element.addEventListener('click', () => element.classList.add('loading'));
+        });
+
         // mobile sidebar handle
 
         const handle = document.querySelector('#sidebar-handle');
@@ -381,11 +385,11 @@ export class EasterEggs {
     #dog() {
         document.getElementById('footer-dog')?.addEventListener('click', event => {
             const container = document.querySelector('.body-container');
-            container.classList.add('is-loading');
+            container.classList.add('loading');
 
             fetch(event.currentTarget.dataset.href, {method: 'POST'})
                 .then(response => {
-                    container.classList.remove('is-loading');
+                    container.classList.remove('loading');
 
                     if (!response.ok) {
                         throw new Error('Unknown error');

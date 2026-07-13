@@ -1,15 +1,19 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Edit user{% endblock %}
+{% block page_title %}User{% endblock %}
 {% block body_id %}admin-user-edit{% endblock %}
 
 {% set back_path = path('app_admin_users') %}
 
 {% block main -%}
-    <h2>{{ user.userIdentifier }}</h2>
-
     <section class="card">
         {{- form_start(form) -}}
+
+        <div class="mb-3">
+            <div class="form-label">Login</div>
+            <div>{{ user.userIdentifier }}</div>
+        </div>
 
         <div class="mb-3">
             {{- form_label(form.status) -}}
