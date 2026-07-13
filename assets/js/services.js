@@ -59,11 +59,12 @@ export class Sidebar {
 
         let dragging = false;
         let startHeight = 0;
-        let currentPercent = 100;
+        let currentPercent = 0;
 
         handle.addEventListener('pointerdown', (e) => {
             dragging = true;
             startHeight = e.clientY;
+            currentPercent = 100;
 
             handle.setPointerCapture(e.pointerId);
             sidebar.classList.add('sidebar-dragging');
@@ -86,7 +87,7 @@ export class Sidebar {
 
             dragging = false;
 
-            if (currentPercent <= 50) {
+            if (currentPercent <= 60) {
                 document.dispatchEvent(new CustomEvent('app:root-click:sidebar-view'));
             }
 
