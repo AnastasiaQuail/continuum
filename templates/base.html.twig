@@ -74,7 +74,7 @@
                         {%- block header_actions -%}
                             <div class="btn-header btn-dropdown">
                                 <div id="shortcut-links-button" class="btn btn-glass" tabindex="0">
-                                    <span class="dropdown-icon">{{ ux_icon('lucide:ellipsis-vertical') }}</span>
+                                    <span class="dropdown-icon">{{ ux_icon('lucide:ellipsis') }}</span>
                                     <ul class="dropdown-menu">
                                         {%- block header_actions_shortcut -%}
                                             <li class="dropdown-item">
@@ -132,6 +132,13 @@
 
     {%- block sidebar -%}
         <aside id="sidebar" class="sidebar">
+            <div id="sidebar-handle" class="sidebar-handle"></div>
+            <div class="sidebar-logo">
+                <a class="sidebar-logo-link" href="{{ path('app_homepage') }}">
+                    {{- ux_icon('hugeicons:infinity-02') -}}
+                    <span>Continuum</span>
+                </a>
+            </div>
             <nav class="navbar">
                 <ul class="navbar-nav">
                     <li class="nav-item">
