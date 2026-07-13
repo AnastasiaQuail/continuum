@@ -53,9 +53,18 @@
         --primary-color: var(--color-pink);
     }
 
-    --body-background-color: var(--color-inverse);
-    --background-color: #fff;
-    --background-color-secondary: color-mix(in srgb, var(--body-background-color) 99%, var(--color-gray));
+    --body-background-color: oklch(0.96 0.007 286.274);
+    --background-color: oklch(0.997 0 none);
+    --body-background-color-secondary: var(--body-background-color);
+    --background-color-secondary: var(--background-color);
+
+    @media (width >= 768px) {
+        --body-background-color: var(--color-inverse);
+        --background-color: oklch(1 0 none);
+    }
+
+    --body-shadow-background-color: color-mix(in oklch, var(--color) 25%, transparent);
+    --body-shadow-backdrop-filter: blur(1px) brightness(0.8);
 
     --device-type: 'mobile';
 
@@ -86,17 +95,26 @@
     --glass-border-color-active: color-mix(in oklch, var(--border-color) 80%, transparent);
     --glass-background-color: color-mix(in oklch, var(--background-color) 60%, transparent);
     --glass-backdrop-filter: blur(3px);
-    --glass-header-background-color: color-mix(in oklch, var(--body-background-color) 80%, transparent);
-    --glass-header-backdrop-filter: blur(3px);
 
     --header-gap-block: var(--body-gap-inline);
-    --header-height: 48px;
+    --header-height: 46px;
     --header-offset-block: calc(var(--header-gap-block) + var(--header-height));
+    --header-shadow-background-color: color-mix(in oklch, var(--body-background-color) 80%, transparent);
+    --header-shadow-backdrop-filter: blur(3px) brightness(0.8);
 
     --sidebar-width: 190px;
     --sidebar-collapsed-width: 40px;
     --sidebar-gap-inline: var(--body-gap-inline);
     --sidebar-offset-inline: 0px;
+    --sidebar-view-offset: 0;
+
+    body {
+        --sidebar-view-percent: calc(min(var(--sidebar-view-offset), 100) / 100);
+
+        &.sidebar-toggling {
+            --sidebar-view-offset: 100;
+        }
+    }
 
     @media (width >= 768px) {
         --header-height: 40px;
@@ -110,6 +128,7 @@
     --control-padding-inline: .75rem;
     --control-padding-block: calc(var(--control-padding-inline) / 2);
     --control-border-color: var(--border-color);
+    --control-box-shadow: 0 0px 8px rgba(0, 0, 0, 0.03);
 
     @media (width >= 576px) {
         --h-font-size-coefficient: 0.375;
@@ -147,18 +166,23 @@
 [data-theme="dark"] {
     --color-green: oklch(72.3% 0.219 149.579);
     --color-light: oklch(0.911 0.007 247.901);
+    --color-dark: oklch(0 0 none);
     --color: var(--color-light);
-    --color-inverse: oklch(0 0 none);
+    --color-inverse: var(--color-dark);
+    --body-background-color: var(--color-inverse);
+    --body-background-color-secondary: var(--background-color);
     --background-color: oklch(0.222 0.004 264.483);
     --background-color-secondary: oklch(0.294 0.004 286.177);
+    --body-shadow-background-color: color-mix(in oklch, var(--body-background-color) 40%, transparent);
     --border-color: oklch(0.344 0.013 267.163);
     --body-border-color: transparent;
     --glass-border-color: color-mix(in oklch, var(--border-color) 35%, transparent);
     --glass-border-color-active: color-mix(in oklch, var(--border-color) 70%, transparent);
     --glass-background-color: color-mix(in oklch, var(--color) 12%, transparent);
     --glass-backdrop-filter: blur(4px) brightness(0.6);
-    --glass-header-background-color: color-mix(in oklch, var(--body-background-color) 60%, transparent);
-    --glass-header-backdrop-filter: blur(2px);
+    --header-shadow-background-color: color-mix(in oklch, var(--body-background-color) 60%, transparent);
+    --header-shadow-backdrop-filter: blur(2px) brightness(0.8);
+    --control-box-shadow: none;
 
     @media (width >= 768px) {
         --color-inverse: oklch(0.173 0 none);
@@ -167,8 +191,8 @@
         --glass-border-color: color-mix(in oklch, var(--border-color) 25%, transparent);
         --glass-border-color-active: color-mix(in oklch, var(--border-color) 50%, transparent);
         --glass-background-color: color-mix(in oklch, var(--color) 4%, transparent);
-        --glass-backdrop-filter: blur(4px);
-        --glass-header-background-color: color-mix(in oklch, var(--body-background-color) 80%, transparent);
+        --glass-backdrop-filter: blur(4px) brightness(0.8);
+        --header-shadow-background-color: color-mix(in oklch, var(--body-background-color) 80%, transparent);
     }
 }
 
@@ -421,10 +445,17 @@ textarea {
         content: '';
         position: absolute;
         inset: 0;
-        background-color: var(--glass-header-background-color);
-        backdrop-filter: var(--glass-header-backdrop-filter);
+        background-color: var(--header-shadow-background-color);
+        backdrop-filter: var(--header-shadow-backdrop-filter);
         mask-image: linear-gradient(to top, transparent 0%, black 60%);
+        transition: background-color .3s;
         pointer-events: none;
+    }
+
+    @media (width < 768px) {
+        body.sidebar-toggling & {
+            --header-shadow-background-color: transparent;
+        }
     }
 
     .header-container {
@@ -597,37 +628,93 @@ textarea {
     view-transition-name: shortcut-links-button;
 }
 
+#sidebar {
+    view-transition-name: sidebar;
+}
+
 .sidebar {
     position: fixed;
     inset: 100% auto 0 0;
+    height: 70%;
     display: grid;
     grid-template-rows: auto 1fr;
-    padding-inline: var(--sidebar-gap-inline);
+    padding: 0 var(--sidebar-gap-inline) var(--body-gap-block);
     border-top: var(--border-width) solid var(--body-border-color);
     border-top-left-radius: calc(var(--body-border-radius) * 1.5);
     border-top-right-radius: calc(var(--body-border-radius) * 1.5);
-    background-color: var(--background-color);
+    background-color: var(--body-background-color-secondary);
     overscroll-behavior: none;
     overflow-y: auto;
     overflow-x: hidden;
-    opacity: .5;
     z-index: 50;
-    transition: top .3s, opacity .3s;
+    transition: transform .3s;
+    touch-action: none;
+    will-change: transform;
+
+    body.sidebar-toggling & {
+        transform: translateY(calc(var(--sidebar-view-percent) * -100%));
+    }
 
     @media (width >= 768px) {
         top: 0 !important;
+        height: 100%;
         display: grid;
         padding-top: var(--header-offset-block);
         border-top: none;
         border-radius: 0;
         background-color: var(--body-background-color);
-        opacity: 1;
+        transform: none !important;
     }
 
-    [data-sidebar-view="open"] & {
-        top: 30%;
-        opacity: 1;
-        transition: top .15s, opacity .15s;
+    .sidebar-handle {
+        position: sticky;
+        inset: 0 0 auto;
+        padding: var(--body-gap-block);
+        background-color: var(--body-background-color-secondary);
+        z-index: 1;
+
+        &:after {
+            --sidebar-handle-size: calc(var(--body-gap-block) / 5);
+
+            position: absolute;
+            content: '';
+            top: calc(var(--sidebar-handle-size) * 2);
+            left: 50%;
+            height: var(--sidebar-handle-size);
+            width: calc(var(--sidebar-handle-size) * 15);
+            background-color: color-mix(in srgb, var(--color) 30%, var(--background-color));
+            border-radius: calc(var(--sidebar-handle-size) / 2);
+            transform: translateX(-50%);
+            transition: background-color .15s;
+        }
+
+        &.sidebar-handle-active:after {
+            background-color: color-mix(in srgb, var(--color) 45%, var(--background-color));
+        }
+
+        @media (width >= 768px) {
+            display: none;
+        }
+    }
+
+    .sidebar-logo {
+        .sidebar-logo-link {
+            display: flex;
+            justify-content: center;
+            gap: calc(var(--gap-inline) / 2);
+            padding: var(--container-gap-inline);
+            font-size: calc(var(--font-size) * 1.25);
+            color: var(--color);
+            text-decoration: none;
+
+            & > svg {
+                color: var(--primary-color);
+            }
+        }
+
+        @media (width >= 768px) {
+            display: none;
+        }
     }
 
     .navbar {
@@ -974,50 +1061,49 @@ textarea {
     padding-top: var(--header-offset-block);
     overflow-y: auto;
     overflow-x: hidden;
-    transform-origin: top center;
-    transition: padding .15s, transform .3s;
+    transition: padding .15s;
 
     body.has-sidebar & {
         padding-left: var(--sidebar-offset-inline);
     }
 
-    &:after {
-        position: fixed;
-        content: '';
-        inset: 0;
-        background-color: color-mix(in oklch, var(--body-background-color) 50%, transparent);
-        backdrop-filter: blur(1px);
-        transform: translateX(100%);
-        opacity: 0;
-
-        @media (width >= 768px) {
-            content: none;
-        }
-    }
-
-    [data-sidebar-view="open"] & {
-        transform: scale(0.95);
-        transition: transform .15s;
-
-        @media (width >= 768px) {
-            transform: none;
-        }
-
+    @media (width < 768px) {
         &:after {
-            right: 0;
+            position: fixed;
+            content: '';
+            inset: 0;
+            background-color: var(--body-shadow-background-color);
+            backdrop-filter: var(--body-shadow-backdrop-filter);
+            transform: translateX(100%);
+            transition: opacity .3s;
+            opacity: 0;
+        }
+
+        body.sidebar-toggling &:after,
+        [data-sidebar-view="open"] &:after {
             transform: none;
-            opacity: 1;
-            transition: opacity .15s;
+        }
+
+        body.sidebar-toggling &:after,
+        [data-sidebar-view="open"] body.sidebar-toggling &:after {
+            opacity: var(--sidebar-view-percent);
         }
     }
 
     .body-container {
         padding: var(--body-gap-block) var(--body-gap-inline);
         width: 100vw;
-        transition: width .15s;
+        transform-origin: top center;
+        transition: width .15s, transform .3s;
 
         body.has-sidebar & {
             width: calc(100vw - var(--sidebar-offset-inline));
+        }
+
+        @media (width < 768px) {
+            body.sidebar-toggling & {
+                transform: scale(calc(1 - 0.05 * var(--sidebar-view-percent))) translateY(calc(-3vw * var(--sidebar-view-percent)));
+            }
         }
 
         &.container-justify {
@@ -1678,6 +1764,7 @@ textarea {
         border-color: var(--glass-border-color);
         background-color: var(--glass-background-color);
         backdrop-filter: var(--glass-backdrop-filter);
+        box-shadow: var(--control-box-shadow);
         transform: scale(1);
         transition: color .15s, border-color .15s, background-color .15s, transform .3s;
 
@@ -1718,6 +1805,7 @@ textarea {
         border-radius: var(--border-radius);
         background-color: var(--glass-background-color);
         backdrop-filter: var(--glass-backdrop-filter);
+        box-shadow: var(--control-box-shadow);
         transform: scale(1);
         transition: border-color .15s, background-color .15s, transform .3s;
     }
@@ -1742,6 +1830,7 @@ textarea {
         border-color: transparent !important;
         background-color: transparent;
         backdrop-filter: blur(0px);
+        box-shadow: none;
 
         &:not([disabled]):active {
             backdrop-filter: none;
@@ -3289,7 +3378,7 @@ textarea {
 
         &.private-secure {
             min-height: var(--font-size);
-            color: color-mix(in srgb, var(--color) 20%, var(--color-inverse));
+            color: color-mix(in srgb, var(--color) 20%, var(--color-dark));
             border-color: color-mix(in srgb, var(--color-green) 40%, transparent);
         }
     }
@@ -4071,13 +4160,13 @@ form {
                         opacity: 1;
 
                         .btn {
-                            --btn-color: color-mix(in srgb, var(--general-color) 20%, var(--color-inverse));
+                            --btn-color: color-mix(in srgb, var(--general-color) 20%, var(--color-dark));
                             --btn-border-color-transparent: 0%;
                             --btn-background-color-transparent: 0%;
 
                             &:hover,
                             &:focus-visible {
-                                --btn-color: color-mix(in srgb, var(--general-color) 40%, var(--color-inverse));
+                                --btn-color: color-mix(in srgb, var(--general-color) 40%, var(--color-dark));
                                 --btn-border-color-transparent: 0%;
                                 --btn-background-color-transparent: 3%;
                             }

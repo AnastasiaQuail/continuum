@@ -14,13 +14,13 @@ export class SidebarToggler extends ToggleStorage {
         if ("'desktop'" === type || '"desktop"' === type) {
             super.onClick(event);
         } else {
-            const dataset = document.documentElement.dataset;
-            dataset.sidebarView = dataset.sidebarView !== 'open' ? 'open' : '';
+            document.dispatchEvent(new CustomEvent('app:root-click:sidebar-view'));
         }
     }
 }
 
 export class Sidebar {
+    #transitionEndListener;
     #navDropdowns = [];
     #className = 'dropdown-active';
 
@@ -28,7 +28,77 @@ export class Sidebar {
      * @param {string} id
      */
     applyTo(id) {
-        this.#navDropdowns = document.querySelector(id).querySelectorAll('.dropdown');
+        const sidebar = document.querySelector(id);
+
+        // open-close sidebar animations
+
+        document.addEventListener('app:root-click:sidebar-view', () => {
+            const dataset = document.documentElement.dataset;
+            const body = document.body;
+
+            sidebar.removeEventListener('transitionend', this.#transitionEndListener);
+            sidebar.addEventListener('transitionend', this.#transitionEndListener = (e) => {
+                if (e.target !== sidebar || e.propertyName !== 'top') {
+                    return;
+                }
+
+                if (dataset.sidebarView !== 'open' && body.classList.contains('sidebar-toggling')) {
+                    dataset.sidebarView = 'open';
+                } else if (dataset.sidebarView === 'open' && !body.classList.contains('sidebar-toggling')) {
+                    dataset.sidebarView = '';
+                }
+            });
+
+            body.classList.toggle('sidebar-toggling');
+        });
+
+        // mobile sidebar handle
+
+        const handle = document.querySelector('#sidebar-handle');
+
+        let dragging = false;
+        let startHeight = 0;
+        let currentPercent = 0;
+
+        handle.addEventListener('pointerdown', (e) => {
+            dragging = true;
+            startHeight = e.clientY;
+
+            handle.setPointerCapture(e.pointerId);
+            handle.classList.add('sidebar-handle-active');
+        });
+
+        handle.addEventListener('pointermove', (e) => {
+            if (!dragging) {
+                return;
+            }
+
+            currentPercent = (window.innerHeight + startHeight - e.clientY) / window.innerHeight * 100;
+
+            document.body.style.setProperty('--sidebar-view-offset', currentPercent.toString());
+        });
+
+        function onPointerUp() {
+            if (!dragging) {
+                return;
+            }
+
+            dragging = false;
+
+            if (currentPercent <= 50) {
+                document.dispatchEvent(new CustomEvent('app:root-click:sidebar-view'));
+            }
+
+            handle.classList.remove('sidebar-handle-active');
+            document.body.style.removeProperty('--sidebar-view-offset');
+        }
+
+        handle.addEventListener('pointerup', onPointerUp);
+        handle.addEventListener('pointercancel', onPointerUp);
+
+        // dropdowns
+
+        this.#navDropdowns = sidebar.querySelectorAll('.dropdown');
 
         for (const navDropdown of this.#navDropdowns) {
             navDropdown.querySelector('.nav-link').onclick = () => this.#onclick(navDropdown);
