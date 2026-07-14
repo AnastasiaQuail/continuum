@@ -18,7 +18,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <title>{% block title %}Continuum{% endblock %}</title>
+    <title>{% block title %}{{ app_title }}{% endblock %}</title>
+    <link rel="manifest" href="{{ path('app_manifest') }}">
+    <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
     <link rel="shortcut icon" type="image/svg+xml" href="{{ favicon_href }}">
     <script>
         Object.keys(localStorage)
@@ -61,7 +63,7 @@
                 <div class="header-logo">
                     <a class="header-logo-link" href="{{ path('app_homepage') }}">
                         {{- ux_icon('hugeicons:infinity-02') -}}
-                        <span class="logo-text">Continuum</span>
+                        <span class="logo-text">{{ app_title }}</span>
                     </a>
                 </div>
 
@@ -137,7 +139,7 @@
             <div class="sidebar-logo">
                 <a class="sidebar-logo-link" href="{{ path('app_homepage') }}">
                     {{- ux_icon('hugeicons:infinity-02') -}}
-                    <span>Continuum</span>
+                    <span>{{ app_title }}</span>
                 </a>
             </div>
             <nav class="navbar">
