@@ -7,6 +7,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.title: 'Continuum'
     app.calendar.upcoming_events.days: 21
     app.calendar.previous_events.days: 31
     app.reflection.mood_trend.days: 60

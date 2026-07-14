@@ -3,6 +3,7 @@ twig:
     form_themes:
         - 'bootstrap_5_layout.html.twig'
     globals:
+        app_title: '%app.title%'
         app_year_min: '%env(int:APP_YEAR_MIN)%'
         app_year_max: '%env(int:APP_YEAR_MAX)%'
 

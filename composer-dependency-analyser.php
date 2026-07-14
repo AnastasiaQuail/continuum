@@ -12,7 +12,6 @@ return new Configuration()
         [
             'doctrine/doctrine-migrations-bundle',
             'symfony/apache-pack',
-            'symfony/asset',
             'symfony/asset-mapper',
             'symfony/flex',
             'symfony/monolog-bundle',
