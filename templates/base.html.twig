@@ -1,12 +1,12 @@
 {%- if app.user and is_couple_day() -%}
     {%- set html_data_day = 'data-couple-day' -%}
-    {%- set favicon_href = asset('favicon-couple-day.svg') -%}
+    {%- set icon_href = asset('icon-couple-day.svg') -%}
 {%- elseif app.user and user_date().format('m-d') === '03-08' -%}
     {%- set html_data_day = 'data-women-day' -%}
-    {%- set favicon_href = asset('favicon-women-day.svg') -%}
+    {%- set icon_href = asset('icon-women-day.svg') -%}
 {%- else -%}
     {%- set html_data_day = null -%}
-    {%- set favicon_href = asset('favicon.svg') -%}
+    {%- set icon_href = asset('icon.svg') -%}
 {%- endif -%}
 
 {%- set body_id = block('body_id') -%}
@@ -20,8 +20,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <title>{% block title %}{{ app_title }}{% endblock %}</title>
     <link rel="manifest" href="{{ path('app_manifest') }}">
-    <link rel="apple-touch-icon" href="{{ asset('favicon.svg') }}">
-    <link rel="shortcut icon" type="image/svg+xml" href="{{ favicon_href }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icon_apple_180.png') }}">
+    <link rel="shortcut icon" type="image/svg+xml" href="{{ icon_href }}">
     <script>
         Object.keys(localStorage)
             .filter(key => key.startsWith('continuum-ls-'))

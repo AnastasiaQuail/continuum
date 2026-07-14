@@ -32,7 +32,7 @@ final class ManifestController extends AbstractController
             'theme_color' => '#ffffff',
             'icons' => [
                 [
-                    'src' => $this->packages->getUrl('favicon.svg'),
+                    'src' => $this->packages->getUrl('icon.svg'),
                     'sizes' => 'any',
                     'type' => 'image/svg',
                 ],
