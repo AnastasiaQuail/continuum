@@ -1,11 +1,15 @@
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelector('#calendar .month.month-current')?.scrollIntoView({
-        behavior: 'smooth',
-        inline: 'start',
-        block: 'nearest'
+window.addEventListener('load', () => {
+    requestAnimationFrame(() => {
+        document.querySelector('#calendar .month.month-current')?.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
+        });
     });
+});
 
-    document.querySelectorAll('#calendar-date .calendar-event-guesses .calendar-event-guess').forEach(button => {
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('#calendar-date button.calendar-event-guess').forEach(button => {
         button.onclick = event => {
             event.preventDefault();
 
@@ -17,3 +21,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+

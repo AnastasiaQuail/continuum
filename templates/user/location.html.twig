@@ -12,29 +12,27 @@
 {% set back_path = path('app_profile') %}
 
 {% block main -%}
-    <section id="profile-location-card" class="card">
+    <section id="profile-location-card" class="card card-form">
         {{- form_start(form) -}}
 
-        <div class="row row-sm-2 row-md-3">
-            {{- form_row(form.latitude) -}}
-            {{- form_row(form.longitude) -}}
-        </div>
+        {{- form_row(form.latitude, {attr: {placeholder: 'Required'}}) -}}
+        {{- form_row(form.longitude, {attr: {placeholder: 'Required'}}) -}}
 
-        <div class="alert alert-danger" style="display: none;" id="alert-error">
-            <div class="alert-title">
-                {{ ux_icon('lucide:triangle-alert') }}
-                <strong>Location blocked by browser.</strong>
+        <div class="card-form-row card-form-row-post">
+            <div class="alert alert-danger" style="display: none" id="alert-error">
+                <div class="alert-title">
+                    {{ ux_icon('lucide:triangle-alert') }}
+                    <strong>Location blocked by browser.</strong>
+                </div>
+                <div>
+                    <small>
+                        To determine your location you can use
+                        <a href="https://iplocation.io/my-location#g_latitude" target="_blank">this site</a>
+                        or <a href="https://www.woosmap.com/where-am-i-find-my-location" target="_blank">this</a>
+                    </small>
+                </div>
             </div>
-            <div>
-                <small>
-                    To determine your location you can use
-                    <a href="https://iplocation.io/my-location#g_latitude" target="_blank">this site</a>
-                    or <a href="https://www.woosmap.com/where-am-i-find-my-location" target="_blank">this</a>
-                </small>
-            </div>
-        </div>
 
-        <div class="mb-3">
             <button class="btn btn-sm btn-primary btn-link" id="location-detector"
                     data-input-latitude="latitude" data-input-longitude="longitude" data-error="alert-error">
                 {{ ux_icon('lucide:locate') }}
@@ -42,8 +40,8 @@
             </button>
         </div>
 
-        <div class="card-submit">
-            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        <div class="card-form-row card-submit">
+            <button type="submit" class="btn">Save</button>
         </div>
 
         {{- form_end(form) -}}

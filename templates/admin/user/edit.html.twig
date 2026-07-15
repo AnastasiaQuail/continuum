@@ -7,15 +7,15 @@
 {% set back_path = path('app_admin_users') %}
 
 {% block main -%}
-    <section class="card">
+    <section class="card card-form">
         {{- form_start(form) -}}
 
-        <div class="mb-3">
+        <div class="card-form-row card-form-row-plain">
             <div class="form-label">Login</div>
-            <div>{{ user.userIdentifier }}</div>
+            <div class="form-control-plain">{{ user.userIdentifier }}</div>
         </div>
 
-        <div class="mb-3">
+        <div class="card-form-row">
             {{- form_label(form.status) -}}
             <div class="form-control-choose-type-group">
                 {%- for choice in form.status.vars.choices -%}
@@ -33,10 +33,10 @@
             {%- do form.status.setRendered -%}
         </div>
 
-        {{- form_row(form.roles) -}}
+        {{- form_row(form.roles, {attr: {placeholder: 'Required'}}) -}}
 
-        <div class="card-submit">
-            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        <div class="card-form-row card-submit">
+            <button type="submit" class="btn">Save</button>
         </div>
 
         {{- form_end(form) -}}
