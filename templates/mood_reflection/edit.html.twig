@@ -26,10 +26,10 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card">
+    <section class="card card-form">
         {{- form_start(form) -}}
 
-        <div class="mb-3">
+        <div class="card-form-row">
             {{- form_label(form.type) -}}
             <div class="form-control-choose-type-group">
                 {%- for choice in form.type.vars.choices -%}
@@ -60,10 +60,10 @@
             {%- do form.type.setRendered -%}
         </div>
 
-        {{- form_row(form.text) -}}
+        {{- form_row(form.text, {attr: {placeholder: 'Optional'}}) -}}
 
-        <div class="card-submit">
-            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        <div class="card-form-row card-submit">
+            <button type="submit" class="btn">Save</button>
         </div>
 
         {{- form_end(form) -}}

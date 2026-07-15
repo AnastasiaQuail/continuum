@@ -4,40 +4,45 @@
 {% block body_id %}profile{% endblock %}
 
 {% block main -%}
-    <section id="profile-card" class="card">
-        <div class="form-plain">
+    <section id="profile-card" class="card card-form card-form-plain">
+        <div class="card-form-row">
             <label class="form-label">{{ ux_icon('lucide:user') }} Status</label>
             <div class="form-field">
-                <span class="badge" data-general-type="{{ app.user.status.color.value }}">
-                    {{- app.user.status.name -}}
-                </span>
+                {%- set status = app.user.status -%}
+                <span class="badge" data-general-type="{{ status.color.value }}">{{ status.name }}</span>
             </div>
+        </div>
 
+        <div class="card-form-row">
             <label class="form-label">{{ ux_icon('lucide:mail') }} Email</label>
             <div class="form-field">
                 <strong>{{ app.user.userIdentifier|email_secure }}</strong>
             </div>
+        </div>
 
+        <div class="card-form-row">
             <label class="form-label">{{ ux_icon('lucide:key-round') }} Password</label>
-            <div class="form-field">
+            <a class="form-field form-field-link" href="{{ path('app_profile_password') }}">
                 <span>**********</span>
-                <a href="{{ path('app_profile_password') }}" class="btn btn-sm btn-primary btn-link">Edit</a>
-            </div>
+                {{ ux_icon('lucide:chevron-right') }}
+            </a>
         </div>
     </section>
 
     <h2>Geoposition</h2>
 
-    <section id="profile-location-card" class="card">
-        <div class="form-plain">
+    <section id="profile-location-card" class="card card-form card-form-plain">
+        <div class="card-form-row">
             <label class="form-label">{{ ux_icon('lucide:clock') }} Timezone</label>
             <div class="form-field">{{ app.user.timezone.name }}</div>
+        </div>
 
+        <div class="card-form-row">
             <label class="form-label">{{ ux_icon('lucide:map-pin') }} Location</label>
-            <div class="form-field">
+            <a class="form-field form-field-link" href="{{ path('app_profile_location') }}">
                 <span>{{ app.user.location.latitude ~ ' : ' ~ app.user.location.longitude }}</span>
-                <a href="{{ path('app_profile_location') }}" class="btn btn-sm btn-primary btn-link">Edit</a>
-            </div>
+                {{ ux_icon('lucide:chevron-right') }}
+            </a>
         </div>
     </section>
 

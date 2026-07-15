@@ -39,7 +39,7 @@
         {%- for event in events -%}
             <div class="calendar-event" data-general-type="{{ event.type.value }}">
                 <div class="calendar-event-body">
-                    <span class="badge badge-fill">{{ event.title }}</span>
+                    <span class="badge">{{ event.title }}</span>
                     {%- if not event.allDay -%}
                         <span> at {{ event.getUserDatetime(app.user).format('H:i') }}</span>
                     {%- endif -%}
@@ -62,18 +62,18 @@
         {%- endfor -%}
 
         {%- for holiday_event in holiday_events -%}
-            <div class="calendar-event calendar-holiday-event">{{ holiday_event }}</div>
+            <div class="calendar-event calendar-holiday-event">{{ ux_icon('lucide:balloon') }} {{ holiday_event }}</div>
         {%- endfor -%}
     </section>
 
     <h2 class="card-title">Add new event</h2>
 
-    <section class="card">
+    <section class="card card-form">
         {{- form_start(form) -}}
 
-        {{- form_row(form.title) -}}
+        {{- form_row(form.title, {attr: {placeholder: 'Required'}}) -}}
 
-        <div class="mb-3">
+        <div class="card-form-row">
             {{- form_label(form.type) -}}
             <div class="form-control-choose-type-group">
                 {%- for choice in form.type.vars.choices -%}
@@ -90,11 +90,11 @@
             {%- do form.type.setRendered -%}
         </div>
 
-        <div class="mb-3">
+        <div class="card-form-row">
             {{- form_label(form.time) -}}
             <div class="form-control-time">
                 {{- form_widget(form.time) -}}
-                <button class="btn" onclick="document.getElementById('time').value = null; return false;">
+                <button class="btn btn-link" onclick="document.getElementById('time').value = null; return false;">
                     {{- ux_icon('lucide:x') -}}
                 </button>
             </div>
@@ -102,9 +102,9 @@
         </div>
 
         {%- if previous_events -%}
-            <div class="calendar-event-guesses">
+            <div class="card-form-row card-form-row-post card-form-calendar-event-guesses">
                 <div class="form-label">Or choose from you previous events</div>
-                <div class="calendar-event-guesses-body">
+                <div class="card-form-row-post-body">
                     {%- for previous_event in previous_events -%}
                         {%- set event_time = previous_event.getUserDatetime(app.user).format('H:i') -%}
                         <button class="btn btn-sm calendar-event-guess"
@@ -122,8 +122,8 @@
             </div>
         {%- endif -%}
 
-        <div class="card-submit">
-            <button type="submit" class="btn btn-primary btn-outline">Create event</button>
+        <div class="card-form-row card-submit">
+            <button type="submit" class="btn">Create event</button>
         </div>
 
         {{- form_end(form) -}}

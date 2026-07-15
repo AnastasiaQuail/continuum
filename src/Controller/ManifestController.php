@@ -28,8 +28,8 @@ final class ManifestController extends AbstractController
             'short_name' => $this->title,
             'start_url' => $this->urlGenerator->generate('app_homepage'),
             'display' => 'standalone',
-            'background_color' => '#ffffff',
-            'theme_color' => '#ffffff',
+            'background_color' => '#000000',
+            'theme_color' => '#000000',
             'icons' => [
                 [
                     'src' => $this->packages->getUrl('icon.svg'),
