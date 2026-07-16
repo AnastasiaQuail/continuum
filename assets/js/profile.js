@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             (err) => {
                 console.error(err);
-                document.getElementById(dataset.error).style.display = 'inherit';
+                document.getElementById(dataset.error).style.display = 'initial';
             },
         )
     };

@@ -5,46 +5,61 @@
 
 {% block main -%}
     <section id="profile-card" class="card card-form card-form-plain">
-        <div class="card-form-row">
-            <label class="form-label">{{ ux_icon('lucide:user') }} Status</label>
-            <div class="form-field">
-                {%- set status = app.user.status -%}
-                <span class="badge" data-general-type="{{ status.color.value }}">{{ status.name }}</span>
-            </div>
-        </div>
+        {%- set status = app.user.status -%}
+        {{- _self.form_row_plain(
+            ux_icon('lucide:user'),
+            'Status',
+            '<span class="badge" data-general-type="' ~ status.color.value ~ '">' ~ status.name ~ '</span>',
+        ) -}}
 
-        <div class="card-form-row">
-            <label class="form-label">{{ ux_icon('lucide:mail') }} Email</label>
-            <div class="form-field">
-                <strong>{{ app.user.userIdentifier|email_secure }}</strong>
-            </div>
-        </div>
+        {{- _self.form_row_plain(
+            ux_icon('lucide:mail'),
+            'Email',
+            app.user.userIdentifier|email_secure,
+        ) -}}
 
-        <div class="card-form-row">
-            <label class="form-label">{{ ux_icon('lucide:key-round') }} Password</label>
-            <a class="form-field form-field-link" href="{{ path('app_profile_password') }}">
-                <span>**********</span>
-                {{ ux_icon('lucide:chevron-right') }}
-            </a>
-        </div>
+        {{- _self.form_row_plain(
+            ux_icon('lucide:key-round'),
+            'Password',
+            '**********',
+            path('app_profile_password'),
+        ) -}}
     </section>
 
     <h2>Geoposition</h2>
 
     <section id="profile-location-card" class="card card-form card-form-plain">
-        <div class="card-form-row">
-            <label class="form-label">{{ ux_icon('lucide:clock') }} Timezone</label>
-            <div class="form-field">{{ app.user.timezone.name }}</div>
-        </div>
+        {{- _self.form_row_plain(
+            ux_icon('lucide:clock'),
+            'Timezone',
+            app.user.timezone.name,
+        ) -}}
 
-        <div class="card-form-row">
-            <label class="form-label">{{ ux_icon('lucide:map-pin') }} Location</label>
-            <a class="form-field form-field-link" href="{{ path('app_profile_location') }}">
-                <span>{{ app.user.location.latitude ~ ' : ' ~ app.user.location.longitude }}</span>
-                {{ ux_icon('lucide:chevron-right') }}
-            </a>
-        </div>
+        {{- _self.form_row_plain(
+            ux_icon('lucide:map-pin'),
+            'Location',
+            app.user.location.latitude ~ ' : ' ~ app.user.location.longitude,
+            path('app_profile_location'),
+        ) -}}
     </section>
 
     <div class="text-footer">Created: {{ app.user.createdAt.format('j F Y, H:i') }}</div>
 {%- endblock %}
+
+{%- macro form_row_plain(icon, label, value, url = null) -%}
+    <div class="form-row">
+        <label class="form-label">
+            <span class="form-icon">{{ icon|raw }}</span>
+            <span>{{ label }}</span>
+        </label>
+
+        {%- if url -%}
+            <a class="form-field form-field-link" href="{{ url }}">
+                <span>{{ value }}</span>
+                {{- ux_icon('lucide:chevron-right') -}}
+            </a>
+        {%- else -%}
+            <div class="form-field">{{ value|raw }}</div>
+        {%- endif -%}
+    </div>
+{%- endmacro -%}

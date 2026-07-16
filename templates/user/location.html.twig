@@ -18,7 +18,7 @@
         {{- form_row(form.latitude, {attr: {placeholder: 'Required'}}) -}}
         {{- form_row(form.longitude, {attr: {placeholder: 'Required'}}) -}}
 
-        <div class="card-form-row card-form-row-post">
+        <div class="form-row form-row-post">
             <div class="alert alert-danger" style="display: none" id="alert-error">
                 <div class="alert-title">
                     {{ ux_icon('lucide:triangle-alert') }}
@@ -40,9 +40,7 @@
             </button>
         </div>
 
-        <div class="card-form-row card-submit">
-            <button type="submit" class="btn">Save</button>
-        </div>
+        {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
     </section>

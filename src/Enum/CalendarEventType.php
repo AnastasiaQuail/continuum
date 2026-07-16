@@ -24,4 +24,9 @@ enum CalendarEventType: string
     case Rose = Color::Rose->value;
     case Slate = Color::Slate->value;
     case Stone = Color::Stone->value;
+
+    public function getColor(): Color
+    {
+        return Color::from($this->value);
+    }
 }

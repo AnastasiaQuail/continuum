@@ -2,6 +2,7 @@ twig:
     file_name_pattern: '*.twig'
     form_themes:
         - 'bootstrap_5_layout.html.twig'
+        - 'form/fields.html.twig'
     globals:
         app_title: '%app.title%'
         app_year_min: '%env(int:APP_YEAR_MIN)%'

@@ -29,42 +29,18 @@
     <section class="card card-form">
         {{- form_start(form) -}}
 
-        <div class="card-form-row">
-            {{- form_label(form.type) -}}
-            <div class="form-control-choose-type-group">
-                {%- for choice in form.type.vars.choices -%}
-                    <label class="form-control-choose-type"
-                           data-general-type="{{ choice.data.color.value }}">
-                        <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
-                               value="{{ choice.value }}"
-                               {% if form.type.vars.required %}required="required"{% endif %}
-                            {% if choice.value === form.type.vars.value %}checked{% endif %}>
-                        <span class="btn" tabindex="0">
-                            {%- if choice.value === 'terrible' -%}
-                                {{- ux_icon('lucide:angry') -}}
-                            {%- elseif choice.value === 'bad' -%}
-                                {{- ux_icon('lucide:frown') -}}
-                            {%- elseif choice.value === 'good' -%}
-                                {{- ux_icon('lucide:smile') -}}
-                            {%- elseif choice.value === 'great' -%}
-                                {{- ux_icon('lucide:laugh') -}}
-                            {%- else -%}
-                                {{- ux_icon('lucide:meh') -}}
-                            {%- endif -%}
-                            <span>{{ choice.label }}</span>
-                        </span>
-                    </label>
-                {%- endfor -%}
-            </div>
-            {{- form_errors(form.type) -}}
-            {%- do form.type.setRendered -%}
-        </div>
-
+        {{- form_row(form.type, {
+            icons: {
+                terrible: ux_icon('lucide:angry'),
+                bad: ux_icon('lucide:frown'),
+                okay: ux_icon('lucide:meh'),
+                good: ux_icon('lucide:smile'),
+                great: ux_icon('lucide:laugh'),
+            },
+        }) -}}
         {{- form_row(form.text, {attr: {placeholder: 'Optional'}}) -}}
 
-        <div class="card-form-row card-submit">
-            <button type="submit" class="btn">Save</button>
-        </div>
+        {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
     </section>
