@@ -72,39 +72,13 @@
         {{- form_start(form) -}}
 
         {{- form_row(form.title, {attr: {placeholder: 'Required'}}) -}}
-
-        <div class="card-form-row">
-            {{- form_label(form.type) -}}
-            <div class="form-control-choose-type-group">
-                {%- for choice in form.type.vars.choices -%}
-                    <label class="form-control-choose-type" data-general-type="{{ choice.value }}">
-                        <input type="radio" name="type" id="{{ form.type.vars.id }}_{{ choice.value }}"
-                               value="{{ choice.value }}"
-                               {%- if form.type.vars.required %}required="required"{% endif %}
-                            {%- if choice.value === form.type.vars.value %}checked{% endif %}>
-                        <span class="btn btn-sm" tabindex="0">{{ choice.label }}</span>
-                    </label>
-                {%- endfor -%}
-            </div>
-            {{- form_errors(form.type) -}}
-            {%- do form.type.setRendered -%}
-        </div>
-
-        <div class="card-form-row">
-            {{- form_label(form.time) -}}
-            <div class="form-control-time">
-                {{- form_widget(form.time) -}}
-                <button class="btn btn-link" onclick="document.getElementById('time').value = null; return false;">
-                    {{- ux_icon('lucide:x') -}}
-                </button>
-            </div>
-            {{- form_errors(form.time) -}}
-        </div>
+        {{- form_row(form.type, {button_size: 'btn-sm'}) -}}
+        {{- form_row(form.time) -}}
 
         {%- if previous_events -%}
-            <div class="card-form-row card-form-row-post card-form-calendar-event-guesses">
+            <div class="form-row form-row-post calendar-event-guesses">
                 <div class="form-label">Or choose from you previous events</div>
-                <div class="card-form-row-post-body">
+                <div class="form-row-post-body">
                     {%- for previous_event in previous_events -%}
                         {%- set event_time = previous_event.getUserDatetime(app.user).format('H:i') -%}
                         <button class="btn btn-sm calendar-event-guess"
@@ -122,9 +96,7 @@
             </div>
         {%- endif -%}
 
-        <div class="card-form-row card-submit">
-            <button type="submit" class="btn">Create event</button>
-        </div>
+        {{- form_row_submit('Create event') -}}
 
         {{- form_end(form) -}}
     </section>

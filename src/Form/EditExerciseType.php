@@ -40,7 +40,7 @@ final class EditExerciseType extends AbstractImmutableType
             ])
             ->add('isActive', CheckboxType::class, [
                 'data' => null !== $exercise ? $exercise->isActive : true,
-                'label' => 'Is active?',
+                'label' => 'Available for workouts',
                 'required' => false,
             ]);
     }

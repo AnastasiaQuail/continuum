@@ -11,26 +11,33 @@
 {% set back_path = path('app_measurements', {month: date.format('Y-m')}) %}
 
 {% block main -%}
-    <section class="card">
+    <section class="card card-form">
         {{- form_start(form) -}}
 
-        {{ form_row(form.datetime) }}
+        {{- form_row(form.datetime) -}}
 
-        <div class="row row-2 row-sm-3">
-            {{- form_row(form.weight) -}}
-            {{- form_row(form.neck) -}}
-            {{- form_row(form.waist) -}}
-            {{- form_row(form.chest) -}}
-            {{- form_row(form.shoulders) -}}
-            {{- form_row(form.flexedBiceps) -}}
-            {{- form_row(form.hips) -}}
-            {{- form_row(form.thigh) -}}
-            {{- form_row(form.calf) -}}
+        <div class="row row-md-3">
+            {{- form_row(form.weight, {attr: {placeholder: '0 kg'}}) -}}
+            {{- form_row(form.neck, {attr: {placeholder: '0 cm'}}) -}}
+            {{- form_row(form.waist, {attr: {placeholder: '0 cm'}}) -}}
         </div>
 
-        <div class="card-submit">
-            <button type="submit" class="btn btn-primary btn-outline">Save</button>
+        <div class="row row-md-3 form-row-collapsible">
+            <div class="form-row form-row-collapse-toggle"
+                 onclick="this.parentNode.classList.add('show'); return false;">
+                <span>Show all</span>
+                {{- ux_icon('lucide:chevron-right') -}}
+            </div>
+
+            {{- form_row(form.chest, {attr: {placeholder: '0 cm'}}) -}}
+            {{- form_row(form.shoulders, {attr: {placeholder: '0 cm'}}) -}}
+            {{- form_row(form.flexedBiceps, {attr: {placeholder: '0 cm'}}) -}}
+            {{- form_row(form.hips, {attr: {placeholder: '0 cm'}}) -}}
+            {{- form_row(form.thigh, {attr: {placeholder: '0 cm'}}) -}}
+            {{- form_row(form.calf, {attr: {placeholder: '0 cm'}}) -}}
         </div>
+
+        {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
     </section>

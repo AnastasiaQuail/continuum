@@ -10,34 +10,15 @@
     <section class="card card-form">
         {{- form_start(form) -}}
 
-        <div class="card-form-row card-form-row-plain">
+        <div class="form-row">
             <div class="form-label">Login</div>
-            <div class="form-control-plain">{{ user.userIdentifier }}</div>
+            <div class="form-field">{{ user.userIdentifier }}</div>
         </div>
 
-        <div class="card-form-row">
-            {{- form_label(form.status) -}}
-            <div class="form-control-choose-type-group">
-                {%- for choice in form.status.vars.choices -%}
-                    <label class="form-control-choose-type"
-                           data-general-type="{{ choice.data.color.value }}">
-                        <input type="radio" name="status" id="{{ form.status.vars.id }}_{{ choice.value }}"
-                               value="{{ choice.value }}"
-                               {% if form.status.vars.required %}required="required"{% endif %}
-                            {% if choice.value === form.status.vars.value %}checked{% endif %}>
-                        <span class="btn" tabindex="0">{{ choice.label }}</span>
-                    </label>
-                {%- endfor -%}
-            </div>
-            {{- form_errors(form.status) -}}
-            {%- do form.status.setRendered -%}
-        </div>
-
+        {{- form_row(form.status) -}}
         {{- form_row(form.roles, {attr: {placeholder: 'Required'}}) -}}
 
-        <div class="card-form-row card-submit">
-            <button type="submit" class="btn">Save</button>
-        </div>
+        {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
     </section>
