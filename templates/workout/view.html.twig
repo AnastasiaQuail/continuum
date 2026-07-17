@@ -29,12 +29,12 @@
                         {%- set is_update_granted = is_granted('WORKOUT_EXERCISE_UPDATE', workout_exercise) -%}
 
                         <div class="exercise-controls">
-                            <button class="btn btn-link btn-description-show"
-                                    {% if not is_update_granted %}disabled{% endif %}>
-                                {{- ux_icon('lucide:message-circle-more') -}}
-                            </button>
-
-                            {%- if workout_exercise.sets.isEmpty -%}
+                            {%- if not workout_exercise.sets.isEmpty -%}
+                                <button class="btn btn-link btn-description-show"
+                                        {% if not is_update_granted %}disabled{% endif %}>
+                                    {{- ux_icon('lucide:message-circle-more') -}}
+                                </button>
+                            {%- else -%}
                                 <form method="post"
                                       action="{{ path('app_workout_exercise_delete', {id: workout_exercise.id}) }}"
                                       onsubmit="return confirm('Delete?') && submitBy(this);">

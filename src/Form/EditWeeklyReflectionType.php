@@ -36,7 +36,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
             ])
             ->add('isJoyPrivate', CheckboxType::class, [
                 'data' => $weeklyReflection?->joy->isPrivate,
-                'label' => 'private?',
+                'label' => 'Secure',
                 'required' => false,
             ])
             ->add('difficulty', TextareaType::class, [
@@ -48,7 +48,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
             ])
             ->add('isDifficultyPrivate', CheckboxType::class, [
                 'data' => $weeklyReflection?->difficulty->isPrivate,
-                'label' => 'private?',
+                'label' => 'Secure',
                 'required' => false,
             ])
             ->add('achievement', TextareaType::class, [
@@ -60,7 +60,7 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
             ])
             ->add('isAchievementPrivate', CheckboxType::class, [
                 'data' => $weeklyReflection?->achievement->isPrivate,
-                'label' => 'private?',
+                'label' => 'Secure',
                 'required' => false,
             ]);
     }
