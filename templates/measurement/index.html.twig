@@ -145,7 +145,7 @@
     {%- endfor -%}
 
     {%- if is_available -%}
-        <div class="form-row" {% if color %}data-general-type="{{ color }}"{% endif %}>
+        <div class="form-row form-row-compact" {% if color %}data-general-type="{{ color }}"{% endif %}>
             <div class="form-label">{{ label }}</div>
             <div class="form-field {% if length > 1 %}form-field-multiple{% endif %}">
                 {%- for sublabel, value in values -%}

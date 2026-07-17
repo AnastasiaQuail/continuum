@@ -1764,6 +1764,10 @@ textarea {
     padding-block: var(--form-row-gap);
     text-decoration: none;
 
+    &.form-row-compact {
+        padding-block: calc(var(--form-row-gap) / 2);
+    }
+
     @media (width >= 768px) {
         flex-direction: column;
         column-gap: calc(var(--form-row-gap) * 2);
@@ -2644,7 +2648,7 @@ textarea {
     background-color: var(--background-color);
 
     &.card-transparent {
-        padding-block: 0;
+        padding-block: calc(var(--container-gap-block) / 2);
         border-color: transparent;
         background-color: transparent;
 
