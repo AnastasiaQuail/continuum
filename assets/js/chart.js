@@ -170,15 +170,15 @@ function initMeasurementWeightChart(element, data) {
                 axisLabel: {
                     fontSize: 10,
                     formatter: '{value} {percentStyle|%}',
-                    rich: {percentStyle: {fontSize: 8, opacity: 0.15}},
-                    color: getHexColorByCssProperty('--color'),
-                    opacity: 0.2,
+                    rich: {percentStyle: {fontSize: 8, opacity: 0.8}},
+                    color: getHexColorByCssProperty('--color-quaternary'),
+                    opacity: 1,
                 },
                 splitLine: {
                     show: true,
                     lineStyle: {
-                        color: getHexColorByCssProperty('--color'),
-                        opacity: 0.04,
+                        color: getHexColorByCssProperty('--color-quaternary'),
+                        opacity: 0.3,
                     }
                 },
             },
@@ -212,8 +212,8 @@ function initMeasurementWeightChart(element, data) {
         function () {
             return {
                 yAxis: {
-                    axisLabel: {color: getHexColorByCssProperty('--color')},
-                    splitLine: {lineStyle: {color: getHexColorByCssProperty('--color')}},
+                    axisLabel: {color: getHexColorByCssProperty('--color-quaternary')},
+                    splitLine: {lineStyle: {color: getHexColorByCssProperty('--color-quaternary')}},
                 }
             };
         }

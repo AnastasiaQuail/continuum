@@ -52,18 +52,17 @@ final class EditMeasurementType extends AbstractImmutableType
                 'input' => 'datetime_immutable',
                 'constraints' => [
                     new Callback(
-                        static function (DateTimeImmutable $datetime, ExecutionContextInterface $context) use (
-                            $user
-                        ): void {
+                        static function (DateTimeImmutable $day, ExecutionContextInterface $context) use ($user): void {
                             $currentDate = new DateTimeImmutable('now', $user->timezone);
 
-                            if ($currentDate->format('Y-m-d') < $datetime->format('Y-m-d')) {
+                            if ($currentDate->format('Y-m-d') < $day->format('Y-m-d')) {
                                 $context->buildViolation('You cannot manage measurements for future days.')
                                     ->addViolation();
                             }
                         }
                     ),
                 ],
+                'label' => 'Time',
             ])
             ->add('weight', MeasurementType::class, [
                 'data' => $measurement?->weight,

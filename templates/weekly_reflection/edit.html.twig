@@ -19,39 +19,25 @@
 {% set back_path = path('app_weekly_reflections', {month: week.format('Y-m')}) %}
 
 {% block main -%}
-    <section class="card">
+    <section class="card card-form">
         {{- form_start(form) -}}
 
-        <div class="weekly-reflection weekly-reflection-form">
-            {%- embed 'weekly_reflection/_alert.html.twig' with {type: 'joy'} -%}
-                {%- block alert_body -%}
-                    <div class="alert-form-textarea">
-                        {{- form_widget(form.joy) -}}
-                        {{- form_errors(form.joy) -}}
-                    </div>
-                    {{- form_widget(form.isJoyPrivate) -}}
-                {%- endblock -%}
-            {%- endembed -%}
+        <div class="form-row form-row-text-field" data-general-type="green">
+            {{- form_label(form.joy) -}}
+            {{- form_widget(form.joy, {attr: {placeholder: 'Required'}}) -}}
+            {{- form_widget(form.isJoyPrivate) -}}
+        </div>
 
-            {%- embed 'weekly_reflection/_alert.html.twig' with {type: 'difficulty'} -%}
-                {%- block alert_body -%}
-                    <div class="alert-form-textarea">
-                        {{- form_widget(form.difficulty) -}}
-                        {{- form_errors(form.difficulty) -}}
-                    </div>
-                    {{- form_widget(form.isDifficultyPrivate) -}}
-                {%- endblock -%}
-            {%- endembed -%}
+        <div class="form-row form-row-text-field" data-general-type="yellow">
+            {{- form_label(form.difficulty) -}}
+            {{- form_widget(form.difficulty, {attr: {placeholder: 'Required'}}) -}}
+            {{- form_widget(form.isDifficultyPrivate) -}}
+        </div>
 
-            {%- embed 'weekly_reflection/_alert.html.twig' with {type: 'achievement'} -%}
-                {%- block alert_body -%}
-                    <div class="alert-form-textarea">
-                        {{- form_widget(form.achievement) -}}
-                        {{- form_errors(form.achievement) -}}
-                    </div>
-                    {{- form_widget(form.isAchievementPrivate) -}}
-                {%- endblock -%}
-            {%- endembed -%}
+        <div class="form-row form-row-text-field" data-general-type="blue">
+            {{- form_label(form.achievement) -}}
+            {{- form_widget(form.achievement, {attr: {placeholder: 'Required'}}) -}}
+            {{- form_widget(form.isAchievementPrivate) -}}
         </div>
 
         {{- form_row_submit() -}}

@@ -105,10 +105,10 @@
 
                     <h2 id="weight-change-title">Body fat</h2>
                     {%- if result !== 0.0 -%}
-                        <span id="weight-change-label"
-                              class="badge {{ result > 0 ? 'badge-bad' : 'badge-good' }}">
+                        <div id="weight-change-label"
+                             class="badge {{ result > 0 ? 'badge-bad' : 'badge-good' }}">
                             <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
-                        </span>
+                        </div>
                     {%- endif -%}
 
                     {{- filters.months(measurement_days, path('app_homepage', {measurement: '###'}), [4, 6, 8, 10]) -}}
