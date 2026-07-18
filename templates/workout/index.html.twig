@@ -57,14 +57,14 @@
 {%- endblock %}
 
 {% block main -%}
-    <section id="workouts-card" class="card">
-        <div class="workouts">
-            {%- if workouts is empty -%}
-                <div class="workout collection-empty">
-                    {{- ux_icon('lucide:frown') -}}
-                    <span>No workouts</span>
-                </div>
-            {%- else -%}
+    {%- if workouts is empty -%}
+        <div class="card collection-empty">
+            {{- ux_icon('lucide:frown') -}}
+            <span>No workouts this month yet</span>
+        </div>
+    {%- else -%}
+        <section id="workouts-card" class="card">
+            <div class="workouts">
                 {%- for workout in workouts|reverse -%}
                     <div class="workout" id="workout_{{ workout.id }}">
                         <div class="workout-date">
@@ -173,7 +173,7 @@
                         </div>
                     </div>
                 {%- endfor -%}
-            {%- endif -%}
-        </div>
-    </section>
+            </div>
+        </section>
+    {%- endif -%}
 {%- endblock %}

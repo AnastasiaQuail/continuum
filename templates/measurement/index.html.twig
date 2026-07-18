@@ -95,7 +95,7 @@
     {%- if measurements is empty -%}
         <section class="card collection-empty">
             {{- ux_icon('lucide:frown') -}}
-            <span>No measurements</span>
+            <span>No measurements for this month yet</span>
         </section>
     {%- else -%}
         {%- for measurement in measurements|reverse -%}
@@ -107,9 +107,7 @@
                     {% if is_granted %}href="{{ path('app_measurement_edit', {id: measurement.id}) }}"{% endif %}
                     class="form-row form-row-header-edit">
                     <div class="form-label">{{ time }}</div>
-                    {% if is_granted %}
-                        <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
-                    {% endif %}
+                    <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
                 </{% if is_granted %}a{% else %}div{% endif %}>
 
                 {{- _self.measurent_row(

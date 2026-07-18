@@ -21,6 +21,7 @@ export class SidebarToggler extends ToggleStorage {
 
 export class Sidebar {
     #transitionEndListener;
+    #backdropClickListener;
     #navDropdowns = [];
     #className = 'dropdown-active';
 
@@ -28,28 +29,36 @@ export class Sidebar {
      * @param {string} id
      */
     applyTo(id) {
+        const dataset = document.documentElement.dataset;
         const sidebar = document.querySelector(id);
+        const classes = document.body.classList;
+        const backdrop = document.body.querySelector('.body');
 
         // open-close sidebar animations
 
         document.addEventListener('app:root-click:sidebar-view', () => {
-            const dataset = document.documentElement.dataset;
-            const body = document.body;
-
             sidebar.removeEventListener('transitionend', this.#transitionEndListener);
+            backdrop.removeEventListener('click', this.#backdropClickListener);
+
             sidebar.addEventListener('transitionend', this.#transitionEndListener = (e) => {
-                if (e.target !== sidebar || e.propertyName !== 'top') {
+                if (e.target !== sidebar || e.propertyName !== 'transform') {
                     return;
                 }
 
-                if (dataset.sidebarView !== 'open' && body.classList.contains('sidebar-toggling')) {
-                    dataset.sidebarView = 'open';
-                } else if (dataset.sidebarView === 'open' && !body.classList.contains('sidebar-toggling')) {
-                    dataset.sidebarView = '';
+                if (!classes.contains('sidebar-toggling')) {
+                    delete dataset.sidebarView;
                 }
             });
 
-            body.classList.toggle('sidebar-toggling');
+            if (!classes.contains('sidebar-toggling')) {
+                dataset.sidebarView = 'show';
+
+                backdrop.addEventListener('click', this.#backdropClickListener = () => {
+                    document.dispatchEvent(new CustomEvent('app:root-click:sidebar-view'));
+                });
+            }
+
+            classes.toggle('sidebar-toggling');
         });
 
         sidebar.querySelectorAll('a.nav-link').forEach(element => {
@@ -71,7 +80,7 @@ export class Sidebar {
             currentPercent = 100;
 
             handle.setPointerCapture(e.pointerId);
-            sidebar.classList.add('sidebar-dragging');
+            dataset.sidebarDragging = '';
         });
 
         handle.addEventListener('pointermove', (e) => {
@@ -95,7 +104,7 @@ export class Sidebar {
                 document.dispatchEvent(new CustomEvent('app:root-click:sidebar-view'));
             }
 
-            sidebar.classList.remove('sidebar-dragging');
+            delete dataset.sidebarDragging;
             document.body.style.removeProperty('--sidebar-view-offset');
         }
 

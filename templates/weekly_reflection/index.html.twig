@@ -46,9 +46,11 @@
             </{% if is_granted %}a{% else %}div{% endif %}>
 
             {%- if reflection is null -%}
-                <div class="collection-empty">
-                    {{- ux_icon('lucide:frown') -}}
-                    <span>No reflection for this week yet</span>
+                <div class="form-row form-row-collection-empty">
+                    <div class="collection-empty">
+                        {{- ux_icon('lucide:frown') -}}
+                        <span>No reflection for this week yet</span>
+                    </div>
                 </div>
             {%- else -%}
                 <div class="row row-md-3">

@@ -47,19 +47,17 @@
 {%- endblock %}
 
 {%- macro form_row_plain(icon, label, value, url = null) -%}
-    <div class="form-row">
+    <{% if url %}a{% else %}div{% endif %}
+        {% if url %}href="{{ url }}"{% endif %} class="form-row">
         <label class="form-label">
             <span class="form-icon">{{ icon|raw }}</span>
             <span>{{ label }}</span>
         </label>
-
-        {%- if url -%}
-            <a class="form-field form-field-link" href="{{ url }}">
-                <span>{{ value }}</span>
-                {{- ux_icon('lucide:chevron-right') -}}
-            </a>
-        {%- else -%}
-            <div class="form-field">{{ value|raw }}</div>
-        {%- endif -%}
-    </div>
+        <div class="form-field">
+            <span>{{ value|raw }}</span>
+            {%- if url -%}
+                {{- ux_icon('lucide:chevron-right', {class: 'form-link-chevron'}) -}}
+            {%- endif -%}
+        </div>
+    </{% if url %}a{% else %}div{% endif %}>
 {%- endmacro -%}
