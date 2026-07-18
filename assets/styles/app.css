@@ -613,7 +613,7 @@ textarea {
         }
 
         @media (width < 768px) {
-            [data-sidebar-view="open"] & {
+            [data-sidebar-view="show"] & {
                 &.icon-menu-open {
                     display: none;
                 }
@@ -652,6 +652,10 @@ textarea {
     transition: transform .3s;
     will-change: transform;
 
+    [data-sidebar-dragging] & {
+        transition: none;
+    }
+
     body.sidebar-toggling & {
         transform: translateY(calc(var(--sidebar-view-percent) * -100%));
     }
@@ -671,6 +675,10 @@ textarea {
     .sidebar-handle {
         --sidebar-handle-size: calc(var(--body-gap-block) / 5);
         --sidebar-handle-transparent: 30%;
+
+        [data-sidebar-dragging] & {
+            --sidebar-handle-transparent: 45%;
+        }
 
         position: sticky;
         inset: 0 0 auto;
@@ -694,14 +702,6 @@ textarea {
 
         @media (width >= 768px) {
             display: none;
-        }
-    }
-
-    &.sidebar-dragging {
-        transition: none;
-
-        .sidebar-handle {
-            --sidebar-handle-transparent: 45%;
         }
     }
 
@@ -1118,19 +1118,17 @@ textarea {
             inset: 0;
             background-color: var(--body-shadow-background-color);
             backdrop-filter: var(--body-shadow-backdrop-filter);
+            opacity: var(--sidebar-view-percent);
             transform: translateX(100%);
             transition: opacity .3s;
-            opacity: 0;
         }
 
-        body.sidebar-toggling &:after,
-        [data-sidebar-view="open"] &:after {
+        [data-sidebar-dragging] &:after {
+            transition: none;
+        }
+
+        [data-sidebar-view="show"] &:after {
             transform: none;
-        }
-
-        body.sidebar-toggling &:after,
-        [data-sidebar-view="open"] body.sidebar-toggling &:after {
-            opacity: var(--sidebar-view-percent);
         }
     }
 
@@ -1139,6 +1137,10 @@ textarea {
         width: 100vw;
         transform-origin: top center;
         transition: width .15s, transform .3s;
+
+        [data-sidebar-dragging] & {
+            transition: none;
+        }
 
         body.has-sidebar & {
             width: calc(100vw - var(--sidebar-offset-inline));
@@ -1212,7 +1214,7 @@ textarea {
         z-index: 101;
 
         @media (width < 768px) {
-            [data-sidebar-view="open"] & {
+            [data-sidebar-view="show"] & {
                 z-index: 49;
             }
         }
@@ -1729,6 +1731,7 @@ textarea {
 
 .form-row {
     --form-row-gap: calc(var(--gap-block) / 2);
+    --form-row-padding-inline: 0;
     --form-row-color-label: var(--color);
     --form-row-color-field: var(--color-secondary);
     --form-row-color-text: var(--color-tertiary);
@@ -1763,10 +1766,6 @@ textarea {
     column-gap: calc(var(--form-row-gap) * 1.5);
     padding-block: var(--form-row-gap);
     text-decoration: none;
-
-    &.form-row-compact {
-        padding-block: calc(var(--form-row-gap) / 2);
-    }
 
     @media (width >= 768px) {
         flex-direction: column;
@@ -1825,6 +1824,14 @@ textarea {
 
             & > .form-field-large {
                 grid-row: 2;
+            }
+        }
+
+        &:has(.form-field) {
+            padding-block: calc(var(--form-row-gap) * 2);
+
+            &.form-row-compact {
+                padding-block: calc(var(--form-row-gap) * 1.5);
             }
         }
 
@@ -1928,17 +1935,7 @@ textarea {
         display: flex;
         align-items: center;
         column-gap: calc(var(--form-row-gap) / 2);
-        padding-block: var(--form-row-gap);
-        color: var(--form-row-color-text);
-
-        &.form-field-link {
-            text-decoration: none;
-            color: var(--form-row-color-field);
-
-            & > svg {
-                color: var(--form-row-color-text);
-            }
-        }
+        color: var(--form-row-color-field);
 
         &.form-field-multiple {
             flex-direction: column;
@@ -1957,6 +1954,10 @@ textarea {
                 color: var(--color-quaternary);
             }
         }
+
+        @media (width >= 768px) {
+            padding-block: var(--form-row-gap);
+        }
     }
 
     .form-field-large {
@@ -1966,6 +1967,10 @@ textarea {
             margin-top: var(--form-row-gap);
             font-size: var(--font-size-medium);
         }
+    }
+
+    .form-link-chevron {
+        color: var(--form-row-color-text);
     }
 
     .form-control-time {
@@ -2007,6 +2012,7 @@ textarea {
         .form-label {
             margin-bottom: 0;
             font-size: var(--font-size-small);
+            color: var(--color-tertiary);
 
             @media (width >= 768px) {
                 font-size: var(--font-size-medium);
@@ -2014,18 +2020,13 @@ textarea {
         }
 
         .form-field {
-            padding-top: 0;
+            padding-block: 0;
             font-size: var(--font-size-medium);
+            color: var(--color-tertiary);
         }
 
-        .form-label,
-        .form-field {
-            padding-bottom: var(--form-row-gap);
-            color: var(--color-tertiary);
-
-            @media (width >= 768px) {
-                padding-bottom: 0;
-            }
+        &:not(:is(a)) .form-field {
+            color: var(--color-quaternary);
         }
     }
 
@@ -2091,7 +2092,8 @@ textarea {
         flex-direction: column;
         align-items: stretch;
         justify-content: center;
-        padding-block: calc(var(--form-row-gap) * 2);
+        padding-top: var(--form-row-gap);
+        padding-bottom: calc(var(--form-row-gap) * 2);
 
         @media (width >= 768px) {
             flex-direction: row;
@@ -2113,6 +2115,16 @@ textarea {
                 padding: calc(var(--control-padding-block) * 1.5) calc(var(--control-padding-inline) * 1.5);
                 font-weight: var(--font-weight);
             }
+        }
+    }
+
+    &.form-row-collection-empty {
+        flex-direction: column;
+        margin-bottom: 0;
+
+        @media (width < 768px) {
+            padding-top: 0;
+            padding-bottom: calc(var(--form-row-gap) * 2);
         }
     }
 }
@@ -2832,14 +2844,27 @@ textarea {
     }
 
     &.card-form {
+        @media (width < 768px) {
+            padding: 0;
+
+            & > .form-row,
+            & > .row > .form-row,
+            & > form > *:not(.row),
+            & > form > .row > * {
+                padding-inline: var(--container-gap-inline);
+            }
+        }
+
         .form-row {
+            --form-row-padding-inline: var(--container-gap-inline);
+
             position: relative;
             border-bottom: var(--border-width) solid transparent;
 
             &:after {
                 position: absolute;
                 content: '';
-                inset: 0;
+                inset: 0 var(--form-row-padding-inline);
                 top: auto;
                 height: var(--border-width);
                 background-color: var(--border-color-divider);
@@ -2847,7 +2872,7 @@ textarea {
 
             &:has(> .form-label > .form-icon) {
                 &:after {
-                    left: calc(var(--form-row-icon-font-size) + 2 * var(--form-row-icon-padding) + var(--form-row-icon-gap));
+                    left: calc(var(--form-row-padding-inline) + var(--form-row-icon-font-size) + 2 * var(--form-row-icon-padding) + var(--form-row-icon-gap));
                 }
             }
 
@@ -2867,18 +2892,11 @@ textarea {
         }
 
         @media (width < 768px) {
-            & > *:first-child,
-            & > *:first-child:is(.row) > *:first-child,
-            & > form > *:first-child {
-                padding-top: 0;
-            }
-
-            & > *:last-child:not(.collection-empty),
+            & > *:last-child,
             & > *:last-child:is(.row) > *:last-child,
             & > form > *:last-child,
-            & > .form-row-submit,
-            & > form > .form-row-submit {
-                padding-bottom: 0;
+            & > form > .form-row-submit,
+            & > form > .row > .form-row-collapse-toggle {
                 border-bottom: none;
 
                 &:after {
@@ -2887,7 +2905,7 @@ textarea {
             }
 
             & > form > *:has(+ .form-row-submit),
-            & > .form-row:has(+ .collection-empty) {
+            & > .form-row:has(+ .form-row-collection-empty) {
                 &:is(.form-row),
                 &:is(.row) > .form-row:last-child {
                     border-bottom: none;
@@ -2895,14 +2913,6 @@ textarea {
                     &:after {
                         content: none;
                     }
-                }
-            }
-
-            .form-row-collapse-toggle {
-                border-bottom: none;
-
-                &:after {
-                    content: none;
                 }
             }
         }
@@ -2926,10 +2936,6 @@ textarea {
                             flex: none;
                             width: var(--form-plain-size);
                         }
-                    }
-
-                    .form-field-large {
-                        padding-block: var(--form-row-gap);
                     }
                 }
             }
@@ -3876,7 +3882,7 @@ textarea {
 }
 
 .card-weekly-reflections {
-    .form-row:not(.form-row-header-edit) {
+    .form-row:not(.form-row-header-edit):not(.form-row-collection-empty) {
         @media (width >= 768px) {
             padding: var(--gap-block) var(--gap-inline);
             margin-bottom: 0;
@@ -4145,10 +4151,10 @@ textarea {
             }
 
             .form-field {
-                --cmfrf-transparent: var(--transparent-color);
+                --cmfrf-transparent: var(--transparent-color-tiny);
 
                 [data-theme="dark"] & {
-                    --cmfrf-transparent: 40%;
+                    --cmfrf-transparent: var(--transparent-color);
                 }
 
                 color: color-mix(in srgb, var(--general-color) var(--cmfrf-transparent), var(--form-row-color-text));
