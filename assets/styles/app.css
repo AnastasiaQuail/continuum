@@ -2892,6 +2892,10 @@ textarea {
         }
 
         @media (width < 768px) {
+            &:has(> form > .form-row-submit) {
+                padding-top: calc(var(--gap-block) / 4);
+            }
+
             & > *:last-child,
             & > *:last-child:is(.row) > *:last-child,
             & > form > *:last-child,
@@ -2901,6 +2905,10 @@ textarea {
 
                 &:after {
                     content: none;
+                }
+
+                &:is(.form-row-compact) {
+                    padding-bottom: var(--form-row-padding-inline);
                 }
             }
 
