@@ -1,12 +1,14 @@
 window.addEventListener('load', () => {
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            document.querySelector('#calendar .month.month-current')?.scrollIntoView({
-                behavior: 'smooth',
-                inline: 'start'
-            });
-        });
-    });
+    const currentMonth = document.querySelector('#calendar .month.month-current');
+    if (!currentMonth) {
+        return;
+    }
+
+    currentMonth.scrollIntoView({behavior: 'smooth', inline: 'start'});
+
+    setTimeout(() => {
+        currentMonth.scrollIntoView({behavior: 'smooth', inline: 'start'});
+    }, 300);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
