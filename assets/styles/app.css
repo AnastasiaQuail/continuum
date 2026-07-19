@@ -57,14 +57,13 @@
     --background-color: oklch(0.997 0 none);
     --body-background-color-secondary: var(--body-background-color);
     --background-color-secondary: var(--background-color);
+    /* oklch(0.926 0.007 286.268) but without transparency */
+    --body-shadow-background-color: color-mix(in oklch, var(--body-background-color) 75%, var(--color) 5%);
 
     @media (width >= 768px) {
         --body-background-color: var(--color-inverse);
         --background-color: oklch(1 0 none);
     }
-
-    --body-shadow-background-color: color-mix(in oklch, var(--color) 25%, transparent);
-    --body-shadow-backdrop-filter: blur(1px) brightness(0.8);
 
     --device-type: 'mobile';
 
@@ -99,8 +98,6 @@
     --header-gap-block: var(--body-gap-inline);
     --header-height: 46px;
     --header-offset-block: calc(var(--header-gap-block) + var(--header-height));
-    --header-shadow-background-color: color-mix(in oklch, var(--body-background-color) 80%, transparent);
-    --header-shadow-backdrop-filter: blur(3px) brightness(0.8);
 
     --sidebar-width: 190px;
     --sidebar-collapsed-width: 40px;
@@ -173,7 +170,7 @@
     --body-background-color-secondary: var(--background-color);
     --background-color: oklch(0.222 0.004 264.483);
     --background-color-secondary: oklch(0.294 0.004 286.177);
-    --body-shadow-background-color: color-mix(in oklch, var(--body-background-color) 40%, transparent);
+    --body-shadow-background-color: color-mix(in oklch, var(--body-background-color) 60%, transparent);
     --border-color: oklch(0.344 0.013 267.163);
     --border-color-divider: color-mix(in srgb, var(--border-color) 70%, var(--color-inverse));
     --body-border-color: transparent;
@@ -181,19 +178,17 @@
     --glass-border-color-active: color-mix(in oklch, var(--border-color) 70%, transparent);
     --glass-background-color: color-mix(in oklch, var(--color) 12%, transparent);
     --glass-backdrop-filter: blur(4px) brightness(0.6);
-    --header-shadow-background-color: color-mix(in oklch, var(--body-background-color) 60%, transparent);
-    --header-shadow-backdrop-filter: blur(2px) brightness(0.8);
     --control-box-shadow: none;
 
     @media (width >= 768px) {
         --color-inverse: oklch(0.173 0 none);
         --background-color: color-mix(in srgb, var(--body-background-color) 96%, var(--color-light));
         --background-color-secondary: color-mix(in srgb, var(--body-background-color) 92%, var(--color-light));
+        --body-shadow-background-color: color-mix(in oklch, var(--body-background-color) 80%, transparent);
         --glass-border-color: color-mix(in oklch, var(--border-color) 25%, transparent);
         --glass-border-color-active: color-mix(in oklch, var(--border-color) 50%, transparent);
         --glass-background-color: color-mix(in oklch, var(--color) 4%, transparent);
         --glass-backdrop-filter: blur(4px) brightness(0.8);
-        --header-shadow-background-color: color-mix(in oklch, var(--body-background-color) 80%, transparent);
     }
 }
 
@@ -291,6 +286,25 @@ body {
     background-color: var(--body-background-color);
     font-optical-sizing: auto;
     font-style: normal;
+
+    @media (width < 768px) {
+        [data-sidebar-view="show"] & {
+            overflow: hidden;
+        }
+    }
+}
+
+@supports (padding: env(safe-area-inset-top)) {
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: env(safe-area-inset-top);
+        background-color: var(--body-shadow-background-color);
+        z-index: 9999;
+    }
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -431,16 +445,15 @@ textarea {
         content: '';
         position: absolute;
         inset: 0;
-        background-color: var(--header-shadow-background-color);
-        backdrop-filter: var(--header-shadow-backdrop-filter);
-        mask-image: linear-gradient(to top, transparent 0%, black 60%);
+        background-color: var(--body-shadow-background-color);
+        mask-image: linear-gradient(to top, transparent 0%, black 35%, black 65%, black 90%, black 100%);
         transition: background-color .3s;
         pointer-events: none;
     }
 
     @media (width < 768px) {
         body.sidebar-toggling & {
-            --header-shadow-background-color: transparent;
+            --body-shadow-background-color: transparent;
         }
     }
 
@@ -1117,7 +1130,6 @@ textarea {
             content: '';
             inset: 0;
             background-color: var(--body-shadow-background-color);
-            backdrop-filter: var(--body-shadow-backdrop-filter);
             opacity: var(--sidebar-view-percent);
             transform: translateX(100%);
             transition: opacity .3s;
@@ -2651,8 +2663,6 @@ textarea {
 }
 
 .card {
-    --card-background-color: var(--background-color);
-
     padding: var(--container-gap-block) var(--container-gap-inline);
     margin-bottom: var(--body-gap-block);
     border: var(--border-width) solid var(--body-border-color);
