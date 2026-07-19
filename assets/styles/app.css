@@ -1394,6 +1394,14 @@ textarea {
     }
 }
 
+#pagination-link-prev {
+    view-transition-name: pagination-link-prev;
+}
+
+#pagination-link-next {
+    view-transition-name: pagination-link-next;
+}
+
 .badge {
     --badge-background-transparent: 10%;
 
