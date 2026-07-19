@@ -50,12 +50,21 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card card-calendar-mood">
+    <section class="card card-calendar-month">
         <div class="calendar">
             <article class="month">
                 {%- set current = user_date().format('Y-m-d') -%}
                 {%- set first_week_day = month.format('N') -%}
 
+                <div class="month-day-title">
+                    <span>mon</span>
+                    <span>tue</span>
+                    <span>wed</span>
+                    <span>thu</span>
+                    <span>fri</span>
+                    <span>sat</span>
+                    <span>sun</span>
+                </div>
                 <div class="month-days">
                     {%- if first_week_day > 1 -%}
                         <div class="day fake-day" style="--fake-days: {{ first_week_day - 1 }};">

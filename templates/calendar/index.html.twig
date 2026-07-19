@@ -11,7 +11,7 @@
 
 {% block showcase -%}
     {%- if upcoming_events is not empty and is_granted('CALENDAR_UPCOMING_EVENTS') -%}
-        <section class="card calendar-upcoming-events" id="calendar-upcoming-events">
+        <section class="card card-calendar-upcoming-events" id="calendar-upcoming-events">
             {{- include('calendar/_upcoming_events.html.twig', {collapsable: true}) -}}
         </section>
     {%- endif -%}
@@ -51,6 +51,15 @@
                 <article class="month {{ month === current_month ? ' month-current' }}"
                          style="--month-offset: {{ first_week_day - 1 }};">
                     <div class="month-title">{{ month|date('F') }}</div>
+                    <div class="month-day-title">
+                        <span>mon</span>
+                        <span>tue</span>
+                        <span>wed</span>
+                        <span>thu</span>
+                        <span>fri</span>
+                        <span>sat</span>
+                        <span>sun</span>
+                    </div>
                     <div class="month-days">
                         {%- if first_week_day > 1 -%}
                             <div class="day fake-day" style="--fake-days: {{ first_week_day - 1 }};">
