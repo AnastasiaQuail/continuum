@@ -1,9 +1,10 @@
 window.addEventListener('load', () => {
     requestAnimationFrame(() => {
-        document.querySelector('#calendar .month.month-current')?.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest'
+        requestAnimationFrame(() => {
+            document.querySelector('#calendar .month.month-current')?.scrollIntoView({
+                behavior: 'smooth',
+                inline: 'start'
+            });
         });
     });
 });

@@ -2152,10 +2152,6 @@ textarea {
         @media (width >= 768px) {
             display: none;
         }
-
-        > svg {
-            transform: rotate(90deg);
-        }
     }
 
     &.show .form-row-collapse-toggle {
@@ -2601,7 +2597,6 @@ textarea {
         transition: border-color .5s, background-color .15s;
 
         & > svg {
-            transform: rotate(90deg);
             margin-right: calc(var(--cti-gap-inline) / 2.5 * -1);
         }
     }
@@ -2656,15 +2651,24 @@ textarea {
 }
 
 .card {
-    padding: var(--container-gap-block) var(--container-gap-inline);
+    --card-padding-block: var(--container-gap-block);
+    --card-padding-inline: var(--container-gap-inline);
+    --card-border-width: var(--border-width);
+    --card-border-style: solid;
+    --card-border-color: var(--body-border-color);
+    --card-border-radius: var(--body-border-radius);
+    --card-background-color: var(--background-color);
+
+    padding: var(--card-padding-block) var(--card-padding-inline);
     margin-bottom: var(--body-gap-block);
-    border: var(--border-width) solid var(--body-border-color);
-    border-radius: var(--body-border-radius);
-    background-color: var(--background-color);
+    border: var(--card-border-width) var(--card-border-style) var(--card-border-color);
+    border-radius: var(--card-border-radius);
+    background-color: var(--card-background-color);
 
     &.card-transparent {
-        padding-block: calc(var(--container-gap-block) / 2);
+        padding-block: calc(var(--card-padding-block) / 2);
         border-color: transparent;
+        border-radius: 0;
         background-color: transparent;
 
         .card-title {
@@ -2701,8 +2705,8 @@ textarea {
 
     .card-title {
         display: flex;
-        margin-bottom: calc(var(--container-gap-block) / 1.25);
-        gap: calc(var(--container-gap-block) / 3) calc(var(--container-gap-inline) / 2);
+        margin-bottom: calc(var(--card-padding-block) / 1.25);
+        gap: calc(var(--card-padding-block) / 3) calc(var(--card-padding-inline) / 2);
         align-items: center;
         justify-content: space-between;
 
@@ -2754,7 +2758,7 @@ textarea {
 
         &.card-title-controls {
             flex-wrap: wrap;
-            margin-bottom: var(--container-gap-block);
+            margin-bottom: var(--card-padding-block);
 
             & > .badge {
                 column-gap: calc(var(--gap-inline) / 6);
@@ -2796,7 +2800,7 @@ textarea {
             --s-color: color-mix(in srgb, var(--color-pink) var(--s-color-transparent), var(--s-color-inverse));
 
             padding-bottom: calc(var(--gap-block) / 4);
-            margin-bottom: calc(var(--container-gap-block) - var(--gap-block) / 4);
+            margin-bottom: calc(var(--card-padding-block) - var(--gap-block) / 4);
             background: linear-gradient(45deg, var(--s-color) 0%, var(--s-color-inverse) 25%, var(--s-color-inverse) 75%, var(--s-color) 100%);
             background-size: 200% 100%;
             background-clip: text;
@@ -2814,7 +2818,7 @@ textarea {
     }
 
     &.card-shine {
-        --s-color-inverse: var(--background-color);
+        --s-color-inverse: var(--card-background-color);
         --s-color-transparent: 20%;
         --s-color: color-mix(in srgb, var(--color-pink) var(--s-color-transparent), var(--s-color-inverse));
 
@@ -2829,7 +2833,7 @@ textarea {
 
     & > hr {
         width: 100%;
-        margin-block: calc(var(--container-gap-block) / 1.5);
+        margin-block: calc(var(--card-padding-block) / 1.5);
         border: 0;
         border-bottom: var(--border-width) solid var(--border-color-divider);
     }
@@ -2837,7 +2841,7 @@ textarea {
     &.card-report {
         .card-title {
             &.card-title-controls:not(:is(:last-child)) {
-                margin-bottom: calc(var(--container-gap-block) / 1.5);
+                margin-bottom: calc(var(--card-padding-block) / 1.5);
             }
 
             .card-title-progress {
@@ -2854,12 +2858,12 @@ textarea {
             & > .row > .form-row,
             & > form > *:not(.row),
             & > form > .row > * {
-                padding-inline: var(--container-gap-inline);
+                padding-inline: var(--card-padding-inline);
             }
         }
 
         .form-row {
-            --form-row-padding-inline: var(--container-gap-inline);
+            --form-row-padding-inline: var(--card-padding-inline);
 
             position: relative;
             border-bottom: var(--border-width) solid transparent;
@@ -3347,11 +3351,13 @@ textarea {
 
 .calendar {
     --grid-month-columns: 2;
-    --gap-month-days: .5vw;
+    --gap-month-days: calc(var(--gap-inline) / 5);
     --grid-day-columns: 7;
+    --day-title-font-size: var(--font-size-extra-small);
+    --day-aspect-ratio: 6 / 7;
     --day-font-size: 2.8vw;
-    --day-border-radius: calc(var(--day-font-size) / 1.6);
-    --day-badge-size: 1.4vw;
+    --day-border-radius: var(--border-radius-internal);
+    --day-badge-size: 2vw;
 
     display: flex;
     flex-direction: row;
@@ -3369,6 +3375,7 @@ textarea {
     }
 
     .month {
+        position: relative;
         padding-left: var(--container-gap-inline);
         scroll-snap-align: start;
 
@@ -3385,18 +3392,36 @@ textarea {
         }
 
         .month-title {
-            width: clamp(40vw, 250px, 60vw);
+            position: relative;
+            width: 75vw;
             margin-bottom: calc(var(--gap-block) * 1.25);
             font-size: var(--font-size-medium);
-            font-weight: var(--font-weight-light);
             text-align: center;
             color: var(--color-tertiary);
             cursor: default;
             user-select: none;
 
+            @media (width >= 576px) {
+                width: 38vw;
+            }
+
             @media (width >= 768px) {
                 width: auto;
             }
+        }
+
+        .month-day-title {
+            position: relative;
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            margin-bottom: calc(var(--gap-block) / 1.25);
+            font-size: var(--day-title-font-size);
+            font-weight: var(--font-weight-light);
+            text-transform: capitalize;
+            text-align: center;
+            color: var(--color-quaternary);
+            cursor: default;
+            user-select: none;
         }
 
         .month-days {
@@ -3416,7 +3441,7 @@ textarea {
         --fake-days: 1;
 
         position: relative;
-        aspect-ratio: 4 / 5;
+        aspect-ratio: var(--day-aspect-ratio);
         min-height: 0; /* fix for safari */
         min-width: 0; /* fix for safari */
         align-content: center;
@@ -3436,11 +3461,17 @@ textarea {
         }
 
         .day-badges {
+            --day-badges-offset: -1px;
+
             display: flex;
             flex-direction: row-reverse;
             position: absolute;
-            right: -2px;
-            top: -2px;
+            top: var(--day-badges-offset);
+            right: var(--day-badges-offset);
+
+            @media (width >= 768px) {
+                --day-badges-offset: -2px;
+            }
         }
 
         .day-badge {
@@ -3551,41 +3582,39 @@ textarea {
         }
     }
 
-    .card-calendar-mood & {
-        --gap-month-days: calc(var(--gap-inline) / 4);
-        --day-font-size: var(--font-size-medium);
-        --day-border-radius: var(--border-radius-internal);
-
-        display: block;
-
-        .day {
-            aspect-ratio: 1;
-        }
-    }
-
     @media (576px <= width < 768px) {
         --grid-month-columns: 3;
-        --gap-month-days: .3vw;
+        --gap-month-days: calc(var(--gap-inline) / 8);
+        --day-aspect-ratio: 5 / 6;
         --day-font-size: 1.9vw;
+        --day-border-radius: var(--border-radius-badge);
         --day-badge-size: 1vw;
     }
 
     @media (768px <= width < 992px) {
         --grid-month-columns: 4;
+        --day-title-font-size: calc(var(--font-size-extra-small) * 0.5);
+        --day-aspect-ratio: 4 / 5;
         --gap-month-days: .25vw;
         --day-font-size: 1.4vw;
+        --day-border-radius: calc(var(--day-font-size) / 1.6);
         --day-badge-size: .75vw;
     }
 
     @media (992px <= width < 1200px) {
         --grid-month-columns: 6;
+        --day-title-font-size: calc(var(--font-size-extra-small) * 0.5);
+        --day-aspect-ratio: 4 / 5;
         --gap-month-days: .2vw;
         --day-font-size: .9vw;
+        --day-border-radius: calc(var(--day-font-size) / 1.6);
         --day-badge-size: .5vw;
     }
 
     @media (width >= 1200px) {
         --grid-month-columns: 6;
+        --day-title-font-size: calc(var(--font-size-extra-small) * 0.6);
+        --day-aspect-ratio: 4 / 5;
         --gap-month-days: 3px;
         --day-font-size: 0.65em;
         --day-border-radius: 7px;
@@ -3597,6 +3626,85 @@ textarea {
     }
 
     @media (width >= 1400px) {
+        --day-title-font-size: calc(var(--font-size-extra-small) * 0.7);
+    }
+}
+
+.card-calendar-month {
+    @media (width >= 768px) {
+        max-width: calc(var(--gap-inline) * 2 + 400px);
+    }
+
+    .calendar {
+        --gap-month-days: calc(var(--gap-inline) / 4);
+        --day-font-size: var(--font-size-medium);
+        --day-border-radius: var(--border-radius-internal);
+
+        @media (width >= 576px) {
+            --day-aspect-ratio: 7 / 8;
+        }
+
+        @media (width >= 768px) {
+            --day-title-font-size: var(--font-size-extra-small);
+            --day-aspect-ratio: 1;
+        }
+
+        display: block;
+    }
+}
+
+.card-calendar {
+    @media (width < 768px) {
+        --card-invert-padding-inline: var(--body-gap-inline);
+
+        padding: 0;
+        margin-inline: calc(var(--card-invert-padding-inline) * -1);
+        border-color: transparent;
+        border-radius: 0;
+        background-color: transparent;
+
+        .calendar {
+            --month-title-font-size: calc(var(--font-size) * 1.125);
+            --month-title-offset-block: calc(var(--body-gap-block) / 1.5);
+
+            gap: 0;
+            margin-inline: auto;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .month {
+                padding: 0 var(--card-padding-inline) var(--card-padding-block) calc(var(--card-invert-padding-inline) + var(--card-padding-inline));
+
+                &:before {
+                    position: absolute;
+                    content: '';
+                    inset: 0;
+                    top: calc(var(--month-title-font-size) + var(--month-title-offset-block));
+                    left: var(--card-invert-padding-inline);
+                    background-color: var(--card-background-color);
+                    border: var(--card-border-width) var(--card-border-style) var(--card-border-color);
+                    border-radius: var(--card-border-radius);
+                }
+
+                &:last-child {
+                    padding-right: calc(var(--card-invert-padding-inline) + var(--card-padding-inline));
+
+                    &:before {
+                        right: var(--card-invert-padding-inline);
+                    }
+                }
+
+                .month-title {
+                    margin-bottom: calc(var(--month-title-offset-block) + var(--card-padding-block));
+                    font-size: var(--month-title-font-size);
+                    font-weight: var(--font-weight-bold);
+                    text-align: left;
+                    color: var(--color-secondary);
+                }
+            }
+        }
     }
 }
 
@@ -3625,7 +3733,7 @@ textarea {
             top: 0;
             right: 0;
             display: flex;
-            transform: rotate(90deg);
+            transform: rotateX(180deg);
             transform-origin: center;
             transition: transform .15s;
         }
@@ -3638,14 +3746,14 @@ textarea {
     }
 }
 
-.calendar-upcoming-events {
+.card-calendar-upcoming-events {
     display: flex;
     cursor: pointer;
     user-select: none;
     transition: padding-block .15s;
 
     [data-calendar-upcoming="collapsed"] & {
-        padding-block: calc(var(--container-gap-block) / 2);
+        padding-block: calc(var(--card-padding-block) / 2);
 
         .upcoming-events-body {
             flex-direction: row;
@@ -3749,19 +3857,13 @@ textarea {
     view-transition-name: mood-chart-title;
 }
 
-.card-calendar-mood {
-    @media (width >= 768px) {
-        max-width: calc(var(--gap-inline) * 2 + 400px);
-    }
-}
-
 .card-mood-chart {
     padding-block: 0;
 
     .mood-chart {
-        --chart-padding: var(--container-gap-block);
+        --chart-padding: var(--card-padding-block);
         --chart-columns: 60;
-        --chart-bar-height: calc(var(--container-gap-block) / 2);
+        --chart-bar-height: calc(var(--card-padding-block) / 2);
         --chart-bar-position: 3;
 
         display: grid;
@@ -3947,107 +4049,6 @@ textarea {
             color: color-mix(in srgb, var(--ffl-private-color) 40%, var(--color) 20%);
             border-radius: var(--border-radius-internal);
             background-color: var(--ffl-private-color);
-        }
-    }
-}
-
-.weekly-reflection {
-    display: flex;
-    flex-direction: column;
-    gap: var(--container-gap-block);
-
-    .alert {
-        display: grid;
-        grid-template-rows: auto 1fr;
-        margin-bottom: 0;
-        border-width: 0;
-        border-radius: var(--border-radius-internal);
-        overflow: hidden;
-
-        .alert-title {
-            padding-top: 2px;
-            font-size: var(--font-size-small);
-            cursor: default;
-        }
-
-        .alert-body {
-            position: relative;
-            display: flex;
-            align-items: center;
-            color: var(--color);
-
-            &.private {
-                color: transparent;
-                transition: color .15s;
-
-                &:after {
-                    content: '';
-                    position: absolute;
-                    inset: calc(-1 * var(--font-size) / 8);
-                    border-radius: calc(var(--border-radius-internal) / 2);
-                    background-color: color-mix(in oklch, var(--alert-color) calc(var(--alert-background-color-transparent) - 5%), transparent);
-                    transition: background-color .15s;
-                }
-
-                &:hover {
-                    color: var(--color);
-                    transition: color .5s;
-
-                    &:after {
-                        background-color: transparent;
-                        transition: background-color .5s;
-                    }
-                }
-            }
-
-            &.private-secure {
-                min-height: var(--font-size);
-                justify-content: center;
-                color: color-mix(in srgb, var(--alert-color) 30%, var(--color) 10%);
-                border-radius: calc(var(--border-radius-internal) / 2);
-                background-color: color-mix(in oklch, var(--alert-color) 10%, transparent);
-                box-shadow: 0 0 10px color-mix(in oklch, var(--alert-color) 20%, transparent);
-            }
-        }
-
-        &.alert-empty {
-            --alert-background-color-transparent: 3%;
-
-            border: var(--border-width) dashed var(--border-color);
-
-            .alert-body {
-                min-height: var(--font-size);
-            }
-        }
-    }
-
-    &.weekly-reflection-form {
-        flex-direction: column;
-
-        .alert {
-            .alert-body {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: calc(var(--gap-block) / 2);
-
-                .alert-form-textarea {
-                    width: 100%;
-                }
-
-                .form-control {
-                    border-radius: calc(var(--border-radius-internal) / 2);
-                }
-
-                .form-control,
-                .form-check-input:not(:checked) {
-                    background-color: color-mix(in oklch, var(--background-color) 40%, transparent);
-                }
-
-                .form-check-label {
-                    font-size: var(--font-size-small);
-                    color: var(--color-secondary);
-                }
-            }
         }
     }
 }
