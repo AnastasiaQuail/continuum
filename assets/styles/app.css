@@ -55,10 +55,9 @@
 
     --body-background-color: oklch(0.96 0.007 286.274);
     --background-color: oklch(0.997 0 none);
-    --body-background-color-secondary: var(--body-background-color);
+    --body-background-color-secondary: color-mix(in srgb, var(--body-background-color) 80%, var(--background-color));
     --background-color-secondary: var(--background-color);
-    /* oklch(0.926 0.007 286.268) but without transparency */
-    --body-shadow-background-color: color-mix(in oklch, var(--body-background-color) 75%, var(--color) 5%);
+    --body-shadow-background-color: oklch(0.926 0.007 286.268);
 
     @media (width >= 768px) {
         --body-background-color: var(--color-inverse);
@@ -170,7 +169,7 @@
     --body-background-color-secondary: var(--background-color);
     --background-color: oklch(0.222 0.004 264.483);
     --background-color-secondary: oklch(0.294 0.004 286.177);
-    --body-shadow-background-color: color-mix(in oklch, var(--body-background-color) 60%, transparent);
+    --body-shadow-background-color: var(--body-background-color);
     --border-color: oklch(0.344 0.013 267.163);
     --border-color-divider: color-mix(in srgb, var(--border-color) 70%, var(--color-inverse));
     --body-border-color: transparent;
@@ -184,7 +183,6 @@
         --color-inverse: oklch(0.173 0 none);
         --background-color: color-mix(in srgb, var(--body-background-color) 96%, var(--color-light));
         --background-color-secondary: color-mix(in srgb, var(--body-background-color) 92%, var(--color-light));
-        --body-shadow-background-color: color-mix(in oklch, var(--body-background-color) 80%, transparent);
         --glass-border-color: color-mix(in oklch, var(--border-color) 25%, transparent);
         --glass-border-color-active: color-mix(in oklch, var(--border-color) 50%, transparent);
         --glass-background-color: color-mix(in oklch, var(--color) 4%, transparent);
@@ -291,19 +289,6 @@ body {
         [data-sidebar-view="show"] & {
             overflow: hidden;
         }
-    }
-}
-
-@supports (padding: env(safe-area-inset-top)) {
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: env(safe-area-inset-top);
-        background-color: var(--body-shadow-background-color);
-        z-index: 9999;
     }
 }
 
@@ -445,16 +430,18 @@ textarea {
         content: '';
         position: absolute;
         inset: 0;
-        background-color: var(--body-shadow-background-color);
-        mask-image: linear-gradient(to top, transparent 0%, black 35%, black 65%, black 90%, black 100%);
+        background-color: color-mix(in oklch, var(--body-shadow-background-color) 90%, transparent);
+        backdrop-filter: blur(2px);
+        mask-image: linear-gradient(
+            to top,
+            transparent 0%,
+            color-mix(in srgb, black 60%, transparent) 35%,
+            color-mix(in srgb, black 85%, transparent) 65%,
+            color-mix(in srgb, black 98%, transparent) 80%,
+            black 100%
+        );
         transition: background-color .3s;
         pointer-events: none;
-    }
-
-    @media (width < 768px) {
-        body.sidebar-toggling & {
-            --body-shadow-background-color: transparent;
-        }
     }
 
     .header-container {
@@ -654,7 +641,7 @@ textarea {
     display: grid;
     grid-template-rows: auto 1fr;
     padding: 0 var(--sidebar-gap-inline) var(--body-gap-block);
-    border-top: var(--border-width) solid var(--body-border-color);
+    border-top: var(--border-width) solid var(--glass-border-color);
     border-top-left-radius: calc(var(--body-border-radius) * 1.5);
     border-top-right-radius: calc(var(--body-border-radius) * 1.5);
     background-color: var(--body-background-color-secondary);
@@ -1126,13 +1113,19 @@ textarea {
 
     @media (width < 768px) {
         &:after {
+            --body-backdrop-transparent: 60%;
+
             position: fixed;
             content: '';
             inset: 0;
-            background-color: var(--body-shadow-background-color);
+            background-color: color-mix(in oklch, var(--body-shadow-background-color) var(--body-backdrop-transparent), transparent);
             opacity: var(--sidebar-view-percent);
             transform: translateX(100%);
             transition: opacity .3s;
+        }
+
+        [data-theme="dark"] &:after {
+            --body-backdrop-transparent: 40%;
         }
 
         [data-sidebar-dragging] &:after {
