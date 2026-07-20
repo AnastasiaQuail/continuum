@@ -2040,6 +2040,17 @@ textarea {
             }
         }
 
+        &.form-row-header-large {
+            .form-label {
+                font-size: var(--font-size-medium);
+                color: var(--color-secondary);
+
+                @media (width >= 768px) {
+                    font-size: var(--font-size);
+                }
+            }
+        }
+
         .form-field {
             padding-block: 0;
             font-size: var(--font-size-medium);
@@ -2961,7 +2972,10 @@ textarea {
                     }
 
                     &.form-row-header-edit {
+                        justify-content: space-between;
                         margin-bottom: calc(var(--form-row-gap) * 2);
+                        padding-bottom: calc(var(--form-row-gap) * 2);
+                        border-bottom: var(--border-width) solid var(--border-color-divider);
                     }
 
                     &:not(.form-row-header-edit) > .form-label {
