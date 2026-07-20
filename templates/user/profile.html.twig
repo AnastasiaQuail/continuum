@@ -43,7 +43,12 @@
         ) -}}
     </section>
 
-    <div class="text-footer">Created: {{ app.user.createdAt.format('j F Y, H:i') }}</div>
+    <div>
+        <div class="card-description">
+            <div>Profile updated: {{ app.user.updatedAt.setTimezone(app.user.timezone).format('j F Y, H:i') }}</div>
+            <div>Last online: {{ app.user.lastVisitedAt.setTimezone(app.user.timezone).format('j F Y, H:i') }}</div>
+        </div>
+    </div>
 {%- endblock %}
 
 {%- macro form_row_plain(icon, label, value, url = null) -%}

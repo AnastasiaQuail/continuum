@@ -1770,7 +1770,7 @@ textarea {
             --form-row-color-label: var(--general-color);
 
             [data-theme="dark"] & {
-                --form-row-color-label: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color-light));
+                --form-row-color-label: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
             }
         }
     }
@@ -1949,6 +1949,14 @@ textarea {
         align-items: center;
         column-gap: calc(var(--form-row-gap) / 2);
         color: var(--form-row-color-field);
+
+        &[data-general-type] {
+            color: var(--general-color);
+
+            [data-theme="dark"] & {
+                color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
+            }
+        }
 
         &.form-field-multiple {
             flex-direction: column;
@@ -2165,11 +2173,6 @@ textarea {
     &.show .form-row-collapse-toggle {
         display: none;
     }
-}
-
-.text-footer {
-    font-size: var(--font-size-extra-small);
-    color: var(--color-tertiary);
 }
 
 .btn {
@@ -2955,15 +2958,33 @@ textarea {
                     & > .form-label {
                         margin-bottom: 0;
 
-                        @media (width >= 768px) {
-                            flex: none;
-                            width: var(--form-plain-size);
-                        }
+                    }
+
+                    &.form-row-header-edit {
+                        margin-bottom: calc(var(--form-row-gap) * 2);
+                    }
+
+                    &:not(.form-row-header-edit) > .form-label {
+                        flex: none;
+                        width: var(--form-plain-size);
                     }
                 }
             }
         }
     }
+
+    &:has(+ .card-description) {
+        margin-bottom: calc(var(--body-gap-block) / 3);
+    }
+}
+
+.card-description {
+    display: flex;
+    flex-direction: column;
+    row-gap: calc(var(--body-gap-block) / 6);
+    margin-bottom: var(--body-gap-block);
+    font-size: var(--font-size-small);
+    color: var(--color-tertiary);
 }
 
 @keyframes shine {
@@ -5085,139 +5106,40 @@ form {
     view-transition-name: profile-location-card;
 }
 
-.users {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--container-gap-block) / 2);
-
-    .user {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        gap: calc(var(--container-gap-inline) / 1.5);
-        padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
-        border-radius: var(--border-radius-internal);
-        background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
-
-        @media (width >= 576px) {
-            flex-direction: row;
-            align-items: center;
-        }
-
-        @media (width >= 992px) {
-            flex-wrap: nowrap;
-        }
-
-        .user-identifier {
-            display: flex;
-            align-items: center;
-            gap: calc(var(--gap-inline) / 2);
-            width: 100%;
-            text-decoration: none;
-
-            &:not(:hover) {
-                color: var(--color);
-            }
-
-            @media (width >= 576px) {
-                flex-direction: row;
-                align-items: center;
-            }
-
-            @media (width >= 992px) {
-                width: auto;
-            }
-
-            .user-email {
-                padding-block: calc(var(--gap-block) / 8);
-                font-weight: var(--font-weight-bold);
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                overflow: clip;
-            }
-        }
-
-        .user-roles {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-            gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
-
-            @media (width >= 992px) {
-                width: auto;
-                justify-content: center;
-            }
-
-            .badge {
-                --general-color: var(--color);
-                --badge-background-transparent: 5%;
-
-                font-size: var(--font-size-extra-small);
-                font-weight: var(--font-weight);
-            }
-        }
-
-        .user-geo {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: baseline;
-            gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
-            padding-inline: calc(var(--gap-inline) / 8);
-            font-size: var(--font-size-medium);
-            font-weight: var(--font-weight-light);
-            color: var(--color-tertiary);
-
-            @media (width >= 576px) {
-                justify-content: center;
-            }
-        }
-
-        .user-last-visited {
-            padding-inline: calc(var(--gap-inline) / 8);
-            font-size: var(--font-size-small);
-            color: var(--color-secondary);
-
-            @media (width >= 576px) {
-                text-align: right;
-            }
-        }
-    }
-}
-
-.backups {
-    display: flex;
-    flex-direction: column;
+.card-backups {
+    padding-block: 0;
 
     .backup {
-        & + & {
-            padding-top: calc(var(--container-gap-block) / 2);
-            margin-top: calc(var(--container-gap-block) / 2);
-            border-top: var(--border-width) solid var(--border-color-divider);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-block: calc(var(--card-padding-block) / 1.75);
+        text-decoration: none;
+        transition: color .15s;
+
+        &:not(:hover) {
+            color: var(--color);
         }
 
-        .backup-date {
-            display: flex;
-            align-items: center;
-            column-gap: calc(var(--gap-inline) / 2);
-            text-decoration: none;
-            transition: color .15s;
-
-            &:not(:hover) {
-                color: var(--color);
-            }
-
-            & > svg {
-                color: var(--primary-color);
-            }
+        & + & {
+            border-top: var(--border-width) solid var(--border-color-divider);
         }
 
         .backup-information {
             display: flex;
-            gap: calc(var(--gap-inline) / 2);
-            margin-top: calc(var(--container-gap-block) / 3);
+            column-gap: calc(var(--gap-inline) / 2);
+            margin-top: calc(var(--card-padding-block) / 6);
             font-size: var(--font-size-extra-small);
             color: var(--color-tertiary);
+
+            .backup-size {
+                font-weight: var(--font-weight-bold);
+            }
+        }
+
+        .backup-download {
+            display: flex;
+            align-items: center;
         }
     }
 }
