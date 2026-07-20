@@ -90,4 +90,9 @@ final readonly class MeasurementService
 
         return $measurement;
     }
+
+    public function findPrevValue(BodyMeasurement $measurement, string $fieldName): ?float
+    {
+        return $this->repository->findPrevByFieldName($measurement, $fieldName);
+    }
 }

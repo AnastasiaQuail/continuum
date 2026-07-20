@@ -79,11 +79,11 @@
             <div id="weight-change-difference" class="card-title-info">
                 <span>{{ ux_icon('lucide:trending-up-down') }}</span>
                 <span>
-                        {%- if offset_measurement.min !== offset_measurement.max -%}
-                            {{- offset_measurement.min ~ ' - ' -}}
-                        {%- endif -%}
+                    {%- if offset_measurement.min !== offset_measurement.max -%}
+                        {{- offset_measurement.min ~ ' - ' -}}
+                    {%- endif -%}
                     {{- offset_measurement.max ~ ' kg' -}}
-                    </span>
+                </span>
             </div>
         </div>
 
@@ -99,6 +99,8 @@
         </section>
     {%- else -%}
         {%- for measurement in measurements|reverse -%}
+            {%- set progress = progresses[measurement.id] -%}
+
             <section class="card card-form card-measurements">
                 {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
                 {%- set is_granted = is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
@@ -112,45 +114,130 @@
 
                 {{- _self.measurent_row(
                     'Body fat',
-                    {'by Deurenberg': measurement.fatDeurenberg, 'by US Navy': measurement.fatUsNavy},
-                    '%',
+                    [
+                        {
+                            value: measurement.fatDeurenberg,
+                            legend: 'by Deurenberg',
+                            description: '%',
+                            progress: progress.fatDeurenberg,
+                        },
+                        {
+                            value: measurement.fatUsNavy,
+                            legend: 'by US Navy',
+                            description: '%',
+                            progress: progress.fatUsNavy,
+                        },
+                    ],
                     'orange',
                 ) -}}
-                {{- _self.measurent_row('Weight', measurement.weight, 'kg') -}}
-                {{- _self.measurent_row('Neck', measurement.neck) -}}
-                {{- _self.measurent_row('Waist', measurement.waist) -}}
-                {{- _self.measurent_row('Chest', measurement.chest) -}}
-                {{- _self.measurent_row('Shoulders', measurement.shoulders) -}}
-                {{- _self.measurent_row('Biceps', measurement.flexedBiceps) -}}
-                {{- _self.measurent_row('Hips', measurement.hips) -}}
-                {{- _self.measurent_row('Thigh', measurement.thigh) -}}
-                {{- _self.measurent_row('Calf', measurement.calf) -}}
+                {{- _self.measurent_row(
+                    'Weight',
+                    {
+                        value: measurement.weight,
+                        description: 'kg',
+                        progress: progress.weight,
+                    },
+                ) -}}
+                {{- _self.measurent_row(
+                    'Neck',
+                    {
+                        value: measurement.neck,
+                        progress: progress.neck,
+                    },
+                ) -}}
+                {{- _self.measurent_row(
+                    'Waist',
+                    {
+                        value: measurement.waist,
+                        progress: progress.waist,
+                    },
+                ) -}}
+                {{- _self.measurent_row(
+                    'Chest',
+                    {
+                        value: measurement.chest,
+                        progress: progress.chest,
+                    },
+                ) -}}
+                {{- _self.measurent_row(
+                    'Shoulders',
+                    {
+                        value: measurement.shoulders,
+                        progress: progress.shoulders,
+                    },
+                ) -}}
+                {{- _self.measurent_row(
+                    'Biceps',
+                    {
+                        value: measurement.flexedBiceps,
+                        progress: progress.flexedBiceps,
+                    },
+                ) -}}
+                {{- _self.measurent_row(
+                    'Hips',
+                    {
+                        value: measurement.hips,
+                        progress: progress.hips,
+                    },
+                ) -}}
+                {{- _self.measurent_row(
+                    'Thigh',
+                    {
+                        value: measurement.thigh,
+                        progress: progress.thigh,
+                    },
+                ) -}}
+                {{- _self.measurent_row(
+                    'Calf',
+                    {
+                        value: measurement.calf,
+                        progress: progress.calf,
+                    },
+                ) -}}
             </section>
         {%- endfor -%}
     {%- endif -%}
 {%- endblock %}
 
-{%- macro measurent_row(label, values, description = 'cm', color = null) -%}
+{%- macro measurent_row(label, values, color = null) -%}
     {%- set is_available = false -%}
-    {%- set length = 0 -%}
-    {%- set values = values is not iterable ? [values] : values -%}
+    {%- set values = values['value'] is defined ? [values] : values -%}
 
-    {%- for value in values -%}
-        {%- if value -%}
+    {%- for subvalue in values -%}
+        {%- if subvalue.value -%}
             {%- set is_available = true -%}
-            {%- set length = length + 1 -%}
         {%- endif -%}
     {%- endfor -%}
 
     {%- if is_available -%}
         <div class="form-row form-row-compact" {% if color %}data-general-type="{{ color }}"{% endif %}>
             <div class="form-label">{{ label }}</div>
-            <div class="form-field {% if length > 1 %}form-field-multiple{% endif %}">
-                {%- for sublabel, value in values -%}
-                    {%- if value -%}
+            <div class="form-field {% if values|length > 1 %}form-field-multiple{% endif %}">
+                {%- for subvalue in values -%}
+                    {%- if subvalue.value -%}
                         <div class="form-field-line">
-                            {%- if sublabel %}<span class="form-field-legend">{{ sublabel }}</span>{% endif -%}
-                            <span>{{ value }}</span><small>{{ description }}</small>
+                            {%- if subvalue['legend'] is defined -%}
+                                <span class="form-field-legend">{{ subvalue.legend }}</span>
+                            {%- endif -%}
+
+                            <span>{{ subvalue.value }}</span>
+                            <small>{{ subvalue['description'] is defined ? subvalue.description : 'cm' }}</small>
+
+                            {%- if subvalue.progress and subvalue.progress.progress.value !== 'unchanged' -%}
+                                {%- set change = subvalue.progress.progress.value -%}
+                                {%- if subvalue.progress.isProgressReversed -%}
+                                    {%- set change = change === 'increased' ? 'decreased' : 'increased' -%}
+                                {%- endif -%}
+
+                                <span class="form-field-progress" data-change="{{ change }}">
+                                    {%- if subvalue.progress.progress.value === 'increased' -%}
+                                        {{- ux_icon('lucide:move-up') -}}
+                                    {%- else -%}
+                                        {{- ux_icon('lucide:move-down') -}}
+                                    {%- endif -%}
+                                </span>
+                            {%- endif -%}
+
                         </div>
                     {%- endif -%}
                 {%- endfor -%}

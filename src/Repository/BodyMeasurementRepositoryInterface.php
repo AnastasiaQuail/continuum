@@ -20,5 +20,7 @@ interface BodyMeasurementRepositoryInterface
 
     public function findOneLastWithNotNull(): LastMeasurement;
 
+    public function findPrevByFieldName(BodyMeasurement $measurement, string $fieldName): ?float;
+
     public function save(BodyMeasurement $measurement): void;
 }

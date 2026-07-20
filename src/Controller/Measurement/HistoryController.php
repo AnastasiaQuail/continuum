@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Continuum\Controller\Measurement;
 
+use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Security\Authorization\Voter\MeasurementVoter;
 use Continuum\Service\Measurement\MeasurementService;
@@ -39,6 +40,7 @@ final class HistoryController extends AbstractController
         return $this->render('measurement/history.html.twig', [
             'measurements' => $measurements,
             'measurement_days' => $measurementDays,
+            'reversed_measurement_names' => BodyMeasurement::getProgressReversedMeasurementNames(),
         ]);
     }
 }

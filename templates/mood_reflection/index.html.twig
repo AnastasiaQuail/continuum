@@ -57,13 +57,9 @@
                 {%- set first_week_day = month.format('N') -%}
 
                 <div class="month-day-title">
-                    <span>mon</span>
-                    <span>tue</span>
-                    <span>wed</span>
-                    <span>thu</span>
-                    <span>fri</span>
-                    <span>sat</span>
-                    <span>sun</span>
+                    {%- for day_title in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] -%}
+                        <span>{{ day_title }}</span>
+                    {%- endfor -%}
                 </div>
                 <div class="month-days">
                     {%- if first_week_day > 1 -%}

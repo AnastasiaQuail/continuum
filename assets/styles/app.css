@@ -1374,10 +1374,40 @@ textarea {
     }
 
     &.actions-pagination {
+        position: sticky;
+        top: calc(var(--header-offset-block) + var(--body-gap-block) / 2);
         justify-content: start;
+        z-index: 1;
 
         @media (width < 768px) {
             justify-content: space-between;
+        }
+
+        .pagination-prev {
+            transform-origin: top left;
+        }
+
+        .pagination-next {
+            transform-origin: top right;
+
+            @media (width >= 768px) {
+                transform-origin: top left;
+            }
+        }
+
+        &.is-stuck {
+            .pagination-prev,
+            .pagination-next {
+                transform: scale(0.8);
+
+                &:not(a) {
+                    opacity: 0;
+                }
+
+                &:not([disabled]):active {
+                    transform: scale(1);
+                }
+            }
         }
     }
 
@@ -1976,6 +2006,18 @@ textarea {
             }
         }
 
+        .form-field-progress {
+            font-size: var(--font-size-extra-small);
+            color: var(--color-green);
+            align-items: baseline;
+            column-gap: calc(var(--form-row-gap) / 4);
+            display: inline-flex;
+
+            &[data-change="increased"] {
+                color: var(--color-red);
+            }
+        }
+
         @media (width >= 768px) {
             padding-block: var(--form-row-gap);
         }
@@ -2329,7 +2371,7 @@ textarea {
         backdrop-filter: var(--glass-backdrop-filter);
         box-shadow: var(--control-box-shadow);
         transform: scale(1);
-        transition: color .15s, border-color .15s, background-color .15s, transform .3s;
+        transition: color .15s, border-color .15s, background-color .15s, transform .3s, opacity .3s;
 
         &:not([disabled]):hover,
         &:not([disabled]):focus-visible {

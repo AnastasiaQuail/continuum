@@ -32,6 +32,7 @@ final readonly class WorkoutProgressService
         /** @var array<non-empty-string, WorkoutExercise> $unhandledWorkoutExercises */
         $unhandledWorkoutExercises = [];
 
+        /** @var array<non-empty-string, ExerciseProgress> $progresses */
         $progresses = [];
 
         foreach ($workouts as $workout) {
