@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace Continuum\Entity;
 
+use Continuum\Entity\Attribute\Measurement;
 use Continuum\Repository\BodyMeasurementRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ReflectionAttribute;
+use ReflectionClass;
+use ReflectionProperty;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 
@@ -26,36 +30,47 @@ final class BodyMeasurement
     public DateTimeImmutable $datetime;
 
     #[ORM\Column(type: Types::SMALLFLOAT)]
+    #[Measurement]
     public private(set) float $fatDeurenberg = 0.0;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement]
     public private(set) ?float $fatUsNavy = null;
 
     #[ORM\Column(type: Types::SMALLFLOAT)]
+    #[Measurement]
     public float $weight = 0.0;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement(isProgressReversed: true)]
     public ?float $neck = null;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement(isProgressReversed: true)]
     public ?float $chest = null;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement(isProgressReversed: true)]
     public ?float $shoulders = null;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement]
     public ?float $waist = null;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement(isProgressReversed: true)]
     public ?float $flexedBiceps = null;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement]
     public ?float $hips = null;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement(isProgressReversed: true)]
     public ?float $thigh = null;
 
     #[ORM\Column(type: Types::SMALLFLOAT, nullable: true)]
+    #[Measurement(isProgressReversed: true)]
     public ?float $calf = null;
 
     public function __construct(
@@ -87,5 +102,54 @@ final class BodyMeasurement
 
             $this->fatUsNavy = round($fatUsNavy, 2);
         }
+    }
+
+    /**
+     * @return list<non-empty-string>
+     */
+    public static function getMeasurementNames(): array
+    {
+        return array_map(
+            static fn (ReflectionProperty $property): string => $property->getName(),
+            self::getMeasurementProperties(),
+        );
+    }
+
+    /**
+     * @return list<non-empty-string>
+     */
+    public static function getProgressReversedMeasurementNames(): array
+    {
+        /** @var list<ReflectionProperty> $properties */
+        $properties = array_filter(
+            self::getMeasurementProperties(),
+            static function (ReflectionProperty $property): bool {
+                /** @var non-empty-list<ReflectionAttribute<Measurement>> $attributes */
+                $attributes = $property->getAttributes(Measurement::class);
+
+                /** @var Measurement $attribute */
+                $attribute = array_first($attributes)->newInstance();
+
+                return $attribute->isProgressReversed;
+            },
+        );
+
+        return array_map(
+            static fn (ReflectionProperty $property): string => $property->getName(),
+            $properties,
+        );
+    }
+
+    /**
+     * @return list<ReflectionProperty>
+     */
+    private static function getMeasurementProperties(): array
+    {
+        return array_values(
+            array_filter(
+                new ReflectionClass(self::class)->getProperties(),
+                static fn (ReflectionProperty $property): bool => [] !== $property->getAttributes(Measurement::class),
+            )
+        );
     }
 }

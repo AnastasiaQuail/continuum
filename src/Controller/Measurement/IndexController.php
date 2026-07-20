@@ -7,6 +7,7 @@ namespace Continuum\Controller\Measurement;
 use Continuum\Entity\User;
 use Continuum\Security\Authorization\Voter\MeasurementVoter;
 use Continuum\Service\Measurement\ChartMeasurementService;
+use Continuum\Service\Measurement\MeasurementProgressService;
 use Continuum\Service\Measurement\MeasurementService;
 use Continuum\Service\RequestValidator;
 use DateTimeImmutable;
@@ -23,6 +24,7 @@ final class IndexController extends AbstractController
         private readonly RequestValidator $requestValidator,
         private readonly MeasurementService $measurementService,
         private readonly ChartMeasurementService $chartMeasurementService,
+        private readonly MeasurementProgressService $measurementProgressService,
     ) {}
 
     #[Route(path: '/measurements', name: 'app_measurements', methods: ['GET'])]
@@ -45,12 +47,14 @@ final class IndexController extends AbstractController
         $measurements = $this->measurementService->getByMonth($user, $month);
         $chartMeasurements = $this->chartMeasurementService->getChartMeasurements($user, $month, $measurements);
         $offsetMeasurement = $this->chartMeasurementService->getOffsetMeasurement($chartMeasurements);
+        $progresses = $this->measurementProgressService->getProgresses($measurements);
 
         return $this->render('measurement/index.html.twig', [
             'month' => $month,
             'measurements' => $measurements,
             'chart_measurements' => $chartMeasurements,
             'offset_measurement' => $offsetMeasurement,
+            'progresses' => $progresses,
         ]);
     }
 }

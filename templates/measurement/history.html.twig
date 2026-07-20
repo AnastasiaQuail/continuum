@@ -72,10 +72,10 @@
                 {%- set result = ((values|last).value - (values|first).value)|round(1) -%}
 
                 {%- if result !== 0.0 -%}
-                    {%- if type !== 'cm' or field === 'waist' or field === 'hips' -%}
-                        {%- set badge_type = result > 0 ? 'badge-bad' : 'badge-good' -%}
-                    {%- else -%}
+                    {%- if field in context.reversed_measurement_names -%}
                         {%- set badge_type = result > 0 ? 'badge-good' : 'badge-bad' -%}
+                    {%- else -%}
+                        {%- set badge_type = result > 0 ? 'badge-bad' : 'badge-good' -%}
                     {%- endif -%}
 
                     <span class="badge {{ badge_type }}">

@@ -30,6 +30,24 @@ window.submitBy = function (element) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    const pagination = document.querySelector('.actions-pagination');
+
+    if (pagination) {
+        function updateStuck() {
+            pagination.classList.toggle(
+                'is-stuck',
+                pagination.getBoundingClientRect().top === parseFloat(getComputedStyle(pagination).top) || 0
+            );
+        }
+
+        window.addEventListener('scroll', updateStuck, {passive: true});
+        window.addEventListener('resize', updateStuck);
+
+        updateStuck();
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
     const toolbar = document.getElementById('footer-toolbar');
     const sfToolbar = document.querySelector('body > .sf-toolbar');
 

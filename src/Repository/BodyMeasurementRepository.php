@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Order;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Override;
 
@@ -88,6 +89,25 @@ final class BodyMeasurementRepository extends ServiceEntityRepository implements
             ->fetchAssociative();
 
         return new LastMeasurement(...array_values($row));
+    }
+
+    #[Override]
+    public function findPrevByFieldName(BodyMeasurement $measurement, string $fieldName): ?float
+    {
+        $query = $this->createQueryBuilder('bm')
+            ->select(sprintf('bm.%s', $fieldName))
+            ->andWhere(sprintf('bm.%s is not null', $fieldName))
+            ->andWhere('bm.datetime < :time')
+            ->setParameter('time', $measurement->datetime)
+            ->addOrderBy('bm.datetime', Order::Descending->value)
+            ->setMaxResults(1)
+            ->getQuery();
+
+        try {
+            return (float) $query->getSingleScalarResult();
+        } catch (NoResultException) {
+            return null;
+        }
     }
 
     #[Override]
