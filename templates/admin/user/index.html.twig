@@ -4,31 +4,48 @@
 {% block body_id %}admin-users{% endblock %}
 
 {% block main -%}
-    <section class="card">
-        <div class="users">
-            {%- for user in users -%}
-                {%- set is_granted = is_granted('ADMIN_USER_EDIT', user) -%}
-                <div class="user" data-general-type="{{ user.status.color.value }}">
-                    <{% if is_granted %}a{% else %}div{% endif %}
-                        {% if is_granted %}href="{{ path('app_admin_user_edit', {id: user.id}) }}"{% endif %}
-                        class=" user-identifier">
-                        <div class="badge">{{ user.status.name }}</div>
-                        <div class="user-email">{{ user.userIdentifier }}</div>
-                    </{% if is_granted %}a{% else %}div{% endif %}>
+    {%- set date = user_date() -%}
 
-                    <div class="user-roles">
-                        {%- for role in user.roles -%}
-                            <span class="badge">{{ role|slice(5) }}</span>
-                        {%- endfor -%}
-                    </div>
+    {%- for user in users -%}
+        <section class="card card-form card-form-plain">
+            {%- set is_granted = is_granted('ADMIN_USER_EDIT', user) -%}
 
-                    <div class="user-geo">{{ user.timezone.name }}</div>
-
-                    <div class="user-last-visited">
-                        {{- user.lastVisitedAt.setTimezone(app.user.timezone).format('j F Y, H:i') -}}
-                    </div>
+            <{% if is_granted %}a{% else %}div{% endif %}
+                {% if is_granted %}href="{{ path('app_admin_user_edit', {id: user.id}) }}"{% endif %}
+                class="form-row form-row-header-edit" data-general-type="{{ user.status.color.value }}">
+                <div class="form-label">
+                    <span class="badge">{{ user.status.name }}</span> {{ user.userIdentifier }}
                 </div>
-            {%- endfor -%}
+                <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
+            </{% if is_granted %}a{% else %}div{% endif %}>
+
+            <div class="form-row">
+                {%- set last_visited_date = user.lastVisitedAt.setTimezone(app.user.timezone) -%}
+                {%- set diff_days = last_visited_date.diff(date).days -%}
+                {%- set general_type = diff_days >= 14 ? 'red' : (diff_days >= 6 ? 'orange' : null) -%}
+
+                <div class="form-label">Last online</div>
+                <div class="form-field" {% if general_type %}data-general-type="{{ general_type }}"{% endif %}>
+                    {{- last_visited_date.format('j F, H:i') -}}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label">Roles</div>
+                <div class="form-field">
+                    {%- for role in user.roles -%}
+                        <span class="badge">{{ role|slice(5) }}</span>
+                    {%- endfor -%}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label">Timezone</div>
+                <div class="form-field">{{ user.timezone.name }}</div>
+            </div>
+        </section>
+
+        <div class="card-description">
+            <div>Created: {{ user.createdAt.setTimezone(app.user.timezone).format('j F Y, H:i') }}</div>
+            <div>Updated: {{ user.updatedAt.setTimezone(app.user.timezone).format('j F Y, H:i') }}</div>
         </div>
-    </section>
+    {%- endfor -%}
 {%- endblock %}

@@ -8,7 +8,7 @@ window.addEventListener('load', () => {
 
     setTimeout(() => {
         currentMonth.scrollIntoView({behavior: 'smooth', inline: 'start'});
-    }, 300);
+    }, 100);
 });
 
 document.addEventListener('DOMContentLoaded', () => {
