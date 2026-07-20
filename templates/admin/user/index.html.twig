@@ -38,7 +38,8 @@
                     {%- endfor -%}
                 </div>
             </div>
-            <a class="form-row" href="geo:{{ user.location.latitude }},{{ user.location.longitude }}" target="_blank">
+            <a class="form-row" target="_blank"
+               href="https://maps.apple.com/?q={{ user.location.latitude }},{{ user.location.longitude }}">
                 <div class="form-label">Location</div>
                 <div class="form-field">
                     {{- user.timezone.name -}}
