@@ -97,106 +97,106 @@
             {{- ux_icon('lucide:frown') -}}
             <span>No measurements for this month yet</span>
         </section>
-    {%- else -%}
-        {%- for measurement in measurements|reverse -%}
-            {%- set progress = progresses[measurement.id] -%}
-
-            <section class="card card-form card-measurements">
-                {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
-                {%- set is_granted = is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
-
-                <{% if is_granted %}a{% else %}div{% endif %}
-                    {% if is_granted %}href="{{ path('app_measurement_edit', {id: measurement.id}) }}"{% endif %}
-                    class="form-row form-row-header-edit">
-                    <div class="form-label">{{ time }}</div>
-                    <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
-                </{% if is_granted %}a{% else %}div{% endif %}>
-
-                {{- _self.measurent_row(
-                    'Body fat',
-                    [
-                        {
-                            value: measurement.fatDeurenberg,
-                            legend: 'by Deurenberg',
-                            description: '%',
-                            progress: progress.fatDeurenberg,
-                        },
-                        {
-                            value: measurement.fatUsNavy,
-                            legend: 'by US Navy',
-                            description: '%',
-                            progress: progress.fatUsNavy,
-                        },
-                    ],
-                    'orange',
-                ) -}}
-                {{- _self.measurent_row(
-                    'Weight',
-                    {
-                        value: measurement.weight,
-                        description: 'kg',
-                        progress: progress.weight,
-                    },
-                ) -}}
-                {{- _self.measurent_row(
-                    'Neck',
-                    {
-                        value: measurement.neck,
-                        progress: progress.neck,
-                    },
-                ) -}}
-                {{- _self.measurent_row(
-                    'Waist',
-                    {
-                        value: measurement.waist,
-                        progress: progress.waist,
-                    },
-                ) -}}
-                {{- _self.measurent_row(
-                    'Chest',
-                    {
-                        value: measurement.chest,
-                        progress: progress.chest,
-                    },
-                ) -}}
-                {{- _self.measurent_row(
-                    'Shoulders',
-                    {
-                        value: measurement.shoulders,
-                        progress: progress.shoulders,
-                    },
-                ) -}}
-                {{- _self.measurent_row(
-                    'Biceps',
-                    {
-                        value: measurement.flexedBiceps,
-                        progress: progress.flexedBiceps,
-                    },
-                ) -}}
-                {{- _self.measurent_row(
-                    'Hips',
-                    {
-                        value: measurement.hips,
-                        progress: progress.hips,
-                    },
-                ) -}}
-                {{- _self.measurent_row(
-                    'Thigh',
-                    {
-                        value: measurement.thigh,
-                        progress: progress.thigh,
-                    },
-                ) -}}
-                {{- _self.measurent_row(
-                    'Calf',
-                    {
-                        value: measurement.calf,
-                        progress: progress.calf,
-                    },
-                ) -}}
-            </section>
-        {%- endfor -%}
     {%- endif -%}
+
+    {%- for measurement in measurements|reverse -%}
+        {%- set progress = progresses[measurement.id] -%}
+
+        <section class="card card-form card-measurements">
+            {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
+            {%- set is_granted = is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
+
+            <{% if is_granted %}a{% else %}div{% endif %}
+                {% if is_granted %}href="{{ path('app_measurement_edit', {id: measurement.id}) }}"{% endif %}
+                class="form-row form-row-header-edit">
+                <div class="form-label">{{ time }}</div>
+                <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
+            </{% if is_granted %}a{% else %}div{% endif %}>
+
+            {{- _self.measurent_row(
+                'Body fat',
+                [
+                    {
+                        value: measurement.fatDeurenberg,
+                        legend: 'by Deurenberg',
+                        description: '%',
+                        progress: progress.fatDeurenberg,
+                    },
+                    {
+                        value: measurement.fatUsNavy,
+                        legend: 'by US Navy',
+                        description: '%',
+                        progress: progress.fatUsNavy,
+                    },
+                ],
+                'orange',
+            ) -}}
+            {{- _self.measurent_row(
+                'Weight',
+                {
+                    value: measurement.weight,
+                    description: 'kg',
+                    progress: progress.weight,
+                },
+            ) -}}
+            {{- _self.measurent_row(
+                'Neck',
+                {
+                    value: measurement.neck,
+                    progress: progress.neck,
+                },
+            ) -}}
+            {{- _self.measurent_row(
+                'Waist',
+                {
+                    value: measurement.waist,
+                    progress: progress.waist,
+                },
+            ) -}}
+            {{- _self.measurent_row(
+                'Chest',
+                {
+                    value: measurement.chest,
+                    progress: progress.chest,
+                },
+            ) -}}
+            {{- _self.measurent_row(
+                'Shoulders',
+                {
+                    value: measurement.shoulders,
+                    progress: progress.shoulders,
+                },
+            ) -}}
+            {{- _self.measurent_row(
+                'Biceps',
+                {
+                    value: measurement.flexedBiceps,
+                    progress: progress.flexedBiceps,
+                },
+            ) -}}
+            {{- _self.measurent_row(
+                'Hips',
+                {
+                    value: measurement.hips,
+                    progress: progress.hips,
+                },
+            ) -}}
+            {{- _self.measurent_row(
+                'Thigh',
+                {
+                    value: measurement.thigh,
+                    progress: progress.thigh,
+                },
+            ) -}}
+            {{- _self.measurent_row(
+                'Calf',
+                {
+                    value: measurement.calf,
+                    progress: progress.calf,
+                },
+            ) -}}
+        </section>
+    {%- endfor -%}
 {%- endblock %}
 
 {%- macro measurent_row(label, values, color = null) -%}
