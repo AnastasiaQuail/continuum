@@ -3444,17 +3444,10 @@ textarea {
 }
 
 .calendar {
-    --grid-month-columns: 2;
-    --gap-month-days: calc(var(--gap-inline) / 5);
-    --grid-day-columns: 7;
-    --day-title-font-size: var(--font-size-extra-small);
-    --day-aspect-ratio: 6 / 7;
-    --day-font-size: 2.8vw;
-    --day-border-radius: var(--border-radius-internal);
-    --day-badge-size: 2vw;
+    --calendar-months-in-row: 2;
 
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: var(--container-gap-block) var(--gap-inline);
     margin-inline: calc(-1 * var(--container-gap-inline));
     overflow: clip;
@@ -3463,12 +3456,16 @@ textarea {
 
     @media (width >= 768px) {
         display: grid;
-        grid-template-columns: repeat(var(--grid-month-columns), 1fr);
+        grid-template-columns: repeat(var(--calendar-months-in-row), 1fr);
         margin-inline: 0;
         overflow: inherit;
     }
 
     .month {
+        --month-day-columns: 7;
+        --month-day-title-font-size: var(--font-size-extra-small);
+        --month-day-gap: calc(var(--gap-inline) / 5);
+
         position: relative;
         padding-left: var(--container-gap-inline);
         scroll-snap-align: start;
@@ -3509,7 +3506,7 @@ textarea {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             margin-bottom: calc(var(--gap-block) / 1.25);
-            font-size: var(--day-title-font-size);
+            font-size: var(--month-day-title-font-size);
             font-weight: var(--font-weight-light);
             text-transform: capitalize;
             text-align: center;
@@ -3520,16 +3517,19 @@ textarea {
 
         .month-days {
             display: grid;
-            grid-template-columns: repeat(var(--grid-day-columns), 1fr);
-            gap: var(--gap-month-days);
+            grid-template-columns: repeat(var(--month-day-columns), 1fr);
+            gap: var(--month-day-gap);
         }
     }
 
     .day {
+        --day-aspect-ratio: 6 / 7;
+        --day-font-size: 2.8vw;
         --day-color: var(--color);
         --day-border-width: 1px;
         --day-border-color: var(--general-color);
-        --day-border-color-transparent: transparent;
+        --day-border-color-transparent: 0%;
+        --day-border-radius: var(--border-radius-internal);
         --day-background-color: var(--general-color);
         --day-background-color-transparent: var(--transparent-color);
         --fake-days: 1;
@@ -3569,6 +3569,7 @@ textarea {
         }
 
         .day-badge {
+            --day-badge-size: 2vw;
             --day-badge-general-color: var(--general-color);
             --day-badge-border-color: var(--day-badge-general-color);
             --day-badge-border-color-transparent: 25%;
@@ -3613,7 +3614,7 @@ textarea {
         }
 
         &.day-current {
-            --day-border-color-transparent: 100% !important;
+            --day-border-color-transparent: 50% !important;
             font-weight: var(--font-weight-bold);
 
             & > span {
@@ -3634,8 +3635,7 @@ textarea {
         &:not(.day-past) {
             /* empty current and future days */
 
-            --day-border-color-transparent: 3%;
-            --day-background-color-transparent: 2%;
+            --day-background-color-transparent: 0%;
 
             .day-badge {
                 --day-badge-border-color-transparent: 10%;
@@ -3648,15 +3648,13 @@ textarea {
                 &:not(.day-current) {
                     --day-color: var(--color-tertiary);
                 }
-
-                --day-background-color-transparent: 4%;
             }
 
             &[data-general-type] {
                 /* future events */
 
                 --day-color: var(--general-color);
-                --day-border-color-transparent: 5%;
+                --day-border-color-transparent: 10%;
                 --day-background-color-transparent: 15%;
 
                 [data-theme="dark"] & {
@@ -3677,73 +3675,161 @@ textarea {
     }
 
     @media (576px <= width < 768px) {
-        --grid-month-columns: 3;
-        --gap-month-days: calc(var(--gap-inline) / 8);
-        --day-aspect-ratio: 5 / 6;
-        --day-font-size: 1.9vw;
-        --day-border-radius: var(--border-radius-badge);
-        --day-badge-size: 1vw;
+        --calendar-months-in-row: 3;
+
+        .month {
+            --month-day-gap: calc(var(--gap-inline) / 8);
+        }
+
+        .day {
+            --day-aspect-ratio: 5 / 6;
+            --day-font-size: 1.9vw;
+
+            .day-badge {
+                --day-badge-size: 1vw;
+            }
+        }
     }
 
     @media (768px <= width < 992px) {
-        --grid-month-columns: 4;
-        --day-title-font-size: calc(var(--font-size-extra-small) * 0.5);
-        --day-aspect-ratio: 4 / 5;
-        --gap-month-days: .25vw;
-        --day-font-size: 1.4vw;
-        --day-border-radius: calc(var(--day-font-size) / 1.6);
-        --day-badge-size: .75vw;
+        --calendar-months-in-row: 4;
+
+        .month {
+            --month-day-title-font-size: calc(var(--font-size-extra-small) * 0.5);
+            --month-day-gap: .25vw;
+        }
+
+        .day {
+            --day-aspect-ratio: 4 / 5;
+            --day-font-size: 1.4vw;
+            --day-border-radius: calc(var(--day-font-size) / 1.6);
+
+            .day-badge {
+                --day-badge-size: .75vw;
+            }
+        }
     }
 
     @media (992px <= width < 1200px) {
-        --grid-month-columns: 6;
-        --day-title-font-size: calc(var(--font-size-extra-small) * 0.5);
-        --day-aspect-ratio: 4 / 5;
-        --gap-month-days: .2vw;
-        --day-font-size: .9vw;
-        --day-border-radius: calc(var(--day-font-size) / 1.6);
-        --day-badge-size: .5vw;
+        --calendar-months-in-row: 6;
+
+        .month {
+            --month-day-title-font-size: calc(var(--font-size-extra-small) * 0.5);
+            --month-day-gap: .2vw;
+        }
+
+        .day {
+            --day-aspect-ratio: 4 / 5;
+            --day-font-size: .9vw;
+            --day-border-radius: calc(var(--day-font-size) / 1.6);
+
+            .day-badge {
+                --day-badge-size: .5vw;
+            }
+        }
     }
 
     @media (width >= 1200px) {
-        --grid-month-columns: 6;
-        --day-title-font-size: calc(var(--font-size-extra-small) * 0.6);
-        --day-aspect-ratio: 4 / 5;
-        --gap-month-days: 3px;
-        --day-font-size: 0.65em;
-        --day-border-radius: 7px;
-        --day-badge-size: 6px;
+        --calendar-months-in-row: 6;
 
         .calendar-body {
             max-width: 1200px;
         }
+
+        .month {
+            --month-day-title-font-size: calc(var(--font-size-extra-small) * 0.6);
+            --month-day-gap: 3px;
+        }
+
+        .day {
+            --day-aspect-ratio: 4 / 5;
+            --day-font-size: 0.65em;
+            --day-border-radius: 7px;
+
+            .day-badge {
+                --day-badge-size: 6px;
+            }
+        }
     }
 
     @media (width >= 1400px) {
-        --day-title-font-size: calc(var(--font-size-extra-small) * 0.7);
+        .month {
+            --month-day-title-font-size: calc(var(--font-size-extra-small) * 0.7);
+        }
+    }
+
+    &.calendar-month {
+        display: block;
+
+        .month {
+            --month-day-gap: calc(var(--gap-inline) / 4);
+
+            @media (width >= 768px) {
+                --month-day-title-font-size: var(--font-size-extra-small);
+            }
+        }
+
+        .day {
+            --day-font-size: var(--font-size-medium);
+            --day-border-radius: var(--border-radius-internal);
+
+            @media (width >= 576px) {
+                --day-aspect-ratio: 7 / 8;
+            }
+
+            @media (width >= 768px) {
+                --day-aspect-ratio: 1;
+            }
+        }
+
+        &.calendar-month-short {
+            .day {
+                --day-aspect-ratio: 2 / 1;
+                --day-font-size: var(--font-size-extra-small);
+            }
+        }
+    }
+
+    &.calendar-badges {
+        .day {
+            container-type: size;
+            container-name: calendar-badges-day;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+
+            &[data-general-type] {
+                --day-border-color-transparent: 0%;
+
+                & > span {
+                    display: none;
+                }
+            }
+
+            .day-badges {
+                inset: unset;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                gap: 3cqmax;
+            }
+
+            .day-badge {
+                --day-badge-size: 12cqmax;
+                --day-badge-border-color-transparent: 25%;
+                --day-badge-background-color-transparent: 100%;
+
+                margin-left: 0;
+            }
+        }
     }
 }
 
 .card-calendar-month {
     @media (width >= 768px) {
         max-width: calc(var(--gap-inline) * 2 + 400px);
-    }
-
-    .calendar {
-        --gap-month-days: calc(var(--gap-inline) / 4);
-        --day-font-size: var(--font-size-medium);
-        --day-border-radius: var(--border-radius-internal);
-
-        @media (width >= 576px) {
-            --day-aspect-ratio: 7 / 8;
-        }
-
-        @media (width >= 768px) {
-            --day-title-font-size: var(--font-size-extra-small);
-            --day-aspect-ratio: 1;
-        }
-
-        display: block;
     }
 }
 
@@ -3758,9 +3844,7 @@ textarea {
         background-color: transparent;
 
         .calendar {
-            --month-title-font-size: calc(var(--font-size) * 1.125);
-            --month-title-offset-block: calc(var(--body-gap-block) / 1.5);
-
+            flex-direction: row;
             gap: 0;
             margin-inline: auto;
 
@@ -3769,6 +3853,9 @@ textarea {
             }
 
             .month {
+                --month-title-font-size: calc(var(--font-size) * 1.125);
+                --month-title-offset-block: calc(var(--body-gap-block) / 1.5);
+
                 padding: 0 var(--card-padding-inline) var(--card-padding-block) calc(var(--card-invert-padding-inline) + var(--card-padding-inline));
 
                 &:before {

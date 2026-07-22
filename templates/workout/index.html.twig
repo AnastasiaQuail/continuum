@@ -57,6 +57,55 @@
 {%- endblock %}
 
 {% block main -%}
+    <section class="card card-transparent card-calendar-month">
+        <div class="calendar calendar-month calendar-month-short calendar-badges">
+            <article class="month">
+                {%- set current = user_date().format('Y-m-d') -%}
+                {%- set first_week_day = month.format('N') -%}
+
+                <div class="month-day-title">
+                    {%- for day_title in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] -%}
+                        <span>{{ day_title }}</span>
+                    {%- endfor -%}
+                </div>
+                <div class="month-days">
+                    {%- if first_week_day > 1 -%}
+                        <div class="day fake-day" style="--fake-days: {{ first_week_day - 1 }};">
+                            <span>1</span>
+                        </div>
+                    {%- endif -%}
+
+                    {%- set workout_map = [] -%}
+
+                    {%- for workout in workouts -%}
+                        {%- set day = workout.date.setTimezone(app.user.timezone).format('Y-m-d') -%}
+                        {%- set workout_map = workout_map|merge({(day): workout}) -%}
+                    {%- endfor -%}
+
+                    {%- for day_number in 1..month.format('t') -%}
+                        {%- set day = month.format('Y-m-') ~ (day_number < 10 ? '0') ~ day_number -%}
+                        {%- set workout = workout_map[day] is defined ? workout_map[day] : null -%}
+
+                        <div
+                            class="day {{- day === current ? ' day-current' -}} {{- day|is_weekend ? ' day-weekend' -}}"
+                            {%- if workout !== null %}data-general-type="green"{% endif -%}>
+                            <span>{{ day_number }}</span>
+
+                            {%- if workout !== null -%}
+                                <div class="day-badges">
+                                    {%- for workout_exercise in workout.workoutExercises -%}
+                                        <span class="day-badge"
+                                              data-general-type="{{ workout_exercise.exercise.group.color.value }}"></span>
+                                    {%- endfor -%}
+                                </div>
+                            {%- endif -%}
+                        </div>
+                    {%- endfor -%}
+                </div>
+            </article>
+        </div>
+    </section>
+
     {%- if workouts is empty -%}
         <div class="card collection-empty">
             {{- ux_icon('lucide:frown') -}}
@@ -71,24 +120,9 @@
             <{% if is_granted %}a{% else %}div{% endif %}
                 {% if is_granted %}href="{{ path('app_workouts_view', {id: workout.id}) }}"{% endif %}
                 class="form-row form-row-header-edit">
-                {%- set start = 0 -%}
-                {%- set end = 0 -%}
+                {%- set time = workout.date.setTimezone(app.user.timezone).format('j F, H:i') -%}
 
-                {%- for workout_exercise in workout.workoutExercises -%}
-                    {%- for exercise_set in workout_exercise.sets -%}
-                        {%- if start === 0 or start > exercise_set.performedAt.timestamp -%}
-                            {%- set start = exercise_set.performedAt.timestamp -%}
-                        {%- endif -%}
-                        {%- if end < exercise_set.performedAt.timestamp -%}
-                            {%- set end = exercise_set.performedAt.timestamp -%}
-                        {%- endif -%}
-                    {%- endfor -%}
-                {%- endfor -%}
-
-                {%- set time = workout.date.setTimezone(app.user.timezone).format('j F H:i') -%}
-                {%- set minutes = ((end - start) / 60)|round -%}
-
-                <div class="form-label">{{ time }} <small>( {{ minutes }} min )</small></div>
+                <div class="form-label">{{ time }}</div>
                 <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
             </{% if is_granted %}a{% else %}div{% endif %}>
 
@@ -160,5 +194,30 @@
                 </div>
             {%- endfor -%}
         </section>
+
+        {%- set start = 0 -%}
+        {%- set end = 0 -%}
+
+        {%- for workout_exercise in workout.workoutExercises -%}
+            {%- for exercise_set in workout_exercise.sets -%}
+                {%- if start === 0 or start > exercise_set.performedAt.timestamp -%}
+                    {%- set start = exercise_set.performedAt.timestamp -%}
+                {%- endif -%}
+                {%- if end < exercise_set.performedAt.timestamp -%}
+                    {%- set end = exercise_set.performedAt.timestamp -%}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endfor -%}
+
+        {%- set total_minutes = ((end - start) / 60)|round -%}
+        {%- set hours = (total_minutes / 60)|round(0, 'floor') -%}
+        {%- set minutes = total_minutes - hours * 60 -%}
+
+        <div class="card-description">
+            <div>Duration:
+                {% if hours > 0 %}{{ hours }} {{ hours > 1 ? 'hours' : 'hour' }}{% endif %}
+                {{ minutes > 9 ? minutes : '0' ~ minutes }} minutes
+            </div>
+        </div>
     {%- endfor -%}
 {%- endblock %}
