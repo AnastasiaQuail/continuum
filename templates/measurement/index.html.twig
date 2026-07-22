@@ -103,7 +103,7 @@
         {%- set progress = progresses[measurement.id] -%}
 
         <section class="card card-form card-measurements">
-            {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F H:i') -%}
+            {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F, H:i') -%}
             {%- set is_granted = is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
 
             <{% if is_granted %}a{% else %}div{% endif %}
