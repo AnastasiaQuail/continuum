@@ -24,6 +24,8 @@ final class WorkoutDeleteController extends AbstractController
     {
         $this->workoutService->delete($workout);
 
+        $this->addFlash('success', sprintf('Workout "%s" has been deleted.', $workout->date->format('j F, H:i')));
+
         return $this->redirectToRoute('app_workouts');
     }
 }

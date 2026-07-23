@@ -21,6 +21,7 @@ final class ExerciseVoter extends Voter
     public const string VIEW = 'EXERCISE_VIEW';
     public const string CREATE = 'EXERCISE_CREATE';
     public const string EDIT = 'EXERCISE_EDIT';
+    public const string DELETE = 'EXERCISE_DELETE';
 
     public function __construct(
         private readonly Security $security,
@@ -29,7 +30,7 @@ final class ExerciseVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::CREATE, self::EDIT], strict: true);
+        return in_array($attribute, [self::VIEW, self::CREATE, self::EDIT, self::DELETE], strict: true);
     }
 
     #[Override]
@@ -48,7 +49,8 @@ final class ExerciseVoter extends Voter
         return match ($attribute) {
             self::VIEW => true,
             self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
-            self::EDIT => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            self::EDIT,
+            self::DELETE => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
             default => false,
         };
     }

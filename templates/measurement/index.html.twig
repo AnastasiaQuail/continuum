@@ -53,7 +53,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section id="weight-change-chart" class="card card-transparent card-panel card-weight-change">
+    <section id="weight-change-chart" class="card card-transparent card-weight-change">
         <div class="card-title card-title-controls">
             <h2 id="weight-change-title">Weight</h2>
 
@@ -75,9 +75,11 @@
             </div>
         </div>
 
-        <div class="card-panel-body chart-panel" {% if chart_measurements %}data-chart="weight-change"
-             data-date="{{ month.format('Y-m-d') }}"
-             data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
+        <div class="chart-container">
+            <div class="chart" {% if chart_measurements %}data-chart="weight-change"
+                 data-date="{{ month.format('Y-m-d') }}"
+                 data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
+        </div>
     </section>
 
     {%- if measurements is empty -%}
