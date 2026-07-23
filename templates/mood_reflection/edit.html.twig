@@ -9,6 +9,11 @@
 
 {% set back_path = path('app_mood_reflections', {month: day.format('Y-m')}) %}
 
+{% block header_actions -%}
+    <button class="btn btn-glass btn-glass-primary"
+            data-form-submit="#form-mood-reflection">{{ ux_icon('lucide:check') }}</button>
+{%- endblock %}
+
 {% block showcase -%}
     {%- set mood_day = day.format('Y-m-d') -%}
     {%- set current_date = user_date() -%}
@@ -27,7 +32,7 @@
 
 {% block main -%}
     <section class="card card-form">
-        {{- form_start(form) -}}
+        {{- form_start(form, {attr: {id: 'form-mood-reflection', class: 'form-submit-external'}}) -}}
 
         {{- form_row(form.type, {
             icons: {

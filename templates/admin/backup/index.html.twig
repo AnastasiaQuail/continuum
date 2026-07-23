@@ -7,13 +7,11 @@
 {% block header_actions -%}
     <form method="post" action="{{ path('app_admin_backup_create') }}">
         <button
-            class="btn btn-glass btn-header"
+            class="btn btn-glass"
             {% if is_granted('ADMIN_BACKUP_CREATE') %}type="submit" {% else %}disabled{% endif %}>
-            {{ ux_icon('lucide:plus') }}
+            Back up
         </button>
     </form>
-
-    {{ parent() }}
 {%- endblock %}
 
 {% block main -%}

@@ -8,6 +8,13 @@
 
 {% set is_granted = is_granted('MOOD_REFLECTION_EDIT') %}
 
+{% block header_actions -%}
+    <{% if is_granted %}a{% else %}button{% endif %}
+        {% if is_granted %} href="{{ path('app_mood_reflection_last_unfilled') }}"{% else %} disabled{% endif %}
+        class="btn btn-glass">Check-in
+    </{% if is_granted %}a{% else %}button{% endif %}>
+{%- endblock %}
+
 {% block showcase -%}
     <section id="mood-chart-card" class="card card-mood-chart">
         <div class="mood-chart" style="--chart-columns: {{ last_moods|length }};">

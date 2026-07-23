@@ -18,17 +18,16 @@
 
     <{% if is_granted %}a{% else %}button{% endif %}
         {% if is_granted %} href="{{ path('app_exercise_create') }}"{% else %} disabled{% endif %}
-        class="btn btn-glass btn-header">
+        class="btn btn-glass">
         {{- ux_icon('lucide:plus') -}}
     </{% if is_granted %}a{% else %}button{% endif %}>
 
-    {{ parent() }}
-{%- endblock %}
-
-{% block body_actions -%}
-    <div class="body-actions">
-        {{- filters.months(exercise_days, path('app_exercises', {months: '###'}), [4, 6, 8, 10]) -}}
-    </div>
+    {{- filters.months(
+        ux_icon('lucide:sliders-horizontal'),
+        exercise_days,
+        path('app_exercises', {months: '###'}),
+        [4, 6, 8, 10],
+    ) -}}
 {%- endblock %}
 
 {% block main -%}

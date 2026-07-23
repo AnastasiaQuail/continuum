@@ -19,29 +19,17 @@
 
     <{% if is_granted %}a{% else %}button{% endif %}
         {% if is_granted %} href="{{ path('app_measurement_create') }}"{% else %} disabled{% endif %}
-        class="btn btn-glass btn-header">
+        class="btn btn-glass">
         {{- ux_icon('lucide:plus') -}}
     </{% if is_granted %}a{% else %}button{% endif %}>
 
-    {{ parent() }}
-{%- endblock %}
+    {%- set is_granted = is_granted('BODY_MEASUREMENT_HISTORY') -%}
 
-{% block header_actions_shortcut -%}
-    <li class="dropdown-item">
-        {%- set is_granted = is_granted('BODY_MEASUREMENT_HISTORY') -%}
-
-        <{% if is_granted %}a{% else %}button{% endif %}
-            {% if is_granted %} href="{{ path('app_measurements_history') }}"{% else %} disabled{% endif %}
-            class="dropdown-link">
-            {{- ux_icon('lucide:history') -}}
-            <span>History</span>
-        </{% if is_granted %}a{% else %}button{% endif %}>
-    </li>
-    <li class="dropdown-item">
-        <hr class="dropdown-divider">
-    </li>
-
-    {{ parent() }}
+    <{% if is_granted %}a{% else %}button{% endif %}
+        {% if is_granted %} href="{{ path('app_measurements_history') }}"{% else %} disabled{% endif %}
+        class="btn btn-glass">
+        {{- ux_icon('lucide:chart-no-axes-combined') -}}
+    </{% if is_granted %}a{% else %}button{% endif %}>
 {%- endblock %}
 
 {% block body_actions -%}

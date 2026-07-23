@@ -9,31 +9,19 @@
 {% block header_actions -%}
     <form method="post" action="{{ path('app_workout_create') }}">
         <button
-            class="btn btn-glass btn-header"
+            class="btn btn-glass"
             {% if is_granted('WORKOUT_CREATE') %}type="submit"{% else %} disabled{% endif %}>
             {{- ux_icon('lucide:plus') -}}
         </button>
     </form>
 
-    {{ parent() }}
-{%- endblock %}
+    {%- set is_granted = is_granted('EXERCISE_VIEW') -%}
 
-{% block header_actions_shortcut -%}
-    <li class="dropdown-item">
-        {%- set is_granted = is_granted('EXERCISE_VIEW') -%}
-
-        <{% if is_granted %}a{% else %}button{% endif %}
-            {% if is_granted %} href="{{ path('app_exercises') }}"{% else %} disabled{% endif %}
-            class="dropdown-link">
-            {{- ux_icon('lucide:gallery-vertical-end') -}}
-            <span>Exercises</span>
-        </{% if is_granted %}a{% else %}button{% endif %}>
-    </li>
-    <li class="dropdown-item">
-        <hr class="dropdown-divider">
-    </li>
-
-    {{ parent() }}
+    <{% if is_granted %}a{% else %}button{% endif %}
+        {% if is_granted %} href="{{ path('app_exercises') }}"{% else %} disabled{% endif %}
+        class="btn btn-glass">
+        {{- ux_icon('lucide:gallery-vertical-end') -}}
+    </{% if is_granted %}a{% else %}button{% endif %}>
 {%- endblock %}
 
 {% block body_actions -%}

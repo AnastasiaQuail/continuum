@@ -4,8 +4,9 @@
 
 {% block body_id 'error' %}
 
+{% set sidebar_show = 'hide' %}
+
 {% block header %}{% endblock %}
-{% block sidebar %}{% endblock %}
 
 {% block body -%}
     <div class="body-error-code" data-code="{{ status_code }}">
