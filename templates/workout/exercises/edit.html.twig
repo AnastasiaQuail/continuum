@@ -22,4 +22,14 @@
 
         {{- form_end(form) -}}
     </section>
+
+    {%- if exercise and exercise.workoutExercises is empty -%}
+        <section class="card card-form">
+            {{- form_delete(
+                path('app_exercise_delete', {id: exercise.id}),
+                is_granted('EXERCISE_DELETE', exercise),
+                'Delete exercise',
+            ) -}}
+        </section>
+    {%- endif -%}
 {%- endblock %}

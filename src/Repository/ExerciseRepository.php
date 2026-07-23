@@ -63,4 +63,10 @@ final class ExerciseRepository extends ServiceEntityRepository
         $this->getEntityManager()->persist($exercise);
         $this->getEntityManager()->flush();
     }
+
+    public function delete(Exercise $exercise): void
+    {
+        $this->getEntityManager()->remove($exercise);
+        $this->getEntityManager()->flush();
+    }
 }

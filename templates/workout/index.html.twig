@@ -104,12 +104,11 @@
     {%- for workout in workouts|reverse -%}
         <section class="card card-form card-workout" id="workout_{{ workout.id }}">
             {%- set is_granted = is_granted('WORKOUT_EDIT', workout) -%}
+            {%- set time = workout.date.setTimezone(app.user.timezone).format('j F, H:i') -%}
 
             <{% if is_granted %}a{% else %}div{% endif %}
                 {% if is_granted %}href="{{ path('app_workouts_view', {id: workout.id}) }}"{% endif %}
                 class="form-row form-row-header-edit">
-                {%- set time = workout.date.setTimezone(app.user.timezone).format('j F, H:i') -%}
-
                 <div class="form-label">{{ time }}</div>
                 <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
             </{% if is_granted %}a{% else %}div{% endif %}>
@@ -119,17 +118,6 @@
                     <div class="collection-empty">
                         {{- ux_icon('lucide:frown') -}}
                         <span>No exercises yet</span>
-                        <form method="post"
-                              action="{{ path('app_workout_delete', {id: workout.id}) }}"
-                              onsubmit="return confirm('Delete?')">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <button
-                                class="btn btn-danger btn-sm btn-link"
-                                {% if is_granted('WORKOUT_DELETE', workout) %}type="submit"
-                                {% else %}disabled{% endif %}>
-                                {{- ux_icon('lucide:trash') -}}
-                            </button>
-                        </form>
                     </div>
                 </div>
             {%- endif -%}

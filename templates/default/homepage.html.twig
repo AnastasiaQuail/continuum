@@ -148,7 +148,7 @@
 {% block main -%}
     <div class="row row-sm-2">
         {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
-            <section id="weight-change-chart" class="card card-panel">
+            <section id="weight-change-chart" class="card">
                 <div class="card-title card-title-controls">
                     {%- set result = 0.0 -%}
                     {%- if chart_measurements -%}
@@ -166,20 +166,22 @@
                     {{- filters.months('', measurement_days, path('app_homepage', {measurement: '###'}), [4, 6, 8, 10]) -}}
                 </div>
 
-                <div class="card-panel-body chart-panel"
-                     {% if chart_measurements %}data-chart="weight-change" data-days="{{ measurement_days }}"
-                     data-symbols="hide" data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
+                <div class="chart-container">
+                    <div class="chart"
+                         {% if chart_measurements %}data-chart="weight-change" data-days="{{ measurement_days }}"
+                         data-symbols="hide" data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
+                </div>
             </section>
         {%- endif -%}
 
         {%- if is_granted('WORKOUT_VIEW') -%}
-            <section id="workouts-card" class="card card-panel">
+            <section id="workouts-card" class="card">
                 <div class="card-title card-title-controls">
                     <h2 id="workouts-title">Workouts</h2>
                     {{- filters.months('', workout_days, path('app_homepage', {workout: '###'}), [4, 6, 8]) -}}
                 </div>
 
-                <div class="card-panel-body calendar-heatmap-workout-container">
+                <div class="calendar-heatmap-workout-container">
                     <div class="calendar-heatmap-week">
                         {%- for day_name in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] -%}
                             <div class="calendar-heatmap-week-day">{{ day_name }}</div>
@@ -218,15 +220,17 @@
     </div>
 
     {%- if is_granted('MOOD_REFLECTION_VIEW') -%}
-        <section id="mood-chart-card" class="card card-panel">
+        <section id="mood-chart-card" class="card">
             <div class="card-title card-title-controls">
                 <h2 id="mood-chart-title">Mood trend</h2>
                 {{- filters.months('', mood_reflection_days, path('app_homepage', {mood: '###'}), [4, 6, 8, 10]) -}}
             </div>
 
-            <div class="card-panel-body chart-panel"
-                 data-chart="mood-reflections" data-days="{{ mood_reflection_days }}"
-                 data-values="{{ chart_mood_reflections|json_encode }}"></div>
+            <div class="chart-container">
+                <div class="chart"
+                     data-chart="mood-reflections" data-days="{{ mood_reflection_days }}"
+                     data-values="{{ chart_mood_reflections|json_encode }}"></div>
+            </div>
         </section>
     {%- endif -%}
 {%- endblock %}

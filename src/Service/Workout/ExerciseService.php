@@ -8,6 +8,7 @@ use Continuum\Dto\Request\Workout\EditExercise;
 use Continuum\Entity\Exercise;
 use Continuum\Enum\ExerciseGroup;
 use Continuum\Repository\ExerciseRepository;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Uid\Uuid;
 
@@ -85,5 +86,14 @@ final readonly class ExerciseService
         $this->repository->save($exercise);
 
         return $exercise;
+    }
+
+    public function delete(Exercise $exercise): void
+    {
+        if (!$exercise->workoutExercises->isEmpty()) {
+            throw new BadRequestHttpException('Exercise has workout exercises');
+        }
+
+        $this->repository->delete($exercise);
     }
 }

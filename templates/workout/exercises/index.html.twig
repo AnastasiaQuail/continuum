@@ -31,56 +31,55 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card">
-        <div class="exercises">
-            {%- for exercise in exercises -%}
-                {%- set exercise_id = exercise.id.toString -%}
-                {%- set is_granted = is_granted('EXERCISE_EDIT', exercise) -%}
+    {%- for exercise in exercises -%}
+        <section class="card card-form card-exercise">
+            {%- set exercise_id = exercise.id.toString -%}
+            {%- set is_granted = is_granted('EXERCISE_EDIT', exercise) -%}
 
-                <{% if is_granted %}a{% else %}span{% endif %}
-                    {% if is_granted %}href="{{ path('app_exercise_edit', {id: exercise_id}) }}"{% endif %}
-                    class="exercise" data-general-type="{{ exercise.group.color.value }}">
-                    <div class="exercise-body">
-                        <div class="exercise-badges">
-                            <div class="badge badge-group">{{ exercise.group.name }}</div>
-                            {%- if not exercise.isActive -%}
-                                <div class="badge badge-bad">{{ ux_icon('lucide:eye-off') }}</div>
-                            {%- endif -%}
-                        </div>
-                        <div class="exercise-title {{ not exercise.isActive ? 'exercise-disabled' }}">
-                            <span class="exercise-name">{{ exercise.name }}</span>
-                            <span class="exercise-usages">({{ exercise_count_map[exercise_id] }} workouts)</span>
-                        </div>
+            <{% if is_granted %}a{% else %}div{% endif %}
+                {% if is_granted %}href="{{ path('app_exercise_edit', {id: exercise_id}) }}"{% endif %}
+                class="form-row form-row-header-edit form-row-header-large"
+                data-general-type="{{ exercise.group.color.value }}">
+                <div class="form-label form-label-exercise">
+                    <div class="badge">{{ exercise.group.name }}</div>
+                    {%- if not exercise.isActive -%}
+                        <div class="badge badge-bad">{{ ux_icon('lucide:eye-off') }}</div>
+                    {%- endif -%}
+                    {{ exercise.name }}
+                </div>
+                <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
+            </{% if is_granted %}a{% else %}div{% endif %}>
+
+            {%- if exercise_progress_map[exercise_id] is defined -%}
+                {%- set exercise_map = exercise_progress_map[exercise_id] -%}
+
+                <div class="form-row form-row-exercise-progress">
+                    <div class="form-field exercise-progress-values">
+                        {{- _self.exercise_progress_sets('From', exercise_map|first.sets) -}}
+
+                        {%- if exercise_map|length > 1 -%}
+                            {{- _self.exercise_progress_sets('To', exercise_map|last.sets) -}}
+                        {%- endif -%}
                     </div>
 
-                    {%- if exercise_progress_map[exercise_id] is defined -%}
-                        {%- set exercise_map = exercise_progress_map[exercise_id] -%}
+                    <div class="form-field chart-container">
+                        <div class="chart" data-chart="exercise-progress"
+                             data-days="{{ exercise_days }}" data-color="{{ exercise.group.color.value }}"
+                             data-values="{{ exercise_map|json_encode }}"></div>
+                    </div>
+                </div>
+            {%- endif -%}
+        </section>
 
-                        <div class="exercise-progress">
-                            <div class="exercise-progress-values">
-                                {{- _self.exercise_progress_sets('From', exercise_map|first.sets) -}}
-
-                                {%- if exercise_map|length > 1 -%}
-                                    {{- _self.exercise_progress_sets('To', exercise_map|last.sets) -}}
-                                {%- endif -%}
-                            </div>
-
-                            <div class="exercise-progress-chart" data-chart="exercise-progress"
-                                 data-days="{{ exercise_days }}" data-color="{{ exercise.group.color.value }}"
-                                 data-values="{{ exercise_map|json_encode }}"></div>
-                        </div>
-                    {%- endif -%}
-                </{% if is_granted %}a{% else %}span{% endif %}>
-            {%- endfor -%}
-        </div>
-    </section>
+        <div class="card-description">{{ exercise_count_map[exercise_id] }} workouts</div>
+    {%- endfor -%}
 {%- endblock %}
 
 {% macro exercise_progress_sets(description, sets) -%}
-    <div class="exercise-progress-sets">
-        <div class="exercise-progress-set set-description">{{ description }}:</div>
+    <div class="exercise-progress-value">
+        <span class="form-field-legend">{{ description }}</span>
         {%- for set in sets|filter(set => not set.isWarmup) -%}
-            <div class="exercise-progress-set">
+            <div class="badge">
                 {%- if set.weight > 0 -%}
                     <span>{{ set.weight }}<small>kg</small></span>
                 {%- endif -%}

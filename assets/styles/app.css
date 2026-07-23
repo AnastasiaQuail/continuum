@@ -2035,24 +2035,6 @@ textarea {
             display: flex;
             align-items: center;
             column-gap: calc(var(--form-row-gap) / 2);
-
-            .form-field-legend {
-                margin-right: calc(var(--form-row-gap) / 2);
-                font-size: var(--font-size-extra-small);
-                color: var(--color-quaternary);
-            }
-        }
-
-        .form-field-progress {
-            font-size: var(--font-size-extra-small);
-            color: var(--color-green);
-            align-items: baseline;
-            column-gap: calc(var(--form-row-gap) / 4);
-            display: inline-flex;
-
-            &[data-change="increased"] {
-                color: var(--color-red);
-            }
         }
 
         @media (width >= 768px) {
@@ -2066,6 +2048,24 @@ textarea {
         @media (width < 768px) {
             margin-top: var(--form-row-gap);
             font-size: var(--font-size-medium);
+        }
+    }
+
+    .form-field-legend {
+        margin-right: calc(var(--form-row-gap) / 2);
+        font-size: var(--font-size-extra-small);
+        color: var(--color-quaternary);
+    }
+
+    .form-field-progress {
+        font-size: var(--font-size-extra-small);
+        color: var(--color-green);
+        align-items: baseline;
+        column-gap: calc(var(--form-row-gap) / 4);
+        display: inline-flex;
+
+        &[data-change="increased"] {
+            color: var(--color-red);
         }
     }
 
@@ -2200,32 +2200,56 @@ textarea {
         }
     }
 
-    &.form-row-submit {
+    &.form-row-submit,
+    &.form-row-delete {
         flex-direction: column;
-        align-items: stretch;
-        justify-content: center;
-        padding-top: var(--form-row-gap);
-        padding-bottom: var(--form-row-gap);
 
         @media (width >= 768px) {
             flex-direction: row;
-            justify-content: flex-start;
-            padding-block: 0;
-            margin-top: var(--container-gap-block);
             margin-bottom: 0;
         }
 
         .btn {
-            --btn-general-color: var(--primary-color);
-
             justify-content: center;
             padding: calc(var(--control-padding-block) * 2) calc(var(--control-padding-inline) * 2);
             font-weight: var(--font-weight-bold);
-            border-radius: calc(var(--border-radius) * 1.5);
+            border-radius: var(--body-border-radius);
 
             @media (width >= 768px) {
                 padding: calc(var(--control-padding-block) * 1.5) calc(var(--control-padding-inline) * 1.5);
                 font-weight: var(--font-weight);
+            }
+        }
+    }
+
+    &.form-row-submit {
+        @media (width >= 768px) {
+            margin-top: var(--container-gap-block);
+        }
+
+        .btn {
+            --btn-general-color: var(--primary-color);
+        }
+    }
+
+    &.form-row-delete {
+        @media (width < 768px) {
+            padding: 0;
+        }
+
+        .btn {
+            --btn-general-color: var(--color-red);
+
+            @media (width < 768px) {
+                --btn-color: var(--btn-general-color);
+                --btn-background-color-transparent: 0%;
+
+                padding-block: calc(var(--form-row-gap) * 2);
+
+                &:hover {
+                    --btn-border-color-transparent: 0%;
+                    --btn-background-color-transparent: 20%;
+                }
             }
         }
     }
@@ -2706,6 +2730,23 @@ textarea {
     }
 }
 
+.chart-container {
+    container: chart / inline-size;
+    display: flex;
+    width: 100%;
+    overflow: clip;
+
+    .chart {
+        height: calc(50px + 10cqw);
+        width: 100%;
+
+        &:not([data-chart]) {
+            border: var(--border-width) dashed var(--border-color);
+            border-radius: var(--border-radius-internal);
+        }
+    }
+}
+
 @property --te-counter {
     syntax: "<integer>";
     initial-value: 0;
@@ -2727,6 +2768,8 @@ textarea {
     --card-border-radius: var(--body-border-radius);
     --card-background-color: var(--background-color);
 
+    display: flex;
+    flex-direction: column;
     padding: var(--card-padding-block) var(--card-padding-inline);
     margin-bottom: var(--body-gap-block);
     border: var(--card-border-width) var(--card-border-style) var(--card-border-color);
@@ -2745,28 +2788,6 @@ textarea {
             &:is(h3),
             & h3 {
                 color: var(--color-secondary);
-            }
-        }
-    }
-
-    &.card-panel {
-        display: grid;
-        grid-template-rows: auto 1fr;
-        overflow-x: clip;
-
-        .card-panel-body {
-            min-height: 70px;
-
-            @media (width >= 576px) {
-                min-height: 90px;
-            }
-
-            @media (width >= 768px) {
-                min-height: 80px;
-            }
-
-            @media (width >= 992px) {
-                min-height: 100px;
             }
         }
     }
@@ -2905,7 +2926,7 @@ textarea {
 
             & > .form-row,
             & > .row > .form-row,
-            & > form > *:not(.row),
+            & > form > *:not(.row):not(.form-row-delete),
             & > form > .row > * {
                 padding-inline: var(--card-padding-inline);
             }
@@ -2945,9 +2966,20 @@ textarea {
                     content: none;
                 }
 
-                &.form-row-header-edit:not(:has(+ .form-row-collection-empty)) {
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                &.form-row-header-edit:not(:has(+ .form-row-collection-empty)):not(:last-child) {
                     padding-bottom: calc(var(--form-row-gap) * 2);
                     border-bottom: var(--border-width) solid var(--border-color-divider);
+                }
+            }
+
+            &.form-row-submit,
+            &.form-row-delete {
+                .btn {
+                    border-radius: var(--card-border-radius);
                 }
             }
         }
@@ -3046,14 +3078,6 @@ textarea {
         border-radius: var(--border-radius-internal);
     }
 
-    &:has(> form) {
-        align-items: center;
-
-        & > form:last-child {
-            margin-left: auto;
-        }
-    }
-
     @media (width < 768px) {
         justify-content: center;
     }
@@ -3077,14 +3101,13 @@ textarea {
 .card-measurement-history,
 .card-workout,
 .card-workout .form-row,
-.exercises .exercise,
-.exercises .exercise .exercise-progress-chart {
+.card-exercise,
+.card-exercise .form-row {
     animation: fader 1s ease-out;
     animation-timeline: view();
     animation-range: entry 0% cover 20%;
 
-    &:is(.form-row),
-    &:is(.exercise-progress-chart) {
+    &:is(.form-row) {
         --fade-offset: 2dvh;
     }
 }
@@ -3167,16 +3190,6 @@ textarea {
     margin-top: calc(var(--gap-block) / 2);
     font-size: var(--font-size-small);
     color: var(--color-secondary);
-}
-
-.chart-panel {
-    min-height: 70px;
-    overflow: clip;
-
-    &:not([data-chart]) {
-        border: var(--border-width) dashed var(--border-color);
-        border-radius: var(--border-radius-internal);
-    }
 }
 
 #the-wait-card {
@@ -3357,9 +3370,7 @@ textarea {
             --workout-day-bg-color-transparent: 10%;
             --workout-row: 1;
 
-            container-type: size;
-            container-name: calendar-workout-day;
-
+            container: calendar-workout-day / size;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -3771,8 +3782,7 @@ textarea {
 
     &.calendar-badges {
         .day {
-            container-type: size;
-            container-name: calendar-badges-day;
+            container: calendar-badges-day / size;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -3816,6 +3826,7 @@ textarea {
     @media (width < 768px) {
         --card-invert-padding-inline: var(--body-gap-inline);
 
+        flex-direction: row;
         padding: 0;
         margin-inline: calc(var(--card-invert-padding-inline) * -1);
         border-color: transparent;
@@ -4285,6 +4296,7 @@ textarea {
     }
 
     @media (width >= 768px) {
+        display: grid;
         grid-template-columns: auto 1fr;
         column-gap: var(--container-gap-inline);
 
@@ -4303,7 +4315,7 @@ textarea {
             }
         }
 
-        .card-panel-body {
+        .chart-container {
             max-width: 500px;
         }
     }
@@ -4337,6 +4349,7 @@ textarea {
 
     @media (width >= 768px) {
         display: flex;
+        flex-direction: row;
         flex-wrap: wrap;
         align-items: center;
         gap: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
@@ -4369,11 +4382,6 @@ textarea {
                     padding: calc(var(--form-row-gap) / 3) calc(var(--form-row-gap) / 1.5);
                     color: var(--color);
 
-                    .form-field-legend {
-                        color: var(--form-row-color-text);
-                        font-weight: var(--font-weight-light);
-                    }
-
                     small {
                         font-size: var(--font-size-small);
                         font-weight: var(--font-weight-light);
@@ -4391,6 +4399,11 @@ textarea {
                             }
                         }
                     }
+                }
+
+                .form-field-legend {
+                    color: var(--form-row-color-text);
+                    font-weight: var(--font-weight-light);
                 }
             }
         }
@@ -5033,152 +5046,48 @@ form {
     }
 }
 
-.exercises {
-    display: flex;
-    flex-direction: column;
-    row-gap: var(--container-gap-block);
+.card-exercise {
+    .form-row {
+        &:has(.form-label-exercise) {
+            grid-template-columns: 1fr auto;
 
-    .exercise {
-        display: flex;
-        flex-direction: column;
-        text-decoration: none;
-        color: var(--color);
-        border-radius: var(--border-radius);
+            .form-label-exercise {
+                position: relative;
+                overflow: hidden;
 
-        @media (width >= 768px) {
-            max-width: 55vw;
-        }
-
-        @media (width >= 992px) {
-            max-width: 50vw;
-        }
-
-        @media (width >= 1200px) {
-            max-width: 45vw;
-        }
-
-        .exercise-body {
-            display: flex;
-            align-items: center;
-            gap: calc(var(--gap-block) / 4) calc(var(--gap-inline) / 2);
-            padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
-            border-radius: var(--border-radius-internal);
-            background-color: color-mix(in oklch, var(--general-color) 3%, transparent);
-            transition: background-color .15s;
-
-            .exercise-badges {
-                display: flex;
-                column-gap: calc(var(--gap-inline) / 4);
-
-                .badge {
-                    justify-content: center;
-
-                    @media (width >= 576px) {
-                        font-size: var(--font-size-medium);
-                    }
-
-                    &.badge-group {
-                        width: 75px;
-
-                        @media (width >= 576px) {
-                            width: 90px;
-                        }
+                @media (width < 768px) {
+                    &:after {
+                        position: absolute;
+                        content: '';
+                        right: 0;
+                        height: 100%;
+                        width: calc(var(--form-row-gap) * 2);
+                        background: linear-gradient(90deg, transparent, var(--background-color));
                     }
                 }
             }
-
-            .exercise-title {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: baseline;
-                gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
-                font-size: var(--font-size-medium);
-
-                @media (width >= 576px) {
-                    font-size: var(--font-size);
-                }
-
-                &.exercise-disabled {
-                    .exercise-name {
-                        text-decoration: line-through;
-                    }
-                }
-
-                .exercise-usages {
-                    font-size: var(--font-size-extra-small);
-                    font-weight: var(--font-weight-light);
-                    color: var(--color-tertiary);
-                }
-            }
         }
 
-        &:is(a):hover {
-            .exercise-body {
-                background-color: color-mix(in oklch, var(--general-color) 6%, transparent);
-            }
-        }
-
-        .exercise-progress {
-            padding-block: calc(var(--gap-block) / 1.5);
+        &.form-row-exercise-progress {
+            flex-direction: column;
+            row-gap: calc(var(--form-row-gap) * 1.5);
 
             .exercise-progress-values {
                 display: flex;
                 flex-wrap: wrap;
-                gap: calc(var(--gap-block) / 2) var(--gap-inline);
-                margin-bottom: calc(var(--gap-block) / 1.5);
                 justify-content: space-between;
+                gap: calc(var(--form-row-gap) / 2) var(--form-row-gap);
+                width: 100%;
 
-                .exercise-progress-sets {
-                    display: flex;
-                    flex-wrap: wrap;
-                    column-gap: calc(var(--gap-inline) / 4);
+                .exercise-progress-value {
+                    display: inline-flex;
+                    column-gap: calc(var(--form-row-gap) / 2);
                     align-items: center;
-                    font-size: var(--font-size-small);
 
-                    .exercise-progress-set {
-                        display: flex;
-                        flex-wrap: nowrap;
-                        white-space: nowrap;
-                        column-gap: calc(var(--gap-inline) / 6);
-                        padding: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
-                        color: var(--color-tertiary);
-                        border-radius: calc(var(--border-radius-badge) / 2);
-                        background-color: color-mix(in oklch, var(--general-color) 8%, transparent);
-
-                        small {
-                            font-size: calc(var(--font-size-extra-small) * 0.5);
-                            font-weight: var(--font-weight-light);
-                            opacity: var(--transparent-color);
-                        }
-
-                        & > span:last-child {
-                            small {
-                                font-size: var(--font-size-extra-small);
-                            }
-                        }
-
-                        &.set-description {
-                            background-color: transparent;
-                            color: var(--color-quaternary);
-                        }
+                    .badge {
+                        font-size: var(--font-size-extra-small);
+                        opacity: .5;
                     }
-                }
-            }
-
-            .exercise-progress-chart {
-                height: 70px;
-                overflow: clip;
-
-                @media (width >= 768px) {
-                    height: 80px;
-                }
-
-                @media (width >= 992px) {
-                    height: 90px;
-                }
-
-                @media (width >= 1200px) {
-                    height: 100px;
                 }
             }
         }

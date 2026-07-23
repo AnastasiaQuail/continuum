@@ -1,0 +1,8 @@
+<form method="post"
+      action="{{ action }}"
+      onsubmit="return confirm('Delete?')">
+    <input type="hidden" name="_method" value="DELETE">
+    <div class="form-row form-row-delete">
+        <button class="btn" {% if is_form_granted %}type="submit" {% else %}disabled{% endif %}>{{ label }}</button>
+    </div>
+</form>
