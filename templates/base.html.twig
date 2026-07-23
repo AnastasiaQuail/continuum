@@ -10,6 +10,8 @@
 {%- endif -%}
 
 {%- set body_id = block('body_id') -%}
+{%- set back_path = back_path|default -%}
+{%- set sidebar_show = sidebar_show|default !== 'hide' -%}
 
 {% import 'default/_sidebar.html.twig' as sidebar %}
 
@@ -37,22 +39,20 @@
         {%- block importmap %}{{ importmap('app') }}{% endblock -%}
     {%- endblock -%}
 </head>
-<body id="{{ body_id }}" class="{% if sidebar_show|default !== 'hide' %}has-sidebar{% endif %}">
+<body id="{{ body_id }}" class="{% if sidebar_show %}has-sidebar{% endif %}">
     {%- block header -%}
         <header class="header">
             <nav class="header-container">
-                {%- set back_path = back_path|default -%}
-                {%- set sidebar_show = sidebar_show|default !== 'hide' -%}
-
                 {%- if back_path or sidebar_show -%}
-                    <div class="btn-group-glass btn-group-header-controls">
+                    <div class="btn-group btn-group-glass btn-group-header-controls">
                         {%- if back_path -%}
-                            <a id="previous-page-button" class="btn btn-glass btn-header" href="{{ back_path }}">
+                            <a id="previous-page-button" class="btn btn-glass" href="{{ back_path }}">
                                 {{- ux_icon('lucide:chevron-left', {class: 'icon-fix-scale'}) -}}
                             </a>
                         {%- endif -%}
                         {%- if sidebar_show -%}
-                            <button id="sidebar-toggler" class="btn btn-glass btn-header">
+                            <button id="sidebar-toggler"
+                                    class="btn btn-glass {% if back_path %}btn-mobile-hidden{% endif %}">
                                 {{- ux_icon('lucide:menu', {class: 'icon-menu-open'}) -}}
                                 {{- ux_icon('lucide:x', {class: 'icon-menu-close'}) -}}
                             </button>
@@ -72,196 +72,149 @@
                     <h2 class="header-subtitle">{% block page_subtitle %}{% endblock %}</h2>
                 </div>
 
-                <div class="header-actions">
-                    <div class="btn-group-glass btn-group-header-actions">
-                        {%- block header_actions -%}
-                            <div class="btn-header btn-dropdown">
-                                <div id="shortcut-links-button" class="btn btn-glass" tabindex="0">
-                                    <span class="dropdown-icon">{{ ux_icon('lucide:ellipsis') }}</span>
-                                    <ul class="dropdown-menu">
-                                        {%- block header_actions_shortcut -%}
-                                            <li class="dropdown-item">
-                                                {%- set is_granted = is_granted('CALENDAR_EDIT') -%}
-
-                                                <{% if is_granted %}a{% else %}button{% endif %}
-                                                    {% if is_granted %} href="{{ path('app_calendar_day', {day: user_date('+1 day').format('Y-m-d')}) }}"{% else %} disabled{% endif %}
-                                                    class="dropdown-link">
-                                                    {{- ux_icon('lucide:calendar-plus') -}}
-                                                    <span>New event</span>
-                                                </{% if is_granted %}a{% else %}button{% endif %}>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <hr class="dropdown-divider">
-                                            </li>
-                                            <li class="dropdown-item">
-                                                {%- set is_granted = is_granted('MOOD_REFLECTION_EDIT') -%}
-
-                                                <{% if is_granted %}a{% else %}button{% endif %}
-                                                    {% if is_granted %} href="{{ path('app_mood_reflection_last_unfilled') }}"{% else %} disabled{% endif %}
-                                                    class="dropdown-link">
-                                                    {{- ux_icon('lucide:scan-face') -}}
-                                                    <span>Track mood</span>
-                                                </{% if is_granted %}a{% else %}button{% endif %}>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                {%- set is_granted = is_granted('BODY_MEASUREMENT_CREATE') -%}
-
-                                                <{% if is_granted %}a{% else %}button{% endif %}
-                                                    {% if is_granted %} href="{{ path('app_measurement_create') }}"{% else %} disabled{% endif %}
-                                                    class="dropdown-link">
-                                                    {{- ux_icon('lucide:ruler') -}}
-                                                    <span>Add measurement</span>
-                                                </{% if is_granted %}a{% else %}button{% endif %}>
-                                            </li>
-                                            <li class="dropdown-item">
-                                                <form method="post" action="{{ path('app_workout_create') }}">
-                                                    <button class="dropdown-link"
-                                                            {% if is_granted('WORKOUT_CREATE') %}type="submit"{% else %} disabled{% endif %}>
-                                                        {{- ux_icon('lucide:biceps-flexed') -}}
-                                                        <span>Start workout</span>
-                                                    </button>
-                                                </form>
-                                            </li>
-                                        {%- endblock -%}
-                                    </ul>
-                                </div>
-                            </div>
-                        {%- endblock -%}
+                {%- set header_actions_block = block('header_actions') -%}
+                {%- if header_actions_block -%}
+                    <div class="header-actions">
+                        <div class="btn-group btn-group-glass btn-group-header-actions">
+                            {%- block header_actions -%}{%- endblock -%}
+                        </div>
                     </div>
-                </div>
+                {%- endif -%}
             </nav>
         </header>
     {%- endblock -%}
 
-    {%- block sidebar -%}
-        <aside id="sidebar" class="sidebar">
-            <div id="sidebar-handle" class="sidebar-handle"></div>
-            <div class="sidebar-logo">
-                <a class="sidebar-logo-link" href="{{ path('app_homepage') }}">
-                    {{- ux_icon('hugeicons:infinity-02') -}}
-                    <span>{{ app_title }}</span>
-                </a>
-            </div>
-            <nav class="navbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        {{- sidebar.item(
-                            'app_calendar',
-                            ['app_calendar_day'],
-                            ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}),
-                            'Calendar',
-                            is_granted('CALENDAR_VIEW'),
-                        ) -}}
-                    </li>
-
-                    <li>{{ sidebar.divider('Reflection') }}</li>
-                    <li class="nav-item">
-                        {{- sidebar.item(
-                            'app_mood_reflections',
-                            ['app_mood_reflection_edit'],
-                            ux_icon('lucide:smile-plus'),
-                            'Mood tracker',
-                            is_granted('MOOD_REFLECTION_VIEW'),
-                        ) -}}
-                    </li>
-                    <li class="nav-item">
-                        {{- sidebar.item(
-                            'app_weekly_reflections',
-                            ['app_weekly_reflection_edit'],
-                            ux_icon('lucide:star'),
-                            'Week in review',
-                            is_granted('WEEKLY_REFLECTION_VIEW'),
-                        ) -}}
-                    </li>
-
-                    <li>{{ sidebar.divider('Health') }}</li>
-                    <li class="nav-item">
-                        {{- sidebar.item(
-                            'app_measurements',
-                            ['app_measurement_create', 'app_measurement_edit', 'app_measurements_history'],
-                            ux_icon('lucide:ruler-dimension-line'),
-                            'Measurements',
-                            is_granted('BODY_MEASUREMENT_VIEW'),
-                        ) -}}
-                    </li>
-                    <li class="nav-item">
-                        {{- sidebar.item(
-                            'app_workouts',
-                            ['app_workouts_view', 'app_exercises', 'app_exercise_create', 'app_exercise_edit'],
-                            ux_icon('lucide:dumbbell'),
-                            'Workouts',
-                            is_granted('WORKOUT_VIEW'),
-                        ) -}}
-                    </li>
-
-                    <li>{{ sidebar.divider('Settings') }}</li>
-                    <li class="nav-item">
-                        {{- sidebar.item(
-                            'app_profile',
-                            ['app_profile_location', 'app_profile_password'],
-                            ux_icon('lucide:user'),
-                            'Profile',
-                        ) -}}
-                    </li>
-                    {%- if is_granted('REPORT_MONTH_VIEW') -%}
-                        <li class="nav-item" data-general-type="red">
-                            {{- sidebar.item(
-                                'app_report_month',
-                                [],
-                                ux_icon('lucide:chart-bar-big'),
-                                'Monthly report',
-                                true,
-                                user_date().format('j') <= 3 ? {icon: ux_icon('lucide:badge-info'), type: 'orange'} : {},
-                            ) -}}
-                        </li>
-                    {%- endif -%}
-                    {%- if is_granted('ADMIN_USER_VIEW') -%}
+    {%- if sidebar_show -%}
+        {%- block sidebar -%}
+            <aside id="sidebar" class="sidebar">
+                <div id="sidebar-handle" class="sidebar-handle"></div>
+                <div class="sidebar-logo">
+                    <a class="sidebar-logo-link" href="{{ path('app_homepage') }}">
+                        {{- ux_icon('hugeicons:infinity-02') -}}
+                        <span>{{ app_title }}</span>
+                    </a>
+                </div>
+                <nav class="navbar">
+                    <ul class="navbar-nav">
                         <li class="nav-item">
                             {{- sidebar.item(
-                                'app_admin_users',
-                                ['app_admin_user_edit'],
-                                ux_icon('lucide:users'),
-                                'Users',
+                                'app_calendar',
+                                ['app_calendar_day'],
+                                ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}),
+                                'Calendar',
+                                is_granted('CALENDAR_VIEW'),
                             ) -}}
                         </li>
-                    {%- endif -%}
-                    {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
+
+                        <li>{{ sidebar.divider('Reflection') }}</li>
                         <li class="nav-item">
                             {{- sidebar.item(
-                                'app_admin_backups',
-                                [],
-                                ux_icon('lucide:database-backup'),
-                                'Backups',
-                                true,
-                                has_backup_alert() ? {icon: ux_icon('lucide:triangle-alert'), type: 'red'} : null,
+                                'app_mood_reflections',
+                                ['app_mood_reflection_edit'],
+                                ux_icon('lucide:smile-plus'),
+                                'Mood tracker',
+                                is_granted('MOOD_REFLECTION_VIEW'),
                             ) -}}
                         </li>
-                    {%- endif -%}
-                </ul>
-            </nav>
+                        <li class="nav-item">
+                            {{- sidebar.item(
+                                'app_weekly_reflections',
+                                ['app_weekly_reflection_edit'],
+                                ux_icon('lucide:star'),
+                                'Week in review',
+                                is_granted('WEEKLY_REFLECTION_VIEW'),
+                            ) -}}
+                        </li>
 
-            <nav class="navbar navbar-footer">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        {{- sidebar.action_button(
-                            ux_icon('lucide:sun', {class: 'theme-light'}) ~ ux_icon('lucide:moon', {class: 'theme-dark'}),
-                            'Appearance',
-                            'theme-toggler',
-                        ) -}}
-                    </li>
-                    {%- if logout_show|default !== 'hide' and is_granted('ROLE_USER') -%}
-                        <li class="nav-item nav-item-logout">
-                            {{- sidebar.link(
-                                logout_path(),
-                                ux_icon('lucide:log-out'),
-                                'Logout',
+                        <li>{{ sidebar.divider('Health') }}</li>
+                        <li class="nav-item">
+                            {{- sidebar.item(
+                                'app_measurements',
+                                ['app_measurement_create', 'app_measurement_edit', 'app_measurements_history'],
+                                ux_icon('lucide:ruler-dimension-line'),
+                                'Measurements',
+                                is_granted('BODY_MEASUREMENT_VIEW'),
                             ) -}}
                         </li>
-                    {%- endif -%}
-                </ul>
-            </nav>
-        </aside>
-    {%- endblock -%}
+                        <li class="nav-item">
+                            {{- sidebar.item(
+                                'app_workouts',
+                                ['app_workouts_view', 'app_exercises', 'app_exercise_create', 'app_exercise_edit'],
+                                ux_icon('lucide:dumbbell'),
+                                'Workouts',
+                                is_granted('WORKOUT_VIEW'),
+                            ) -}}
+                        </li>
+
+                        <li>{{ sidebar.divider('Settings') }}</li>
+                        <li class="nav-item">
+                            {{- sidebar.item(
+                                'app_profile',
+                                ['app_profile_location', 'app_profile_password'],
+                                ux_icon('lucide:user'),
+                                'Profile',
+                            ) -}}
+                        </li>
+                        {%- if is_granted('REPORT_MONTH_VIEW') -%}
+                            <li class="nav-item" data-general-type="red">
+                                {{- sidebar.item(
+                                    'app_report_month',
+                                    [],
+                                    ux_icon('lucide:chart-bar-big'),
+                                    'Monthly report',
+                                    true,
+                                    user_date().format('j') <= 3 ? {icon: ux_icon('lucide:badge-info'), type: 'orange'} : {},
+                                ) -}}
+                            </li>
+                        {%- endif -%}
+                        {%- if is_granted('ADMIN_USER_VIEW') -%}
+                            <li class="nav-item">
+                                {{- sidebar.item(
+                                    'app_admin_users',
+                                    ['app_admin_user_edit'],
+                                    ux_icon('lucide:users'),
+                                    'Users',
+                                ) -}}
+                            </li>
+                        {%- endif -%}
+                        {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
+                            <li class="nav-item">
+                                {{- sidebar.item(
+                                    'app_admin_backups',
+                                    [],
+                                    ux_icon('lucide:database-backup'),
+                                    'Backups',
+                                    true,
+                                    has_backup_alert() ? {icon: ux_icon('lucide:triangle-alert'), type: 'red'} : null,
+                                ) -}}
+                            </li>
+                        {%- endif -%}
+                    </ul>
+                </nav>
+
+                <nav class="navbar navbar-footer">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            {{- sidebar.action_button(
+                                ux_icon('lucide:sun', {class: 'theme-light'}) ~ ux_icon('lucide:moon', {class: 'theme-dark'}),
+                                'Appearance',
+                                'theme-toggler',
+                            ) -}}
+                        </li>
+                        {%- if is_granted('ROLE_USER') -%}
+                            <li class="nav-item nav-item-logout">
+                                {{- sidebar.link(
+                                    logout_path(),
+                                    ux_icon('lucide:log-out'),
+                                    'Logout',
+                                ) -}}
+                            </li>
+                        {%- endif -%}
+                    </ul>
+                </nav>
+            </aside>
+        {%- endblock -%}
+    {%- endif -%}
 
     <div class="body">
         <div id="body-messages" class="body-messages">

@@ -18,9 +18,14 @@
 
 {% set back_path = path('app_weekly_reflections', {month: week.format('Y-m')}) %}
 
+{% block header_actions -%}
+    <button class="btn btn-glass btn-glass-primary"
+            data-form-submit="#form-weekly-reflection">{{ ux_icon('lucide:check') }}</button>
+{%- endblock %}
+
 {% block main -%}
     <section class="card card-form">
-        {{- form_start(form) -}}
+        {{- form_start(form, {attr: {id: 'form-weekly-reflection', class: 'form-submit-external'}}) -}}
 
         <div class="form-row form-row-text-field" data-general-type="green">
             {{- form_label(form.joy) -}}

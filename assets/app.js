@@ -30,6 +30,18 @@ window.submitBy = function (element) {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('button[data-form-submit]').forEach(button => {
+        const form = document.querySelector(button.dataset.formSubmit);
+
+        button.onclick = () => {
+            if (form.reportValidity()) {
+                form.submit();
+            }
+        }
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
     const pagination = document.querySelector('.actions-pagination');
 
     if (pagination) {

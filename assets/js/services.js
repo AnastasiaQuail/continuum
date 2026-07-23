@@ -62,7 +62,10 @@ export class Sidebar {
         });
 
         sidebar.querySelectorAll('a.nav-link').forEach(element => {
-            element.addEventListener('click', () => element.classList.add('loading'));
+            element.addEventListener('click', () => {
+                element.classList.add('loading');
+                setTimeout(() => element.classList.remove('loading'), 5000)
+            });
         });
 
         // mobile sidebar handle

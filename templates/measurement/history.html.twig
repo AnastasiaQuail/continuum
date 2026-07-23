@@ -14,10 +14,13 @@
 
 {% set back_path = path('app_measurements') %}
 
-{% block body_actions -%}
-    <div class="body-actions">
-        {{- filters.months(measurement_days, path('app_measurements_history', {months: '###'}), [4, 6, 8, 10]) -}}
-    </div>
+{% block header_actions -%}
+    {{- filters.months(
+        ux_icon('lucide:sliders-horizontal'),
+        measurement_days,
+        path('app_measurements_history', {months: '###'}),
+        [4, 6, 8, 10],
+    ) -}}
 {%- endblock %}
 
 {% block main -%}

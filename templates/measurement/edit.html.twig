@@ -10,9 +10,14 @@
 
 {% set back_path = path('app_measurements', {month: date.format('Y-m')}) %}
 
+{% block header_actions -%}
+    <button class="btn btn-glass btn-glass-primary"
+            data-form-submit="#form-measurement">{{ ux_icon('lucide:check') }}</button>
+{%- endblock %}
+
 {% block main -%}
     <section class="card card-form">
-        {{- form_start(form) -}}
+        {{- form_start(form, {attr: {id: 'form-measurement', class: 'form-submit-external'}}) -}}
 
         {{- form_row(form.datetime) -}}
 

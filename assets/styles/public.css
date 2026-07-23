@@ -1,23 +1,11 @@
-.header {
-    padding: calc(var(--gap-inline) / 2) 0 0;
-
-    .header-container {
-        background-color: transparent;
-        backdrop-filter: none;
-        border: none;
-    }
-}
-
 .body {
-    padding: 0 !important;
+    padding-top: 0 !important;
 
     .body-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100%;
-        width: 100% !important;
     }
 }
 

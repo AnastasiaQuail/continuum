@@ -14,6 +14,58 @@
 
 {% set current_date = user_date() %}
 
+{% block header_actions %}
+    <div class="btn btn-glass btn-dropdown" tabindex="0">
+        <span class="dropdown-label">{{ ux_icon('lucide:ellipsis') }}</span>
+        <ul class="dropdown-menu">
+            {%- block header_actions_shortcut -%}
+                <li class="dropdown-item">
+                    {%- set is_granted = is_granted('CALENDAR_EDIT') -%}
+
+                    <{% if is_granted %}a{% else %}button{% endif %}
+                        {% if is_granted %} href="{{ path('app_calendar_day', {day: user_date('+1 day').format('Y-m-d')}) }}"{% else %} disabled{% endif %}
+                        class="dropdown-link">
+                        {{- ux_icon('lucide:calendar-plus') -}}
+                        <span>New event</span>
+                    </{% if is_granted %}a{% else %}button{% endif %}>
+                </li>
+                <li class="dropdown-item">
+                    <hr class="dropdown-divider">
+                </li>
+                <li class="dropdown-item">
+                    {%- set is_granted = is_granted('MOOD_REFLECTION_EDIT') -%}
+
+                    <{% if is_granted %}a{% else %}button{% endif %}
+                        {% if is_granted %} href="{{ path('app_mood_reflection_last_unfilled') }}"{% else %} disabled{% endif %}
+                        class="dropdown-link">
+                        {{- ux_icon('lucide:scan-face') -}}
+                        <span>Track mood</span>
+                    </{% if is_granted %}a{% else %}button{% endif %}>
+                </li>
+                <li class="dropdown-item">
+                    {%- set is_granted = is_granted('BODY_MEASUREMENT_CREATE') -%}
+
+                    <{% if is_granted %}a{% else %}button{% endif %}
+                        {% if is_granted %} href="{{ path('app_measurement_create') }}"{% else %} disabled{% endif %}
+                        class="dropdown-link">
+                        {{- ux_icon('lucide:ruler') -}}
+                        <span>Add measurement</span>
+                    </{% if is_granted %}a{% else %}button{% endif %}>
+                </li>
+                <li class="dropdown-item">
+                    <form method="post" action="{{ path('app_workout_create') }}">
+                        <button class="dropdown-link"
+                                {% if is_granted('WORKOUT_CREATE') %}type="submit"{% else %} disabled{% endif %}>
+                            {{- ux_icon('lucide:biceps-flexed') -}}
+                            <span>Start workout</span>
+                        </button>
+                    </form>
+                </li>
+            {%- endblock -%}
+        </ul>
+    </div>
+{% endblock %}
+
 {% block showcase -%}
     {%- if current_date.format('m-d') === '03-08' -%}
         <section class="card card-shine">
@@ -111,7 +163,7 @@
                         </div>
                     {%- endif -%}
 
-                    {{- filters.months(measurement_days, path('app_homepage', {measurement: '###'}), [4, 6, 8, 10]) -}}
+                    {{- filters.months('', measurement_days, path('app_homepage', {measurement: '###'}), [4, 6, 8, 10]) -}}
                 </div>
 
                 <div class="card-panel-body chart-panel"
@@ -124,7 +176,7 @@
             <section id="workouts-card" class="card card-panel">
                 <div class="card-title card-title-controls">
                     <h2 id="workouts-title">Workouts</h2>
-                    {{- filters.months(workout_days, path('app_homepage', {workout: '###'}), [4, 6, 8]) -}}
+                    {{- filters.months('', workout_days, path('app_homepage', {workout: '###'}), [4, 6, 8]) -}}
                 </div>
 
                 <div class="card-panel-body calendar-heatmap-workout-container">
@@ -169,7 +221,7 @@
         <section id="mood-chart-card" class="card card-panel">
             <div class="card-title card-title-controls">
                 <h2 id="mood-chart-title">Mood trend</h2>
-                {{- filters.months(mood_reflection_days, path('app_homepage', {mood: '###'}), [4, 6, 8, 10]) -}}
+                {{- filters.months('', mood_reflection_days, path('app_homepage', {mood: '###'}), [4, 6, 8, 10]) -}}
             </div>
 
             <div class="card-panel-body chart-panel"

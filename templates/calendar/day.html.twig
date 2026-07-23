@@ -14,6 +14,11 @@
 
 {% set back_path = path('app_calendar', {year: day.format('Y')}) %}
 
+{% block header_actions -%}
+    <button class="btn btn-glass btn-glass-primary"
+            data-form-submit="#form-calendar">{{ ux_icon('lucide:check') }}</button>
+{%- endblock %}
+
 {% block body_actions -%}
     <div class="body-actions actions-pagination">
         {%- set prev_day = day.modify('-1 day') -%}
@@ -69,7 +74,7 @@
     <h2 class="card-title">Add new event</h2>
 
     <section class="card card-form">
-        {{- form_start(form) -}}
+        {{- form_start(form, {attr: {id: 'form-calendar', class: 'form-submit-external'}}) -}}
 
         {{- form_row(form.title, {attr: {placeholder: 'Required'}}) -}}
         {{- form_row(form.type, {button_size: 'btn-sm'}) -}}
