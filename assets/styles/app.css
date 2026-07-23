@@ -714,7 +714,8 @@ textarea {
         position: sticky;
         inset: 0 0 auto;
         padding: var(--body-gap-block);
-        background-color: var(--body-background-color-secondary);
+        background: linear-gradient(0deg, transparent, var(--body-background-color-secondary));
+        backdrop-filter: blur(1px);
         touch-action: none;
         z-index: 2;
 
@@ -5199,7 +5200,7 @@ form {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        padding-block: calc(var(--card-padding-block) / 1.75);
+        padding-block: calc(var(--card-padding-block) / 1.25);
         text-decoration: none;
         transition: color .15s;
 
@@ -5226,6 +5227,7 @@ form {
         .backup-download {
             display: flex;
             align-items: center;
+            color: var(--color-secondary);
         }
     }
 }
