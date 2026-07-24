@@ -35,14 +35,14 @@ enum WindDirection: string
     public function toEmoji(): string
     {
         return match ($this) {
-            self::North => '↓',
-            self::NorthEast => '↙',
-            self::East => '←',
-            self::SouthEast => '↖',
-            self::South => '↑',
-            self::SouthWest => '↗',
-            self::West => '→',
-            self::NorthWest => '↘',
+            self::North => '⬇️',
+            self::NorthEast => '↙️',
+            self::East => '⬅️',
+            self::SouthEast => '↖️',
+            self::South => '⬆️',
+            self::SouthWest => '↗️',
+            self::West => '➡️',
+            self::NorthWest => '↘️',
         };
     }
 }

@@ -1,10 +1,10 @@
-<{% if prev.is_granted %}a{% else %}span{% endif %} class="btn btn-glass pagination-prev" id="pagination-link-prev"
+<{% if prev.is_granted %}a{% else %}span{% endif %} class="btn btn-glass btn-pagination"
     {% if prev.is_granted %}href="{{ prev.url }}"{% else %} disabled{% endif %}>
     {{- ux_icon('lucide:chevron-left') -}}
     <span>{{ prev.label }}</span>
 </{% if prev.is_granted %}a{% else %}span{% endif %}>
 
-<{% if next.is_granted %}a{% else %}span{% endif %} class="btn btn-glass pagination-next" id="pagination-link-next"
+<{% if next.is_granted %}a{% else %}span{% endif %} class="btn btn-glass btn-pagination"
     {% if next.is_granted %}href="{{ next.url }}"{% else %} disabled{% endif %}>
     <span>{{ next.label }}</span>
     {{- ux_icon('lucide:chevron-right') -}}

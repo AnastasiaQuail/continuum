@@ -60,20 +60,20 @@ final class WindDirectionTest extends TestCase
      */
     public static function provideWindDirectionEmojiCases(): iterable
     {
-        yield [WindDirection::North, '↓'];
+        yield [WindDirection::North, '⬇️'];
 
-        yield [WindDirection::NorthEast, '↙'];
+        yield [WindDirection::NorthEast, '↙️'];
 
-        yield [WindDirection::East, '←'];
+        yield [WindDirection::East, '⬅️'];
 
-        yield [WindDirection::SouthEast, '↖'];
+        yield [WindDirection::SouthEast, '↖️'];
 
-        yield [WindDirection::South, '↑'];
+        yield [WindDirection::South, '⬆️'];
 
-        yield [WindDirection::SouthWest, '↗'];
+        yield [WindDirection::SouthWest, '↗️'];
 
-        yield [WindDirection::West, '→'];
+        yield [WindDirection::West, '➡️'];
 
-        yield [WindDirection::NorthWest, '↘'];
+        yield [WindDirection::NorthWest, '↘️'];
     }
 }

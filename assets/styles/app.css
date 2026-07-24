@@ -1242,27 +1242,19 @@ textarea {
 
     & > .body-messages {
         position: fixed;
-        top: calc(var(--header-gap-block) * 2 + var(--header-height));
-        right: var(--body-gap-inline);
+        inset: calc(var(--header-offset-block) + var(--body-gap-block) / 1.5) var(--body-gap-inline) auto;
+        padding-inline: var(--container-gap-inline);
         display: none;
         flex-direction: column;
         row-gap: calc(var(--gap-block) / 2);
-        width: 80vw;
         z-index: 101;
-
-        @media (width < 768px) {
-            [data-sidebar-view="show"] & {
-                z-index: 49;
-            }
-        }
-
-        @media (width >= 576px) {
-            width: 60vw;
-        }
+        view-transition-name: body-messages;
 
         @media (width >= 768px) {
-            top: calc(var(--header-gap-block) * 1.5 + var(--header-height));
+            left: auto;
+            padding-inline: 0;
             width: 40vw;
+            background: transparent;
         }
 
         @media (width >= 992px) {
@@ -1296,7 +1288,8 @@ textarea {
 
             &.hide {
                 opacity: 0;
-                transition: opacity 2s ease-in;
+                transform: translateY(-25%);
+                transition: opacity 2s ease-in, transform 2s ease-in;
             }
         }
     }
@@ -1415,21 +1408,22 @@ textarea {
             justify-content: space-between;
         }
 
-        .pagination-prev {
-            transform-origin: top left;
-        }
+        .btn-pagination {
+            view-transition-name: none;
 
-        .pagination-next {
-            transform-origin: top right;
-
-            @media (width >= 768px) {
+            &:first-child {
                 transform-origin: top left;
             }
-        }
 
-        &.is-stuck {
-            .pagination-prev,
-            .pagination-next {
+            &:last-child {
+                transform-origin: top right;
+
+                @media (width >= 768px) {
+                    transform-origin: top left;
+                }
+            }
+
+            .is-stuck > & {
                 transform: scale(0.8);
 
                 &:not(a) {
@@ -1446,22 +1440,14 @@ textarea {
     .btn {
         column-gap: calc(var(--control-padding-inline) / 4);
 
-        &.pagination-prev {
+        &.btn-pagination:has(> svg:first-child) {
             padding-left: calc(var(--control-padding-inline) / 1.5);
         }
 
-        &.pagination-next {
+        &.btn-pagination:has(> svg:last-child) {
             padding-right: calc(var(--control-padding-inline) / 1.5);
         }
     }
-}
-
-#pagination-link-prev {
-    view-transition-name: pagination-link-prev;
-}
-
-#pagination-link-next {
-    view-transition-name: pagination-link-next;
 }
 
 .badge {
@@ -2319,7 +2305,7 @@ textarea {
     background-color: color-mix(in oklch, var(--btn-background-color) var(--btn-background-color-transparent), transparent);
     backdrop-filter: var(--btn-backdrop-filter);
     box-shadow: var(--btn-box-shadow);
-    transition: color .15s, background-color .15s, border-color .15s;
+    transition: color .15s, border-color .15s, background-color .15s;
 
     &:hover {
         --btn-border-color-transparent: calc(var(--transparent-color) + 10%);
