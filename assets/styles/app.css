@@ -3056,10 +3056,20 @@ textarea {
 .card-description {
     display: flex;
     flex-direction: column;
-    row-gap: calc(var(--body-gap-block) / 6);
+    gap: calc(var(--body-gap-block) / 6) var(--container-gap-inline);
     margin-bottom: var(--body-gap-block);
     font-size: var(--font-size-small);
     color: var(--color-tertiary);
+
+    &:has(.card-description-line) {
+        flex-direction: row;
+        justify-content: space-between;
+
+        .card-description-line {
+            display: flex;
+            gap: calc(var(--gap-block) / 6) calc(var(--container-gap-inline) / 4);
+        }
+    }
 }
 
 @keyframes shine {
@@ -4665,6 +4675,27 @@ form {
                     margin-top: 0;
                 }
             }
+        }
+    }
+
+    @media (width < 768px) {
+        &:not(.card-workout-details) {
+            .form-row {
+                .form-workout-sets,
+                .form-workout-hint {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.card-description-workout {
+    .card-description-toggler {
+        white-space: nowrap;
+
+        @media (width >= 768px) {
+            display: none;
         }
     }
 }
