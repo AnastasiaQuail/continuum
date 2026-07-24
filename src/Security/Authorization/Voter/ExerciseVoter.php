@@ -49,9 +49,28 @@ final class ExerciseVoter extends Voter
         return match ($attribute) {
             self::VIEW => true,
             self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
-            self::EDIT,
-            self::DELETE => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            self::EDIT => $this->isEditGranted($user, $subject),
+            self::DELETE => $this->isDeleteGranted($user, $subject),
             default => false,
         };
+    }
+
+    private function isEditGranted(User $user, mixed $subject): bool
+    {
+        if (!$subject instanceof Exercise) {
+            return false;
+        }
+
+        return $this->security->isGrantedForUser($user, UserRole::Admin->value);
+    }
+
+    private function isDeleteGranted(User $user, mixed $subject): bool
+    {
+        if (!$subject instanceof Exercise) {
+            return false;
+        }
+
+        return $subject->workoutExercises->isEmpty()
+            && $this->security->isGrantedForUser($user, UserRole::Admin->value);
     }
 }

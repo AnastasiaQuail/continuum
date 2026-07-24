@@ -10,10 +10,11 @@
 {% block body_id %}calendar{% endblock %}
 
 {% block header_actions -%}
-    {%- set is_granted = is_granted('CALENDAR_EDIT') -%}
+    {%- set new_event_day = user_date('+1 day').format('Y-m-d') -%}
+    {%- set is_granted = is_granted('CALENDAR_EDIT', new_event_day) -%}
 
     <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path('app_calendar_day', {day: user_date('+1 day').format('Y-m-d')}) }}"{% else %} disabled{% endif %}
+        {% if is_granted %} href="{{ path('app_calendar_day', {day: new_event_day}) }}"{% else %} disabled{% endif %}
         class="btn btn-glass">Add event</{% if is_granted %}a{% else %}button{% endif %}>
 {%- endblock %}
 
@@ -49,7 +50,6 @@
             {%- set current_date = user_date() -%}
             {%- set current_month = current_date.format('Y-m') -%}
             {%- set current = current_date.format('Y-m-d') -%}
-            {%- set is_granted = is_granted('CALENDAR_EDIT') -%}
 
             {%- for month_number in 1..12 -%}
                 {%- set month = year ~ '-' ~ (month_number < 10 ? '0') ~ month_number -%}
@@ -73,6 +73,7 @@
 
                         {%- for day_number in 1..first_day|date('t') -%}
                             {%- set day = month ~ '-' ~ (day_number < 10 ? '0') ~ day_number -%}
+                            {%- set is_granted = is_granted('CALENDAR_EDIT', day) -%}
                             {%- set day_event = events[day] is defined ? events[day].dayEvent : null -%}
                             {%- set hour_events = events[day] is defined ? events[day].hourEvents : [] -%}
 

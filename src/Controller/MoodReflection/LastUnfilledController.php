@@ -11,7 +11,6 @@ use Continuum\Service\RequestValidator;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -24,8 +23,8 @@ final class LastUnfilledController extends AbstractController
     ) {}
 
     #[Route(path: '/mood-reflections/unfilled', name: 'app_mood_reflection_last_unfilled', methods: ['GET'])]
-    #[IsGranted(MoodReflectionVoter::EDIT)]
-    public function __invoke(#[CurrentUser] User $user, Request $request): RedirectResponse
+    #[IsGranted(MoodReflectionVoter::LAST_UNFILLED)]
+    public function __invoke(#[CurrentUser] User $user): RedirectResponse
     {
         $moodReflection = $this->moodReflectionService->findLastMood();
 
@@ -41,9 +40,11 @@ final class LastUnfilledController extends AbstractController
         if (null !== $this->requestValidator->validateExistenceDay($day)) {
             $this->addFlash('success', 'Your mood reflection is up to date!');
 
-            if (null !== $referer = $request->headers->get('referer')) {
-                return $this->redirect($referer);
-            }
+            return $this->redirectToRoute('app_mood_reflections');
+        }
+
+        if (!$this->isGranted(MoodReflectionVoter::EDIT, $unfilledDay->format('Y-m-d'))) {
+            $this->addFlash('success', 'We were unable to choose a suitable date');
 
             return $this->redirectToRoute('app_mood_reflections');
         }

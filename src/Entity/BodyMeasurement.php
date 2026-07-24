@@ -101,6 +101,8 @@ final class BodyMeasurement
             $fatUsNavy = (495 / (1.0324 - (0.19077 * $logBody) + (0.15456 * $logHeight))) - 450;
 
             $this->fatUsNavy = round($fatUsNavy, 2);
+        } else {
+            $this->fatUsNavy = null;
         }
     }
 

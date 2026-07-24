@@ -2436,6 +2436,7 @@ textarea {
         --btn-dropdown-background-color: color-mix(in oklch, var(--btn-background-color) var(--btn-background-color-transparent), transparent);
 
         position: relative;
+        cursor: default;
         overflow: hidden;
         z-index: 1;
 
@@ -2980,6 +2981,10 @@ textarea {
             &.form-row-delete {
                 .btn {
                     border-radius: var(--card-border-radius);
+
+                    @media (width < 768px) {
+                        padding-inline: var(--card-padding-inline);
+                    }
                 }
             }
         }
@@ -3803,10 +3808,11 @@ textarea {
                 align-items: center;
                 justify-content: center;
                 gap: 3cqmax;
+                padding-inline: 18cqmax;
             }
 
             .day-badge {
-                --day-badge-size: 12cqmax;
+                --day-badge-size: 9cqmax;
                 --day-badge-border-color-transparent: 25%;
                 --day-badge-background-color-transparent: 100%;
 
@@ -5137,6 +5143,10 @@ form {
             display: flex;
             align-items: center;
             color: var(--color-secondary);
+        }
+
+        &:not(a) .backup-download {
+            color: var(--color-quaternary);
         }
     }
 }

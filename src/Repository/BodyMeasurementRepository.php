@@ -116,4 +116,11 @@ final class BodyMeasurementRepository extends ServiceEntityRepository implements
         $this->getEntityManager()->persist($measurement);
         $this->getEntityManager()->flush();
     }
+
+    #[Override]
+    public function delete(BodyMeasurement $measurement): void
+    {
+        $this->getEntityManager()->remove($measurement);
+        $this->getEntityManager()->flush();
+    }
 }

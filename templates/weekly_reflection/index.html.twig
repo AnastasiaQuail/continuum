@@ -27,12 +27,12 @@
 {%- endblock %}
 
 {% block main -%}
-    {%- set is_granted = is_granted('WEEKLY_REFLECTION_EDIT') -%}
-
     {%- for date, reflection in weekly_reflections|reverse -%}
         <section class="card card-form card-weekly-reflections">
             {%- set monday = date(date).modify('-6 days') -%}
             {%- set sunday = date(date) -%}
+
+            {%- set is_granted = is_granted('WEEKLY_REFLECTION_EDIT', sunday.format('Y-m-d')) -%}
             {%- set is_different_month = monday.format('n') !== sunday.format('n') -%}
             {%- set time = monday.format(is_different_month ? 'j F' : 'j') ~ ' - ' ~ sunday.format('j F') -%}
 

@@ -40,9 +40,7 @@
                     </div>
                 </div>
 
-                {%- if is_granted -%}
-                    <div class="backup-download">{{ ux_icon('lucide:download') }}</div>
-                {%- endif -%}
+                <div class="backup-download">{{ ux_icon('lucide:download') }}</div>
             </{% if is_granted %}a{% else %}div{% endif %}>
         {%- endfor -%}
     </section>

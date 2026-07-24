@@ -6,9 +6,9 @@
 {% block page_subtitle %}{{ is_current_year ? month.format('F') : month.format('F Y') }}{% endblock %}
 {% block body_id %}mood-reflection{% endblock %}
 
-{% set is_granted = is_granted('MOOD_REFLECTION_EDIT') %}
-
 {% block header_actions -%}
+    {%- set is_granted = is_granted('MOOD_REFLECTION_LAST_UNFILLED') -%}
+
     <{% if is_granted %}a{% else %}button{% endif %}
         {% if is_granted %} href="{{ path('app_mood_reflection_last_unfilled') }}"{% else %} disabled{% endif %}
         class="btn btn-glass">Check-in
@@ -19,18 +19,10 @@
     <section id="mood-chart-card" class="card card-mood-chart">
         <div class="mood-chart" style="--chart-columns: {{ last_moods|length }};">
             {%- for last_mood in last_moods -%}
-                {%- if last_mood -%}
-                    <{% if is_granted %}a{% else %}div{% endif %}
-                        {% if is_granted %}href="{{ path('app_mood_reflection_edit', {day: last_mood.date.format('Y-m-d')}) }}"{% endif %}
-                        class="chart-day" data-type="{{ last_mood.type.value }}"
-                        data-general-type="{{ last_mood.type.color.value }}">
-                        <div class="chart-day-type">{{ last_mood.date.format('j') }}</div>
-                    </{% if is_granted %}a{% else %}div{% endif %}>
-                {%- else -%}
-                    <div class="chart-day">
-                        <div class="chart-day-type"></div>
-                    </div>
-                {%- endif -%}
+                <div class="chart-day" data-type="{{ last_mood?.type.value }}"
+                     {% if last_mood %}data-general-type="{{ last_mood.type.color.value }}"{% endif %}>
+                    <div class="chart-day-type">{{ last_mood?.date.format('j') }}</div>
+                </div>
             {%- endfor -%}
         </div>
     </section>
@@ -78,10 +70,10 @@
                     {%- for day_number in 1..month.format('t') -%}
                         {%- set day = month.format('Y-m-') ~ (day_number < 10 ? '0') ~ day_number -%}
                         {%- set mood = moods[day] is defined ? moods[day] : null -%}
-                        {%- set is_granted_day = is_granted and current >= day -%}
+                        {%- set is_granted = is_granted('MOOD_REFLECTION_EDIT', day) -%}
 
-                        <{% if is_granted_day %}a{% else %}div{% endif %}
-                            {% if is_granted_day %}href="{{ path('app_mood_reflection_edit', {day: day}) }}"{% endif %}
+                        <{% if is_granted %}a{% else %}div{% endif %}
+                            {% if is_granted %}href="{{ path('app_mood_reflection_edit', {day: day}) }}"{% endif %}
                             class="day {{- mood !== null ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day|is_weekend ? ' day-weekend' -}}"
                             {%- if mood !== null %}data-general-type="{{ mood.type.color.value }}"{% endif -%}>
                             <span>{{ day_number }}</span>
@@ -91,7 +83,7 @@
                                     <span class="day-badge" data-general-type="{{ mood.type.color.value }}"></span>
                                 </div>
                             {%- endif -%}
-                        </{% if is_granted_day %}a{% else %}div{% endif %}>
+                        </{% if is_granted %}a{% else %}div{% endif %}>
                     {%- endfor -%}
                 </div>
             </article>

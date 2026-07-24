@@ -6,6 +6,7 @@ namespace Continuum\Security\Authorization\Voter;
 
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
+use DateMalformedStringException;
 use DateTimeImmutable;
 use Override;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -47,23 +48,16 @@ final class WeeklyReflectionVoter extends Voter
         }
 
         return match ($attribute) {
-            self::VIEW, self::REPORT_VIEW => $this->isViewGranted($user, $subject),
+            self::VIEW,
+            self::REPORT_VIEW => $subject instanceof DateTimeImmutable && $this->isViewGranted($user, $subject),
             self::PRIVATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
-            self::EDIT => $this->isEditGranted($user),
+            self::EDIT => is_string($subject) && $this->isEditGranted($user, $subject),
             default => false,
         };
     }
 
-    private function isViewGranted(User $user, mixed $subject): bool
+    private function isViewGranted(User $user, DateTimeImmutable $subject): bool
     {
-        if (null === $subject) {
-            return true;
-        }
-
-        if (!$subject instanceof DateTimeImmutable) {
-            return false;
-        }
-
         $currentDate = new DateTimeImmutable('now', $user->timezone);
 
         if ($currentDate->format('Y-m') === $subject->format('Y-m')) {
@@ -77,14 +71,26 @@ final class WeeklyReflectionVoter extends Voter
 
         // closest sunday is first week of the next month
         if ($currentDate->modify('sunday')->format('Y-m') === $subject->format('Y-m')) {
-            return $this->isEditGranted($user);
+            return $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value);
         }
 
         return false;
     }
 
-    private function isEditGranted(User $user): bool
+    private function isEditGranted(User $user, string $subject): bool
     {
-        return $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value);
+        if (!$this->security->isGrantedForUser($user, UserRole::SuperAdmin->value)) {
+            return false;
+        }
+
+        try {
+            $week = new DateTimeImmutable($subject, $user->timezone)->setTime(0, 0);
+        } catch (DateMalformedStringException) {
+            return false;
+        }
+
+        $now = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);
+
+        return $week > $now || $now->diff($week)->days <= 14;
     }
 }

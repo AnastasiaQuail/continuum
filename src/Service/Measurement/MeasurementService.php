@@ -95,4 +95,9 @@ final readonly class MeasurementService
     {
         return $this->repository->findPrevByFieldName($measurement, $fieldName);
     }
+
+    public function delete(BodyMeasurement $measurement): void
+    {
+        $this->repository->delete($measurement);
+    }
 }

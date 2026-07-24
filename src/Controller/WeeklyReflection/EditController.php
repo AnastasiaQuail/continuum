@@ -27,7 +27,7 @@ final class EditController extends AbstractController
     ) {}
 
     #[Route(path: '/weekly-reflections/{week:date}', name: 'app_weekly_reflection_edit', methods: ['GET', 'POST'])]
-    #[IsGranted(WeeklyReflectionVoter::EDIT)]
+    #[IsGranted(WeeklyReflectionVoter::EDIT, 'date')]
     public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {
         $week = new DateTimeImmutable($date, $user->timezone)->setTime(0, 0);

@@ -7,6 +7,7 @@ namespace Continuum\Security\Authorization\Voter;
 use Continuum\Entity\BodyMeasurement;
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
+use DateTimeImmutable;
 use Override;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -23,6 +24,7 @@ final class MeasurementVoter extends Voter
     public const string REPORT_VIEW = 'BODY_MEASUREMENT_REPORT_VIEW';
     public const string CREATE = 'BODY_MEASUREMENT_CREATE';
     public const string EDIT = 'BODY_MEASUREMENT_EDIT';
+    public const string DELETE = 'BODY_MEASUREMENT_DELETE';
 
     public function __construct(
         private readonly Security $security,
@@ -31,7 +33,18 @@ final class MeasurementVoter extends Voter
     #[Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::VIEW, self::HISTORY, self::REPORT_VIEW, self::CREATE, self::EDIT], strict: true);
+        return in_array(
+            $attribute,
+            [
+                self::VIEW,
+                self::HISTORY,
+                self::REPORT_VIEW,
+                self::CREATE,
+                self::EDIT,
+                self::DELETE,
+            ],
+            strict: true
+        );
     }
 
     #[Override]
@@ -50,9 +63,24 @@ final class MeasurementVoter extends Voter
         return match ($attribute) {
             self::VIEW, self::HISTORY, self::REPORT_VIEW => true,
             self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
-            self::EDIT => $subject instanceof BodyMeasurement
-                && $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            self::EDIT, self::DELETE => $this->isEditOrDeleteGranted($user, $subject),
             default => false,
         };
+    }
+
+    private function isEditOrDeleteGranted(User $user, mixed $subject): bool
+    {
+        if (!$subject instanceof BodyMeasurement) {
+            return false;
+        }
+
+        $diff = new DateTimeImmutable()->diff($subject->datetime);
+
+        if (0 === $diff->days) {
+            return $this->security->isGrantedForUser($user, UserRole::Admin->value);
+        }
+
+        return $diff->days < 3
+            && $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value);
     }
 }

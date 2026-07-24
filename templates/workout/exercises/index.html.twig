@@ -71,7 +71,13 @@
             {%- endif -%}
         </section>
 
-        <div class="card-description">{{ exercise_count_map[exercise_id] }} workouts</div>
+        <div class="card-description">
+            {%- if exercise_count_map[exercise_id] -%}
+                Used in {{ exercise_count_map[exercise_id] }} workouts
+            {%- else -%}
+                Not used anywhere
+            {%- endif -%}
+        </div>
     {%- endfor -%}
 {%- endblock %}
 

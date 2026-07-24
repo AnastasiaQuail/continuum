@@ -23,4 +23,6 @@ interface BodyMeasurementRepositoryInterface
     public function findPrevByFieldName(BodyMeasurement $measurement, string $fieldName): ?float;
 
     public function save(BodyMeasurement $measurement): void;
+
+    public function delete(BodyMeasurement $measurement): void;
 }
