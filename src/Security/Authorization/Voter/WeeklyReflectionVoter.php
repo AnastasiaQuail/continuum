@@ -49,7 +49,8 @@ final class WeeklyReflectionVoter extends Voter
 
         return match ($attribute) {
             self::VIEW,
-            self::REPORT_VIEW => $subject instanceof DateTimeImmutable && $this->isViewGranted($user, $subject),
+            self::REPORT_VIEW => null === $subject
+                || ($subject instanceof DateTimeImmutable && $this->isViewGranted($user, $subject)),
             self::PRIVATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
             self::EDIT => is_string($subject) && $this->isEditGranted($user, $subject),
             default => false,
