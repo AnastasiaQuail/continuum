@@ -73,45 +73,28 @@ final class WorkoutVoter extends Voter
         return match ($attribute) {
             self::VIEW,
             self::REPORT_VIEW => true,
-
             self::CREATE => $this->security->isGrantedForUser($user, UserRole::Admin->value),
-
             self::EDIT,
-            self::EXERCISE_CREATE,
-            self::EXERCISE_UPDATE,
-            self::SET_CREATE,
             self::DELETE,
+            self::EXERCISE_CREATE => $subject instanceof Workout && $this->isGranted($user, $subject),
+            self::EXERCISE_UPDATE,
             self::EXERCISE_DELETE,
-            self::SET_DELETE => (
-                $this->editWorkout($user, $attribute, $subject)
-                    && $this->security->isGrantedForUser($user, UserRole::Admin->value)
-            )
-                || $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
+            self::SET_CREATE => $subject instanceof WorkoutExercise && $this->isGranted($user, $subject->workout),
+            self::SET_DELETE => $subject instanceof WorkoutSet
+                && $this->isGranted($user, $subject->workoutExercise->workout),
             default => false,
         };
     }
 
-    private function editWorkout(User $user, string $attribute, mixed $subject): bool
+    private function isGranted(User $user, Workout $workout): bool
     {
-        if (!$this->security->isGrantedForUser($user, UserRole::Admin->value)) {
-            return false;
+        $now = new DateTimeImmutable();
+
+        if ($now->format('Y-m-d') === $workout->date->format('Y-m-d')) {
+            return $this->security->isGrantedForUser($user, UserRole::Admin->value);
         }
 
-        return match ($attribute) {
-            self::EDIT,
-            self::DELETE,
-            self::EXERCISE_CREATE => $subject instanceof Workout && $this->isCurrentDay($subject),
-            self::EXERCISE_UPDATE,
-            self::EXERCISE_DELETE,
-            self::SET_CREATE => $subject instanceof WorkoutExercise && $this->isCurrentDay($subject->workout),
-            self::SET_DELETE => $subject instanceof WorkoutSet
-                && $this->isCurrentDay($subject->workoutExercise->workout),
-            default => false,
-        };
-    }
-
-    private function isCurrentDay(Workout $workout): bool
-    {
-        return $workout->date->format('Y-m-d') === new DateTimeImmutable()->format('Y-m-d');
+        return $now->diff($workout->date)->d <= 7
+            && $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value);
     }
 }

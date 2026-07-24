@@ -32,7 +32,7 @@ final class EditController extends AbstractController
         requirements: ['day' => '\d{4}-\d{2}-\d{2}'],
         methods: ['GET', 'POST']
     )]
-    #[IsGranted(MoodReflectionVoter::EDIT)]
+    #[IsGranted(MoodReflectionVoter::EDIT, 'date')]
     public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {
         $day = new DateTimeImmutable($date, $user->timezone)->setTime(0, 0);

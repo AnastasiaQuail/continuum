@@ -6,6 +6,8 @@ namespace Continuum\Security\Authorization\Voter;
 
 use Continuum\Entity\User;
 use Continuum\Security\User\UserRole;
+use DateMalformedStringException;
+use DateTimeImmutable;
 use Override;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -58,9 +60,27 @@ final class CalendarVoter extends Voter
 
         return match ($attribute) {
             self::VIEW, self::REPORT_VIEW, self::UPCOMING => true,
-            self::EDIT => $this->security->isGrantedForUser($user, UserRole::Admin->value),
+            self::EDIT => is_string($subject) && $this->isEditGranted($user, $subject),
             self::EVENT_DELETE => $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value),
             default => false,
         };
+    }
+
+    private function isEditGranted(User $user, string $subject): bool
+    {
+        try {
+            $day = new DateTimeImmutable($subject, $user->timezone)->setTime(0, 0);
+        } catch (DateMalformedStringException) {
+            return false;
+        }
+
+        $now = new DateTimeImmutable('now', $user->timezone)->setTime(0, 0);
+
+        if ($day > $now || $now->diff($day)->days <= 3) {
+            return $this->security->isGrantedForUser($user, UserRole::Admin->value);
+        }
+
+        return $now->diff($day)->days <= 14
+            && $this->security->isGrantedForUser($user, UserRole::SuperAdmin->value);
     }
 }

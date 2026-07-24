@@ -20,10 +20,11 @@
         <ul class="dropdown-menu">
             {%- block header_actions_shortcut -%}
                 <li class="dropdown-item">
-                    {%- set is_granted = is_granted('CALENDAR_EDIT') -%}
+                    {%- set new_event_day = user_date('+1 day').format('Y-m-d') -%}
+                    {%- set is_granted = is_granted('CALENDAR_EDIT', new_event_day) -%}
 
                     <{% if is_granted %}a{% else %}button{% endif %}
-                        {% if is_granted %} href="{{ path('app_calendar_day', {day: user_date('+1 day').format('Y-m-d')}) }}"{% else %} disabled{% endif %}
+                        {% if is_granted %} href="{{ path('app_calendar_day', {day: new_event_day}) }}"{% else %} disabled{% endif %}
                         class="dropdown-link">
                         {{- ux_icon('lucide:calendar-plus') -}}
                         <span>New event</span>
@@ -33,7 +34,7 @@
                     <hr class="dropdown-divider">
                 </li>
                 <li class="dropdown-item">
-                    {%- set is_granted = is_granted('MOOD_REFLECTION_EDIT') -%}
+                    {%- set is_granted = is_granted('MOOD_REFLECTION_LAST_UNFILLED') -%}
 
                     <{% if is_granted %}a{% else %}button{% endif %}
                         {% if is_granted %} href="{{ path('app_mood_reflection_last_unfilled') }}"{% else %} disabled{% endif %}

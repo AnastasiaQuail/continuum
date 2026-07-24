@@ -31,7 +31,7 @@ final class DayController extends AbstractController
     ) {}
 
     #[Route(path: '/calendar/{day:date}', name: 'app_calendar_day', methods: ['GET', 'POST'])]
-    #[IsGranted(CalendarVoter::EDIT)]
+    #[IsGranted(CalendarVoter::EDIT, 'date')]
     public function __invoke(#[CurrentUser] User $user, Request $request, string $date): Response
     {
         $day = new DateTimeImmutable($date, $user->timezone)->setTime(0, 0);
