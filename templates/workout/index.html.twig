@@ -102,7 +102,9 @@
     {%- endif -%}
 
     {%- for workout in workouts|reverse -%}
-        <section class="card card-form card-workout" id="workout_{{ workout.id }}">
+        {%- set card_id = 'workout_' ~ workout.id -%}
+
+        <section class="card card-form card-workout" id="{{ card_id }}">
             {%- set is_granted = is_granted('WORKOUT_EDIT', workout) -%}
             {%- set time = workout.date.setTimezone(app.user.timezone).format('j F, H:i') -%}
 
@@ -189,11 +191,20 @@
         {%- set hours = (total_minutes / 60)|round(0, 'floor') -%}
         {%- set minutes = total_minutes - hours * 60 -%}
 
-        <div class="card-description">
-            <div>Duration:
-                {% if hours > 0 %}{{ hours }} {{ hours > 1 ? 'hours' : 'hour' }}{% endif %}
-                {{ minutes > 9 ? minutes : '0' ~ minutes }} minutes
+        {%- if workout.workoutExercises is not empty -%}
+            <div class="card-description card-description-workout">
+                <div class="card-description-line">
+                    {%- if total_minutes -%}
+                        {% if hours > 0 %}{{ hours }} {{ hours > 1 ? 'hours' : 'hour' }}{% endif %}
+                        {{ minutes > 9 ? minutes : '0' ~ minutes }} minutes
+                    {%- endif -%}
+                </div>
+                <div class="card-description-line card-description-toggler"
+                     onclick="document.getElementById('{{ card_id }}').classList.toggle('card-workout-details'); return false;">
+                    Details
+                    {{- ux_icon('lucide:unfold-vertical') -}}
+                </div>
             </div>
-        </div>
+        {%- endif -%}
     {%- endfor -%}
 {%- endblock %}
