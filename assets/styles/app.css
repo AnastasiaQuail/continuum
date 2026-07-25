@@ -1136,6 +1136,7 @@ textarea {
     grid-template-rows: 1fr auto;
     min-height: 100dvh;
     padding-top: var(--header-offset-block);
+    overflow-y: unset;
     overflow-x: clip;
     transition: padding .15s;
 
@@ -2762,6 +2763,8 @@ textarea {
     border: var(--card-border-width) var(--card-border-style) var(--card-border-color);
     border-radius: var(--card-border-radius);
     background-color: var(--card-background-color);
+    overflow-y: unset;
+    overflow-x: clip;
 
     &.card-transparent {
         padding-block: calc(var(--card-padding-block) / 2);
@@ -4551,9 +4554,41 @@ form {
                 color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
             }
 
-            &:has(.form-label-progress) {
+            .form-label-name {
+                position: relative;
+
+                @media (width < 768px) {
+                    white-space: nowrap;
+                    overflow: hidden;
+
+                    &:after {
+                        position: absolute;
+                        content: '';
+                        right: 0;
+                        height: 100%;
+                        width: calc(var(--form-row-gap) * 2);
+                        background: linear-gradient(90deg, transparent, var(--background-color));
+                    }
+                }
+            }
+
+            &:has(.form-label-legend) {
                 display: grid;
                 grid-template-columns: 1fr auto;
+
+                .form-label-legend {
+                    display: flex;
+                    align-items: center;
+                    column-gap: var(--form-row-gap);
+                    font-size: var(--font-size-extra-small);
+                    color: var(--color-quaternary);
+                }
+
+                .form-label-reps {
+                    @media (width > 768px) {
+                        display: none;
+                    }
+                }
 
                 .form-label-progress {
                     display: inline-flex;
@@ -4639,6 +4674,27 @@ form {
             color: var(--color-tertiary);
             border: var(--border-width) dashed var(--glass-border-color);
             border-radius: var(--border-radius-internal);
+
+            @media (width > 768px) {
+                flex-basis: 100%;
+                margin-top: 0;
+                order: 4;
+            }
+        }
+
+        .form-text {
+            grid-row: unset;
+            column-gap: calc(var(--form-row-gap) / 4);
+            margin-top: var(--form-row-gap);
+            color: var(--color-quaternary);
+
+            @media (width >= 768px) {
+                display: flex;
+                align-items: center;
+                margin-top: 0;
+                margin-left: auto;
+                order: 3;
+            }
         }
 
         @media (width > 768px) {
@@ -4655,20 +4711,24 @@ form {
                 .form-label {
                     margin-bottom: 0;
                 }
-
-                .form-workout-hint {
-                    flex-basis: 100%;
-                    margin-top: 0;
-                }
             }
         }
     }
 
     @media (width < 768px) {
+        &.card-workout-details {
+            .form-row {
+                .form-label-reps {
+                    display: none;
+                }
+            }
+        }
+
         &:not(.card-workout-details) {
             .form-row {
                 .form-workout-sets,
-                .form-workout-hint {
+                .form-workout-hint,
+                .form-text {
                     display: none;
                 }
             }
@@ -5104,6 +5164,7 @@ form {
 
                 .exercise-progress-value {
                     display: inline-flex;
+                    flex-wrap: wrap;
                     column-gap: calc(var(--form-row-gap) / 2);
                     align-items: center;
 
