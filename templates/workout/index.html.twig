@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% set is_current_year = month.format('Y') === user_date().format('Y') %}
+{% set current_date = user_date() %}
+{% set is_current_year = month.format('Y') === current_date.format('Y') %}
 
 {% block title %}Workouts{% endblock %}
 {% block page_subtitle %}{{ is_current_year ? month.format('F') : month.format('F Y') }}{% endblock %}
@@ -38,7 +39,7 @@
             next: {
                 url: path('app_workouts', {month: next_month.format('Y-m')}),
                 label: next_month.format('F'),
-                is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
+                is_granted: current_date.format('Y-m') >= next_month.format('Y-m'),
             },
         }) }}
     </div>
@@ -48,7 +49,7 @@
     <section class="card card-transparent card-calendar-month">
         <div class="calendar calendar-month calendar-month-short calendar-badges">
             <article class="month">
-                {%- set current = user_date().format('Y-m-d') -%}
+                {%- set current = current_date.format('Y-m-d') -%}
                 {%- set first_week_day = month.format('N') -%}
 
                 <div class="month-day-title">
@@ -99,6 +100,16 @@
             {{- ux_icon('lucide:frown') -}}
             <span>No workouts this month yet</span>
         </div>
+    {%- elseif month.format('Y-m') === current_date.format('Y-m') -%}
+        {%- set last_workout_date = (workouts|last).date.setTimezone(app.user.timezone) -%}
+        {%- set days = current_date.format('d') - last_workout_date.format('d') -%}
+
+        {%- if days > 3 -%}
+            <div class="alert alert-warning alert-inline">
+                {{ ux_icon('lucide:clock-alert') }}
+                <span><strong>{{ days }} days</strong> since the last workout</span>
+            </div>
+        {%- endif -%}
     {%- endif -%}
 
     {%- for workout in workouts|reverse -%}
@@ -128,20 +139,27 @@
                 {%- set id = workout_exercise.id.toString -%}
                 {%- set exercise = workout_exercise.exercise -%}
                 {%- set sets = workout_exercise.sets -%}
+                {%- set work_sets = sets|filter(set => not set.isWarmup) -%}
 
                 <div class="form-row form-row-compact" data-general-type="{{ exercise.group.color.value }}">
                     <div class="form-label">
-                        <span>{{ exercise.name }}</span>
+                        <span class="form-label-name">{{ exercise.name }}</span>
 
-                        {%- if sets|filter(set => not set.isWarmup) is not empty and progresses[id] is defined -%}
-                            {%- set progress = progresses[id] -%}
+                        {%- if work_sets is not empty -%}
+                            <div class="form-label-legend">
+                                <span class="form-label-reps">{{ work_sets|length }} reps</span>
 
-                            {%- if progress.change.value !== 'unchanged' -%}
-                                <span class="form-label-progress" data-change="{{ progress.change.value }}">
-                                    {{- progress.percent -}}%
-                                    {{- ux_icon('lucide:trending-up') -}}
-                                </span>
-                            {%- endif -%}
+                                {%- if progresses[id] is defined -%}
+                                    {%- set progress = progresses[id] -%}
+
+                                    {%- if progress.change.value !== 'unchanged' -%}
+                                        <span class="form-label-progress" data-change="{{ progress.change.value }}">
+                                            {{- progress.percent -}}%
+                                            {{- ux_icon('lucide:trending-up') -}}
+                                        </span>
+                                    {%- endif -%}
+                                {%- endif -%}
+                            </div>
                         {%- endif -%}
                     </div>
 
@@ -168,6 +186,16 @@
 
                     {%- if workout_exercise.description !== '' -%}
                         <div class="form-workout-hint">{{ workout_exercise.description }}</div>
+                    {%- endif -%}
+
+                    {%- if sets|length > 1 -%}
+                        {% set time_first = (sets|first).performedAt.timestamp %}
+                        {% set time_last = (sets|last).performedAt.timestamp %}
+                        {% set minutes = ((time_last - time_first) / 60)|round(0, 'ceil') %}
+
+                        <div class="form-text">
+                            {{ ux_icon('lucide:timer') }} {{ minutes }} min.
+                        </div>
                     {%- endif -%}
                 </div>
             {%- endfor -%}
