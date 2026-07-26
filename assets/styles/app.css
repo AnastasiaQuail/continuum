@@ -2780,6 +2780,14 @@ textarea {
     }
 }
 
+.card-container {
+    margin-bottom: var(--body-gap-block);
+
+    & > *:last-child {
+        margin-bottom: 0;
+    }
+}
+
 .card {
     --card-padding-block: var(--container-gap-block);
     --card-padding-inline: var(--container-gap-inline);
@@ -4812,6 +4820,7 @@ form {
 
             .btn-container-toggler {
                 display: none;
+                color: var(--color-tertiary);
             }
 
             .form-workout-exercise-description {
@@ -5074,11 +5083,23 @@ form {
 }
 
 .card-container-workout-exercise.card-container-collapse {
+    &:has(+.card-container) {
+        margin-bottom: 0;
+    }
+
     .card-workout-exercise {
         .form-row {
             &.form-row-header-edit {
+                cursor: pointer;
+
                 &:after {
                     content: none;
+                }
+
+                @media (width >= 768px) {
+                    padding-bottom: 0 !important;
+                    margin-bottom: 0;
+                    border-bottom: none !important;
                 }
 
                 .form-label-check,

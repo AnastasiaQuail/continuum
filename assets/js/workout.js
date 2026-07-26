@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.form-row .btn-description-show').forEach(btn => {
+    document.querySelectorAll('.card-container-workout-exercise .btn-description-show').forEach(btn => {
         btn.onclick = () => btn.closest('.form-row').classList.add('description-show');
     })
 
-    document.querySelectorAll('.form-row .btn-container-toggler').forEach(btn => {
+    document.querySelectorAll('.card-container-workout-exercise.card-container-collapse .form-row-header-edit').forEach(btn => {
         btn.onclick = () => btn.closest('.card-container').classList.remove('card-container-collapse');
     })
 });
