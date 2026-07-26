@@ -113,126 +113,126 @@
     {%- endif -%}
 
     {%- for workout in workouts|reverse -%}
-        {%- set card_id = 'workout_' ~ workout.id -%}
+        <div class="card-container card-container-workout card-container-collapse">
+            <section class="card card-form card-workout" id="workout_{{ workout.id }}">
+                {%- set is_granted = is_granted('WORKOUT_EDIT', workout) -%}
+                {%- set time = workout.date.setTimezone(app.user.timezone).format('j F, H:i') -%}
 
-        <section class="card card-form card-workout" id="{{ card_id }}">
-            {%- set is_granted = is_granted('WORKOUT_EDIT', workout) -%}
-            {%- set time = workout.date.setTimezone(app.user.timezone).format('j F, H:i') -%}
+                <{% if is_granted %}a{% else %}div{% endif %}
+                    {% if is_granted %}href="{{ path('app_workouts_view', {id: workout.id}) }}"{% endif %}
+                    class="form-row form-row-header-edit">
+                    <div class="form-label">{{ time }}</div>
+                    <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
+                </{% if is_granted %}a{% else %}div{% endif %}>
 
-            <{% if is_granted %}a{% else %}div{% endif %}
-                {% if is_granted %}href="{{ path('app_workouts_view', {id: workout.id}) }}"{% endif %}
-                class="form-row form-row-header-edit">
-                <div class="form-label">{{ time }}</div>
-                <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
-            </{% if is_granted %}a{% else %}div{% endif %}>
-
-            {%- if workout.workoutExercises.empty -%}
-                <div class="form-row form-row-collection-empty">
-                    <div class="collection-empty">
-                        {{- ux_icon('lucide:frown') -}}
-                        <span>No exercises yet</span>
+                {%- if workout.workoutExercises.empty -%}
+                    <div class="form-row form-row-collection-empty">
+                        <div class="collection-empty">
+                            {{- ux_icon('lucide:frown') -}}
+                            <span>No exercises yet</span>
+                        </div>
                     </div>
-                </div>
-            {%- endif -%}
+                {%- endif -%}
 
-            {%- for workout_exercise in workout.workoutExercises -%}
-                {%- set id = workout_exercise.id.toString -%}
-                {%- set exercise = workout_exercise.exercise -%}
-                {%- set sets = workout_exercise.sets -%}
-                {%- set work_sets = sets|filter(set => not set.isWarmup) -%}
+                {%- for workout_exercise in workout.workoutExercises -%}
+                    {%- set id = workout_exercise.id.toString -%}
+                    {%- set exercise = workout_exercise.exercise -%}
+                    {%- set sets = workout_exercise.sets -%}
+                    {%- set work_sets = sets|filter(set => not set.isWarmup) -%}
 
-                <div class="form-row form-row-compact" data-general-type="{{ exercise.group.color.value }}">
-                    <div class="form-label">
-                        <span class="form-label-name">{{ exercise.name }}</span>
+                    <div class="form-row form-row-compact" data-general-type="{{ exercise.group.color.value }}">
+                        <div class="form-label">
+                            <span class="form-label-name">{{ exercise.name }}</span>
 
-                        {%- if work_sets is not empty -%}
                             <div class="form-label-legend">
-                                <span class="form-label-reps">{{ work_sets|length }} reps</span>
+                                {%- if work_sets is not empty -%}
+                                    <span class="form-label-reps">{{ work_sets|length }} reps</span>
 
-                                {%- if progresses[id] is defined -%}
-                                    {%- set progress = progresses[id] -%}
+                                    {%- if progresses[id] is defined -%}
+                                        {%- set progress = progresses[id] -%}
 
-                                    {%- if progress.change.value !== 'unchanged' -%}
-                                        <span class="form-label-progress" data-change="{{ progress.change.value }}">
+                                        {%- if progress.change.value !== 'unchanged' -%}
+                                            <span class="form-label-progress" data-change="{{ progress.change.value }}">
                                             {{- progress.percent -}}%
                                             {{- ux_icon('lucide:trending-up') -}}
                                         </span>
+                                        {%- endif -%}
                                     {%- endif -%}
                                 {%- endif -%}
                             </div>
-                        {%- endif -%}
-                    </div>
-
-                    <div class="form-field-large form-workout-sets">
-                        {%- if sets is empty -%}
-                            <div class="workout-set collection-empty">No reps yet</div>
-                        {%- else -%}
-                            {%- for set in sets -%}
-                                <div class="workout-set {{ set.isWarmup ? 'set-warmup' }}">
-                                    {%- if set.weight > 0 -%}
-                                        <div class="workout-set-field set-weight">
-                                            <span>{{ set.weight }}</span>
-                                            <span>kg</span>
-                                        </div>
-                                    {%- endif -%}
-                                    <div class="workout-set-field set-reps">
-                                        <span>{{ set.reps }}</span>
-                                        <span>x</span>
-                                    </div>
-                                </div>
-                            {%- endfor -%}
-                        {%- endif -%}
-                    </div>
-
-                    {%- if workout_exercise.description !== '' -%}
-                        <div class="form-workout-hint">{{ workout_exercise.description }}</div>
-                    {%- endif -%}
-
-                    {%- if sets|length > 1 -%}
-                        {% set time_first = (sets|first).performedAt.timestamp %}
-                        {% set time_last = (sets|last).performedAt.timestamp %}
-                        {% set minutes = ((time_last - time_first) / 60)|round(0, 'ceil') %}
-
-                        <div class="form-text">
-                            {{ ux_icon('lucide:timer') }} {{ minutes }} min.
                         </div>
+
+                        <div class="form-field-large form-workout-sets">
+                            {%- if sets is empty -%}
+                                <div class="workout-set collection-empty">No reps yet</div>
+                            {%- else -%}
+                                {%- for set in sets -%}
+                                    <div class="workout-set {{ set.isWarmup ? 'set-warmup' }}">
+                                        {%- if set.weight > 0 -%}
+                                            <div class="workout-set-field set-weight">
+                                                <span>{{ set.weight }}</span>
+                                                <span>kg</span>
+                                            </div>
+                                        {%- endif -%}
+                                        <div class="workout-set-field set-reps">
+                                            <span>{{ set.reps }}</span>
+                                            <span>x</span>
+                                        </div>
+                                    </div>
+                                {%- endfor -%}
+                            {%- endif -%}
+                        </div>
+
+                        {%- if workout_exercise.description !== '' -%}
+                            <div class="form-workout-hint">{{ workout_exercise.description }}</div>
+                        {%- endif -%}
+
+                        {%- if sets|length > 1 -%}
+                            {% set time_first = (sets|first).performedAt.timestamp %}
+                            {% set time_last = (sets|last).performedAt.timestamp %}
+                            {% set minutes = ((time_last - time_first) / 60)|round(0, 'ceil') %}
+
+                            <div class="form-text">
+                                {{ ux_icon('lucide:timer') }} {{ minutes }} min.
+                            </div>
+                        {%- endif -%}
+                    </div>
+                {%- endfor -%}
+            </section>
+
+            {%- set start = 0 -%}
+            {%- set end = 0 -%}
+
+            {%- for workout_exercise in workout.workoutExercises -%}
+                {%- for exercise_set in workout_exercise.sets -%}
+                    {%- if start === 0 or start > exercise_set.performedAt.timestamp -%}
+                        {%- set start = exercise_set.performedAt.timestamp -%}
                     {%- endif -%}
-                </div>
-            {%- endfor -%}
-        </section>
-
-        {%- set start = 0 -%}
-        {%- set end = 0 -%}
-
-        {%- for workout_exercise in workout.workoutExercises -%}
-            {%- for exercise_set in workout_exercise.sets -%}
-                {%- if start === 0 or start > exercise_set.performedAt.timestamp -%}
-                    {%- set start = exercise_set.performedAt.timestamp -%}
-                {%- endif -%}
-                {%- if end < exercise_set.performedAt.timestamp -%}
-                    {%- set end = exercise_set.performedAt.timestamp -%}
-                {%- endif -%}
-            {%- endfor -%}
-        {%- endfor -%}
-
-        {%- set total_minutes = ((end - start) / 60)|round -%}
-        {%- set hours = (total_minutes / 60)|round(0, 'floor') -%}
-        {%- set minutes = total_minutes - hours * 60 -%}
-
-        {%- if workout.workoutExercises is not empty -%}
-            <div class="card-description card-description-workout">
-                <div class="card-description-column">
-                    {%- if total_minutes -%}
-                        {% if hours > 0 %}{{ hours }} {{ hours > 1 ? 'hours' : 'hour' }}{% endif %}
-                        {{ minutes > 9 ? minutes : '0' ~ minutes }} minutes
+                    {%- if end < exercise_set.performedAt.timestamp -%}
+                        {%- set end = exercise_set.performedAt.timestamp -%}
                     {%- endif -%}
+                {%- endfor -%}
+            {%- endfor -%}
+
+            {%- set total_minutes = ((end - start) / 60)|round -%}
+            {%- set hours = (total_minutes / 60)|round(0, 'floor') -%}
+            {%- set minutes = total_minutes - hours * 60 -%}
+
+            {%- if workout.workoutExercises is not empty -%}
+                <div class="card-description card-description-workout">
+                    <div class="card-description-column">
+                        {%- if total_minutes -%}
+                            {% if hours > 0 %}{{ hours }} {{ hours > 1 ? 'hours' : 'hour' }}{% endif %}
+                            {{ minutes > 9 ? minutes : '0' ~ minutes }} minutes
+                        {%- endif -%}
+                    </div>
+                    <div class="card-description-column card-description-toggler"
+                         onclick="this.closest('.card-container').classList.toggle('card-container-collapse'); return false;">
+                        <span class="toggler-unfold">Show details {{ ux_icon('lucide:unfold-vertical') }}</span>
+                        <span class="toggler-fold">Hide details {{ ux_icon('lucide:fold-vertical') }}</span>
+                    </div>
                 </div>
-                <div class="card-description-column card-description-toggler"
-                     onclick="document.getElementById('{{ card_id }}').classList.toggle('card-workout-details'); return false;">
-                    Details
-                    {{- ux_icon('lucide:unfold-vertical') -}}
-                </div>
-            </div>
-        {%- endif -%}
+            {%- endif -%}
+        </div>
     {%- endfor -%}
 {%- endblock %}

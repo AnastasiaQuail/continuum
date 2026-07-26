@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Continuum\Service\Workout;
 
-use Continuum\Entity\WorkoutExercise;
+use Continuum\Entity\WorkoutSet;
 
 final readonly class WorkoutExerciseScoreService
 {
-    public function getScore(WorkoutExercise $workoutExercise): float
+    public function getScore(WorkoutSet ...$sets): float
     {
-        if ($workoutExercise->sets->isEmpty()) {
+        if ([] === $sets) {
             return 0;
         }
 
@@ -18,7 +18,7 @@ final readonly class WorkoutExerciseScoreService
         $multiplier = 1;
         $count = 0;
 
-        foreach ($workoutExercise->sets as $set) {
+        foreach ($sets as $set) {
             if ($set->isWarmup) {
                 continue;
             }

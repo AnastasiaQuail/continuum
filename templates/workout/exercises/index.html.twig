@@ -84,7 +84,7 @@
 {% macro exercise_progress_sets(description, sets) -%}
     <div class="exercise-progress-value">
         <span class="form-field-legend">{{ description }}</span>
-        {%- for set in sets|filter(set => not set.isWarmup) -%}
+        {%- for set in sets -%}
             <div class="badge">
                 {%- if set.weight > 0 -%}
                     <span>{{ set.weight }}<small>kg</small></span>
