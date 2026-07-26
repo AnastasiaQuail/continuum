@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-final class ExerciseDeleteController extends AbstractController
+final class DeleteController extends AbstractController
 {
     public function __construct(
         private readonly ExerciseService $exerciseService,

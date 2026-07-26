@@ -1218,7 +1218,8 @@ textarea {
             }
         }
 
-        & > *:not(.card):not(.row) {
+        & > *:not(.card-container):not(.card):not(.row),
+        & > .card-container > *:not(.card):not(.row) {
             padding-inline: var(--container-gap-inline);
             border-radius: var(--body-border-radius);
         }
@@ -4612,9 +4613,7 @@ form {
                 }
 
                 .form-label-reps {
-                    @media (width > 768px) {
-                        display: none;
-                    }
+                    display: none;
                 }
 
                 .form-label-progress {
@@ -4741,18 +4740,34 @@ form {
             }
         }
     }
+}
 
-    @media (width < 768px) {
-        &.card-workout-details {
-            .form-row {
-                .form-label-reps {
-                    display: none;
-                }
-            }
+.card-description-workout {
+    .card-description-toggler {
+        > * {
+            display: flex;
+            column-gap: calc(var(--container-gap-inline) / 4);
+            white-space: nowrap;
         }
 
-        &:not(.card-workout-details) {
+        .toggler-unfold {
+            display: none;
+        }
+
+        @media (width >= 768px) {
+            display: none;
+        }
+    }
+}
+
+@media (width < 768px) {
+    .card-container-workout.card-container-collapse {
+        .card-workout {
             .form-row {
+                .form-label-reps {
+                    display: flex !important;
+                }
+
                 .form-workout-sets,
                 .form-workout-hint,
                 .form-text {
@@ -4760,15 +4775,15 @@ form {
                 }
             }
         }
-    }
-}
 
-.card-description-workout {
-    .card-description-toggler {
-        white-space: nowrap;
+        .card-description-toggler {
+            .toggler-unfold {
+                display: flex;
+            }
 
-        @media (width >= 768px) {
-            display: none;
+            .toggler-fold {
+                display: none;
+            }
         }
     }
 }
@@ -4788,6 +4803,15 @@ form {
             .form-label {
                 font-size: var(--font-size-medium);
                 color: var(--general-color);
+
+                .form-label-check {
+                    display: none;
+                    color: var(--color-green);
+                }
+            }
+
+            .btn-container-toggler {
+                display: none;
             }
 
             .form-workout-exercise-description {
@@ -5049,6 +5073,37 @@ form {
     }
 }
 
+.card-container-workout-exercise.card-container-collapse {
+    .card-workout-exercise {
+        .form-row {
+            &.form-row-header-edit {
+                &:after {
+                    content: none;
+                }
+
+                .form-label-check,
+                .btn-container-toggler {
+                    display: flex;
+                }
+
+                .form-field > *:not(.btn-container-toggler),
+                .form-workout-exercise-description {
+                    display: none;
+                }
+            }
+
+            &:has(.form-subrow),
+            &.form-workout-exercise-submit {
+                display: none;
+            }
+        }
+    }
+
+    .card-description {
+        display: none;
+    }
+}
+
 .card-exercise-tabs {
     .form-row.form-row-tabs {
         --tab-padding-inline: var(--control-padding-inline);
@@ -5270,7 +5325,7 @@ form {
                 .exercise-progress-value {
                     display: inline-flex;
                     flex-wrap: wrap;
-                    column-gap: calc(var(--form-row-gap) / 2);
+                    gap: calc(var(--form-row-gap) / 4) calc(var(--form-row-gap) / 2);
                     align-items: center;
 
                     .badge {

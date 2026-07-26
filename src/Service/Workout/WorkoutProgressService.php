@@ -84,9 +84,15 @@ final readonly class WorkoutProgressService
             $data[$exerciseId] = [];
 
             foreach ($workoutExercises as $workoutExercise) {
+                $sets = $workoutExercise->sets->filter(static fn (WorkoutSet $set): bool => !$set->isWarmup);
+
+                if ($sets->isEmpty()) {
+                    continue;
+                }
+
                 $data[$exerciseId][] = [
-                    'score' => $this->workoutExerciseScoreService->getScore($workoutExercise),
-                    'sets' => $workoutExercise->sets,
+                    'score' => $this->workoutExerciseScoreService->getScore(...$sets),
+                    'sets' => $sets,
                     'date' => $workoutExercise->workout->date->getTimestamp(),
                 ];
             }
@@ -97,10 +103,10 @@ final readonly class WorkoutProgressService
 
     public function getProgress(WorkoutExercise $prevExercise, WorkoutExercise $exercise): ExerciseProgress
     {
-        $prevScore = $this->workoutExerciseScoreService->getScore($prevExercise);
-        $score = $this->workoutExerciseScoreService->getScore($exercise);
+        $prevScore = $this->workoutExerciseScoreService->getScore(...$prevExercise->sets);
+        $score = $this->workoutExerciseScoreService->getScore(...$exercise->sets);
 
-        $percent = round(($score - $prevScore) / $prevScore * 100, 1);
+        $percent = 0.0 === $prevScore ? 100 : round(($score - $prevScore) / $prevScore * 100, 1);
 
         return new ExerciseProgress(
             change: match (true) {
