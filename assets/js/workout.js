@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.exercise .btn-description-show').forEach(btn => {
-        btn.onclick = () => btn.closest('.exercise').classList.add('exercise-description-show');
+    document.querySelectorAll('.form-row .btn-description-show').forEach(btn => {
+        btn.onclick = () => btn.closest('.form-row').classList.add('description-show');
     })
 });

@@ -16,215 +16,230 @@
 {% set back_path = path('app_workouts', {month: date.format('Y-m')}) %}
 
 {% block main -%}
-    <section class="card">
-        <div class="workout-exercises-edit">
-            {%- set is_autofocused = false -%}
+    {%- set is_autofocused = false -%}
 
-            {%- for workout_exercise in workout.workoutExercises -%}
-                <div class="workout-exercise">
-                    <div class="exercise {{ workout_exercise.description !== '' ? 'exercise-description-show' }}"
-                         data-general-type="{{ workout_exercise.exercise.group.color.value }}">
-                        <div class="exercise-name">{{ workout_exercise.exercise.name }}</div>
+    {%- for workout_exercise in workout.workoutExercises -%}
+        {%- set exercise_id = workout_exercise.exercise.id.toString -%}
+        {%- set prev_workout_exercise = prev_workout_exercises[exercise_id] is defined ? prev_workout_exercises[exercise_id] : null -%}
 
-                        {%- set is_update_granted = is_granted('WORKOUT_EXERCISE_UPDATE', workout_exercise) -%}
+        <section class="card card-form card-workout-exercise">
+            <div class="form-row form-row-header-edit {{ workout_exercise.description !== '' ? 'description-show' }}"
+                 data-general-type="{{ workout_exercise.exercise.group.color.value }}">
+                <div class="form-label">{{ workout_exercise.exercise.name }}</div>
+                <div class="form-field">
+                    {%- set is_update_granted = is_granted('WORKOUT_EXERCISE_UPDATE', workout_exercise) -%}
 
-                        <div class="exercise-controls">
-                            {%- if not workout_exercise.sets.isEmpty -%}
-                                <button class="btn btn-link btn-description-show"
-                                        {% if not is_update_granted %}disabled{% endif %}>
-                                    {{- ux_icon('lucide:message-circle-more') -}}
-                                </button>
-                            {%- else -%}
-                                <form method="post"
-                                      action="{{ path('app_workout_exercise_delete', {id: workout_exercise.id}) }}"
-                                      onsubmit="return confirm('Delete?') && submitBy(this);">
-                                    <input type="hidden" name="_method" value="DELETE">
-                                    <button
-                                        class="btn btn-danger btn-link"
-                                        {% if is_granted('WORKOUT_EXERCISE_DELETE', workout_exercise) %}type="submit"
-                                        {% else %}disabled{% endif %}>
-                                        {{- ux_icon('lucide:trash') -}}
-                                        {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
-                                    </button>
-                                </form>
-                            {%- endif -%}
-                        </div>
+                    {%- if not workout_exercise.sets.isEmpty -%}
+                        <button class="btn btn-link btn-description-show"
+                                {% if not is_update_granted %}disabled{% endif %}>
+                            {{- ux_icon('lucide:message-circle-more') -}}
+                        </button>
+                    {%- else -%}
+                        <form method="post"
+                              action="{{ path('app_workout_exercise_delete', {id: workout_exercise.id}) }}"
+                              onsubmit="return confirm('Delete?') && submitBy(this);">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <button
+                                class="btn btn-danger btn-link"
+                                {% if is_granted('WORKOUT_EXERCISE_DELETE', workout_exercise) %}type="submit"
+                                {% else %}disabled{% endif %}>
+                                {{- ux_icon('lucide:trash') -}}
+                                {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
+                            </button>
+                        </form>
+                    {%- endif -%}
+                </div>
 
-                        <div class="exercise-description">
-                            <form method="post"
-                                  action="{{ path('app_workout_exercise_update', {id: workout_exercise.id}) }}"
-                                  onsubmit="return submitBy(this);">
-                                <input type="hidden" name="_method" value="PATCH">
-                                <label for="description"></label>
-                                <input class="form-control" type="text" id="description" name="description"
-                                       maxlength="255" value="{{ workout_exercise.description }}"
-                                       placeholder="Add description...">
-                                <button class="btn btn-transparent" {% if is_update_granted %}type="submit"
-                                        {% else %}disabled{% endif %}>
-                                    {{- ux_icon('lucide:message-circle-plus') -}}
-                                    {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
-                                </button>
-                            </form>
-                        </div>
-                    </div>
+                <form method="post" action="{{ path('app_workout_exercise_update', {id: workout_exercise.id}) }}"
+                      class="form-workout-exercise-description" onsubmit="return submitBy(this);">
+                    <input type="hidden" name="_method" value="PATCH">
+                    <label for="description_{{ workout_exercise.id }}"></label>
+                    <input class="form-control" type="text" id="description_{{ workout_exercise.id }}"
+                           name="description" value="{{ workout_exercise.description }}" maxlength="255"
+                           placeholder="Add description...">
+                    <button class="btn btn-transparent" {% if is_update_granted %}type="submit"
+                            {% else %}disabled{% endif %}>
+                        {{- ux_icon('lucide:message-circle-plus') -}}
+                        {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
+                    </button>
+                </form>
+            </div>
 
-                    <div class="workout-exercise-sets">
-                        {%- for workout_set in workout_exercise.sets -%}
-                            <div class="workout-exercise-set workout-exercise-set-exists">
-                                <div class="workout-exercise-set-fields">
-                                    <div class="workout-exercise-set-field set-weight">
-                                        <span>{{ workout_set.weight }}</span>
-                                        <span>kg</span>
-                                    </div>
-                                    <div class="workout-exercise-set-field set-reps">{{ workout_set.reps }}</div>
-                                </div>
+            {%- if workout_exercise.sets is not empty -%}
+                <div class="form-row">
+                    {%- set last_time = (workout_exercise.sets|first).performedAt.setTimezone(app.user.timezone) -%}
 
-                                {%- if workout_set.isWarmup -%}
-                                    <div class="workout-exercise-set-warmup">
-                                        {{- ux_icon('lucide:battery-charging') -}}
-                                    </div>
-                                {%- endif -%}
+                    {%- for workout_set in workout_exercise.sets -%}
+                        <div class="form-subrow">
+                            <div class="form-time">
+                                {%- set time = workout_set.performedAt.setTimezone(app.user.timezone) -%}
+                                {%- set minutes = ((time.timestamp - last_time.timestamp) / 60)|round(0, 'floor') -%}
+                                {%- set last_time = time -%}
 
-                                {%- if loop.last -%}
-                                    <div class="workout-exercise-set-controls">
-                                        <form method="post"
-                                              action="{{ path('app_workout_set_delete', {id: workout_set.id}) }}"
-                                              onsubmit="return confirm('Delete?') && submitBy(this);">
-                                            <input type="hidden" name="_method" value="DELETE">
-                                            <button
-                                                class="btn btn-danger btn-link"
-                                                {% if is_granted('WORKOUT_SET_DELETE', workout_set) %}type="submit"
-                                                {% else %}disabled{% endif %}>
-                                                {{- ux_icon('lucide:x') -}}
-                                                {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
-                                            </button>
-                                        </form>
-                                    </div>
-                                {%- endif -%}
+                                {{- time.format('H:i') -}}
+
+                                {% if not loop.first %}
+                                    <span class="form-time-offset"
+                                        {% if minutes >= 10 %} data-general-type="{{ minutes >= 20 ? 'red' : 'yellow' }}"{% endif %}>
+                                        {{- minutes > 60 ? '>' ~ 60 : '+' ~ minutes -}}
+                                    </span>
+                                {% endif %}
                             </div>
-                        {%- endfor -%}
 
-                        {%- if is_granted('WORKOUT_SET_CREATE', workout_exercise) -%}
-                            {%- set exercise_id = workout_exercise.exercise.id.toString -%}
-                            {%- set prev_workout_exercise = prev_workout_exercises[exercise_id] is defined ? prev_workout_exercises[exercise_id] : null -%}
+                            <div class="form-workout-exercise-set">
+                                {%- if workout_set.weight -%}
+                                    <div class="set-field">
+                                        <span>{{ workout_set.weight }}</span>
+                                        <small>kg</small>
+                                    </div>
+                                {%- endif -%}
+                                <div class="set-field">
+                                    <small>x</small>
+                                    <span>{{ workout_set.reps }}</span>
+                                </div>
+                            </div>
 
-                            {%- set last_set = workout_exercise.sets|last -%}
-                            {%- if not last_set and prev_workout_exercise -%}
-                                {%- set last_set = prev_workout_exercise.sets|first -%}
+                            {%- if workout_set.isWarmup -%}
+                                <div class="form-workout-exercise-set-warmup">
+                                    {{- ux_icon('lucide:flame') -}}
+                                </div>
                             {%- endif -%}
 
-                            {%- set is_autofocus = false -%}
-                            {%- if not is_autofocused and (loop.last or workout_exercise.sets.isEmpty) -%}
-                                {%- set is_autofocused = true -%}
-                                {%- set is_autofocus = true -%}
-                            {%- endif -%}
-
-                            <div class="workout-exercise-set workout-exercise-set-new">
-                                <form method="post"
-                                      action="{{ path('app_workout_set_create', {id: workout_exercise.id}) }}"
-                                      onsubmit="return submitBy(this);">
-                                    <label for="weight"></label>
-                                    <label for="reps"></label>
-                                    <div class="workout-exercise-set-fields">
-                                        <input class="form-control" type="number" id="weight" name="weight"
-                                               value="{{ last_set?.weight ?? 0 }}" autocomplete="off"
-                                               {%- if is_autofocus -%}autofocus="autofocus"{%- endif -%}
-                                               inputmode="decimal" min="0" max="199" step="0.1" required="required"
-                                               data-mask="postfix" data-postfix="kg">
-                                        <input class="form-control" type="number" id="reps" name="reps"
-                                               value="{{ last_set?.reps ?? 1 }}" autocomplete="off"
-                                               inputmode="decimal" min="1" max="99" step="1" required="required">
-                                    </div>
-                                    <div class="workout-exercise-set-warmup form-control-choose-type-group">
-                                        <label class="form-control-choose-type">
-                                            <input type="checkbox" name="warmup"
-                                                {% if last_set?.isWarmup ?? false %} checked="checked"{% endif %}>
-                                            <span class="btn" tabindex="0">
-                                            {{- ux_icon('lucide:battery-charging') -}}
-                                            <span>Is warmup</span>
-                                        </span>
-                                        </label>
-                                    </div>
-                                    <div class="workout-exercise-set-controls">
-                                        <button class="btn btn-primary btn-transparent" type="submit">
-                                            {{- ux_icon('lucide:plus') -}}
+                            {%- if loop.last -%}
+                                <div class="form-workout-exercise-controls">
+                                    <form method="post"
+                                          action="{{ path('app_workout_set_delete', {id: workout_set.id}) }}"
+                                          onsubmit="return confirm('Delete?') && submitBy(this);">
+                                        <input type="hidden" name="_method" value="DELETE">
+                                        <button
+                                            class="btn btn-danger btn-link"
+                                            {% if is_granted('WORKOUT_SET_DELETE', workout_set) %}type="submit"
+                                            {% else %}disabled{% endif %}>
+                                            {{- ux_icon('lucide:x') -}}
                                             {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
                                         </button>
-                                    </div>
-                                </form>
-                            </div>
-
-                            {%- if prev_workout_exercise -%}
-                                <div class="workout-exercise-set workout-exercise-set-prev">
-                                    {%- for prev_set in prev_workout_exercise.sets -%}
-                                        <div class="workout-exercise-prev {{ prev_set.isWarmup ? 'prev-warmup' }}">
-                                            {%- if prev_set.weight > 0 -%}
-                                                <span>{{ prev_set.weight }}<small>kg</small></span>
-                                            {%- endif -%}
-                                            <span><small>x</small>{{ prev_set.reps }}</span>
-                                        </div>
-                                    {%- endfor -%}
-
-                                    {%- if prev_workout_exercise.description !== '' -%}
-                                        <div class="workout-exercise-prev prev-description">
-                                            {{- prev_workout_exercise.description -}}
-                                        </div>
-                                    {%- endif -%}
-                                </div>
-                            {%- endif -%}
-                        {%- endif -%}
-                    </div>
-                </div>
-            {%- endfor -%}
-
-            {%- if is_granted('WORKOUT_EXERCISE_CREATE', workout) -%}
-                <div class="workout-exercise workout-exercise-new">
-                    {%- if workout.workoutExercises is not empty -%}
-                        {%- set first_group = (workout.workoutExercises|last).exercise.group -%}
-                    {%- else -%}
-                        {%- set first_group = exercise_groups|first -%}
-                    {%- endif -%}
-
-                    <div class="exercise" data-general-type="{{ first_group.color.value }}" data-tabs>
-                        <label class="exercise-title" for="exercise_id">Start new exercise:</label>
-
-                        <div class="exercise-tabs">
-                            {%- for exercise_group in exercise_groups -%}
-                                <button class="btn btn-link {{- exercise_group === first_group ? ' active' }}"
-                                        data-general-type="{{ exercise_group.color.value }}"
-                                        data-tab-id="{{ exercise_group.value }}">
-                                    {{- exercise_group.name -}}
-                                </button>
-                            {%- endfor -%}
-                        </div>
-
-                        <div class="exercise-tab-contents">
-                            {%- for exercise_group in exercise_groups -%}
-                                <div class="exercise-content {{- exercise_group === first_group ? ' active' }}"
-                                     data-tab-content-id="{{ exercise_group.value }}">
-                                    <form method="post"
-                                          action="{{ path('app_workout_exercise_create', {id: workout.id}) }}">
-                                        <select class="form-control" id="exercise_id" name="exercise"
-                                                required="required" onchange="return submitBy(this);">
-                                            <option value="" disabled selected hidden>Choose exercise...</option>
-                                            {%- for exercise in exercises -%}
-                                                {%- if exercise_group === exercise.group -%}
-                                                    <option value="{{ exercise.id }}">
-                                                        {{- exercise.name -}}
-                                                    </option>
-                                                {%- endif -%}
-                                            {%- endfor -%}
-                                        </select>
-                                        <div class="select-submit-loader">{{ ux_icon('lucide:loader-circle') }}</div>
                                     </form>
                                 </div>
-                            {%- endfor -%}
+                            {%- endif -%}
                         </div>
+                    {%- endfor -%}
+                </div>
+            {%- endif -%}
+
+            {%- if is_granted('WORKOUT_SET_CREATE', workout_exercise) -%}
+                {%- set last_set = workout_exercise.sets|last -%}
+                {%- if not last_set and prev_workout_exercise -%}
+                    {%- set last_set = prev_workout_exercise.sets|first -%}
+                {%- endif -%}
+
+                {%- set is_autofocus = false -%}
+                {%- if not is_autofocused and (loop.last or workout_exercise.sets.isEmpty) -%}
+                    {%- set is_autofocused = true -%}
+                    {%- set is_autofocus = true -%}
+                {%- endif -%}
+
+                <form method="post" action="{{ path('app_workout_set_create', {id: workout_exercise.id}) }}"
+                      class="form-row form-workout-exercise-submit" onsubmit="return submitBy(this);">
+                    <label for="weight_{{ workout_exercise.id }}"></label>
+                    <label for="reps_{{ workout_exercise.id }}"></label>
+                    <div class="form-workout-exercise-set">
+                        <input class="form-control" type="number" id="weight_{{ workout_exercise.id }}" name="weight"
+                               value="{{ last_set?.weight ?? 0 }}" autocomplete="off"
+                               {%- if is_autofocus -%}autofocus="autofocus"{%- endif -%}
+                               data-mask="postfix" data-postfix="kg" required="required"
+                               inputmode="decimal" min="0" max="199" step="0.1" placeholder="0 kg">
+                        <input class="form-control" type="number" id="reps_{{ workout_exercise.id }}" name="reps"
+                               value="{{ last_set?.reps ?? 1 }}" autocomplete="off"
+                               data-mask="postfix" data-postfix="reps" required="required"
+                               inputmode="decimal" min="1" max="99" step="1" placeholder="0 reps">
                     </div>
+                    <div class="form-check form-workout-exercise-warmup">
+                        <label class="form-check-label" for="warmup_{{ workout_exercise.id }}">
+                            {{- ux_icon('lucide:flame') -}}
+                            <span>Is warmup</span>
+                        </label>
+                        <input class="form-check-input" id="warmup_{{ workout_exercise.id }}" name="warmup"
+                               type="checkbox" {% if last_set?.isWarmup ?? false %} checked="checked"{% endif %}>
+                    </div>
+                    <div class="form-workout-exercise-controls">
+                        <button class="btn btn-primary btn-transparent" type="submit">
+                            {{- ux_icon('lucide:plus') -}}
+                            {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
+                        </button>
+                    </div>
+                </form>
+            {%- endif -%}
+        </section>
+
+        <div class="card-description card-description-workout-exercise">
+            {%- if prev_workout_exercise?.sets is not empty -%}
+                <div class="card-description-line">
+                    {{ ux_icon('lucide:circle-arrow-left') }}
+                    {%- for prev_set in prev_workout_exercise.sets -%}
+                        <div class="workout-exercise-set {{ prev_set.isWarmup ? 'set-warmup' }}">
+                            {%- if prev_set.weight > 0 -%}
+                                <span>{{ prev_set.weight }}<small>kg</small></span>
+                            {%- endif -%}
+                            <span><small>x</small>{{ prev_set.reps }}</span>
+                        </div>
+                    {%- endfor -%}
+                </div>
+            {%- endif -%}
+
+            {%- if prev_workout_exercise.description !== '' -%}
+                <div class="card-description-line">
+                    {{- ux_icon('lucide:message-circle-more') -}}
+                    {{- prev_workout_exercise.description -}}
                 </div>
             {%- endif -%}
         </div>
-    </section>
+    {%- endfor -%}
+
+    {%- if is_granted('WORKOUT_EXERCISE_CREATE', workout) -%}
+        <h3>Start new exercise</h3>
+
+        {%- if workout.workoutExercises is not empty -%}
+            {%- set first_group = (workout.workoutExercises|last).exercise.group -%}
+        {%- else -%}
+            {%- set first_group = exercise_groups|first -%}
+        {%- endif -%}
+
+        <section class="card card-form card-exercise-tabs" data-tabs data-general-type="{{ first_group.color.value }}">
+            <div class="form-row form-row-tabs">
+                <div class="form-row-tabs-container">
+                    {%- for exercise_group in exercise_groups -%}
+                        <button class="btn btn-link {{- exercise_group === first_group ? ' active' }}"
+                                data-general-type="{{ exercise_group.color.value }}"
+                                data-tab-id="{{ exercise_group.value }}">
+                            <span>{{ exercise_group.name }}</span>
+                        </button>
+                    {%- endfor -%}
+                </div>
+            </div>
+
+            <div class="form-row-tab-contents">
+                {%- for exercise_group in exercise_groups -%}
+                    <form method="post" action="{{ path('app_workout_exercise_create', {id: workout.id}) }}"
+                          class="form-row-content {{- exercise_group === first_group ? ' active' }}"
+                          data-tab-content-id="{{ exercise_group.value }}">
+                        {%- for exercise in exercises -%}
+                            {%- if exercise_group === exercise.group -%}
+                                <label class="form-row">
+                                    <input type="radio" name="exercise" value="{{ exercise.id }}"
+                                           onchange="return submitBy(this);">
+                                    <span class="form-label">{{ exercise.name }}</span>
+                                    <span class="form-field">
+                                        {{- ux_icon('lucide:plus') -}}
+                                        {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
+                                    </span>
+                                </label>
+                            {%- endif -%}
+                        {%- endfor -%}
+                    </form>
+                {%- endfor -%}
+            </div>
+        </section>
+    {%- endif -%}
 
     {%- if workout.workoutExercises is empty -%}
         <section class="card card-form">
