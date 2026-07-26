@@ -221,13 +221,13 @@
 
         {%- if workout.workoutExercises is not empty -%}
             <div class="card-description card-description-workout">
-                <div class="card-description-line">
+                <div class="card-description-column">
                     {%- if total_minutes -%}
                         {% if hours > 0 %}{{ hours }} {{ hours > 1 ? 'hours' : 'hour' }}{% endif %}
                         {{ minutes > 9 ? minutes : '0' ~ minutes }} minutes
                     {%- endif -%}
                 </div>
-                <div class="card-description-line card-description-toggler"
+                <div class="card-description-column card-description-toggler"
                      onclick="document.getElementById('{{ card_id }}').classList.toggle('card-workout-details'); return false;">
                     Details
                     {{- ux_icon('lucide:unfold-vertical') -}}

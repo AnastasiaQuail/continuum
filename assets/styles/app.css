@@ -1228,7 +1228,8 @@ textarea {
         }
 
         & > h1,
-        & > h2 {
+        & > h2,
+        & > h3 {
             margin-bottom: calc(var(--body-gap-block) / 1.5);
             line-height: 1;
             color: var(--color-secondary);
@@ -1616,7 +1617,7 @@ textarea {
             width: calc(var(--checkbox-size) * 2.25);
             border: none;
             border-radius: var(--checkbox-radius);
-            background-color: var(--border-color);
+            background-color: color-mix(in srgb, var(--border-color) 95%, var(--color));
             transition: background-color .15s;
 
             &:after {
@@ -1986,15 +1987,33 @@ textarea {
         }
     }
 
-    .form-control {
-        @media (width < 768px) {
+    @media (width < 768px) {
+        .form-control {
             padding-inline: 0;
-            text-align: right;
-            color: var(--form-row-color-field);
             border: none;
             border-radius: 0;
             background-color: transparent;
             box-shadow: none;
+        }
+
+        .form-control-number .form-mask {
+            padding-inline: 0;
+            border: none;
+        }
+
+        & > .form-control-number {
+            .form-control {
+                color: var(--form-row-color-field);
+                text-align: right;
+
+                &:not(:placeholder-shown) {
+                    padding-right: calc(var(--form-control-number-gap) + var(--container-gap-inline));
+                }
+            }
+
+            .form-mask {
+                justify-content: flex-end;
+            }
         }
     }
 
@@ -2074,20 +2093,6 @@ textarea {
             justify-content: space-between;
             width: 100%;
             padding-block: calc(var(--form-row-gap) / 4);
-        }
-    }
-
-    .form-control-number {
-        @media (width < 768px) {
-            .form-control:not(:placeholder-shown) {
-                padding-right: calc(var(--form-control-number-gap) + var(--container-gap-inline));
-            }
-
-            .form-mask {
-                justify-content: flex-end;
-                padding-inline: 0;
-                border: none;
-            }
         }
     }
 
@@ -2248,6 +2253,33 @@ textarea {
         @media (width < 768px) {
             padding-top: 0;
             padding-bottom: calc(var(--form-row-gap) * 2);
+        }
+    }
+
+    &:has(> .form-subrow) {
+        flex-direction: column;
+        padding-block: 0;
+
+        .form-subrow {
+            --form-subrow-padding-inline: calc(var(--form-row-gap) * 1.5);
+            --form-subrow-gap-inline: var(--form-row-gap);
+
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: var(--form-subrow-gap-inline);
+            padding: var(--form-row-gap) var(--form-subrow-padding-inline);
+            border-bottom: var(--border-width) solid transparent;
+
+            &:not(:last-child):after {
+                position: absolute;
+                content: '';
+                inset: auto var(--form-subrow-padding-inline) 0;
+                height: var(--border-width);
+                background-color: var(--border-color-divider);
+                opacity: var(--transparent-color);
+            }
         }
     }
 }
@@ -3045,16 +3077,16 @@ textarea {
 .card-description {
     display: flex;
     flex-direction: column;
-    gap: calc(var(--body-gap-block) / 6) var(--container-gap-inline);
+    gap: calc(var(--body-gap-block) / 4) var(--container-gap-inline);
     margin-bottom: var(--body-gap-block);
     font-size: var(--font-size-small);
     color: var(--color-tertiary);
 
-    &:has(.card-description-line) {
+    &:has(.card-description-column) {
         flex-direction: row;
         justify-content: space-between;
 
-        .card-description-line {
+        .card-description-column {
             display: flex;
             gap: calc(var(--gap-block) / 6) calc(var(--container-gap-inline) / 4);
         }
@@ -4501,8 +4533,7 @@ textarea {
 }
 
 form {
-    .submit-loader,
-    .select-submit-loader {
+    .submit-loader {
         display: none;
         animation: load_spinner 1s infinite linear;
     }
@@ -4516,10 +4547,6 @@ form {
                     display: flex;
                 }
             }
-        }
-
-        .select-submit-loader {
-            display: flex;
         }
     }
 
@@ -4746,353 +4773,431 @@ form {
     }
 }
 
-.workout-exercises-edit {
-    display: flex;
-    flex-direction: column;
-    row-gap: calc(var(--container-gap-block) / 1.25);
+.card-workout-exercise {
+    .btn {
+        padding: min(var(--control-padding-block), var(--control-padding-inline));
+        border-radius: var(--border-radius);
+    }
 
-    .workout-exercise {
-        display: flex;
-        flex-direction: column;
-        row-gap: calc(var(--gap-block) / 2);
-
-        .btn {
-            padding: min(var(--control-padding-block), var(--control-padding-inline));
-        }
-
-        .exercise {
-            --exercise-color: var(--general-color);
-            --exercise-background-color-transparent: 5%;
-
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            column-gap: calc(var(--gap-inline) / 2);
-            padding: calc(var(--gap-block) / 4) var(--gap-inline);
-            padding-right: calc(var(--gap-inline) / 2);
-            font-size: var(--font-size-medium);
-            border-radius: var(--border-radius-internal);
-            background-color: color-mix(in oklch, var(--exercise-color) var(--exercise-background-color-transparent), transparent);
-
-            .exercise-name {
-                flex: 1;
-                padding-block: var(--control-padding-block);
-                color: var(--exercise-color);
-
-                [data-theme="dark"] & {
-                    color: color-mix(in srgb, var(--exercise-color) var(--transparent-color-tiny), var(--color));
-                }
-
-                &::first-letter {
-                    text-transform: uppercase;
-                }
+    .form-row {
+        &.form-row-header-edit {
+            @media (width < 768px) {
+                padding-block: var(--form-row-gap);
             }
 
-            .exercise-controls {
-                display: flex;
-                align-items: center;
-
-                .btn-description-show:not(:hover) {
-                    opacity: var(--transparent-color);
-                }
+            .form-label {
+                font-size: var(--font-size-medium);
+                color: var(--general-color);
             }
 
-            .exercise-description {
+            .form-workout-exercise-description {
                 display: none;
-                flex-basis: 100%;
-                padding-right: calc(var(--gap-inline) / 2);
-                padding-bottom: var(--control-padding-block);
+                grid-column: 1 / span 2;
+                column-gap: var(--form-row-gap);
 
-                & > form {
-                    display: flex;
-                    column-gap: calc(var(--gap-inline) / 4);
-
-                    & > label {
-                        display: none;
-                    }
-
-                    .form-control {
-                        --form-control-color: var(--color-secondary);
-
-                        font-size: var(--font-size-small);
-                        border-style: dashed;
-                        background-color: color-mix(in srgb, var(--background-color) var(--transparent-color), transparent);
-                        transition: color .15s;
-
-                        &:focus-visible {
-                            --form-control-color: var(--color);
-                        }
-                    }
+                label {
+                    display: none;
                 }
-            }
 
-            &.exercise-description-show {
-                .exercise-controls {
-                    .btn-description-show {
-                        display: none;
+                .form-control {
+                    --form-control-color: var(--color-secondary);
+
+                    transition: color .15s;
+
+                    &:focus-visible {
+                        --form-control-color: var(--color);
                     }
                 }
 
-                .exercise-description {
-                    display: block;
-                }
-            }
-        }
-
-        &.workout-exercise-new {
-            &:not(:first-child) {
-                padding-top: calc(var(--container-gap-block) / 1.25);
-                border-top: var(--border-width) dashed var(--border-color-divider);
-            }
-
-            .exercise {
-                flex-direction: column;
-                align-items: flex-start;
-                row-gap: calc(var(--gap-block) / 3);
-                padding: var(--gap-block) var(--gap-inline);
-                font-size: var(--font-size);
-
-                .exercise-title {
-                    width: 100%;
-                    margin-bottom: calc(var(--gap-block) / 3);
-                    font-size: var(--font-size-small);
-                    color: var(--color-secondary);
-                }
-
-                .exercise-tabs {
-                    display: flex;
-                    flex-wrap: wrap;
-                    gap: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 8);
-
+                @media (width < 576px) {
+                    .form-control,
                     .btn {
-                        font-size: var(--font-size-extra-small);
-
-                        &:not(.active):not(:hover) {
-                            --btn-color: color-mix(in oklch, var(--general-color) var(--transparent-color), transparent);
-                        }
-
-                        &.active {
-                            --btn-color: var(--general-color);
-                            --btn-background-color-transparent: 5%;
-                        }
-
-                        @media (width >= 576px) {
-                            font-size: var(--font-size-small);
-                        }
-
-                        @media (width >= 768px) {
-                            font-size: var(--font-size-medium);
-                        }
+                        font-size: var(--font-size-small);
                     }
                 }
+            }
 
-                .exercise-tab-contents {
-                    width: 100%;
+            &.description-show {
+                flex-wrap: wrap;
 
-                    .exercise-content {
-                        display: none;
+                .btn-description-show {
+                    opacity: 0;
+                    pointer-events: none;
+                    cursor: not-allowed;
+                }
 
-                        &.active {
-                            display: flex;
-                        }
-
-                        & > form {
-                            display: flex;
-                            column-gap: calc(var(--gap-inline) / 2);
-                            width: 100%;
-                        }
-                    }
-
-                    .select-submit-loader {
-                        align-items: center;
-                    }
+                .form-workout-exercise-description {
+                    display: flex;
+                    flex-basis: 100%;
                 }
             }
         }
 
-        .workout-exercise-sets {
-            display: flex;
-            flex-direction: column;
-            row-gap: calc(var(--gap-block) / 3);
-            padding-inline: var(--gap-inline);
+        .form-subrow {
+            --form-subrow-time-width: calc(var(--form-row-gap) * 6);
+            --form-subrow-offset-left-inline: calc(var(--form-subrow-padding-inline) * 3);
+            --form-subrow-control-padding: calc(var(--form-row-gap) / 2.5);
 
-            .workout-exercise-set {
+            padding-block: calc(var(--form-row-gap) / 1.5);
+
+            &:not(:last-child):after {
+                left: calc(var(--form-subrow-padding-inline) + var(--form-subrow-time-width) + var(--form-subrow-gap-inline));
+            }
+
+            @media (width >= 992px) {
+                --form-subrow-control-padding: calc(var(--form-row-gap) / 2);
+            }
+
+            .form-time {
+                --general-color: var(--color-quaternary);
+
                 display: flex;
-                align-items: center;
-                column-gap: calc(var(--gap-inline) / 2);
+                width: var(--form-subrow-time-width);
+                font-size: var(--font-size-extra-small);
+                color: var(--color-tertiary);
+                text-align: center;
 
-                .workout-exercise-set-fields {
-                    position: relative;
-                    display: flex;
-                    flex: none;
-                    width: 140px;
+                .form-time-offset {
+                    font-size: 0.75em;
+                    transform: translate(2px, -2px);
+                    color: var(--general-color);
 
-                    & > * {
-                        &:first-child {
-                            flex: 1;
-                        }
-
-                        &:last-child {
-                            width: 40%;
-                            margin-left: calc(var(--border-width) * -1);
-                        }
-                    }
-
-                    & > *:first-child,
-                    & > *:first-child .form-control {
-                        border-top-right-radius: 0 !important;
-                        border-bottom-right-radius: 0 !important;
-                    }
-
-                    & > *:last-child,
-                    & > *:last-child .form-control {
-                        border-top-left-radius: 0 !important;
-                        border-bottom-left-radius: 0 !important;
+                    [data-theme="dark"] & {
+                        color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
                     }
                 }
+            }
 
-                .workout-exercise-set-warmup {
+            .form-workout-exercise-set {
+                display: flex;
+                gap: var(--form-row-gap);
+                padding: var(--form-subrow-control-padding) calc(var(--form-subrow-control-padding) * 1.5);
+                font-size: var(--font-size-medium);
+                border-radius: var(--border-radius-badge);
+                background-color: color-mix(in srgb, var(--color) 5%, var(--background-color));
+
+                .set-field {
                     display: flex;
-                    padding-inline: min(var(--control-padding-block), var(--control-padding-inline));
+                    gap: calc(var(--form-row-gap) / 4);
+                    align-items: flex-start;
+
+                    small {
+                        font-size: calc(var(--font-size-extra-small) * 0.5);
+                        color: var(--color-secondary);
+                    }
+
+                    &:last-child {
+                        align-items: baseline;
+
+                        small {
+                            font-size: var(--font-size-extra-small);
+                            font-weight: var(--font-weight-light);
+                        }
+                    }
+                }
+            }
+
+            .form-workout-exercise-set-warmup {
+                font-size: var(--font-size-small);
+                color: var(--color-tertiary);
+            }
+
+            .form-workout-exercise-controls {
+                margin-left: auto;
+
+                @media (width >= 992px) {
+                    margin-left: unset;
+                }
+
+                .btn {
+                    padding: var(--form-subrow-control-padding);
                     font-size: var(--font-size-medium);
-                    color: var(--color-tertiary);
+                    border: none;
+                }
+            }
+        }
+
+        &.form-workout-exercise-submit {
+            align-items: center;
+            column-gap: calc(var(--form-row-gap) * 2);
+
+            @media (width >= 768px) {
+                flex-direction: row;
+                column-gap: calc(var(--form-row-gap) * 3);
+            }
+
+            & > label {
+                display: none;
+            }
+
+            & > * {
+                padding-inline: 0 !important;
+            }
+
+            .form-workout-exercise-set {
+                display: flex;
+                flex-wrap: nowrap;
+                flex: 1;
+                column-gap: var(--form-row-gap);
+
+                @media (width >= 576px) {
+                    flex: none;
+                    width: 220px;
+
+                    @media (width < 992px) {
+                        margin-right: auto;
+                    }
                 }
 
-                .workout-exercise-set-controls {
+                & > * {
+                    &:first-child {
+                        flex: 1;
+                    }
+
+                    &:last-child {
+                        width: 45%;
+                    }
+                }
+            }
+
+            .form-workout-exercise-warmup {
+                width: auto;
+                flex-direction: row;
+
+                @media (width >= 768px) {
+                    flex-direction: row-reverse;
+                }
+
+                .form-check-label {
                     display: flex;
-                    justify-content: center;
-                }
+                    align-items: center;
+                    column-gap: calc(var(--gap-inline) / 6);
+                    color: var(--color-secondary);
+                    cursor: pointer;
+                    transition: color .15s;
 
-                &.workout-exercise-set-exists {
-                    .workout-exercise-set-fields {
+                    @media (width < 576px) {
+                        font-size: var(--font-size-small);
+                    }
+
+                    & > span {
                         font-size: var(--font-size-medium);
 
-                        .workout-exercise-set-field {
-                            gap: calc(var(--gap-inline) / 4);
-                            align-items: baseline;
-                            padding: var(--control-padding-block) var(--control-padding-inline);
-                            color: var(--color-secondary);
-                            border-radius: var(--border-radius-badge);
-                            background-color: color-mix(in srgb, var(--color) 3%, transparent);
-
-                            & > span:nth-child(2) {
-                                font-weight: var(--font-weight-light);
-                                font-size: var(--font-size-extra-small);
-                                color: var(--color-tertiary);
-                            }
-
-                            &:last-child {
-                                margin-left: var(--border-width);
-                            }
-                        }
-                    }
-
-                    .workout-exercise-set-controls {
-                        .btn {
-                            font-size: var(--font-size-small);
-                        }
-                    }
-                }
-
-                &.workout-exercise-set-new {
-                    flex-direction: column;
-                    align-items: start;
-
-                    &:not(:first-child) {
-                        padding-top: calc(var(--gap-block) / 3);
-                    }
-
-                    & > form {
-                        display: flex;
-                        align-items: center;
-                        column-gap: calc(var(--gap-inline) / 3);
-                        width: 100%;
-
-                        & > label {
+                        @media (width < 768px) {
                             display: none;
                         }
                     }
 
-                    .workout-exercise-set-fields {
-                        flex: 1;
-
-                        @media (width >= 576px) {
-                            flex: none;
-                            width: 220px;
+                    @media (width < 768px) {
+                        &:has(+ .form-check-input:checked) {
+                            color: var(--color-green);
                         }
-                    }
-
-                    .workout-exercise-set-warmup {
-                        font-size: var(--font-size);
-                        opacity: 1;
-
-                        .btn {
-                            --btn-color: color-mix(in srgb, var(--general-color) 20%, var(--color-dark));
-                            --btn-border-color-transparent: 0%;
-                            --btn-background-color-transparent: 0%;
-
-                            &:hover,
-                            &:focus-visible {
-                                --btn-color: color-mix(in srgb, var(--general-color) 40%, var(--color-dark));
-                                --btn-border-color-transparent: 0%;
-                                --btn-background-color-transparent: 3%;
-                            }
-
-                            & > span:last-child {
-                                display: none;
-
-                                @media (width >= 576px) {
-                                    display: flex;
-                                    font-size: var(--font-size-small);
-                                }
-                            }
-                        }
-
-                        :has(input[type]:checked) .btn {
-                            --btn-color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color-inverse));
-                        }
-                    }
-
-                    .workout-exercise-set-controls {
-                        padding-left: calc(var(--gap-inline) / 2);
                     }
                 }
 
-                &.workout-exercise-set-prev {
-                    flex-wrap: wrap;
-                    gap: calc(var(--gap-block) / 3) calc(var(--gap-inline) / 1.5);
-                    padding-top: calc(var(--gap-block) / 3);
-                    font-size: var(--font-size-small);
-
-                    .workout-exercise-prev {
-                        display: flex;
-                        flex-wrap: nowrap;
-                        white-space: nowrap;
-                        column-gap: calc(var(--gap-inline) / 6);
-                        color: var(--color-tertiary);
-
-                        small {
-                            font-size: calc(var(--font-size-extra-small) * 0.5);
-                            font-weight: var(--font-weight-light);
-                            opacity: var(--transparent-color);
-                        }
-
-                        & > span:last-child {
-                            small {
-                                font-size: var(--font-size-extra-small);
-                            }
-                        }
-
-                        &.prev-warmup {
-                            opacity: var(--transparent-color);
-                        }
-
-                        &.prev-description {
-                            flex-basis: 100%;
-                            font-size: var(--font-size-extra-small);
-                            white-space: normal;
-                        }
+                @media (width < 576px) {
+                    .form-check-input {
+                        --checkbox-size: var(--font-size);
                     }
+                }
+            }
+        }
+    }
+}
+
+.card-description-workout-exercise {
+    .card-description-line {
+        display: flex;
+        gap: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 3);
+        flex-wrap: wrap;
+        align-items: center;
+
+        .workout-exercise-set {
+            display: flex;
+            column-gap: calc(var(--gap-inline) / 3);
+            padding: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            border: var(--border-width) solid color-mix(in oklch, var(--color-quaternary) 50%, transparent);
+            border-radius: var(--border-radius-badge);
+
+            &.set-warmup {
+                color: var(--color-quaternary);
+                border-style: dashed;
+            }
+
+            span {
+                display: flex;
+                gap: calc(var(--gap-inline) / 8);
+                align-items: flex-start;
+
+                small {
+                    font-size: calc(var(--font-size-extra-small) * 0.5);
+                    color: var(--color-quaternary);
+                }
+            }
+
+            & > span:last-child {
+                align-items: baseline;
+
+                small {
+                    font-size: var(--font-size-extra-small);
+                    font-weight: var(--font-weight-light);
+                }
+            }
+        }
+    }
+}
+
+.card-exercise-tabs {
+    .form-row.form-row-tabs {
+        --tab-padding-inline: var(--control-padding-inline);
+
+        padding-inline: var(--form-row-gap);
+
+        &:after {
+            content: none;
+        }
+
+        @media (576px <= width < 768px) {
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .form-row-tabs-container {
+            --frtc-gap: calc(var(--form-row-gap) / 2);
+
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: space-between;
+            width: 100%;
+            padding: var(--frtc-gap) calc(var(--frtc-gap) + var(--control-padding-inline));
+            border-radius: var(--border-radius);
+            background-color: color-mix(in srgb, var(--color) 5%, var(--background-color));
+
+            @media (width >= 576px) {
+                align-self: flex-start;
+                column-gap: calc(var(--frtc-gap) + var(--control-padding-inline) * 2);
+                width: auto;
+            }
+
+            @media (width >= 768px) {
+                column-gap: 0;
+            }
+
+            @media (width >= 992px) {
+                column-gap: var(--control-padding-inline);
+            }
+
+            & > .btn {
+                position: relative;
+                padding-inline: 0;
+                font-size: var(--font-size-small);
+
+                @media (width >= 576px) {
+                    font-size: var(--font-size-medium);
+                }
+
+                @media (width >= 768px) {
+                    padding-inline: var(--control-padding-inline);
+                    font-size: var(--font-size);
+                }
+
+                @media (width >= 992px) {
+                    padding-inline: calc(var(--control-padding-inline) * 2);
+                }
+
+                &:before {
+                    content: '';
+                    position: absolute;
+                    inset: 0 calc(var(--control-padding-inline) * -1);
+                    border-radius: calc(var(--border-radius) - var(--frtc-gap));
+
+                    @media (width >= 768px) {
+                        inset: 0;
+                    }
+                }
+
+                & > span {
+                    z-index: 1;
+                }
+
+                &:hover,
+                &:focus-visible {
+                    background-color: transparent;
+
+                    &:before {
+                        background-color: color-mix(in srgb, var(--color) 3%, var(--background-color));
+                    }
+                }
+
+                &.active {
+                    font-weight: var(--font-weight-bold);
+
+                    &:before {
+                        background-color: var(--background-color);
+                    }
+                }
+            }
+
+        }
+    }
+
+    .form-row-tab-contents {
+        .form-row-content:not(.active) {
+            display: none;
+        }
+
+        .form-row {
+            padding: calc(var(--form-row-gap) * 2) var(--card-padding-inline);
+            cursor: pointer;
+
+            &:last-child:after {
+                content: none;
+            }
+
+            input[type="radio"] {
+                display: none;
+            }
+
+            &:has(input:disabled:not(:checked)) {
+                .form-label,
+                .form-field {
+                    color: var(--color-tertiary);
+                }
+            }
+
+            &:has(input:checked) {
+                .form-field svg {
+                    display: none;
+
+                    &.submit-loader {
+                        display: flex;
+                    }
+                }
+            }
+
+            &:hover .form-label {
+                color: var(--color);
+            }
+
+            @media (width >= 768px) {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 0;
+                padding-inline: calc(var(--card-padding-inline) / 2);
+
+                .form-label {
+                    margin: 0;
+                }
+
+                .form-field {
+                    padding: 0;
+                }
+
+                &:not(:last-child) {
+                    border-bottom: var(--border-width) solid var(--border-color-divider);
                 }
             }
         }
