@@ -102,22 +102,22 @@
 
                 {%- if not is_sets_empty -%}
                     <div class="form-row">
-                        {%- set last_time = (workout_exercise.sets|first).performedAt.setTimezone(app.user.timezone) -%}
+                        {%- set last_time = null -%}
 
                         {%- for workout_set in workout_exercise.sets -%}
                             <div class="form-subrow">
                                 <div class="form-time">
                                     {%- set time = workout_set.performedAt.setTimezone(app.user.timezone) -%}
-                                    {%- set minutes = ((time.timestamp - last_time.timestamp) / 60)|round(0, 'floor') -%}
+                                    {%- set minutes = loop.first ? 0 : ((time.timestamp - last_time.timestamp) / 60)|round(0, 'floor') -%}
                                     {%- set last_time = time -%}
 
                                     {{- time.format('H:i') -}}
 
                                     {% if not loop.first %}
                                         <span class="form-time-offset"
-                                        {% if minutes >= 10 %} data-general-type="{{ minutes >= 20 ? 'red' : 'yellow' }}"{% endif %}>
-                                        {{- minutes > 60 ? '>' ~ 60 : '+' ~ minutes -}}
-                                    </span>
+                                            {% if minutes >= 10 %} data-general-type="{{ minutes >= 20 ? 'red' : 'yellow' }}"{% endif %}>
+                                            {{- minutes > 60 ? '>' ~ 60 : '+' ~ minutes -}}
+                                        </span>
                                     {% endif %}
                                 </div>
 
@@ -158,6 +158,19 @@
                                 {%- endif -%}
                             </div>
                         {%- endfor -%}
+
+                        {%- if last_time is not null -%}
+                            {%- set minutes = ((user_date().timestamp - last_time.timestamp) / 60)|round(0, 'floor') -%}
+
+                            <div class="form-subrow form-subrow-time-last loading" data-time="{{ last_time.timestamp }}"
+                                {% if minutes >= 10 %} data-general-type="{{ minutes >= 20 ? 'red' : 'yellow' }}"{% endif %}>
+                                <strong class="form-time-offset">
+                                    {{- minutes > 60 ? '> ' ~ 60 : minutes -}}
+                                    {{- minutes === 1 ? ' minute' : ' minutes' -}}
+                                </strong>
+                                <span>since the last attempt</span>
+                            </div>
+                        {%- endif -%}
                     </div>
                 {%- endif -%}
 

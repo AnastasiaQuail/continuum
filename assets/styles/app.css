@@ -2262,6 +2262,7 @@ textarea {
         padding-block: 0;
 
         .form-subrow {
+            --form-subrow-padding-block: var(--form-row-gap);
             --form-subrow-padding-inline: calc(var(--form-row-gap) * 1.5);
             --form-subrow-gap-inline: var(--form-row-gap);
 
@@ -2270,7 +2271,7 @@ textarea {
             flex-direction: row;
             align-items: center;
             gap: var(--form-subrow-gap-inline);
-            padding: var(--form-row-gap) var(--form-subrow-padding-inline);
+            padding: var(--form-subrow-padding-block) var(--form-subrow-padding-inline);
             border-bottom: var(--border-width) solid transparent;
 
             &:not(:last-child):after {
@@ -4871,7 +4872,9 @@ form {
             --form-subrow-offset-left-inline: calc(var(--form-subrow-padding-inline) * 3);
             --form-subrow-control-padding: calc(var(--form-row-gap) / 2.5);
 
-            padding-block: calc(var(--form-row-gap) / 1.5);
+            &:not(.form-subrow-time-last) {
+                --form-subrow-padding-block: calc(var(--form-row-gap) / 1.5);
+            }
 
             &:not(:last-child):after {
                 left: calc(var(--form-subrow-padding-inline) + var(--form-subrow-time-width) + var(--form-subrow-gap-inline));
@@ -4898,6 +4901,39 @@ form {
                     [data-theme="dark"] & {
                         color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
                     }
+                }
+            }
+
+            &.form-subrow-time-last {
+                gap: calc(var(--form-subrow-gap-inline) / 2);
+                font-size: var(--font-size-extra-small);
+                color: var(--general-color);
+
+                [data-theme="dark"] & {
+                    color: color-mix(in srgb, var(--general-color) var(--transparent-color-tiny), var(--color));
+                }
+
+                &:not([data-general-type]) {
+                    --general-color: var(--color-quaternary);
+                }
+
+                &.loading {
+                    --loader-size: var(--font-size-extra-small);
+                    --loader-position-right: calc(var(--form-subrow-padding-inline) + var(--loader-size) / 2);
+
+                    &:after {
+                        opacity: 0;
+                        transition: opacity .6s;
+                    }
+
+                    &.loading-show:after {
+                        opacity: 1;
+                        transition: opacity .15s;
+                    }
+                }
+
+                .form-time-offset {
+                    font-weight: var(--font-weight-bold-extra);
                 }
             }
 
