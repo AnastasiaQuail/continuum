@@ -1991,6 +1991,8 @@ textarea {
     @media (width < 768px) {
         .form-control {
             padding-inline: 0;
+            text-align: right;
+            color: var(--form-row-color-field);
             border: none;
             border-radius: 0;
             background-color: transparent;
@@ -2004,9 +2006,6 @@ textarea {
 
         & > .form-control-number {
             .form-control {
-                color: var(--form-row-color-field);
-                text-align: right;
-
                 &:not(:placeholder-shown) {
                     padding-right: calc(var(--form-control-number-gap) + var(--container-gap-inline));
                 }
@@ -2081,6 +2080,12 @@ textarea {
     }
 
     .form-control-time {
+        @media (width < 768px) {
+            .form-control {
+                width: 100%;
+            }
+        }
+
         .btn {
             --btn-color: var(--form-row-color-text);
         }
@@ -5027,6 +5032,11 @@ form {
                         width: 45%;
                     }
                 }
+
+                .form-control {
+                    text-align: left;
+                    color: var(--color);
+                }
             }
 
             .form-workout-exercise-warmup {
@@ -5039,6 +5049,7 @@ form {
 
                 .form-check-label {
                     display: flex;
+                    flex-direction: row-reverse;
                     align-items: center;
                     column-gap: calc(var(--gap-inline) / 6);
                     color: var(--color-secondary);
@@ -5058,6 +5069,8 @@ form {
                     }
 
                     @media (width < 768px) {
+                        flex-direction: row;
+
                         &:has(+ .form-check-input:checked) {
                             color: var(--color-green);
                         }
