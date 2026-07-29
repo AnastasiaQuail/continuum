@@ -42,9 +42,9 @@
                 class="form-row form-row-header-edit form-row-header-large"
                 data-general-type="{{ exercise.group.color.value }}">
                 <div class="form-label form-label-exercise">
-                    <div class="badge">{{ exercise.group.name }}</div>
+                    <twig:Badge>{{ exercise.group.name }}</twig:Badge>
                     {%- if not exercise.isActive -%}
-                        <div class="badge badge-bad">{{ ux_icon('lucide:eye-off') }}</div>
+                        <twig:Badge color="red">{{ ux_icon('lucide:eye-off') }}</twig:Badge>
                     {%- endif -%}
                     {{ exercise.name }}
                 </div>
@@ -65,10 +65,9 @@
                         {%- endif -%}
                     </div>
 
-                    <div class="form-field chart-container">
-                        <div class="chart" data-chart="exercise-progress"
-                             data-days="{{ exercise_days }}" data-color="{{ exercise.group.color.value }}"
-                             data-values="{{ exercise_map|json_encode }}"></div>
+                    <div class="form-field">
+                        <twig:Chart name="exercise-progress" values="{{ exercise_map }}"
+                                    data-days="{{ exercise_days }}" data-color="{{ exercise.group.color.value }}"/>
                     </div>
                 </div>
             {%- endif -%}
@@ -88,12 +87,12 @@
     <div class="exercise-progress-value">
         <span class="form-field-legend">{{ description }}</span>
         {%- for set in sets -%}
-            <div class="badge">
+            <twig:Badge>
                 {%- if set.weight > 0 -%}
                     <span>{{ set.weight }}<small>kg</small></span>
                 {%- endif -%}
                 <span><small>x</small>{{ set.reps }}</span>
-            </div>
+            </twig:Badge>
         {%- endfor -%}
     </div>
 {%- endmacro %}

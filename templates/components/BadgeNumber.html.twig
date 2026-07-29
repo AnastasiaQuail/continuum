@@ -1,0 +1,13 @@
+{%- props number, postfix, reversable = false -%}
+
+{%- set preferred_color = false -%}
+{%- if number > 0 -%}
+    {%- set preferred_color = reversable ? 'red' : 'green' -%}
+{%- elseif number < 0 -%}
+    {%- set preferred_color = reversable ? 'green' : 'red' -%}
+{%- endif -%}
+
+<twig:Badge {{ ...attributes.defaults({color: preferred_color ? preferred_color}) }}>
+    <span>{{ number > 0 ? '+' ~ number : number }}</span>
+    <span>{{ postfix }}</span>
+</twig:Badge>

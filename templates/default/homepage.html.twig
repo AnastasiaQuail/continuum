@@ -159,9 +159,7 @@
                             {%- set result = ((chart_measurements|last).weight - (chart_measurements|first).weight)|round(1) -%}
 
                             {%- if result !== 0.0 -%}
-                                <div class="badge {{ result > 0 ? 'badge-bad' : 'badge-good' }}">
-                                    <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
-                                </div>
+                                <twig:BadgeNumber number="{{ result }}" postfix="kg" reversable/>
                             {%- endif -%}
                         {%- endif -%}
                     </twig:block>
@@ -172,11 +170,8 @@
                     </twig:block>
                 </twig:Card:Title>
 
-                <div class="chart-container">
-                    <div class="chart"
-                         {% if chart_measurements %}data-chart="weight-change" data-days="{{ measurement_days }}"
-                         data-symbols="hide" data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
-                </div>
+                <twig:Chart name="weight-change" values="{{ chart_measurements }}" showEmpty
+                            data-days="{{ measurement_days }}" data-symbols="hide"/>
             </twig:Card>
         {%- endif -%}
 
@@ -238,11 +233,8 @@
                 </twig:block>
             </twig:Card:Title>
 
-            <div class="chart-container">
-                <div class="chart"
-                     data-chart="mood-reflections" data-days="{{ mood_reflection_days }}"
-                     data-values="{{ chart_mood_reflections|json_encode }}"></div>
-            </div>
+            <twig:Chart name="mood-reflections" values="{{ chart_mood_reflections }}"
+                        data-days="{{ mood_reflection_days }}"/>
         </twig:Card>
     {%- endif -%}
 {%- endblock %}

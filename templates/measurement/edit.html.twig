@@ -11,8 +11,7 @@
 {% set back_path = path('app_measurements', {month: date.format('Y-m')}) %}
 
 {% block header_actions -%}
-    <button class="btn btn-glass btn-glass-primary"
-            data-form-submit="#form-measurement">{{ ux_icon('lucide:check') }}</button>
+    <twig:Form:ButtonExternalSubmit target="#form-measurement"/>
 {%- endblock %}
 
 {% block main -%}

@@ -6,8 +6,7 @@
 {% set back_path = path('app_exercises') %}
 
 {% block header_actions -%}
-    <button class="btn btn-glass btn-glass-primary"
-            data-form-submit="#form-exercise">{{ ux_icon('lucide:check') }}</button>
+    <twig:Form:ButtonExternalSubmit target="#form-exercise"/>
 {%- endblock %}
 
 {% block main -%}

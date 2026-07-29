@@ -7,11 +7,10 @@
     <twig:CardForm isPlain id="profile-card">
         {%- import 'user/profile.html.twig' as profile -%}
 
-        {%- set status = app.user.status -%}
         {{- profile.form_row_plain(
             ux_icon('lucide:user'),
             'Status',
-            '<span class="badge" data-general-type="' ~ status.color.value ~ '">' ~ status.name ~ '</span>',
+            profile.status_badge(app.user.status),
         ) -}}
 
         {{- profile.form_row_plain(
@@ -75,4 +74,8 @@
             {%- endif -%}
         </div>
     </{% if url %}a{% else %}div{% endif %}>
+{%- endmacro -%}
+
+{%- macro status_badge(status) -%}
+    <twig:Badge color="{{ status.color.value }}">{{ status.name }}</twig:Badge>
 {%- endmacro -%}

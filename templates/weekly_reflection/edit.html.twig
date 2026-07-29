@@ -19,8 +19,7 @@
 {% set back_path = path('app_weekly_reflections', {month: week.format('Y-m')}) %}
 
 {% block header_actions -%}
-    <button class="btn btn-glass btn-glass-primary"
-            data-form-submit="#form-weekly-reflection">{{ ux_icon('lucide:check') }}</button>
+    <twig:Form:ButtonExternalSubmit target="#form-weekly-reflection"/>
 {%- endblock %}
 
 {% block main -%}

@@ -37,9 +37,7 @@
                     <twig:block name="header">The Wait</twig:block>
 
                     <twig:block name="badge">
-                        <div class="badge badge-good">
-                            <span>+{{ progress_offset }}</span><span>%</span>
-                        </div>
+                        <twig:BadgeNumber number="{{ progress_offset }}" postfix="%"/>
                     </twig:block>
 
                     <twig:block name="info">
@@ -62,9 +60,7 @@
                     <twig:block name="header">Love story</twig:block>
 
                     <twig:block name="badge">
-                        <div class="badge badge-good">
-                            <span>+{{ couple_progress_days }}</span><span>days</span>
-                        </div>
+                        <twig:BadgeNumber number="{{ couple_progress_days }}" postfix="days"/>
                     </twig:block>
 
                     <twig:block name="info">{{ couple_together_info }}</twig:block>
@@ -91,12 +87,12 @@
 
             <div class="upcoming-events-body report-upcoming-events">
                 {%- for calendar_event in calendar_events -%}
-                    <div class="badge" data-general-type="{{ calendar_event.type.value }}">
+                    <twig:Badge color="{{ calendar_event.type.value }}">
                         <strong>{{ calendar_event.title }}</strong>
                         {%- if calendar_event.count > 1 -%}
                             <span class="badge-count">{{ calendar_event.count }}</span>
                         {%- endif -%}
-                    </div>
+                    </twig:Badge>
                 {%- endfor -%}
             </div>
         </twig:Card>
@@ -214,10 +210,7 @@
                     <twig:block name="header">Weight</twig:block>
 
                     <twig:block name="badge">
-                        <div class="badge {{ weight_change > 0 ? 'badge-bad' : 'badge-good' }}">
-                            <span>{{ weight_change > 0 ? '+' ~ weight_change : weight_change }}</span>
-                            <span>kg</span>
-                        </div>
+                        <twig:BadgeNumber number="{{ weight_change }}" postfix="kg" reversable/>
                     </twig:block>
 
                     <twig:block name="info">
@@ -238,10 +231,8 @@
                     <twig:block name="header">Workouts</twig:block>
 
                     <twig:block name="badge">
-                        <div class="badge badge-good">
-                            <span>+{{ workout_report.count }}</span>
-                            <span>{{ workout_report.count > 1 ? 'workouts' : 'workout' }}</span>
-                        </div>
+                        <twig:BadgeNumber number="{{ workout_report.count }}"
+                                          postfix="{{ workout_report.count > 1 ? 'workouts' : 'workout' }}"/>
                     </twig:block>
 
                     <twig:block name="info">
@@ -251,8 +242,7 @@
 
                 <div class="report-workouts">
                     {%- for workout_progress in workout_report.progresses -%}
-                        <div class="badge"
-                             data-general-type="{{ workout_progress.exercise.group.color.value }}">
+                        <twig:Badge color="{{ workout_progress.exercise.group.color.value }}">
                             <span>{{ workout_progress.exercise.name }}</span>
                             {%- if workout_progress.progress is null -%}
                                 <span class="badge-progress">NEW</span>
@@ -263,7 +253,7 @@
                                     {{- ux_icon('lucide:trending-up') -}}
                                 </span>
                             {%- endif -%}
-                        </div>
+                        </twig:Badge>
                     {%- endfor -%}
                 </div>
             {%- endif -%}

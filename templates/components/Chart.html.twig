@@ -1,0 +1,8 @@
+{%- props name, values, showEmpty = false -%}
+
+<article {{ attributes.defaults({class: 'chart-container'}).only('class') }}>
+    <div class="chart"
+        {%- if values or not showEmpty -%}
+            {{- attributes.defaults({'data-chart': name, 'data-values': values|json_encode}) -}}
+        {%- endif -%}></div>
+</article>

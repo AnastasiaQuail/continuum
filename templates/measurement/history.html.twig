@@ -72,14 +72,12 @@
 
                     {%- if result !== 0.0 -%}
                         {%- if field in context.reversed_measurement_names -%}
-                            {%- set badge_type = result > 0 ? 'badge-good' : 'badge-bad' -%}
+                            {%- set color = result > 0 ? 'green' : 'red' -%}
                         {%- else -%}
-                            {%- set badge_type = result > 0 ? 'badge-bad' : 'badge-good' -%}
+                            {%- set color = result > 0 ? 'red' : 'green' -%}
                         {%- endif -%}
 
-                        <span class="badge {{ badge_type }}">
-                            <span>{{ result > 0 ? '+' ~ result : result }}</span><span>{{ outerScope.type }}</span>
-                        </span>
+                        <twig:BadgeNumber color="{{ color }}" number="{{ result }}" postfix="{{ outerScope.type }}"/>
                     {%- endif -%}
                 {%- endif -%}
             </twig:block>
@@ -92,10 +90,8 @@
         {%- if values is empty -%}
             <div class="collection-empty">No values</div>
         {%- else -%}
-            <div class="chart-container">
-                <div class="chart" data-chart="measurement-change" data-type="{{ type }}"
-                     data-days="{{ context.measurement_days }}" data-values="{{ values|json_encode }}"></div>
-            </div>
+            <twig:Chart name="measurement-change" values="{{ values }}"
+                        data-type="{{ type }}" data-days="{{ context.measurement_days }}"/>
         {%- endif -%}
     </twig:Card>
 {%- endmacro %}
