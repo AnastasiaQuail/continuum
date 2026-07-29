@@ -1878,6 +1878,24 @@ textarea {
             grid-template-rows: auto;
         }
 
+        &:has(.form-icon + .form-label + .form-field) {
+            grid-template-columns: auto 1fr;
+            align-items: center;
+
+            & > .form-icon {
+                grid-column: 1;
+            }
+
+            & > .form-label {
+                grid-column: 2;
+                white-space: unset;
+            }
+
+            & > .form-field {
+                grid-column: 3;
+            }
+        }
+
         &:has(.form-icon + .form-label + .form-field-large) {
             grid-template-columns: auto 1fr;
 
@@ -2024,7 +2042,7 @@ textarea {
         column-gap: calc(var(--form-row-gap) / 2);
         color: var(--form-row-color-field);
 
-        &[data-general-type] {
+        & > [data-general-type] {
             color: var(--general-color);
 
             [data-theme="dark"] & {
@@ -2032,7 +2050,8 @@ textarea {
             }
         }
 
-        &.form-field-multiple {
+        .form-field-multiple {
+            display: flex;
             flex-direction: column;
             align-items: flex-end;
             row-gap: calc(var(--form-row-gap) / 1.5);
@@ -2103,7 +2122,7 @@ textarea {
         }
     }
 
-    &.form-row-header-edit {
+    &.form-row-header {
         @media (width >= 768px) {
             flex-direction: row;
             justify-content: space-between;
@@ -2965,7 +2984,7 @@ textarea {
                 background-color: var(--border-color-divider);
             }
 
-            &:has(> .form-label > .form-icon) {
+            &:has(> .form-icon) {
                 &:after {
                     left: calc(var(--form-row-padding-inline) + var(--form-row-icon-font-size) + 2 * var(--form-row-icon-padding) + var(--form-row-icon-gap));
                 }
@@ -2988,7 +3007,7 @@ textarea {
                     margin-bottom: 0;
                 }
 
-                &.form-row-header-edit:not(:has(+ .form-row-collection-empty)):not(:last-child) {
+                &.form-row-header:not(:has(+ .form-row-collection-empty)):not(:last-child) {
                     padding-bottom: calc(var(--form-row-gap) * 2);
                     border-bottom: var(--border-width) solid var(--border-color-divider);
                 }
@@ -3056,7 +3075,7 @@ textarea {
                         margin-bottom: 0;
                     }
 
-                    &:not(.form-row-header-edit) > .form-label {
+                    &:not(.form-row-header) > .form-label {
                         flex: none;
                         width: var(--form-plain-size);
                     }
@@ -3231,7 +3250,7 @@ textarea {
     view-transition-name: progress-the-wait;
 }
 
-#card-title-love-story .card-title-header {
+#card-title-love-story {
     view-transition-name: title-love-story;
 }
 
@@ -4217,7 +4236,7 @@ textarea {
 }
 
 .card-weekly-reflections {
-    .form-row:not(.form-row-header-edit):not(.form-row-collection-empty) {
+    .form-row:not(.form-row-header):not(.form-row-collection-empty) {
         @media (width >= 768px) {
             padding: var(--gap-block) var(--gap-inline);
             margin-bottom: 0;
@@ -4238,7 +4257,7 @@ textarea {
 
         position: relative;
 
-        &.form-field-private {
+        .form-field-private {
             color: transparent;
             transition: color .15s;
 
@@ -4263,7 +4282,7 @@ textarea {
             }
         }
 
-        &.form-field-secure {
+        .form-field-secure {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -4404,12 +4423,12 @@ textarea {
         gap: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 2);
 
         .form-row {
-            &.form-row-header-edit {
+            &.form-row-header {
                 flex-basis: 100%;
                 margin-bottom: calc(var(--gap-block) * 0.5);
             }
 
-            &:not(.form-row-header-edit) {
+            &:not(.form-row-header) {
                 --cmfr-color: color-mix(in srgb, var(--general-color) 12%, var(--background-color));
 
                 display: inline-flex;
@@ -4585,7 +4604,7 @@ form {
         --workout-set-padding-block: calc(var(--form-row-gap) / 2);
         --workout-set-padding-inline: var(--form-row-gap);
 
-        &:not(.form-row-header-edit) .form-label {
+        &:not(.form-row-header) .form-label {
             color: var(--general-color);
             white-space: unset;
 
@@ -4735,7 +4754,7 @@ form {
         }
 
         @media (width > 768px) {
-            &:not(.form-row-header-edit):not(.form-row-collection-empty) {
+            &:not(.form-row-header):not(.form-row-collection-empty) {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
@@ -4779,7 +4798,7 @@ form {
                     display: flex !important;
                 }
 
-                .form-workout-sets,
+                .form-field-large,
                 .form-workout-hint,
                 .form-text {
                     display: none;
@@ -4806,7 +4825,7 @@ form {
     }
 
     .form-row {
-        &.form-row-header-edit {
+        &.form-row-header {
             @media (width < 768px) {
                 padding-block: var(--form-row-gap);
             }
@@ -4838,6 +4857,7 @@ form {
                 .form-control {
                     --form-control-color: var(--color-secondary);
 
+                    text-align: left;
                     transition: color .15s;
 
                     &:focus-visible {
@@ -5128,7 +5148,7 @@ form {
 
     .card-workout-exercise {
         .form-row {
-            &.form-row-header-edit {
+            &.form-row-header {
                 cursor: pointer;
 
                 &:after {
@@ -5351,10 +5371,10 @@ form {
 
 .card-exercise {
     .form-row {
-        &:has(.form-label-exercise) {
+        &:has(.form-label) {
             grid-template-columns: 1fr auto;
 
-            .form-label-exercise {
+            .form-label {
                 position: relative;
                 overflow: hidden;
 

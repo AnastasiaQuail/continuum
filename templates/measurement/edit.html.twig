@@ -11,7 +11,7 @@
 {% set back_path = path('app_measurements', {month: date.format('Y-m')}) %}
 
 {% block header_actions -%}
-    <twig:Form:ButtonExternalSubmit target="#form-measurement"/>
+    <twig:Form:ExternalSubmit target="#form-measurement"/>
 {%- endblock %}
 
 {% block main -%}
@@ -27,11 +27,11 @@
         </div>
 
         <div class="row row-md-3 form-row-collapsible">
-            <div class="form-row form-row-collapse-toggle"
+            <twig:Form:Row class="form-row-collapse-toggle"
                  onclick="this.parentNode.classList.add('show'); return false;">
                 <span>Show all</span>
                 {{- ux_icon('lucide:chevron-down') -}}
-            </div>
+            </twig:Form:Row>
 
             {{- form_row(form.chest, {attr: {placeholder: '0 cm'}}) -}}
             {{- form_row(form.shoulders, {attr: {placeholder: '0 cm'}}) -}}
@@ -41,7 +41,7 @@
             {{- form_row(form.calf, {attr: {placeholder: '0 cm'}}) -}}
         </div>
 
-        {{- form_row_submit() -}}
+        <twig:Form:Submit/>
 
         {{- form_end(form) -}}
     </twig:CardForm>

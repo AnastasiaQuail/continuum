@@ -12,7 +12,7 @@
 {% set back_path = path('app_profile') %}
 
 {% block header_actions -%}
-    <twig:Form:ButtonExternalSubmit target="#form-profile-location"/>
+    <twig:Form:ExternalSubmit target="#form-profile-location"/>
 {%- endblock %}
 
 {% block main -%}
@@ -22,7 +22,7 @@
         {{- form_row(form.latitude, {attr: {placeholder: 'Required'}}) -}}
         {{- form_row(form.longitude, {attr: {placeholder: 'Required'}}) -}}
 
-        <div class="form-row form-row-post">
+        <twig:Form:Row class="form-row-post">
             <div class="alert alert-danger" style="display: none" id="alert-error">
                 <div class="alert-title">
                     {{ ux_icon('lucide:triangle-alert') }}
@@ -42,9 +42,9 @@
                 {{ ux_icon('lucide:locate') }}
                 <span>Detect current location</span>
             </button>
-        </div>
+        </twig:Form:Row>
 
-        {{- form_row_submit() -}}
+        <twig:Form:Submit/>
 
         {{- form_end(form) -}}
     </twig:CardForm>

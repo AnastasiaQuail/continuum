@@ -31,25 +31,14 @@
         <twig:CardForm class="card-weekly-reflections">
             {%- set monday = date(date).modify('-6 days') -%}
             {%- set sunday = date(date) -%}
-
-            {%- set is_granted = is_granted('WEEKLY_REFLECTION_EDIT', sunday.format('Y-m-d')) -%}
             {%- set is_different_month = monday.format('n') !== sunday.format('n') -%}
-            {%- set time = monday.format(is_different_month ? 'j F' : 'j') ~ ' - ' ~ sunday.format('j F') -%}
 
-            <{% if is_granted %}a{% else %}div{% endif %}
-                {% if is_granted %}href="{{ path('app_weekly_reflection_edit', {week: date}) }}"{% endif %}
-                class="form-row form-row-header-edit">
-                <div class="form-label">{{ time }}</div>
-                <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
-            </{% if is_granted %}a{% else %}div{% endif %}>
+            <twig:Form:RowField isHeader href="{{ path('app_weekly_reflection_edit', {week: date}) }}"
+                                isGranted="{{ is_granted('WEEKLY_REFLECTION_EDIT', sunday.format('Y-m-d')) }}"
+                                label="{{ monday.format(is_different_month ? 'j F' : 'j') ~ ' - ' ~ sunday.format('j F') }}"/>
 
             {%- if reflection is null -%}
-                <div class="form-row form-row-collection-empty">
-                    <div class="collection-empty">
-                        {{- ux_icon('lucide:frown') -}}
-                        <span>No reflection for this week yet</span>
-                    </div>
-                </div>
+                <twig:Form:RowEmptyCollection message="No reflection for this week yet"/>
             {%- else -%}
                 <div class="row row-md-3">
                     {%- import 'weekly_reflection/index.html.twig' as weekly_reflection -%}
@@ -83,11 +72,9 @@
 {%- macro weekly_row(color, icon, label, field) -%}
     {%- set is_secure = field.isPrivate and not is_granted('WEEKLY_REFLECTION_PRIVATE') -%}
 
-    <div class="form-row" data-general-type="{{ color }}">
-        <div class="form-icon form-icon-large">{{ icon|raw }}</div>
-        <div class="form-label">{{ label }}</div>
-        <div class="form-field-large {{ is_secure ? 'form-field-secure' : (field.isPrivate ? 'form-field-private') }}">
+    <twig:Form:RowField isLarge icon="{{ icon }}" label="{{ label }}" data-general-type="{{ color }}">
+        <div class="{{ is_secure ? 'form-field-secure' : (field.isPrivate ? 'form-field-private') }}">
             {{- is_secure ? ux_icon('lucide:lock') : field.text -}}
         </div>
-    </div>
+    </twig:Form:RowField>
 {%- endmacro -%}

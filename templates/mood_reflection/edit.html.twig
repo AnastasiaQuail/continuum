@@ -10,7 +10,7 @@
 {% set back_path = path('app_mood_reflections', {month: day.format('Y-m')}) %}
 
 {% block header_actions -%}
-    <twig:Form:ButtonExternalSubmit target="#form-mood-reflection"/>
+    <twig:Form:ExternalSubmit target="#form-mood-reflection"/>
 {%- endblock %}
 
 {% block showcase -%}
@@ -44,7 +44,7 @@
         }) -}}
         {{- form_row(form.text, {attr: {placeholder: 'Optional'}}) -}}
 
-        {{- form_row_submit() -}}
+        <twig:Form:Submit/>
 
         {{- form_end(form) -}}
     </twig:CardForm>

@@ -15,7 +15,7 @@
 {% set back_path = path('app_calendar', {year: day.format('Y')}) %}
 
 {% block header_actions -%}
-    <twig:Form:ButtonExternalSubmit target="#form-calendar"/>
+    <twig:Form:ExternalSubmit target="#form-calendar"/>
 {%- endblock %}
 
 {% block body_actions -%}
@@ -80,8 +80,8 @@
         {{- form_row(form.time) -}}
 
         {%- if previous_events -%}
-            <div class="form-row form-row-post calendar-event-guesses">
-                <div class="form-label">Or choose from you previous events</div>
+            <twig:Form:RowField class="form-row-post calendar-event-guesses"
+                                label="Or choose from you previous events">
                 <div class="form-row-post-body">
                     {%- for previous_event in previous_events -%}
                         {%- set event_time = previous_event.getUserDatetime(app.user).format('H:i') -%}
@@ -97,10 +97,10 @@
                         </button>
                     {%- endfor -%}
                 </div>
-            </div>
+            </twig:Form:RowField>
         {%- endif -%}
 
-        {{- form_row_submit('Create event') -}}
+        <twig:Form:Submit label="Create event"/>
 
         {{- form_end(form) -}}
     </twig:CardForm>

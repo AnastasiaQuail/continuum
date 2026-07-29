@@ -7,22 +7,19 @@
 {% set back_path = path('app_admin_users') %}
 
 {% block header_actions -%}
-    <twig:Form:ButtonExternalSubmit target="#form-user-edit"/>
+    <twig:Form:ExternalSubmit target="#form-user-edit"/>
 {%- endblock %}
 
 {% block main -%}
     <twig:CardForm>
         {{- form_start(form, {attr: {id: 'form-user-edit', class: 'form-submit-external'}}) -}}
 
-        <div class="form-row">
-            <div class="form-label">Login</div>
-            <div class="form-field">{{ user.userIdentifier }}</div>
-        </div>
+        <twig:Form:RowField label="Login">{{ user.userIdentifier }}</twig:Form:RowField>
 
         {{- form_row(form.status) -}}
         {{- form_row(form.roles, {attr: {placeholder: 'Required'}}) -}}
 
-        {{- form_row_submit() -}}
+        <twig:Form:Submit/>
 
         {{- form_end(form) -}}
     </twig:CardForm>

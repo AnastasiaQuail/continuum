@@ -1,0 +1,5 @@
+{%- props isLarge = false -%}
+
+<div {{ attributes.defaults({class: 'form-icon' ~ (isLarge ? ' form-icon-large')}) }}>
+    {%- block content %}{% endblock -%}
+</div>

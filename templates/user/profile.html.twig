@@ -5,45 +5,31 @@
 
 {% block main -%}
     <twig:CardForm isPlain id="profile-card">
-        {%- import 'user/profile.html.twig' as profile -%}
+        <twig:Form:RowField icon="{{ ux_icon('lucide:user') }}" label="Status">
+            <twig:Badge color="{{ app.user.status.color.value }}">{{ app.user.status.name }}</twig:Badge>
+        </twig:Form:RowField>
 
-        {{- profile.form_row_plain(
-            ux_icon('lucide:user'),
-            'Status',
-            profile.status_badge(app.user.status),
-        ) -}}
+        <twig:Form:RowField icon="{{ ux_icon('lucide:mail') }}" label="Email">
+            {{- app.user.userIdentifier|email_secure -}}
+        </twig:Form:RowField>
 
-        {{- profile.form_row_plain(
-            ux_icon('lucide:mail'),
-            'Email',
-            app.user.userIdentifier|email_secure,
-        ) -}}
-
-        {{- profile.form_row_plain(
-            ux_icon('lucide:key-round'),
-            'Password',
-            '**********',
-            path('app_profile_password'),
-        ) -}}
+        <twig:Form:RowField href="{{ path('app_profile_password') }}"
+                            icon="{{ ux_icon('lucide:key-round') }}" label="Password">
+            {{- '**********' -}}
+        </twig:Form:RowField>
     </twig:CardForm>
 
     <h2>Geoposition</h2>
 
     <twig:CardForm isPlain id="profile-location-card">
-        {%- import 'user/profile.html.twig' as profile -%}
+        <twig:Form:RowField icon="{{ ux_icon('lucide:clock') }}" label="Timezone">
+            {{- app.user.timezone.name -}}
+        </twig:Form:RowField>
 
-        {{- profile.form_row_plain(
-            ux_icon('lucide:clock'),
-            'Timezone',
-            app.user.timezone.name,
-        ) -}}
-
-        {{- profile.form_row_plain(
-            ux_icon('lucide:map-pin'),
-            'Location',
-            app.user.location.latitude ~ ' : ' ~ app.user.location.longitude,
-            path('app_profile_location'),
-        ) -}}
+        <twig:Form:RowField href="{{ path('app_profile_location') }}"
+                            icon="{{ ux_icon('lucide:map-pin') }}" label="Location">
+            {{- app.user.location.latitude ~ ' : ' ~ app.user.location.longitude -}}
+        </twig:Form:RowField>
     </twig:CardForm>
 
     <div>
@@ -59,23 +45,3 @@
         </twig:Card:Description>
     </div>
 {%- endblock %}
-
-{%- macro form_row_plain(icon, label, value, url = null) -%}
-    <{% if url %}a{% else %}div{% endif %}
-        {% if url %}href="{{ url }}"{% endif %} class="form-row">
-        <label class="form-label">
-            <span class="form-icon">{{ icon|raw }}</span>
-            <span>{{ label }}</span>
-        </label>
-        <div class="form-field">
-            <span>{{ value|raw }}</span>
-            {%- if url -%}
-                {{- ux_icon('lucide:chevron-right', {class: 'form-link-chevron'}) -}}
-            {%- endif -%}
-        </div>
-    </{% if url %}a{% else %}div{% endif %}>
-{%- endmacro -%}
-
-{%- macro status_badge(status) -%}
-    <twig:Badge color="{{ status.color.value }}">{{ status.name }}</twig:Badge>
-{%- endmacro -%}
