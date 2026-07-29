@@ -84,15 +84,9 @@
         {%- set progress = progresses[measurement.id] -%}
 
         <twig:CardForm class="card-measurements">
-            {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F, H:i') -%}
-            {%- set is_granted = is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
-
-            <{% if is_granted %}a{% else %}div{% endif %}
-                {% if is_granted %}href="{{ path('app_measurement_edit', {id: measurement.id}) }}"{% endif %}
-                class="form-row form-row-header-edit">
-                <div class="form-label">{{ time }}</div>
-                <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
-            </{% if is_granted %}a{% else %}div{% endif %}>
+            <twig:Form:RowField isHeader href="{{ path('app_measurement_edit', {id: measurement.id}) }}"
+                                isGranted="{{ is_granted('BODY_MEASUREMENT_EDIT', measurement) }}"
+                                label="{{ measurement.datetime.setTimezone(app.user.timezone).format('j F, H:i') }}"/>
 
             {%- import 'measurement/index.html.twig' as macro -%}
 
@@ -182,7 +176,7 @@
     {%- endfor -%}
 {%- endblock %}
 
-{%- macro measurent_row(label, values, color = null) -%}
+{%- macro measurent_row(label, values, color = false) -%}
     {%- set is_available = false -%}
     {%- set values = values['value'] is defined ? [values] : values -%}
 
@@ -193,9 +187,8 @@
     {%- endfor -%}
 
     {%- if is_available -%}
-        <div class="form-row form-row-compact" {% if color %}data-general-type="{{ color }}"{% endif %}>
-            <div class="form-label">{{ label }}</div>
-            <div class="form-field {% if values|length > 1 %}form-field-multiple{% endif %}">
+        <twig:Form:RowField isCompact label="{{ label }}" data-general-type="{{ color }}">
+            <div class="form-field-multiple">
                 {%- for subvalue in values -%}
                     {%- if subvalue.value -%}
                         <div class="form-field-line">
@@ -220,11 +213,10 @@
                                     {%- endif -%}
                                 </span>
                             {%- endif -%}
-
                         </div>
                     {%- endif -%}
                 {%- endfor -%}
             </div>
-        </div>
+        </twig:Form:RowField>
     {%- endif -%}
 {%- endmacro -%}

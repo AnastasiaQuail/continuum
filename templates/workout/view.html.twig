@@ -47,23 +47,24 @@
 
         <div class="card-container card-container-workout-exercise {{ is_collapse ? 'card-container-collapse' }}">
             <twig:CardForm class="card-workout-exercise">
-                <div
-                    class="form-row form-row-header-edit {{ workout_exercise.description !== '' ? 'description-show' }}"
-                    data-general-type="{{ workout_exercise.exercise.group.color.value }}">
-                    <div class="form-label">
+                {%- set is_update_granted = is_granted('WORKOUT_EXERCISE_UPDATE', workout_exercise) -%}
+
+                <twig:Form:RowField isHeader
+                                    class="{{ workout_exercise.description !== '' ? 'description-show' }}"
+                                    data-general-type="{{ workout_exercise.exercise.group.color.value }}">
+                    <twig:block name="label">
                         {%- if is_collapse and not is_sets_empty -%}
                             {{- ux_icon('lucide:check', {class: 'form-label-check'}) -}}
                         {%- endif -%}
                         {{- workout_exercise.exercise.name -}}
-                    </div>
-                    <div class="form-field">
+                    </twig:block>
+
+                    <twig:block name="field">
                         {%- if is_collapse -%}
                             <button class="btn btn-link btn-container-toggler">
                                 {{ ux_icon('lucide:unfold-vertical') -}}
                             </button>
                         {%- endif -%}
-
-                        {%- set is_update_granted = is_granted('WORKOUT_EXERCISE_UPDATE', workout_exercise) -%}
 
                         {%- if not is_sets_empty -%}
                             <button class="btn btn-link btn-description-show"
@@ -84,25 +85,28 @@
                                 </button>
                             </form>
                         {%- endif -%}
-                    </div>
+                    </twig:block>
 
-                    <form method="post" action="{{ path('app_workout_exercise_update', {id: workout_exercise.id}) }}"
-                          class="form-workout-exercise-description" onsubmit="return submitBy(this);">
-                        <input type="hidden" name="_method" value="PATCH">
-                        <label for="description_{{ workout_exercise.id }}"></label>
-                        <input class="form-control" type="text" id="description_{{ workout_exercise.id }}"
-                               name="description" value="{{ workout_exercise.description }}" maxlength="255"
-                               placeholder="Add description...">
-                        <button class="btn btn-transparent" {% if is_update_granted %}type="submit"
-                                {% else %}disabled{% endif %}>
-                            {{- ux_icon('lucide:message-circle-plus') -}}
-                            {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
-                        </button>
-                    </form>
-                </div>
+                    <twig:block name="footer">
+                        <form method="post"
+                              action="{{ path('app_workout_exercise_update', {id: workout_exercise.id}) }}"
+                              class="form-workout-exercise-description" onsubmit="return submitBy(this);">
+                            <input type="hidden" name="_method" value="PATCH">
+                            <label for="description_{{ workout_exercise.id }}"></label>
+                            <input class="form-control" type="text" id="description_{{ workout_exercise.id }}"
+                                   name="description" value="{{ workout_exercise.description }}" maxlength="255"
+                                   placeholder="Add description...">
+                            <button class="btn btn-transparent" {% if is_update_granted %}type="submit"
+                                    {% else %}disabled{% endif %}>
+                                {{- ux_icon('lucide:message-circle-plus') -}}
+                                {{- ux_icon('lucide:loader-circle', {class: 'submit-loader'}) -}}
+                            </button>
+                        </form>
+                    </twig:block>
+                </twig:Form:RowField>
 
                 {%- if not is_sets_empty -%}
-                    <div class="form-row">
+                    <twig:Form:Row>
                         {%- set last_time = null -%}
 
                         {%- for workout_set in workout_exercise.sets -%}
@@ -172,7 +176,7 @@
                                 <span>since the last attempt</span>
                             </div>
                         {%- endif -%}
-                    </div>
+                    </twig:Form:Row>
                 {%- endif -%}
 
                 {%- if is_granted('WORKOUT_SET_CREATE', workout_exercise) -%}
@@ -256,7 +260,7 @@
         {%- endif -%}
 
         <twig:CardForm class="card-exercise-tabs" data-tabs="" data-general-type="{{ first_group.color.value }}">
-            <div class="form-row form-row-tabs">
+            <twig:Form:Row class="form-row-tabs">
                 <div class="form-row-tabs-container">
                     {%- for exercise_group in exercise_groups -%}
                         <button class="btn btn-link {{- exercise_group === first_group ? ' active' }}"
@@ -266,7 +270,7 @@
                         </button>
                     {%- endfor -%}
                 </div>
-            </div>
+            </twig:Form:Row>
 
             <div class="form-row-tab-contents">
                 {%- for exercise_group in exercise_groups -%}

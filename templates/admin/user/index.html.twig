@@ -8,44 +8,35 @@
 
     {%- for user in users -%}
         <twig:CardForm isPlain>
-            {%- set is_granted = is_granted('ADMIN_USER_EDIT', user) -%}
-
-            <{% if is_granted %}a{% else %}div{% endif %}
-                {% if is_granted %}href="{{ path('app_admin_user_edit', {id: user.id}) }}"{% endif %}
-                class="form-row form-row-header-edit form-row-header-large">
-                <div class="form-label">
+            <twig:Form:RowField isHeaderLarge href="{{ path('app_admin_user_edit', {id: user.id}) }}"
+                                isGranted="{{ is_granted('ADMIN_USER_EDIT', user) }}">
+                <twig:block name="label">
                     <twig:Badge color="{{ user.status.color.value }}">{{ user.status.name }}</twig:Badge>
                     {{ user.userIdentifier }}
-                </div>
-                <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
-            </{% if is_granted %}a{% else %}div{% endif %}>
+                </twig:block>
+            </twig:Form:RowField>
 
-            <div class="form-row">
+            <twig:Form:RowField label="Last online">
                 {%- set last_visited_date = user.lastVisitedAt.setTimezone(app.user.timezone) -%}
                 {%- set diff_days = last_visited_date.diff(date).days -%}
                 {%- set general_type = diff_days >= 14 ? 'red' : (diff_days >= 7 ? 'orange' : null) -%}
 
-                <div class="form-label">Last online</div>
-                <div class="form-field" {% if general_type %}data-general-type="{{ general_type }}"{% endif %}>
+                <span {% if general_type %}data-general-type="{{ general_type }}"{% endif %}>
                     {{- last_visited_date.format('j F, H:i') -}}
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-label">Roles</div>
-                <div class="form-field">
-                    {%- for role in user.roles -%}
-                        <twig:Badge>{{ role|slice(5) }}</twig:Badge>
-                    {%- endfor -%}
-                </div>
-            </div>
-            <a class="form-row" target="_blank"
-               href="https://maps.apple.com/?q={{ user.location.latitude }},{{ user.location.longitude }}">
-                <div class="form-label">Location</div>
-                <div class="form-field">
-                    {{- user.timezone.name -}}
-                    {{- ux_icon('lucide:chevron-right', {class: 'form-link-chevron'}) -}}
-                </div>
-            </a>
+                </span>
+            </twig:Form:RowField>
+
+            <twig:Form:RowField label="Roles">
+                {%- for role in user.roles -%}
+                    <twig:Badge>{{ role|slice(5) }}</twig:Badge>
+                {%- endfor -%}
+            </twig:Form:RowField>
+
+            <twig:Form:RowField
+                href="https://maps.apple.com/?q={{ user.location.latitude }},{{ user.location.longitude }}"
+                target="_blank" label="Location">
+                {{- user.timezone.name -}}
+            </twig:Form:RowField>
         </twig:CardForm>
 
         <twig:Card:Description>

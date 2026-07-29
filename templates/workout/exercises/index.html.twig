@@ -35,26 +35,21 @@
         {%- set exercise_id = exercise.id.toString -%}
 
         <twig:CardForm class="card-exercise">
-            {%- set is_granted = is_granted('EXERCISE_EDIT', exercise) -%}
-
-            <{% if is_granted %}a{% else %}div{% endif %}
-                {% if is_granted %}href="{{ path('app_exercise_edit', {id: exercise_id}) }}"{% endif %}
-                class="form-row form-row-header-edit form-row-header-large"
-                data-general-type="{{ exercise.group.color.value }}">
-                <div class="form-label form-label-exercise">
-                    <twig:Badge>{{ exercise.group.name }}</twig:Badge>
+            <twig:Form:RowField isHeaderLarge href="{{ path('app_exercise_edit', {id: exercise_id}) }}"
+                                isGranted="{{ is_granted('EXERCISE_EDIT', exercise) }}">
+                <twig:block name="label">
+                    <twig:Badge color="{{ exercise.group.color.value }}">{{ exercise.group.name }}</twig:Badge>
                     {%- if not exercise.isActive -%}
                         <twig:Badge color="red">{{ ux_icon('lucide:eye-off') }}</twig:Badge>
                     {%- endif -%}
                     {{ exercise.name }}
-                </div>
-                <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
-            </{% if is_granted %}a{% else %}div{% endif %}>
+                </twig:block>
+            </twig:Form:RowField>
 
             {%- if exercise_progress_map[exercise_id] is defined -%}
                 {%- set exercise_map = exercise_progress_map[exercise_id] -%}
 
-                <div class="form-row form-row-exercise-progress">
+                <twig:Form:Row class="form-row-exercise-progress">
                     <div class="form-field exercise-progress-values">
                         {%- import 'workout/exercises/index.html.twig' as macro -%}
 
@@ -69,7 +64,7 @@
                         <twig:Chart name="exercise-progress" values="{{ exercise_map }}"
                                     data-days="{{ exercise_days }}" data-color="{{ exercise.group.color.value }}"/>
                     </div>
-                </div>
+                </twig:Form:Row>
             {%- endif -%}
         </twig:CardForm>
 

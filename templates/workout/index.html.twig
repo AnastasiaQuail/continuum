@@ -112,23 +112,12 @@
     {%- for workout in workouts|reverse -%}
         <div class="card-container card-container-workout card-container-collapse">
             <twig:CardForm class="card-workout" id="workout_{{ workout.id }}">
-                {%- set is_granted = is_granted('WORKOUT_EDIT', workout) -%}
-                {%- set time = workout.date.setTimezone(app.user.timezone).format('j F, H:i') -%}
-
-                <{% if is_granted %}a{% else %}div{% endif %}
-                    {% if is_granted %}href="{{ path('app_workouts_view', {id: workout.id}) }}"{% endif %}
-                    class="form-row form-row-header-edit">
-                    <div class="form-label">{{ time }}</div>
-                    <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
-                </{% if is_granted %}a{% else %}div{% endif %}>
+                <twig:Form:RowField isHeader href="{{ path('app_workouts_view', {id: workout.id}) }}"
+                                    isGranted="{{ is_granted('WORKOUT_EDIT', workout) }}"
+                                    label="{{ workout.date.setTimezone(app.user.timezone).format('j F, H:i') }}"/>
 
                 {%- if workout.workoutExercises.empty -%}
-                    <div class="form-row form-row-collection-empty">
-                        <div class="collection-empty">
-                            {{- ux_icon('lucide:frown') -}}
-                            <span>No exercises yet</span>
-                        </div>
-                    </div>
+                    <twig:Form:RowEmptyCollection message="No exercises yet"/>
                 {%- endif -%}
 
                 {%- for workout_exercise in workout.workoutExercises -%}
@@ -137,8 +126,8 @@
                     {%- set sets = workout_exercise.sets -%}
                     {%- set work_sets = sets|filter(set => not set.isWarmup) -%}
 
-                    <div class="form-row form-row-compact" data-general-type="{{ exercise.group.color.value }}">
-                        <div class="form-label">
+                    <twig:Form:RowField isCompact isLarge data-general-type="{{ exercise.group.color.value }}">
+                        <twig:block name="label">
                             <span class="form-label-name">{{ exercise.name }}</span>
 
                             <div class="form-label-legend">
@@ -157,43 +146,47 @@
                                     {%- endif -%}
                                 {%- endif -%}
                             </div>
-                        </div>
+                        </twig:block>
 
-                        <div class="form-field-large form-workout-sets">
-                            {%- if sets is empty -%}
-                                <div class="workout-set collection-empty">No reps yet</div>
-                            {%- else -%}
-                                {%- for set in sets -%}
-                                    <div class="workout-set {{ set.isWarmup ? 'set-warmup' }}">
-                                        {%- if set.weight > 0 -%}
-                                            <div class="workout-set-field set-weight">
-                                                <span>{{ set.weight }}</span>
-                                                <span>kg</span>
+                        <twig:block name="field">
+                            <div class="form-workout-sets">
+                                {%- if sets is empty -%}
+                                    <div class="workout-set collection-empty">No reps yet</div>
+                                {%- else -%}
+                                    {%- for set in sets -%}
+                                        <div class="workout-set {{ set.isWarmup ? 'set-warmup' }}">
+                                            {%- if set.weight > 0 -%}
+                                                <div class="workout-set-field set-weight">
+                                                    <span>{{ set.weight }}</span>
+                                                    <span>kg</span>
+                                                </div>
+                                            {%- endif -%}
+                                            <div class="workout-set-field set-reps">
+                                                <span>{{ set.reps }}</span>
+                                                <span>x</span>
                                             </div>
-                                        {%- endif -%}
-                                        <div class="workout-set-field set-reps">
-                                            <span>{{ set.reps }}</span>
-                                            <span>x</span>
                                         </div>
-                                    </div>
-                                {%- endfor -%}
-                            {%- endif -%}
-                        </div>
-
-                        {%- if workout_exercise.description !== '' -%}
-                            <div class="form-workout-hint">{{ workout_exercise.description }}</div>
-                        {%- endif -%}
-
-                        {%- if sets|length > 1 -%}
-                            {% set time_first = (sets|first).performedAt.timestamp %}
-                            {% set time_last = (sets|last).performedAt.timestamp %}
-                            {% set minutes = ((time_last - time_first) / 60)|round(0, 'ceil') %}
-
-                            <div class="form-text">
-                                {{ ux_icon('lucide:timer') }} {{ minutes }} min.
+                                    {%- endfor -%}
+                                {%- endif -%}
                             </div>
-                        {%- endif -%}
-                    </div>
+                        </twig:block>
+
+                        <twig:block name="footer">
+                            {%- if workout_exercise.description !== '' -%}
+                                <div class="form-workout-hint">{{ workout_exercise.description }}</div>
+                            {%- endif -%}
+
+                            {%- if sets|length > 1 -%}
+                                {% set time_first = (sets|first).performedAt.timestamp %}
+                                {% set time_last = (sets|last).performedAt.timestamp %}
+                                {% set minutes = ((time_last - time_first) / 60)|round(0, 'ceil') %}
+
+                                <div class="form-text">
+                                    {{ ux_icon('lucide:timer') }} {{ minutes }} min.
+                                </div>
+                            {%- endif -%}
+                        </twig:block>
+                    </twig:Form:RowField>
                 {%- endfor -%}
             </twig:CardForm>
 

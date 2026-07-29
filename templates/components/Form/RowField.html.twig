@@ -1,0 +1,33 @@
+{%- props isGranted = true, href = false, icon = false, isCompact = false, isLarge = false, label = false, isHeader = false, isHeaderLarge = false -%}
+
+{%- set is_link = href and isGranted -%}
+{%- set header_class = isHeader or isHeaderLarge ? ' form-row-header' ~ (isHeaderLarge ? ' form-row-header-large') -%}
+
+<{% if is_link %}a{% else %}div{% endif %}
+    {% if is_link %}href="{{ href }}"{% endif %}
+    {{ attributes.defaults({class: 'form-row' ~ (isCompact ? ' form-row-compact') ~ header_class}) }}>
+
+    {%- if icon -%}
+        <div class="form-icon {{ isLarge ? ' form-icon-large' }}">
+            {%- block icon %}{{ icon|raw }}{% endblock -%}
+        </div>
+    {%- endif -%}
+
+    <div class="form-label">
+        {%- block label -%}{{ label }}{%- endblock -%}
+    </div>
+
+    <div class="{{ isLarge ? 'form-field-large' : 'form-field' }}">
+        {%- block field -%}
+            {%- block content %}{% endblock %}
+
+            {%- if header_class -%}
+                {{- ux_icon('lucide:square-pen') -}}
+            {%- elseif is_link -%}
+                {{- ux_icon('lucide:chevron-right', {class: 'form-link-chevron'}) -}}
+            {%- endif -%}
+        {%- endblock -%}
+    </div>
+
+    {%- block footer -%}{%- endblock -%}
+</{% if is_link %}a{% else %}div{% endif %}>

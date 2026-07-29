@@ -6,7 +6,7 @@
 {% set back_path = path('app_exercises') %}
 
 {% block header_actions -%}
-    <twig:Form:ButtonExternalSubmit target="#form-exercise"/>
+    <twig:Form:ExternalSubmit target="#form-exercise"/>
 {%- endblock %}
 
 {% block main -%}
@@ -17,7 +17,7 @@
         {{- form_row(form.name, {attr: {placeholder: 'Required'}}) -}}
         {{- form_row(form.isActive) -}}
 
-        {{- form_row_submit() -}}
+        <twig:Form:Submit/>
 
         {{- form_end(form) -}}
     </twig:CardForm>

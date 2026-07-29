@@ -1,5 +1,12 @@
 {%- props action, isGranted = false, label = 'Delete' -%}
 
 <twig:CardForm>
-    {{- form_delete(action, isGranted, label) -}}
+    <form method="post"
+          action="{{ action }}"
+          onsubmit="return confirm('Delete?')">
+        <input type="hidden" name="_method" value="DELETE">
+        <twig:Form:Row class="form-row-delete">
+            <button class="btn" {% if isGranted %}type="submit" {% else %}disabled{% endif %}>{{ label }}</button>
+        </twig:Form:Row>
+    </form>
 </twig:CardForm>

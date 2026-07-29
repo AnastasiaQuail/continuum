@@ -1,0 +1,8 @@
+{%- props message -%}
+
+<twig:Form:Row {{ ...attributes.defaults({class: 'form-row-collection-empty'}) }}>
+    <div class="collection-empty">
+        {{- ux_icon('lucide:frown') -}}
+        <span>{{ message }}</span>
+    </div>
+</twig:Form:Row>
