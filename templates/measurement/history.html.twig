@@ -25,12 +25,7 @@
 
 {% block main -%}
     {%- if measurements is empty -%}
-        <section class="card">
-            <div class="collection-empty">
-                {{- ux_icon('lucide:frown') -}}
-                <span>No measurements</span>
-            </div>
-        </section>
+        <twig:CardEmptyCollection message="No measurements"/>
     {%- else -%}
         <div class="row row-sm-2">
             {{- _self.measurent_chart(_context, 'fatDeurenberg', 'Body fat (Deurenberg)', '%') -}}
@@ -67,28 +62,32 @@
         {%- endif -%}
     {%- endfor -%}
 
-    <section class="card card-measurement-history">
-        <div class="card-title card-title-controls card-title-showcase">
-            <h2>{{ name }}</h2>
+    <twig:Card class="card-measurement-history">
+        <twig:Card:Title isCompact>
+            <twig:block name="header">{{ outerScope.name }}</twig:block>
 
-            {%- if values -%}
-                {%- set result = ((values|last).value - (values|first).value)|round(1) -%}
+            <twig:block name="badge">
+                {%- if outerScope.values -%}
+                    {%- set result = ((outerScope.values|last).value - (outerScope.values|first).value)|round(1) -%}
 
-                {%- if result !== 0.0 -%}
-                    {%- if field in context.reversed_measurement_names -%}
-                        {%- set badge_type = result > 0 ? 'badge-good' : 'badge-bad' -%}
-                    {%- else -%}
-                        {%- set badge_type = result > 0 ? 'badge-bad' : 'badge-good' -%}
+                    {%- if result !== 0.0 -%}
+                        {%- if field in context.reversed_measurement_names -%}
+                            {%- set badge_type = result > 0 ? 'badge-good' : 'badge-bad' -%}
+                        {%- else -%}
+                            {%- set badge_type = result > 0 ? 'badge-bad' : 'badge-good' -%}
+                        {%- endif -%}
+
+                        <span class="badge {{ badge_type }}">
+                            <span>{{ result > 0 ? '+' ~ result : result }}</span><span>{{ outerScope.type }}</span>
+                        </span>
                     {%- endif -%}
-
-                    <span class="badge {{ badge_type }}">
-                        <span>{{ result > 0 ? '+' ~ result : result }}</span><span>{{ type }}</span>
-                    </span>
                 {%- endif -%}
+            </twig:block>
 
-                <span class="card-title-info">{{ (values|last).value }} {{ type }}</span>
-            {%- endif -%}
-        </div>
+            <twig:block name="info">
+                {%- if outerScope.values -%}{{ (outerScope.values|last).value }} {{ outerScope.type }}{%- endif -%}
+            </twig:block>
+        </twig:Card:Title>
 
         {%- if values is empty -%}
             <div class="collection-empty">No values</div>
@@ -98,5 +97,5 @@
                      data-days="{{ context.measurement_days }}" data-values="{{ values|json_encode }}"></div>
             </div>
         {%- endif -%}
-    </section>
+    </twig:Card>
 {%- endmacro %}

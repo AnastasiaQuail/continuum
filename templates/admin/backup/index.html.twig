@@ -22,7 +22,7 @@
         </div>
     {%- endif -%}
 
-    <section class="card card-backups">
+    <twig:Card class="card-backups">
         {%- for backup in backups|reverse -%}
             {%- set is_granted = is_granted('ADMIN_BACKUP_DOWNLOAD') -%}
             {%- set backup_date = backup.date.setTimezone(app.user.timezone).format('j F Y, H:i') -%}
@@ -43,5 +43,5 @@
                 <div class="backup-download">{{ ux_icon('lucide:download') }}</div>
             </{% if is_granted %}a{% else %}div{% endif %}>
         {%- endfor -%}
-    </section>
+    </twig:Card>
 {%- endblock %}

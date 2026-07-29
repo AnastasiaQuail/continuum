@@ -8,7 +8,7 @@ new Services.SidebarToggler('#sidebar-toggler');
 new Services.Sidebar().applyTo('#sidebar');
 new Services.TimezoneDetector().detect('#body-messages');
 new Services.FlashMessages().show('#body-messages');
-new Services.CalendarUpcomingEventsToggler('#calendar-upcoming-events');
+new Services.CalendarUpcomingEventsToggler('#card-calendar-upcoming-events');
 new Services.InputWrapper().apply();
 new Services.TabToggler().apply();
 new Services.EasterEggs().apply();

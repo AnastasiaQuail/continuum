@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% import 'default/_filters.html.twig' as filters %}
-
 {%- block javascripts -%}
     {{ parent() }}
     <script src="{{ asset('js/echarts.min.js') }}"></script>
@@ -69,22 +67,24 @@
 
 {% block showcase -%}
     {%- if current_date.format('m-d') === '03-08' -%}
-        <section class="card card-shine">
-            <div class="card-title">
-                <h2>International Women's Day 👩‍🔬👩‍🏫👩‍💼👩‍⚕️👩‍💻</h2>
-            </div>
+        <twig:Card class="card-shine">
+            <twig:Card:Title isCompact>
+                <twig:block name="header">International Women's Day 👩‍🔬👩‍🏫👩‍💼👩‍⚕️👩‍💻</twig:block>
+            </twig:Card:Title>
+
             <div>
                 <small>Commemorating women's fight for equality and liberation 💪</small>
             </div>
-        </section>
+        </twig:Card>
     {%- endif -%}
 
-    <section id="the-wait-card" class="card">
-        <div class="card-title card-title-showcase">
-            <h2 id="the-wait-title">The Wait</h2>
-            <div class="card-title-info">apart, still us {{ ux_icon('lucide:heart') }}</div>
-        </div>
-        <div id="the-wait-progress" class="progress-group">
+    <twig:Card id="card-the-wait">
+        <twig:Card:Title isCompact id="card-title-the-wait">
+            <twig:block name="header">The Wait</twig:block>
+            <twig:block name="info">apart, still us {{ ux_icon('lucide:heart') }}</twig:block>
+        </twig:Card:Title>
+
+        <div id="progress-the-wait" class="progress-group">
             <div class="progress" style="--progress: {{ progress.currentProgress }}%;">
                 <div class="progress-bar"></div>
             </div>
@@ -102,46 +102,47 @@
                 <strong>{{ progress.totalWeeks }}</strong> weeks have passed 💪
             </div>
         {%- endif -%}
-    </section>
+    </twig:Card>
 
     <div class="row row-md-2">
-        <section class="card">
-            <div id="love-story" class="card-title card-title-showcase card-title-controls card-title-shine">
-                <h2>Love story</h2>
-                <span class="card-title-info">{{ couple.together }}</span>
-            </div>
+        <twig:Card>
+            <twig:Card:Title isCompact class="card-title-shine" id="card-title-love-story">
+                <twig:block name="header">Love story</twig:block>
+                <twig:block name="info">{{ couple.together }}</twig:block>
+            </twig:Card:Title>
+
             <div class="card-couple">
-                {{- _self.couple_partner(couple.time, couple.weather) -}}
+                {%- import 'default/homepage.html.twig' as homepage -%}
+                {{- homepage.couple_partner(couple.time, couple.weather) -}}
                 <div class="couple-distance">
                     <div class="couple-line">
                         {{- ux_icon('lucide:chevron-left') }}{{ ux_icon('lucide:chevron-right') -}}
                     </div>
                     <span class="couple-distance-value">{{ couple.distance|round }} <small>km</small></span>
                 </div>
-                {{- _self.couple_partner(couple.partnerTime, couple.partnerWeather) -}}
+                {{- homepage.couple_partner(couple.partnerTime, couple.partnerWeather) -}}
             </div>
-        </section>
+        </twig:Card>
 
         {%- if is_granted('CALENDAR_UPCOMING_EVENTS') -%}
-            <section id="calendar-card" class="card">
-                <div class="card-title card-title-showcase card-title-controls">
-                    <h2 id="calendar-title">Calendar</h2>
-
-                    {%- if today_events is not empty -%}
-                        <div class="card-title-info card-today-events">
+            <twig:Card id="card-calendar">
+                <twig:Card:Title isCompact class="card-title-calendar-upcoming">
+                    <twig:block name="header">Calendar</twig:block>
+                    <twig:block name="info">
+                        {%- if today_events is not empty -%}
                             <div class="today-events" style="--te-count: {{ today_events|length }};">
                                 {%- for today_event in today_events -%}
                                     <div class="today-event">{{ today_event }}</div>
                                 {%- endfor -%}
                             </div>
-                        </div>
-                    {%- endif -%}
-                </div>
+                        {%- endif -%}
+                    </twig:block>
+                </twig:Card:Title>
 
                 {%- if upcoming_events is not empty -%}
                     {{- include('calendar/_upcoming_events.html.twig') -}}
                 {%- endif -%}
-            </section>
+            </twig:Card>
         {%- endif -%}
     </div>
 {%- endblock %}
@@ -149,38 +150,45 @@
 {% block main -%}
     <div class="row row-sm-2">
         {%- if is_granted('BODY_MEASUREMENT_VIEW') -%}
-            <section id="weight-change-chart" class="card">
-                <div class="card-title card-title-controls">
-                    {%- set result = 0.0 -%}
-                    {%- if chart_measurements -%}
-                        {%- set result = ((chart_measurements|last).weight - (chart_measurements|first).weight)|round(1) -%}
-                    {%- endif -%}
+            <twig:Card id="card-weight-change">
+                <twig:Card:Title id="card-title-weight-change">
+                    <twig:block name="header">Body fat</twig:block>
 
-                    <h2 id="weight-change-title">Body fat</h2>
-                    {%- if result !== 0.0 -%}
-                        <div id="weight-change-label"
-                             class="badge {{ result > 0 ? 'badge-bad' : 'badge-good' }}">
-                            <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
-                        </div>
-                    {%- endif -%}
+                    <twig:block name="badge">
+                        {%- if chart_measurements|length > 1 -%}
+                            {%- set result = ((chart_measurements|last).weight - (chart_measurements|first).weight)|round(1) -%}
 
-                    {{- filters.months('', measurement_days, path('app_homepage', {measurement: '###'}), [4, 6, 8, 10]) -}}
-                </div>
+                            {%- if result !== 0.0 -%}
+                                <div class="badge {{ result > 0 ? 'badge-bad' : 'badge-good' }}">
+                                    <span>{{ result > 0 ? '+' ~ result : result }}</span><span>kg</span>
+                                </div>
+                            {%- endif -%}
+                        {%- endif -%}
+                    </twig:block>
+
+                    <twig:block name="title_info">
+                        {%- import 'default/_filters.html.twig' as filters -%}
+                        {{- filters.months('', measurement_days, path('app_homepage', {measurement: '###'}), [4, 6, 8, 10]) -}}
+                    </twig:block>
+                </twig:Card:Title>
 
                 <div class="chart-container">
                     <div class="chart"
                          {% if chart_measurements %}data-chart="weight-change" data-days="{{ measurement_days }}"
                          data-symbols="hide" data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
                 </div>
-            </section>
+            </twig:Card>
         {%- endif -%}
 
         {%- if is_granted('WORKOUT_VIEW') -%}
-            <section id="workouts-card" class="card">
-                <div class="card-title card-title-controls">
-                    <h2 id="workouts-title">Workouts</h2>
-                    {{- filters.months('', workout_days, path('app_homepage', {workout: '###'}), [4, 6, 8]) -}}
-                </div>
+            <twig:Card id="card-workouts">
+                <twig:Card:Title id="card-title-workouts">
+                    <twig:block name="header">Workouts</twig:block>
+                    <twig:block name="title_info">
+                        {%- import 'default/_filters.html.twig' as filters -%}
+                        {{- filters.months('', workout_days, path('app_homepage', {workout: '###'}), [4, 6, 8]) -}}
+                    </twig:block>
+                </twig:Card:Title>
 
                 <div class="calendar-heatmap-workout-container">
                     <div class="calendar-heatmap-week">
@@ -216,23 +224,26 @@
                         {%- endfor -%}
                     </div>
                 </div>
-            </section>
+            </twig:Card>
         {%- endif -%}
     </div>
 
     {%- if is_granted('MOOD_REFLECTION_VIEW') -%}
-        <section id="mood-chart-card" class="card">
-            <div class="card-title card-title-controls">
-                <h2 id="mood-chart-title">Mood trend</h2>
-                {{- filters.months('', mood_reflection_days, path('app_homepage', {mood: '###'}), [4, 6, 8, 10]) -}}
-            </div>
+        <twig:Card id="card-mood-chart">
+            <twig:Card:Title id="card-title-mood-chart">
+                <twig:block name="header">Mood trend</twig:block>
+                <twig:block name="title_info">
+                    {%- import 'default/_filters.html.twig' as filters -%}
+                    {{- filters.months('', mood_reflection_days, path('app_homepage', {mood: '###'}), [4, 6, 8, 10]) -}}
+                </twig:block>
+            </twig:Card:Title>
 
             <div class="chart-container">
                 <div class="chart"
                      data-chart="mood-reflections" data-days="{{ mood_reflection_days }}"
                      data-values="{{ chart_mood_reflections|json_encode }}"></div>
             </div>
-        </section>
+        </twig:Card>
     {%- endif -%}
 {%- endblock %}
 

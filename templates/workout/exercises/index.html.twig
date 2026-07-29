@@ -32,8 +32,9 @@
 
 {% block main -%}
     {%- for exercise in exercises -%}
-        <section class="card card-form card-exercise">
-            {%- set exercise_id = exercise.id.toString -%}
+        {%- set exercise_id = exercise.id.toString -%}
+
+        <twig:CardForm class="card-exercise">
             {%- set is_granted = is_granted('EXERCISE_EDIT', exercise) -%}
 
             <{% if is_granted %}a{% else %}div{% endif %}
@@ -55,10 +56,12 @@
 
                 <div class="form-row form-row-exercise-progress">
                     <div class="form-field exercise-progress-values">
-                        {{- _self.exercise_progress_sets('From', exercise_map|first.sets) -}}
+                        {%- import 'workout/exercises/index.html.twig' as macro -%}
+
+                        {{- macro.exercise_progress_sets('From', exercise_map|first.sets) -}}
 
                         {%- if exercise_map|length > 1 -%}
-                            {{- _self.exercise_progress_sets('To', exercise_map|last.sets) -}}
+                            {{- macro.exercise_progress_sets('To', exercise_map|last.sets) -}}
                         {%- endif -%}
                     </div>
 
@@ -69,15 +72,15 @@
                     </div>
                 </div>
             {%- endif -%}
-        </section>
+        </twig:CardForm>
 
-        <div class="card-description">
+        <twig:Card:Description>
             {%- if exercise_count_map[exercise_id] -%}
                 Used in {{ exercise_count_map[exercise_id] }} workouts
             {%- else -%}
                 Not used anywhere
             {%- endif -%}
-        </div>
+        </twig:Card:Description>
     {%- endfor -%}
 {%- endblock %}
 

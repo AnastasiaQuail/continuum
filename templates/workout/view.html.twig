@@ -34,6 +34,7 @@
     {%- endif -%}
 
     {%- for row_number, workout_exercise in workout.workoutExercises -%}
+        {%- set loop = loop -%}
         {%- set exercise_id = workout_exercise.exercise.id.toString -%}
         {%- set prev_workout_exercise = prev_workout_exercises[exercise_id] is defined ? prev_workout_exercises[exercise_id] : null -%}
 
@@ -45,7 +46,7 @@
         {%- endif -%}
 
         <div class="card-container card-container-workout-exercise {{ is_collapse ? 'card-container-collapse' }}">
-            <section class="card card-form card-workout-exercise">
+            <twig:CardForm class="card-workout-exercise">
                 <div
                     class="form-row form-row-header-edit {{ workout_exercise.description !== '' ? 'description-show' }}"
                     data-general-type="{{ workout_exercise.exercise.group.color.value }}">
@@ -181,7 +182,7 @@
                     {%- endif -%}
 
                     {%- set is_autofocus = false -%}
-                    {%- if not is_autofocused and (loop.last or is_sets_empty) -%}
+                    {%- if not is_autofocused and (outerScope.loop.last or is_sets_empty) -%}
                         {%- set is_autofocused = true -%}
                         {%- set is_autofocus = true -%}
                     {%- endif -%}
@@ -218,11 +219,11 @@
                         </div>
                     </form>
                 {%- endif -%}
-            </section>
+            </twig:CardForm>
 
-            <div class="card-description card-description-workout-exercise">
+            <twig:Card:Description class="card-description-workout-exercise">
                 {%- if prev_workout_exercise?.sets is not empty -%}
-                    <div class="card-description-line">
+                    <twig:Card:DescriptionLine>
                         {{ ux_icon('lucide:circle-arrow-left') }}
                         {%- for prev_set in prev_workout_exercise.sets -%}
                             <div class="workout-exercise-set {{ prev_set.isWarmup ? 'set-warmup' }}">
@@ -232,21 +233,21 @@
                                 <span><small>x</small>{{ prev_set.reps }}</span>
                             </div>
                         {%- endfor -%}
-                    </div>
+                    </twig:Card:DescriptionLine>
                 {%- endif -%}
 
                 {%- if prev_workout_exercise.description !== '' -%}
-                    <div class="card-description-line">
+                    <twig:Card:DescriptionLine>
                         {{- ux_icon('lucide:message-circle-more') -}}
                         {{- prev_workout_exercise.description -}}
-                    </div>
+                    </twig:Card:DescriptionLine>
                 {%- endif -%}
-            </div>
+            </twig:Card:Description>
         </div>
     {%- endfor -%}
 
     {%- if is_granted('WORKOUT_EXERCISE_CREATE', workout) -%}
-        <h3>Start new exercise</h3>
+        <h2>Start new exercise</h2>
 
         {%- if workout.workoutExercises is not empty -%}
             {%- set first_group = (workout.workoutExercises|last).exercise.group -%}
@@ -254,7 +255,7 @@
             {%- set first_group = exercise_groups|first -%}
         {%- endif -%}
 
-        <section class="card card-form card-exercise-tabs" data-tabs data-general-type="{{ first_group.color.value }}">
+        <twig:CardForm class="card-exercise-tabs" data-tabs="" data-general-type="{{ first_group.color.value }}">
             <div class="form-row form-row-tabs">
                 <div class="form-row-tabs-container">
                     {%- for exercise_group in exercise_groups -%}
@@ -288,16 +289,12 @@
                     </form>
                 {%- endfor -%}
             </div>
-        </section>
+        </twig:CardForm>
     {%- endif -%}
 
     {%- if workout.workoutExercises is empty -%}
-        <section class="card card-form">
-            {{- form_delete(
-                path('app_workout_delete', {id: workout.id}),
-                is_granted('WORKOUT_DELETE', workout),
-                'Delete workout',
-            ) -}}
-        </section>
+        <twig:CardForm:Delete action="{{ path('app_workout_delete', {id: workout.id}) }}"
+                              isGranted="{{ is_granted('WORKOUT_DELETE', workout) }}"
+                              label="Delete workout"/>
     {%- endif -%}
 {%- endblock %}

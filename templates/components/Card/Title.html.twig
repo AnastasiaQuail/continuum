@@ -1,0 +1,15 @@
+{%- props isCompact = false, type = 'secondary' -%}
+
+<div {{ attributes.defaults({class: 'card-title' ~ (isCompact ? ' card-title-showcase')}) }}>
+    {%- block content -%}
+        <{% if type === 'tertiary' %}h3{% else %}h2{% endif %} class="card-title-header">
+            {% block header %}{% endblock %}
+        </{% if type === 'tertiary' %}h3{% else %}h2{% endif %}>
+
+        {%- block badge %}{% endblock -%}
+
+        {%- block title_info -%}
+            <div class="card-title-info">{%- block info %}{% endblock -%}</div>
+        {%- endblock -%}
+    {%- endblock -%}
+</div>

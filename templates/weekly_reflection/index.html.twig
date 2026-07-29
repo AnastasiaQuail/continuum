@@ -28,7 +28,7 @@
 
 {% block main -%}
     {%- for date, reflection in weekly_reflections|reverse -%}
-        <section class="card card-form card-weekly-reflections">
+        <twig:CardForm class="card-weekly-reflections">
             {%- set monday = date(date).modify('-6 days') -%}
             {%- set sunday = date(date) -%}
 
@@ -52,21 +52,23 @@
                 </div>
             {%- else -%}
                 <div class="row row-md-3">
-                    {{- _self.weekly_row(
+                    {%- import 'weekly_reflection/index.html.twig' as weekly_reflection -%}
+
+                    {{- weekly_reflection.weekly_row(
                         'green',
                         ux_icon('lucide:heart'),
                         'Joy',
                         reflection.joy,
                     ) -}}
 
-                    {{- _self.weekly_row(
+                    {{- weekly_reflection.weekly_row(
                         'yellow',
                         ux_icon('lucide:triangle-alert'),
                         'Difficulty',
                         reflection.difficulty,
                     ) -}}
 
-                    {{- _self.weekly_row(
+                    {{- weekly_reflection.weekly_row(
                         'blue',
                         ux_icon('lucide:trophy'),
                         'Achievement',
@@ -74,7 +76,7 @@
                     ) -}}
                 </div>
             {%- endif -%}
-        </section>
+        </twig:CardForm>
     {%- endfor -%}
 {%- endblock %}
 

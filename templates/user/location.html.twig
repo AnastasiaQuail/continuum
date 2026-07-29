@@ -17,7 +17,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section id="profile-location-card" class="card card-form">
+    <twig:CardForm id="profile-location-card">
         {{- form_start(form, {attr: {id: 'form-profile-location', class: 'form-submit-external'}}) -}}
 
         {{- form_row(form.latitude, {attr: {placeholder: 'Required'}}) -}}
@@ -48,5 +48,5 @@
         {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
-    </section>
+    </twig:CardForm>
 {%- endblock %}

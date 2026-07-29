@@ -16,7 +16,7 @@
 {%- endblock %}
 
 {% block showcase -%}
-    <section id="mood-chart-card" class="card card-mood-chart">
+    <twig:Card class="card-mood-chart" id="card-mood-chart">
         <div class="mood-chart" style="--chart-columns: {{ last_moods|length }};">
             {%- for last_mood in last_moods -%}
                 <div class="chart-day" data-type="{{ last_mood?.type.value }}"
@@ -25,7 +25,7 @@
                 </div>
             {%- endfor -%}
         </div>
-    </section>
+    </twig:Card>
 {%- endblock %}
 
 {% block body_actions -%}
@@ -49,7 +49,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card card-calendar-month">
+    <twig:Card class="card-calendar-month">
         <div class="calendar calendar-month">
             <article class="month">
                 {%- set current = user_date().format('Y-m-d') -%}
@@ -88,5 +88,5 @@
                 </div>
             </article>
         </div>
-    </section>
+    </twig:Card>
 {%- endblock %}

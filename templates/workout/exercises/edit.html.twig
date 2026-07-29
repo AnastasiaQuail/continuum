@@ -11,7 +11,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card card-form">
+    <twig:CardForm>
         {{- form_start(form, {attr: {id: 'form-exercise', class: 'form-submit-external'}}) -}}
 
         {{- form_row(form.group) -}}
@@ -21,15 +21,11 @@
         {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
-    </section>
+    </twig:CardForm>
 
     {%- if exercise -%}
-        <section class="card card-form">
-            {{- form_delete(
-                path('app_exercise_delete', {id: exercise.id}),
-                is_granted('EXERCISE_DELETE', exercise),
-                'Delete exercise',
-            ) -}}
-        </section>
+        <twig:CardForm:Delete action="{{ path('app_exercise_delete', {id: exercise.id}) }}"
+                              isGranted="{{ is_granted('EXERCISE_DELETE', exercise) }}"
+                              label="Delete exercise"/>
     {%- endif -%}
 {%- endblock %}
