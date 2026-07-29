@@ -69,7 +69,7 @@
 
                 <div class="header-title">
                     <h1 id="page-title-{{ body_id }}">{% block page_title %}{{ block('title') }}{% endblock %}</h1>
-                    <h2 class="header-subtitle">{% block page_subtitle %}{% endblock %}</h2>
+                    <div class="header-subtitle">{% block page_subtitle %}{% endblock %}</div>
                 </div>
 
                 {%- set header_actions_block = block('header_actions') -%}

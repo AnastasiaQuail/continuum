@@ -1,0 +1,7 @@
+{%- props type = 'line' -%}
+
+{%- set class_name = type === 'column' ? 'card-description-column' : 'card-description-line' -%}
+
+<div {{ attributes.defaults({class: class_name}) }}>
+    {%- block content %}{% endblock -%}
+</div>

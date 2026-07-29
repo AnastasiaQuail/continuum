@@ -24,7 +24,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card card-form">
+    <twig:CardForm>
         {{- form_start(form, {attr: {id: 'form-weekly-reflection', class: 'form-submit-external'}}) -}}
 
         <div class="form-row form-row-text-field" data-general-type="green">
@@ -48,5 +48,5 @@
         {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
-    </section>
+    </twig:CardForm>
 {%- endblock %}

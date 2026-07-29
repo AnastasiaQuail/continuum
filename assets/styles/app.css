@@ -609,6 +609,7 @@ textarea {
                 margin-bottom: 0;
                 font-size: clamp(var(--font-size-small), calc(var(--font-size-extra-small) + 1vw), calc(var(--font-size) * 1.2));
                 font-weight: var(--font-weight);
+                line-height: 0.8;
                 color: var(--color-secondary);
 
                 &:empty {
@@ -2820,10 +2821,7 @@ textarea {
         background-color: transparent;
 
         .card-title {
-            &:is(h2),
-            & h2,
-            &:is(h3),
-            & h3 {
+            .card-title-header {
                 color: var(--color-secondary);
             }
         }
@@ -2831,25 +2829,25 @@ textarea {
 
     .card-title {
         display: flex;
+        flex-wrap: wrap;
         margin-bottom: calc(var(--card-padding-block) / 1.25);
         gap: calc(var(--card-padding-block) / 3) calc(var(--card-padding-inline) / 2);
         align-items: center;
         justify-content: space-between;
 
-        & h2,
-        & h3 {
+        .card-title-header {
             margin-bottom: 0;
+
+            &:is(h2) {
+                --font-size-coefficient: calc(var(--h-font-size-coefficient) / 3);
+            }
+
+            &:is(h3) {
+                --font-size-coefficient: calc(var(--h-font-size-coefficient) / 5);
+            }
         }
 
-        &:is(h2), & h2 {
-            --font-size-coefficient: calc(var(--h-font-size-coefficient) / 3);
-        }
-
-        &:is(h3), & h3 {
-            --font-size-coefficient: calc(var(--h-font-size-coefficient) / 5);
-        }
-
-        &.card-title-showcase h2 {
+        &.card-title-showcase h2.card-title-header {
             --font-size-coefficient: calc(var(--h-font-size-coefficient) / 6);
         }
 
@@ -2861,43 +2859,38 @@ textarea {
             font-weight: var(--font-weight-light);
             color: var(--color-secondary);
             cursor: default;
+        }
 
-            &.card-today-events {
-                --te-gap: calc(var(--gap-block) / 8);
-                --te-height: calc(var(--font-size-extra-small) + var(--te-gap) * 2);
+        &.card-title-calendar-upcoming .card-title-info {
+            --te-gap: calc(var(--gap-block) / 8);
+            --te-height: calc(var(--font-size-extra-small) + var(--te-gap) * 2);
 
-                height: var(--te-height);
-                align-items: normal;
-                overflow: clip;
+            height: var(--te-height);
+            align-items: normal;
+            overflow: clip;
 
-                & > .today-events {
-                    text-align: right;
-                    transform: translateY(calc(-1 * var(--te-height) * var(--te-counter)));
-                    animation: te_slider calc(var(--te-count) * 2s + 1s) linear infinite;
+            & > .today-events {
+                text-align: right;
+                transform: translateY(calc(-1 * var(--te-height) * var(--te-counter)));
+                animation: te_slider calc(var(--te-count) * 2s + 1s) linear infinite;
 
-                    .today-event {
-                        padding-block: var(--te-gap);
-                    }
+                .today-event {
+                    padding-block: var(--te-gap);
                 }
             }
         }
 
-        &.card-title-controls {
-            flex-wrap: wrap;
-            margin-bottom: var(--card-padding-block);
+        & > .badge {
+            column-gap: calc(var(--gap-inline) / 6);
+            margin-right: auto;
+            align-items: baseline;
 
-            & > .badge {
-                column-gap: calc(var(--gap-inline) / 6);
-                margin-right: auto;
-                align-items: baseline;
+            @media (width >= 992px) {
+                font-size: var(--font-size-medium);
+            }
 
-                @media (width >= 992px) {
-                    font-size: var(--font-size-medium);
-                }
-
-                & > span:last-child {
-                    font-size: .875em;
-                }
+            & > span:last-child {
+                font-size: .875em;
             }
         }
 
@@ -2943,18 +2936,6 @@ textarea {
         margin-block: calc(var(--card-padding-block) / 1.5);
         border: 0;
         border-bottom: var(--border-width) solid var(--border-color-divider);
-    }
-
-    &.card-report {
-        .card-title {
-            &.card-title-controls:not(:is(:last-child)) {
-                margin-bottom: calc(var(--card-padding-block) / 1.5);
-            }
-
-            .card-title-progress {
-                flex: 1;
-            }
-        }
     }
 
     &.card-form {
@@ -3106,6 +3087,13 @@ textarea {
             gap: calc(var(--gap-block) / 6) calc(var(--container-gap-inline) / 4);
         }
     }
+
+    .card-description-line {
+        display: flex;
+        gap: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 3);
+        flex-wrap: wrap;
+        align-items: center;
+    }
 }
 
 @keyframes shine {
@@ -3119,6 +3107,7 @@ textarea {
 
 .collection-empty {
     display: flex;
+    flex-direction: row;
     column-gap: calc(var(--gap-inline) / 2);
     color: var(--color-quaternary);
     user-select: none;
@@ -3222,19 +3211,6 @@ textarea {
         white-space: nowrap;
         user-select: none;
     }
-
-    .card-title-progress & {
-        width: 90%;
-        margin-left: auto;
-
-        @media (width >= 576px) {
-            width: 80%;
-        }
-
-        .progress-text {
-            font-size: var(--font-size-small);
-        }
-    }
 }
 
 .progress-description {
@@ -3243,20 +3219,20 @@ textarea {
     color: var(--color-secondary);
 }
 
-#the-wait-card {
-    view-transition-name: the-wait-card;
+#card-the-wait {
+    view-transition-name: card-the-wait;
 }
 
-#the-wait-title {
-    view-transition-name: the-wait-title;
+#card-title-the-wait .card-title-header {
+    view-transition-name: title-the-wait;
 }
 
-#the-wait-progress {
-    view-transition-name: the-wait-progress;
+#progress-the-wait {
+    view-transition-name: progress-the-wait;
 }
 
-#love-story {
-    view-transition-name: love-story;
+#card-title-love-story .card-title-header {
+    view-transition-name: title-love-story;
 }
 
 .card-couple {
@@ -3391,14 +3367,14 @@ textarea {
     }
 }
 
-#calendar-card,
-#calendar-upcoming-events {
-    view-transition-name: calendar-card;
+#card-calendar,
+#card-calendar-upcoming-events {
+    view-transition-name: card-calendar;
 }
 
-#calendar-title,
-#page-title-calendar {
-    view-transition-name: calendar-title;
+#page-title-calendar,
+#card-calendar .card-title-header {
+    view-transition-name: title-calendar;
 }
 
 .calendar-heatmap-workout-container {
@@ -4071,13 +4047,13 @@ textarea {
     }
 }
 
-#mood-chart-card {
-    view-transition-name: mood-chart-card;
+#card-mood-chart {
+    view-transition-name: card-mood-chart;
 }
 
-#mood-chart-title,
-#page-title-mood-reflection {
-    view-transition-name: mood-chart-title;
+#page-title-mood-reflection,
+#card-title-mood-chart .card-title-header {
+    view-transition-name: title-mood-chart;
 }
 
 .card-mood-chart {
@@ -4155,6 +4131,29 @@ textarea {
     }
 }
 
+.card-report {
+    .card-title:has(+ hr) {
+        margin-bottom: 0;
+    }
+
+    .card-title-info:has(> .progress-group) {
+        flex: 1;
+
+        .progress-group {
+            width: 90%;
+            margin-left: auto;
+
+            @media (width >= 576px) {
+                width: 80%;
+            }
+
+            .progress-text {
+                font-size: var(--font-size-small);
+            }
+        }
+    }
+}
+
 .report-mood-reflection-chart {
     --mrd-size: calc(var(--font-size) / 3);
     --mrd-translate: calc(var(--mrd-size) / 2);
@@ -4212,9 +4211,9 @@ textarea {
     }
 }
 
-#joy-of-weeks-title,
-#page-title-weekly-reflection {
-    view-transition-name: weekly-reflection-title;
+#page-title-weekly-reflection,
+#card-title-weekly-reflection .card-title-header {
+    view-transition-name: title-weekly-reflection;
 }
 
 .card-weekly-reflections {
@@ -4320,25 +4319,25 @@ textarea {
     }
 }
 
-#weight-change-chart {
-    view-transition-name: weight-change-chart;
+#card-weight-change {
+    view-transition-name: card-weight-change;
 }
 
-#weight-change-title {
-    view-transition-name: weight-change-title;
+#card-title-weight-change .card-title-header {
+    view-transition-name: card-title-header-weight-change;
 }
 
-#weight-change-label {
-    view-transition-name: weight-change-label;
+#card-title-weight-change .badge {
+    view-transition-name: card-title-badge-weight-change;
 }
 
-#weight-change-difference {
-    view-transition-name: weight-change-difference;
+#card-title-weight-change .card-title-info {
+    view-transition-name: card-title-info-weight-change;
 }
 
 .card-weight-change {
     .card-title {
-        h2 {
+        .card-title-header {
             font-size: var(--font-size);
         }
 
@@ -4357,13 +4356,11 @@ textarea {
             margin-bottom: 0 !important;
             align-items: flex-start;
 
-            &.card-title-controls {
-                .badge {
-                    padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
-                    font-size: calc(var(--font-size) * 2);
-                    font-weight: var(--font-weight-bold-extra);
-                    border-radius: var(--border-radius-internal);
-                }
+            .badge {
+                padding: calc(var(--gap-block) / 2) calc(var(--gap-inline) / 1.5);
+                font-size: calc(var(--font-size) * 2);
+                font-weight: var(--font-weight-bold-extra);
+                border-radius: var(--border-radius-internal);
             }
         }
 
@@ -4574,13 +4571,13 @@ form {
     }
 }
 
-#workouts-card {
-    view-transition-name: workouts-card;
+#card-workouts {
+    view-transition-name: card-workouts;
 }
 
-#workouts-title,
-#page-title-workouts {
-    view-transition-name: workouts-title;
+#page-title-workouts,
+#card-title-workouts .card-title-header {
+    view-transition-name: title-workouts;
 }
 
 .card-workout {
@@ -5088,44 +5085,37 @@ form {
 }
 
 .card-description-workout-exercise {
-    .card-description-line {
+    .workout-exercise-set {
         display: flex;
-        gap: calc(var(--gap-block) / 6) calc(var(--gap-inline) / 3);
-        flex-wrap: wrap;
-        align-items: center;
+        column-gap: calc(var(--gap-inline) / 3);
+        padding: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        border: var(--border-width) solid color-mix(in oklch, var(--color-quaternary) 50%, transparent);
+        border-radius: var(--border-radius-badge);
 
-        .workout-exercise-set {
+        &.set-warmup {
+            color: var(--color-quaternary);
+            border-style: dashed;
+        }
+
+        span {
             display: flex;
-            column-gap: calc(var(--gap-inline) / 3);
-            padding: calc(var(--gap-block) / 8) calc(var(--gap-inline) / 4);
-            flex-wrap: nowrap;
-            white-space: nowrap;
-            border: var(--border-width) solid color-mix(in oklch, var(--color-quaternary) 50%, transparent);
-            border-radius: var(--border-radius-badge);
+            gap: calc(var(--gap-inline) / 8);
+            align-items: flex-start;
 
-            &.set-warmup {
+            small {
+                font-size: calc(var(--font-size-extra-small) * 0.5);
                 color: var(--color-quaternary);
-                border-style: dashed;
             }
+        }
 
-            span {
-                display: flex;
-                gap: calc(var(--gap-inline) / 8);
-                align-items: flex-start;
+        & > span:last-child {
+            align-items: baseline;
 
-                small {
-                    font-size: calc(var(--font-size-extra-small) * 0.5);
-                    color: var(--color-quaternary);
-                }
-            }
-
-            & > span:last-child {
-                align-items: baseline;
-
-                small {
-                    font-size: var(--font-size-extra-small);
-                    font-weight: var(--font-weight-light);
-                }
+            small {
+                font-size: var(--font-size-extra-small);
+                font-weight: var(--font-weight-light);
             }
         }
     }

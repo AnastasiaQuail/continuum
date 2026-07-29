@@ -1,0 +1,5 @@
+{%- props isPlain = false -%}
+
+<twig:Card {{ ...attributes.defaults({class: 'card-form' ~ (isPlain ? ' card-form-plain')}) }}>
+    {{- block(outerBlocks.content) -}}
+</twig:Card>

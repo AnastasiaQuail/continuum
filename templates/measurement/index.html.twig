@@ -53,18 +53,19 @@
 {%- endblock %}
 
 {% block main -%}
-    <section id="weight-change-chart" class="card card-transparent card-weight-change">
-        <div class="card-title card-title-controls">
-            <h2 id="weight-change-title">Weight</h2>
+    <twig:Card isTransparent class="card-weight-change" id="card-weight-change">
+        <twig:Card:Title id="card-title-weight-change">
+            <twig:block name="header">Weight</twig:block>
 
-            {%- set change = offset_measurement.offset -%}
-            <div id="weight-change-label"
-                 class="badge {{ change > 0 ? 'badge-bad' }}{{ change < 0 ? 'badge-good' }}">
-                <span>{{ change > 0 ? '+' ~ change : change }}</span>
-                <span>kg</span>
-            </div>
+            <twig:block name="badge">
+                {%- set change = offset_measurement.offset -%}
+                <div class="badge {{ change > 0 ? 'badge-bad' }}{{ change < 0 ? 'badge-good' }}">
+                    <span>{{ change > 0 ? '+' ~ change : change }}</span>
+                    <span>kg</span>
+                </div>
+            </twig:block>
 
-            <div id="weight-change-difference" class="card-title-info">
+            <twig:block name="info">
                 <span>{{ ux_icon('lucide:trending-up-down') }}</span>
                 <span>
                     {%- if offset_measurement.min !== offset_measurement.max -%}
@@ -72,27 +73,24 @@
                     {%- endif -%}
                     {{- offset_measurement.max ~ ' kg' -}}
                 </span>
-            </div>
-        </div>
+            </twig:block>
+        </twig:Card:Title>
 
         <div class="chart-container">
             <div class="chart" {% if chart_measurements %}data-chart="weight-change"
                  data-date="{{ month.format('Y-m-d') }}"
                  data-values="{{ chart_measurements|json_encode }}"{% endif %}></div>
         </div>
-    </section>
+    </twig:Card>
 
     {%- if measurements is empty -%}
-        <section class="card collection-empty">
-            {{- ux_icon('lucide:frown') -}}
-            <span>No measurements for this month yet</span>
-        </section>
+        <twig:CardEmptyCollection message="No measurements for this month yet"/>
     {%- endif -%}
 
     {%- for measurement in measurements|reverse -%}
         {%- set progress = progresses[measurement.id] -%}
 
-        <section class="card card-form card-measurements">
+        <twig:CardForm class="card-measurements">
             {%- set time = measurement.datetime.setTimezone(app.user.timezone).format('j F, H:i') -%}
             {%- set is_granted = is_granted('BODY_MEASUREMENT_EDIT', measurement) -%}
 
@@ -103,7 +101,9 @@
                 <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
             </{% if is_granted %}a{% else %}div{% endif %}>
 
-            {{- _self.measurent_row(
+            {%- import 'measurement/index.html.twig' as macro -%}
+
+            {{- macro.measurent_row(
                 'Body fat',
                 [
                     {
@@ -121,7 +121,7 @@
                 ],
                 'orange',
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Weight',
                 {
                     value: measurement.weight,
@@ -129,63 +129,63 @@
                     progress: progress.weight,
                 },
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Neck',
                 {
                     value: measurement.neck,
                     progress: progress.neck,
                 },
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Waist',
                 {
                     value: measurement.waist,
                     progress: progress.waist,
                 },
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Chest',
                 {
                     value: measurement.chest,
                     progress: progress.chest,
                 },
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Shoulders',
                 {
                     value: measurement.shoulders,
                     progress: progress.shoulders,
                 },
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Biceps',
                 {
                     value: measurement.flexedBiceps,
                     progress: progress.flexedBiceps,
                 },
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Hips',
                 {
                     value: measurement.hips,
                     progress: progress.hips,
                 },
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Thigh',
                 {
                     value: measurement.thigh,
                     progress: progress.thigh,
                 },
             ) -}}
-            {{- _self.measurent_row(
+            {{- macro.measurent_row(
                 'Calf',
                 {
                     value: measurement.calf,
                     progress: progress.calf,
                 },
             ) -}}
-        </section>
+        </twig:CardForm>
     {%- endfor -%}
 {%- endblock %}
 

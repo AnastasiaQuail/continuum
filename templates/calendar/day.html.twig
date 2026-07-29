@@ -40,7 +40,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card">
+    <twig:Card>
         {%- for event in events -%}
             <div class="calendar-event" data-general-type="{{ event.type.value }}">
                 <div class="calendar-event-body">
@@ -69,11 +69,11 @@
         {%- for holiday_event in holiday_events -%}
             <div class="calendar-event calendar-holiday-event">{{ ux_icon('lucide:balloon') }} {{ holiday_event }}</div>
         {%- endfor -%}
-    </section>
+    </twig:Card>
 
-    <h2 class="card-title">Add new event</h2>
+    <h2>Add new event</h2>
 
-    <section class="card card-form">
+    <twig:CardForm>
         {{- form_start(form, {attr: {id: 'form-calendar', class: 'form-submit-external'}}) -}}
 
         {{- form_row(form.title, {attr: {placeholder: 'Required'}}) -}}
@@ -104,5 +104,5 @@
         {{- form_row_submit('Create event') -}}
 
         {{- form_end(form) -}}
-    </section>
+    </twig:CardForm>
 {%- endblock %}

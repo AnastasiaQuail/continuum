@@ -44,6 +44,7 @@
         "symfony/twig-bundle": "^8.1.0",
         "symfony/uid": "^8.1.0",
         "symfony/ux-icons": "^3.2.0",
+        "symfony/ux-twig-component": "^3.3",
         "symfony/validator": "^8.1.1",
         "symfony/yaml": "^8.1.1",
         "twig/twig": "^3.27.1"

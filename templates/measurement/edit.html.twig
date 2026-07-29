@@ -16,7 +16,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card card-form">
+    <twig:CardForm>
         {{- form_start(form, {attr: {id: 'form-measurement', class: 'form-submit-external'}}) -}}
 
         {{- form_row(form.datetime) -}}
@@ -45,15 +45,11 @@
         {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
-    </section>
+    </twig:CardForm>
 
     {%- if measurement -%}
-        <section class="card card-form">
-            {{- form_delete(
-                path('app_measurement_delete', {id: measurement.id}),
-                is_granted('BODY_MEASUREMENT_DELETE', measurement),
-                'Delete measurement',
-            ) -}}
-        </section>
+        <twig:CardForm:Delete action="{{ path('app_measurement_delete', {id: measurement.id}) }}"
+                              isGranted="{{ is_granted('BODY_MEASUREMENT_DELETE', measurement) }}"
+                              label="Delete measurement"/>
     {%- endif -%}
 {%- endblock %}

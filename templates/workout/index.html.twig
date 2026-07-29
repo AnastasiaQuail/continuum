@@ -46,7 +46,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card card-transparent card-calendar-month">
+    <twig:Card isTransparent class="card-calendar-month">
         <div class="calendar calendar-month calendar-month-short calendar-badges">
             <article class="month">
                 {%- set current = current_date.format('Y-m-d') -%}
@@ -93,13 +93,10 @@
                 </div>
             </article>
         </div>
-    </section>
+    </twig:Card>
 
     {%- if workouts is empty -%}
-        <div class="card collection-empty">
-            {{- ux_icon('lucide:frown') -}}
-            <span>No workouts this month yet</span>
-        </div>
+        <twig:CardEmptyCollection message="No workouts this month yet"/>
     {%- elseif month.format('Y-m') === current_date.format('Y-m') -%}
         {%- set last_workout_date = (workouts|last).date.setTimezone(app.user.timezone) -%}
         {%- set days = current_date.format('d') - last_workout_date.format('d') -%}
@@ -114,7 +111,7 @@
 
     {%- for workout in workouts|reverse -%}
         <div class="card-container card-container-workout card-container-collapse">
-            <section class="card card-form card-workout" id="workout_{{ workout.id }}">
+            <twig:CardForm class="card-workout" id="workout_{{ workout.id }}">
                 {%- set is_granted = is_granted('WORKOUT_EDIT', workout) -%}
                 {%- set time = workout.date.setTimezone(app.user.timezone).format('j F, H:i') -%}
 
@@ -198,7 +195,7 @@
                         {%- endif -%}
                     </div>
                 {%- endfor -%}
-            </section>
+            </twig:CardForm>
 
             {%- set start = 0 -%}
             {%- set end = 0 -%}
@@ -219,19 +216,19 @@
             {%- set minutes = total_minutes - hours * 60 -%}
 
             {%- if workout.workoutExercises is not empty -%}
-                <div class="card-description card-description-workout">
-                    <div class="card-description-column">
+                <twig:Card:Description class="card-description-workout">
+                    <twig:Card:DescriptionLine type="column">
                         {%- if total_minutes -%}
                             {% if hours > 0 %}{{ hours }} {{ hours > 1 ? 'hours' : 'hour' }}{% endif %}
                             {{ minutes > 9 ? minutes : '0' ~ minutes }} minutes
                         {%- endif -%}
-                    </div>
-                    <div class="card-description-column card-description-toggler"
-                         onclick="this.closest('.card-container').classList.toggle('card-container-collapse'); return false;">
+                    </twig:Card:DescriptionLine>
+                    <twig:Card:DescriptionLine type="column" class="card-description-toggler"
+                                               onclick="this.closest('.card-container').classList.toggle('card-container-collapse'); return false;">
                         <span class="toggler-unfold">Show details {{ ux_icon('lucide:unfold-vertical') }}</span>
                         <span class="toggler-fold">Hide details {{ ux_icon('lucide:fold-vertical') }}</span>
-                    </div>
-                </div>
+                    </twig:Card:DescriptionLine>
+                </twig:Card:Description>
             {%- endif -%}
         </div>
     {%- endfor -%}

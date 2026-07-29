@@ -12,7 +12,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card card-form">
+    <twig:CardForm>
         {{- form_start(form, {attr: {id: 'form-user-edit', class: 'form-submit-external'}}) -}}
 
         <div class="form-row">
@@ -26,5 +26,5 @@
         {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
-    </section>
+    </twig:CardForm>
 {%- endblock %}

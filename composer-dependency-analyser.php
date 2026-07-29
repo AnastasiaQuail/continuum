@@ -18,6 +18,7 @@ return new Configuration()
             'symfony/runtime',
             'symfony/twig-bundle',
             'symfony/ux-icons',
+            'symfony/ux-twig-component',
             'symfony/yaml',
         ],
         [ErrorType::UNUSED_DEPENDENCY]

@@ -1,0 +1,5 @@
+{%- props isTransparent = false -%}
+
+<section {{ attributes.defaults({class: 'card' ~ (isTransparent ? ' card-transparent')}) }}>
+    {%- block content %}{% endblock -%}
+</section>

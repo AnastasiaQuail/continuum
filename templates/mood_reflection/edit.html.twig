@@ -31,7 +31,7 @@
 {%- endblock %}
 
 {% block main -%}
-    <section class="card card-form">
+    <twig:CardForm>
         {{- form_start(form, {attr: {id: 'form-mood-reflection', class: 'form-submit-external'}}) -}}
 
         {{- form_row(form.type, {
@@ -48,5 +48,5 @@
         {{- form_row_submit() -}}
 
         {{- form_end(form) -}}
-    </section>
+    </twig:CardForm>
 {%- endblock %}

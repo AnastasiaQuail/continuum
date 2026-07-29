@@ -14,6 +14,7 @@ use Symfony\Bundle\SecurityBundle\SecurityBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Bundle\WebProfilerBundle\WebProfilerBundle;
 use Symfony\UX\Icons\UXIconsBundle;
+use Symfony\UX\TwigComponent\TwigComponentBundle;
 
 return [
     FrameworkBundle::class => ['all' => true],
@@ -28,4 +29,5 @@ return [
     DebugBundle::class => ['dev' => true],
     MakerBundle::class => ['dev' => true],
     WebProfilerBundle::class => ['dev' => true, 'test' => true],
+    TwigComponentBundle::class => ['all' => true],
 ];

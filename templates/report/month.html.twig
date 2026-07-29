@@ -31,16 +31,19 @@
     {%- set couple_together_info = couple_together ~ '' -%}
 
     {%- if progress_offset > 0 or couple_together_info !== '' -%}
-        <section id="the-wait-card" class="card card-report">
+        <twig:Card class="card-report" id="card-the-wait">
             {%- if progress_offset > 0 -%}
-                <div class="card-title card-title-controls">
-                    <h3 id="the-wait-title">The Wait</h3>
-                    <div class="badge badge-good">
-                        <span>+{{ progress_offset }}</span><span>%</span>
-                    </div>
+                <twig:Card:Title type="tertiary" id="card-title-the-wait">
+                    <twig:block name="header">The Wait</twig:block>
 
-                    <div class="card-title-info card-title-progress">
-                        <div id="the-wait-progress" class="progress-group">
+                    <twig:block name="badge">
+                        <div class="badge badge-good">
+                            <span>+{{ progress_offset }}</span><span>%</span>
+                        </div>
+                    </twig:block>
+
+                    <twig:block name="info">
+                        <div id="progress-the-wait" class="progress-group">
                             <div class="progress progress-offset">
                                 <div class="progress-bar"
                                      style="--progress: {{ progress.startProgress.currentProgress }}%;"></div>
@@ -48,42 +51,43 @@
                             </div>
                             <div class="progress-text">{{ progress.endProgress.currentProgress }}%</div>
                         </div>
-                    </div>
-                </div>
+                    </twig:block>
+                </twig:Card:Title>
 
                 <hr>
             {%- endif -%}
 
             {%- if couple_together_info !== '' -%}
-                <div id="love-story" class="card-title card-title-controls">
-                    <h3>Love story</h3>
-                    <div class="badge badge-good">
-                        <span>+{{ couple_progress_days }}</span><span>days</span>
-                    </div>
-                    <div class="card-title-info">{{ couple_together_info }}</div>
-                </div>
+                <twig:Card:Title type="tertiary" id="card-title-love-story">
+                    <twig:block name="header">Love story</twig:block>
+
+                    <twig:block name="badge">
+                        <div class="badge badge-good">
+                            <span>+{{ couple_progress_days }}</span><span>days</span>
+                        </div>
+                    </twig:block>
+
+                    <twig:block name="info">{{ couple_together_info }}</twig:block>
+                </twig:Card:Title>
             {%- endif -%}
-        </section>
+        </twig:Card>
     {%- else -%}
-        <section class="card collection-empty">
-            {{- ux_icon('lucide:heart') -}}
-            <span>The love story has not yet begun</span>
-        </section>
+        <twig:CardEmptyCollection message="The love story has not yet begun"/>
     {%- endif -%}
 
     {%- if (calendar_events is not empty) and is_granted('CALENDAR_REPORT_VIEW') -%}
-        <section id="calendar-card" class="card card-report">
-            <div class="card-title card-title-controls">
-                <h3 id="calendar-title">Calendar</h3>
-                <div class="card-title-info">
+        <twig:Card class="card-report" id="card-calendar">
+            <twig:Card:Title type="tertiary">
+                <twig:block name="header">Calendar</twig:block>
+                <twig:block name="info">
                     {%- set events_count = 0 -%}
                     {%- for calendar_event in calendar_events -%}
                         {%- set events_count = events_count + calendar_event.count -%}
                     {%- endfor -%}
 
                     {{- events_count ~ (events_count > 1 ? ' events' : ' event') -}}
-                </div>
-            </div>
+                </twig:block>
+            </twig:Card:Title>
 
             <div class="upcoming-events-body report-upcoming-events">
                 {%- for calendar_event in calendar_events -%}
@@ -95,7 +99,7 @@
                     </div>
                 {%- endfor -%}
             </div>
-        </section>
+        </twig:Card>
     {%- endif -%}
 
     {%- set is_mood_reflection_granted = (mood_reflections is not empty) and is_granted('MOOD_REFLECTION_REPORT_VIEW') -%}
@@ -104,14 +108,13 @@
     {%- if is_mood_reflection_granted or is_weekly_reflection_granted -%}
         <h2>Reflection</h2>
 
-        <section id="mood-chart-card" class="card card-report">
+        <twig:Card class="card-report" id="card-mood-chart">
             {%- if is_mood_reflection_granted -%}
                 {%- set total_days = month.format('t') -%}
 
-                <div class="card-title card-title-controls">
-                    <h3 id="mood-chart-title">Mood trend</h3>
-
-                    <div class="card-title-info">
+                <twig:Card:Title type="tertiary" id="card-title-mood-chart">
+                    <twig:block name="header">Mood trend</twig:block>
+                    <twig:block name="info">
                         <div class="report-mood-reflection-chart">
                             {%- for day_number in 1..total_days -%}
                                 {%- set day = month.format('Y-m-') ~ (day_number < 10 ? '0') ~ day_number -%}
@@ -126,8 +129,8 @@
                                 {%- endif -%}
                             {%- endfor -%}
                         </div>
-                    </div>
-                </div>
+                    </twig:block>
+                </twig:Card:Title>
 
                 {%- set okay_days = 0 -%}
                 {%- set okay_color = '' -%}
@@ -178,9 +181,9 @@
                     <hr>
                 {%- endif -%}
 
-                <div class="card-title card-title-controls">
-                    <h3 id="joy-of-weeks-title">Joy of weeks</h3>
-                </div>
+                <twig:Card:Title type="tertiary" id="card-title-weekly-reflection">
+                    <twig:block name="header">Joy of weeks</twig:block>
+                </twig:Card:Title>
 
                 <div class="report-weekly-reflections">
                     {%- for weekly_reflection in weekly_reflections -%}
@@ -194,7 +197,7 @@
                     {%- endfor -%}
                 </div>
             {%- endif -%}
-        </section>
+        </twig:Card>
     {%- endif -%}
 
     {%- set weight_change = offset_measurement.offset -%}
@@ -205,23 +208,25 @@
     {%- if is_weight_change_granted or is_workout_granted -%}
         <h2>Health</h2>
 
-        <section id="workouts-card" class="card card-report">
+        <twig:Card class="card-report" id="card-workouts">
             {%- if is_weight_change_granted -%}
-                <div class="card-title card-title-controls">
-                    <h3 id="weight-change-title">Weight</h3>
-                    <div id="weight-change-label"
-                         class="badge {{ weight_change > 0 ? 'badge-bad' : 'badge-good' }}">
-                        <span>{{ weight_change > 0 ? '+' ~ weight_change : weight_change }}</span>
-                        <span>kg</span>
-                    </div>
+                <twig:Card:Title type="tertiary" id="card-title-weight-change">
+                    <twig:block name="header">Weight</twig:block>
 
-                    {%- if offset_measurement.min !== offset_measurement.max -%}
-                        <div id="weight-change-difference" class="card-title-info">
+                    <twig:block name="badge">
+                        <div class="badge {{ weight_change > 0 ? 'badge-bad' : 'badge-good' }}">
+                            <span>{{ weight_change > 0 ? '+' ~ weight_change : weight_change }}</span>
+                            <span>kg</span>
+                        </div>
+                    </twig:block>
+
+                    <twig:block name="info">
+                        {%- if offset_measurement.min !== offset_measurement.max -%}
                             <span>{{ ux_icon('lucide:trending-up-down') }}</span>
                             <span>min {{ offset_measurement.min }}, max {{ offset_measurement.max }} kg</span>
-                        </div>
-                    {%- endif -%}
-                </div>
+                        {%- endif -%}
+                    </twig:block>
+                </twig:Card:Title>
             {%- endif -%}
 
             {%- if is_workout_granted -%}
@@ -229,14 +234,20 @@
                     <hr>
                 {%- endif -%}
 
-                <div class="card-title card-title-controls">
-                    <h3 id="workouts-title">Workouts</h3>
-                    <div class="badge badge-good">
-                        <span>+{{ workout_report.count }}</span>
-                        <span>{{ workout_report.count > 1 ? 'workouts' : 'workout' }}</span>
-                    </div>
-                    <div class="card-title-info">{{ (workout_report.duration / 3600)|round ~ '+ hours' }}</div>
-                </div>
+                <twig:Card:Title type="tertiary" id="card-title-workouts">
+                    <twig:block name="header">Workouts</twig:block>
+
+                    <twig:block name="badge">
+                        <div class="badge badge-good">
+                            <span>+{{ workout_report.count }}</span>
+                            <span>{{ workout_report.count > 1 ? 'workouts' : 'workout' }}</span>
+                        </div>
+                    </twig:block>
+
+                    <twig:block name="info">
+                        {{- (workout_report.duration / 3600)|round ~ '+ hours' -}}
+                    </twig:block>
+                </twig:Card:Title>
 
                 <div class="report-workouts">
                     {%- for workout_progress in workout_report.progresses -%}
@@ -256,6 +267,6 @@
                     {%- endfor -%}
                 </div>
             {%- endif -%}
-        </section>
+        </twig:Card>
     {%- endif -%}
 {%- endblock %}

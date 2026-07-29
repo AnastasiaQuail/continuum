@@ -20,9 +20,19 @@ return new Config()
     ->setRuleset(
         new Ruleset()
             ->addStandard(new TwigCsFixer())
-            ->addRule(new DirectoryNameRule(baseDirectory: 'templates', ignoredSubDirectories: ['bundles']))
-            ->addRule(new FileExtensionRule())
             ->addRule(
-                new FileNameRule(baseDirectory: 'templates', ignoredSubDirectories: ['bundles'], optionalPrefix: '_')
+                new DirectoryNameRule(baseDirectory: 'templates', ignoredSubDirectories: ['bundles', 'components'])
             )
+            ->addRule(
+                new DirectoryNameRule(case: DirectoryNameRule::PASCAL_CASE, baseDirectory: 'templates/components')
+            )
+            ->addRule(
+                new FileNameRule(
+                    baseDirectory: 'templates',
+                    ignoredSubDirectories: ['bundles', 'components'],
+                    optionalPrefix: '_',
+                )
+            )
+            ->addRule(new FileNameRule(case: DirectoryNameRule::PASCAL_CASE, baseDirectory: 'templates/components'))
+            ->addRule(new FileExtensionRule())
     );

@@ -4,50 +4,60 @@
 {% block body_id %}profile{% endblock %}
 
 {% block main -%}
-    <section id="profile-card" class="card card-form card-form-plain">
+    <twig:CardForm isPlain id="profile-card">
+        {%- import 'user/profile.html.twig' as profile -%}
+
         {%- set status = app.user.status -%}
-        {{- _self.form_row_plain(
+        {{- profile.form_row_plain(
             ux_icon('lucide:user'),
             'Status',
             '<span class="badge" data-general-type="' ~ status.color.value ~ '">' ~ status.name ~ '</span>',
         ) -}}
 
-        {{- _self.form_row_plain(
+        {{- profile.form_row_plain(
             ux_icon('lucide:mail'),
             'Email',
             app.user.userIdentifier|email_secure,
         ) -}}
 
-        {{- _self.form_row_plain(
+        {{- profile.form_row_plain(
             ux_icon('lucide:key-round'),
             'Password',
             '**********',
             path('app_profile_password'),
         ) -}}
-    </section>
+    </twig:CardForm>
 
     <h2>Geoposition</h2>
 
-    <section id="profile-location-card" class="card card-form card-form-plain">
-        {{- _self.form_row_plain(
+    <twig:CardForm isPlain id="profile-location-card">
+        {%- import 'user/profile.html.twig' as profile -%}
+
+        {{- profile.form_row_plain(
             ux_icon('lucide:clock'),
             'Timezone',
             app.user.timezone.name,
         ) -}}
 
-        {{- _self.form_row_plain(
+        {{- profile.form_row_plain(
             ux_icon('lucide:map-pin'),
             'Location',
             app.user.location.latitude ~ ' : ' ~ app.user.location.longitude,
             path('app_profile_location'),
         ) -}}
-    </section>
+    </twig:CardForm>
 
     <div>
-        <div class="card-description">
-            <div>Profile updated: {{ app.user.updatedAt.setTimezone(app.user.timezone).format('j F Y, H:i') }}</div>
-            <div>Last online: {{ app.user.lastVisitedAt.setTimezone(app.user.timezone).format('j F Y, H:i') }}</div>
-        </div>
+        <twig:Card:Description>
+            <twig:Card:DescriptionLine>
+                <span>Profile updated:</span>
+                <span>{{ app.user.updatedAt.setTimezone(app.user.timezone).format('j F Y, H:i') }}</span>
+            </twig:Card:DescriptionLine>
+            <twig:Card:DescriptionLine>
+                <span>Last online:</span>
+                <span>{{ app.user.lastVisitedAt.setTimezone(app.user.timezone).format('j F Y, H:i') }}</span>
+            </twig:Card:DescriptionLine>
+        </twig:Card:Description>
     </div>
 {%- endblock %}
 
