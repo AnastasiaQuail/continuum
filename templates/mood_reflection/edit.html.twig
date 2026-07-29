@@ -10,8 +10,7 @@
 {% set back_path = path('app_mood_reflections', {month: day.format('Y-m')}) %}
 
 {% block header_actions -%}
-    <button class="btn btn-glass btn-glass-primary"
-            data-form-submit="#form-mood-reflection">{{ ux_icon('lucide:check') }}</button>
+    <twig:Form:ButtonExternalSubmit target="#form-mood-reflection"/>
 {%- endblock %}
 
 {% block showcase -%}

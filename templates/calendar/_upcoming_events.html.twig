@@ -1,7 +1,7 @@
 <div class="upcoming-events-body {{ (collapsable ?? false) ? 'collapsable' }}">
     {%- for upcoming_event in upcoming_events -%}
         <div class="upcoming-event-badge" data-general-type="{{ upcoming_event.type.value }}">
-            <span class="badge">{{ upcoming_event.title }}</span>
+            <twig:Badge>{{ upcoming_event.title }}</twig:Badge>
             <span class="upcoming-event-text">- {{ upcoming_event.text -}}</span>
         </div>
     {%- endfor -%}

@@ -12,8 +12,7 @@
 {% set back_path = path('app_profile') %}
 
 {% block header_actions -%}
-    <button class="btn btn-glass btn-glass-primary"
-            data-form-submit="#form-profile-location">{{ ux_icon('lucide:check') }}</button>
+    <twig:Form:ButtonExternalSubmit target="#form-profile-location"/>
 {%- endblock %}
 
 {% block main -%}

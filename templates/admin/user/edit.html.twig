@@ -7,8 +7,7 @@
 {% set back_path = path('app_admin_users') %}
 
 {% block header_actions -%}
-    <button class="btn btn-glass btn-glass-primary"
-            data-form-submit="#form-user-edit">{{ ux_icon('lucide:check') }}</button>
+    <twig:Form:ButtonExternalSubmit target="#form-user-edit"/>
 {%- endblock %}
 
 {% block main -%}

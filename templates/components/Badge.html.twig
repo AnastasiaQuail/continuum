@@ -1,0 +1,5 @@
+{%- props color = false -%}
+
+<div {{ attributes.defaults({class: 'badge', 'data-general-type': color}) }}>
+    {%- block content %}{% endblock -%}
+</div>

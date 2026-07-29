@@ -12,10 +12,10 @@
 
             <{% if is_granted %}a{% else %}div{% endif %}
                 {% if is_granted %}href="{{ path('app_admin_user_edit', {id: user.id}) }}"{% endif %}
-                class="form-row form-row-header-edit form-row-header-large"
-                data-general-type="{{ user.status.color.value }}">
+                class="form-row form-row-header-edit form-row-header-large">
                 <div class="form-label">
-                    <span class="badge">{{ user.status.name }}</span> {{ user.userIdentifier }}
+                    <twig:Badge color="{{ user.status.color.value }}">{{ user.status.name }}</twig:Badge>
+                    {{ user.userIdentifier }}
                 </div>
                 <div class="form-field">{{ ux_icon('lucide:square-pen') }}</div>
             </{% if is_granted %}a{% else %}div{% endif %}>
@@ -34,7 +34,7 @@
                 <div class="form-label">Roles</div>
                 <div class="form-field">
                     {%- for role in user.roles -%}
-                        <span class="badge">{{ role|slice(5) }}</span>
+                        <twig:Badge>{{ role|slice(5) }}</twig:Badge>
                     {%- endfor -%}
                 </div>
             </div>
