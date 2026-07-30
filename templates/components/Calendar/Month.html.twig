@@ -1,0 +1,25 @@
+{# @var month \DateTime|\DateTimeImmutable #}
+
+{%- props month, showTitle = false, isCurrent = false -%}
+
+<article class="month {{- isCurrent ? ' month-current' -}}">
+    {%- if showTitle -%}
+        <div class="month-title">{{ month.format('F') }}</div>
+    {%- endif -%}
+    <div class="month-day-title">
+        {%- for day_title in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] -%}
+            <span>{{ day_title }}</span>
+        {%- endfor -%}
+    </div>
+    <div class="month-days">
+        {%- set first_week_day = month.format('N') -%}
+        {%- if first_week_day > 1 -%}
+            <twig:Calendar:FakeDay offset="{{ first_week_day - 1 }}"/>
+        {%- endif -%}
+
+        {%- for day_number in 1..month.format('t') -%}
+            {%- set day = month.format('Y-m-') ~ (day_number < 10 ? '0') ~ day_number -%}
+            {%- block content %}{% endblock -%}
+        {%- endfor -%}
+    </div>
+</article>

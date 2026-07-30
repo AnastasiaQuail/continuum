@@ -1,0 +1,16 @@
+{# @var set \Continuum\Entity\WorkoutSet #}
+
+{%- props set -%}
+
+<div class="workout-set {{- set.isWarmup ? ' workout-set-warmup' -}}">
+    {%- if set.weight > 0 -%}
+        <div class="workout-set-field set-field-weight">
+            <span class="field-value">{{ set.weight }}</span>
+            <span class="field-description">kg</span>
+        </div>
+    {%- endif -%}
+    <div class="workout-set-field set-field-reps">
+        <span class="field-value">{{ set.reps }}</span>
+        <span class="field-description">x</span>
+    </div>
+</div>

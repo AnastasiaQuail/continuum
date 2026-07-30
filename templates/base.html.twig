@@ -13,8 +13,6 @@
 {%- set back_path = back_path|default -%}
 {%- set sidebar_show = sidebar_show|default !== 'hide' -%}
 
-{% import 'default/_sidebar.html.twig' as sidebar %}
-
 <!DOCTYPE html>
 <html lang="en" data-timezone="{{ app.user?.timezone.name }}" {{ html_data_day }}>
 <head>
@@ -72,8 +70,7 @@
                     <div class="header-subtitle">{% block page_subtitle %}{% endblock %}</div>
                 </div>
 
-                {%- set header_actions_block = block('header_actions') -%}
-                {%- if header_actions_block -%}
+                {%- if block('header_actions') is defined -%}
                     <div class="header-actions">
                         <div class="btn-group btn-group-glass btn-group-header-actions">
                             {%- block header_actions -%}{%- endblock -%}
@@ -96,119 +93,75 @@
                 </div>
                 <nav class="navbar">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            {{- sidebar.item(
-                                'app_calendar',
-                                ['app_calendar_day'],
-                                ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}),
-                                'Calendar',
-                                is_granted('CALENDAR_VIEW'),
-                            ) -}}
-                        </li>
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) }}"
+                                          name="Calendar"
+                                          path="app_calendar" related_paths="{{ ['app_calendar_day'] }}"
+                                          isGranted="{{ is_granted('CALENDAR_VIEW') }}"/>
 
-                        <li>{{ sidebar.divider('Reflection') }}</li>
-                        <li class="nav-item">
-                            {{- sidebar.item(
-                                'app_mood_reflections',
-                                ['app_mood_reflection_edit'],
-                                ux_icon('lucide:smile-plus'),
-                                'Mood tracker',
-                                is_granted('MOOD_REFLECTION_VIEW'),
-                            ) -}}
-                        </li>
-                        <li class="nav-item">
-                            {{- sidebar.item(
-                                'app_weekly_reflections',
-                                ['app_weekly_reflection_edit'],
-                                ux_icon('lucide:star'),
-                                'Week in review',
-                                is_granted('WEEKLY_REFLECTION_VIEW'),
-                            ) -}}
-                        </li>
+                        <twig:Navbar:Title name="Reflection"/>
 
-                        <li>{{ sidebar.divider('Health') }}</li>
-                        <li class="nav-item">
-                            {{- sidebar.item(
-                                'app_measurements',
-                                ['app_measurement_create', 'app_measurement_edit', 'app_measurements_history'],
-                                ux_icon('lucide:ruler-dimension-line'),
-                                'Measurements',
-                                is_granted('BODY_MEASUREMENT_VIEW'),
-                            ) -}}
-                        </li>
-                        <li class="nav-item">
-                            {{- sidebar.item(
-                                'app_workouts',
-                                ['app_workouts_view', 'app_exercises', 'app_exercise_create', 'app_exercise_edit'],
-                                ux_icon('lucide:dumbbell'),
-                                'Workouts',
-                                is_granted('WORKOUT_VIEW'),
-                            ) -}}
-                        </li>
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:smile-plus') }}" name="Mood tracker"
+                                          path="app_mood_reflections" related_paths="{{ ['app_mood_reflection_edit'] }}"
+                                          isGranted="{{ is_granted('MOOD_REFLECTION_VIEW') }}"/>
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:star') }}" name="Week in review"
+                                          path="app_weekly_reflections"
+                                          related_paths="{{ ['app_weekly_reflection_edit'] }}"
+                                          isGranted="{{ is_granted('WEEKLY_REFLECTION_VIEW') }}"/>
 
-                        <li>{{ sidebar.divider('Settings') }}</li>
-                        <li class="nav-item">
-                            {{- sidebar.item(
-                                'app_profile',
-                                ['app_profile_location', 'app_profile_password'],
-                                ux_icon('lucide:user'),
-                                'Profile',
-                            ) -}}
-                        </li>
+                        <twig:Navbar:Title name="Health"/>
+
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:ruler-dimension-line') }}" name="Measurements"
+                                          path="app_measurements"
+                                          related_paths="{{ ['app_measurement_create', 'app_measurement_edit', 'app_measurements_history'] }}"
+                                          isGranted="{{ is_granted('BODY_MEASUREMENT_VIEW') }}"/>
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:dumbbell') }}" name="Workouts"
+                                          path="app_workouts"
+                                          related_paths="{{ ['app_workouts_view', 'app_exercises', 'app_exercise_create', 'app_exercise_edit'] }}"
+                                          isGranted="{{ is_granted('WORKOUT_VIEW') }}"/>
+
+                        <twig:Navbar:Title name="Settings"/>
+
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:user') }}" name="Profile"
+                                          path="app_profile"
+                                          related_paths="{{ ['app_profile_location', 'app_profile_password'] }}"/>
                         {%- if is_granted('REPORT_MONTH_VIEW') -%}
-                            <li class="nav-item" data-general-type="red">
-                                {{- sidebar.item(
-                                    'app_report_month',
-                                    [],
-                                    ux_icon('lucide:chart-bar-big'),
-                                    'Monthly report',
-                                    true,
-                                    user_date().format('j') <= 3 ? {icon: ux_icon('lucide:badge-info'), type: 'orange'} : {},
-                                ) -}}
-                            </li>
+                            <twig:Navbar:Item icon="{{ ux_icon('lucide:chart-bar-big') }}" name="Monthly report"
+                                              path="app_report_month">
+                                <twig:block name="icon">
+                                    {%- if user_date().format('j') <= 3 -%}
+                                        <twig:Navbar:Icon icon="{{ ux_icon('lucide:badge-info') }}" color="orange"/>
+                                    {%- endif -%}
+                                </twig:block>
+                            </twig:Navbar:Item>
                         {%- endif -%}
                         {%- if is_granted('ADMIN_USER_VIEW') -%}
-                            <li class="nav-item">
-                                {{- sidebar.item(
-                                    'app_admin_users',
-                                    ['app_admin_user_edit'],
-                                    ux_icon('lucide:users'),
-                                    'Users',
-                                ) -}}
-                            </li>
+                            <twig:Navbar:Item icon="{{ ux_icon('lucide:users') }}" name="Users"
+                                              path="app_admin_users" related_paths="{{ ['app_admin_user_edit'] }}"/>
                         {%- endif -%}
                         {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
-                            <li class="nav-item">
-                                {{- sidebar.item(
-                                    'app_admin_backups',
-                                    [],
-                                    ux_icon('lucide:database-backup'),
-                                    'Backups',
-                                    true,
-                                    has_backup_alert() ? {icon: ux_icon('lucide:triangle-alert'), type: 'red'} : null,
-                                ) -}}
-                            </li>
+                            <twig:Navbar:Item icon="{{ ux_icon('lucide:database-backup') }}" name="Backups"
+                                              path="app_admin_backups">
+                                <twig:block name="icon">
+                                    {%- if has_backup_alert() -%}
+                                        <twig:Navbar:Icon icon="{{ ux_icon('lucide:triangle-alert') }}" color="red"/>
+                                    {%- endif -%}
+                                </twig:block>
+                            </twig:Navbar:Item>
                         {%- endif -%}
                     </ul>
                 </nav>
 
                 <nav class="navbar navbar-footer">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            {{- sidebar.action_button(
-                                ux_icon('lucide:sun', {class: 'theme-light'}) ~ ux_icon('lucide:moon', {class: 'theme-dark'}),
-                                'Appearance',
-                                'theme-toggler',
-                            ) -}}
-                        </li>
+                        <twig:Navbar:Item
+                            icon="{{ ux_icon('lucide:sun', {class: 'theme-light'}) ~ ux_icon('lucide:moon', {class: 'theme-dark'}) }}"
+                            name="Appearance"
+                            id="theme-toggler" :disabled="false"/>
+
                         {%- if is_granted('ROLE_USER') -%}
-                            <li class="nav-item nav-item-logout">
-                                {{- sidebar.link(
-                                    logout_path(),
-                                    ux_icon('lucide:log-out'),
-                                    'Logout',
-                                ) -}}
-                            </li>
+                            <twig:Navbar:Item icon="{{ ux_icon('lucide:log-out') }}" name="Logout"
+                                              link="{{ logout_path() }}"
+                                              class="nav-link-logout"/>
                         {%- endif -%}
                     </ul>
                 </nav>

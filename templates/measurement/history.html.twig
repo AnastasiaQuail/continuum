@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% import 'default/_filters.html.twig' as filters %}
-
 {%- block javascripts -%}
     {{ parent() }}
     <script src="{{ asset('js/echarts.min.js') }}"></script>
@@ -15,12 +13,7 @@
 {% set back_path = path('app_measurements') %}
 
 {% block header_actions -%}
-    {{- filters.months(
-        ux_icon('lucide:sliders-horizontal'),
-        measurement_days,
-        path('app_measurements_history', {months: '###'}),
-        [4, 6, 8, 10],
-    ) -}}
+    <twig:MonthFilter href="{{ path('app_measurements_history', {months: '###'}) }}" months="4,6,8,10"/>
 {%- endblock %}
 
 {% block main -%}
