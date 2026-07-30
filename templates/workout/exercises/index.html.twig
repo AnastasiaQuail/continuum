@@ -1,7 +1,5 @@
 {% extends 'base.html.twig' %}
 
-{% import 'default/_filters.html.twig' as filters %}
-
 {%- block javascripts -%}
     {{ parent() }}
     <script src="{{ asset('js/echarts.min.js') }}"></script>
@@ -22,12 +20,7 @@
         {{- ux_icon('lucide:plus') -}}
     </{% if is_granted %}a{% else %}button{% endif %}>
 
-    {{- filters.months(
-        ux_icon('lucide:sliders-horizontal'),
-        exercise_days,
-        path('app_exercises', {months: '###'}),
-        [4, 6, 8, 10],
-    ) -}}
+    <twig:MonthFilter href="{{ path('app_exercises', {months: '###'}) }}" months="4,6,8,10"/>
 {%- endblock %}
 
 {% block main -%}
@@ -51,12 +44,20 @@
 
                 <twig:Form:Row class="form-row-exercise-progress">
                     <div class="form-field exercise-progress-values">
-                        {%- import 'workout/exercises/index.html.twig' as macro -%}
-
-                        {{- macro.exercise_progress_sets('From', exercise_map|first.sets) -}}
+                        <div class="exercise-progress-value">
+                            <span class="form-field-legend">From</span>
+                            {%- for set in exercise_map|first.sets -%}
+                                <twig:Workout:Set set="{{ set }}"/>
+                            {%- endfor -%}
+                        </div>
 
                         {%- if exercise_map|length > 1 -%}
-                            {{- macro.exercise_progress_sets('To', exercise_map|last.sets) -}}
+                            <div class="exercise-progress-value">
+                                <span class="form-field-legend">To</span>
+                                {%- for set in exercise_map|last.sets -%}
+                                    <twig:Workout:Set set="{{ set }}"/>
+                                {%- endfor -%}
+                            </div>
                         {%- endif -%}
                     </div>
 
@@ -77,17 +78,3 @@
         </twig:Card:Description>
     {%- endfor -%}
 {%- endblock %}
-
-{% macro exercise_progress_sets(description, sets) -%}
-    <div class="exercise-progress-value">
-        <span class="form-field-legend">{{ description }}</span>
-        {%- for set in sets -%}
-            <twig:Badge>
-                {%- if set.weight > 0 -%}
-                    <span>{{ set.weight }}<small>kg</small></span>
-                {%- endif -%}
-                <span><small>x</small>{{ set.reps }}</span>
-            </twig:Badge>
-        {%- endfor -%}
-    </div>
-{%- endmacro %}

@@ -1,0 +1,27 @@
+{%- props link = false, path = false, related_paths = [], isGranted = true, icon, name -%}
+
+{%- set is_active = false -%}
+
+{%- if isGranted and path -%}
+    {%- for related_path in [path, ...related_paths] -%}
+        {%- if app.current_route === related_path -%}
+            {%- set is_active = true -%}
+        {%- endif -%}
+    {%- endfor -%}
+
+    {%- set link = path(path) -%}
+{%- endif -%}
+
+<li class="nav-item">
+    <{% if link %}a{% else %}div{% endif %}
+        {% if link %}href="{{ link }}"{% endif %}
+        {{ attributes.defaults({
+            class: 'nav-link' ~ (is_active ? ' active'),
+            disabled: link ? false : true,
+        }) }}>
+        <span class="nav-logo">{{ icon|raw }}</span>
+        <span class="nav-text">{{ name }}</span>
+
+        {%- block icon -%}{%- endblock -%}
+    </{% if link %}a{% else %}div{% endif %}>
+</li>

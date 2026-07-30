@@ -41,7 +41,7 @@
         {%- set is_sets_empty = workout_exercise.sets is empty -%}
         {%- set is_collapse = row_number < first_row_with_sets - 2 -%}
 
-        {%- if is_sets_empty and (first_row_with_sets > 1 or row_number > first_row_with_sets) -%}
+        {%- if is_sets_empty and (first_row_with_sets >= 1 or row_number > first_row_with_sets) -%}
             {%- set is_collapse = true -%}
         {%- endif -%}
 
@@ -126,18 +126,7 @@
                                     {% endif %}
                                 </div>
 
-                                <div class="form-workout-exercise-set">
-                                    {%- if workout_set.weight -%}
-                                        <div class="set-field">
-                                            <span>{{ workout_set.weight }}</span>
-                                            <small>kg</small>
-                                        </div>
-                                    {%- endif -%}
-                                    <div class="set-field">
-                                        <small>x</small>
-                                        <span>{{ workout_set.reps }}</span>
-                                    </div>
-                                </div>
+                                <twig:Workout:Set set="{{ workout_set }}"/>
 
                                 {%- if workout_set.isWarmup -%}
                                     <div class="form-workout-exercise-set-warmup">
@@ -230,12 +219,7 @@
                     <twig:Card:DescriptionLine>
                         {{ ux_icon('lucide:circle-arrow-left') }}
                         {%- for prev_set in prev_workout_exercise.sets -%}
-                            <div class="workout-exercise-set {{ prev_set.isWarmup ? 'set-warmup' }}">
-                                {%- if prev_set.weight > 0 -%}
-                                    <span>{{ prev_set.weight }}<small>kg</small></span>
-                                {%- endif -%}
-                                <span><small>x</small>{{ prev_set.reps }}</span>
-                            </div>
+                            <twig:Workout:Set set="{{ prev_set }}"/>
                         {%- endfor -%}
                     </twig:Card:DescriptionLine>
                 {%- endif -%}

@@ -1,0 +1,24 @@
+{%- props year = false, onlyMonth = false, isShort = false, onlyBadges = false -%}
+
+{%- set months = [] -%}
+{%- set current_month = user_date().format('Y-m') -%}
+
+{%- if onlyMonth -%}
+    {%- set months = [onlyMonth] -%}
+{%- else -%}
+    {%- for month_number in 1..12 -%}
+        {%- set month = date(year ~ '-' ~ (month_number < 10 ? '0') ~ month_number ~ '-01') -%}
+        {%- set months = months|merge([month]) -%}
+    {%- endfor -%}
+{%- endif -%}
+
+<div
+    class="calendar {{- onlyMonth ? ' calendar-month' -}} {{- isShort ? ' calendar-month-short' -}} {{- onlyBadges ? ' calendar-badges' -}}">
+    {%- for month in months -%}
+        <twig:Calendar:Month month="{{ month }}" showTitle="{{ onlyMonth === false }}"
+                             isCurrent="{{ month.format('Y-m') === current_month }}">
+            {# "day" is an internal string in the "Y-m-d" format #}
+            {{- block(outerBlocks.content) -}}
+        </twig:Calendar:Month>
+    {%- endfor -%}
+</div>

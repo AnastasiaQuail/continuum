@@ -13,56 +13,28 @@
 {% set current_date = user_date() %}
 
 {% block header_actions %}
-    <div class="btn btn-glass btn-dropdown" tabindex="0">
-        <span class="dropdown-label">{{ ux_icon('lucide:ellipsis') }}</span>
-        <ul class="dropdown-menu">
-            {%- block header_actions_shortcut -%}
-                <li class="dropdown-item">
-                    {%- set new_event_day = user_date('+1 day').format('Y-m-d') -%}
-                    {%- set is_granted = is_granted('CALENDAR_EDIT', new_event_day) -%}
+    <twig:Dropdown label="{{ ux_icon('lucide:ellipsis') }}">
+        {%- set new_event_day = user_date('+1 day').format('Y-m-d') -%}
+        <twig:Dropdown:Item href="{{ path('app_calendar_day', {day: new_event_day}) }}"
+                            isGranted="{{ is_granted('CALENDAR_EDIT', new_event_day) }}"
+                            icon="{{ ux_icon('lucide:calendar-plus') }}"
+                            name="New event"/>
 
-                    <{% if is_granted %}a{% else %}button{% endif %}
-                        {% if is_granted %} href="{{ path('app_calendar_day', {day: new_event_day}) }}"{% else %} disabled{% endif %}
-                        class="dropdown-link">
-                        {{- ux_icon('lucide:calendar-plus') -}}
-                        <span>New event</span>
-                    </{% if is_granted %}a{% else %}button{% endif %}>
-                </li>
-                <li class="dropdown-item">
-                    <hr class="dropdown-divider">
-                </li>
-                <li class="dropdown-item">
-                    {%- set is_granted = is_granted('MOOD_REFLECTION_LAST_UNFILLED') -%}
+        <twig:Dropdown:Divider/>
 
-                    <{% if is_granted %}a{% else %}button{% endif %}
-                        {% if is_granted %} href="{{ path('app_mood_reflection_last_unfilled') }}"{% else %} disabled{% endif %}
-                        class="dropdown-link">
-                        {{- ux_icon('lucide:scan-face') -}}
-                        <span>Track mood</span>
-                    </{% if is_granted %}a{% else %}button{% endif %}>
-                </li>
-                <li class="dropdown-item">
-                    {%- set is_granted = is_granted('BODY_MEASUREMENT_CREATE') -%}
-
-                    <{% if is_granted %}a{% else %}button{% endif %}
-                        {% if is_granted %} href="{{ path('app_measurement_create') }}"{% else %} disabled{% endif %}
-                        class="dropdown-link">
-                        {{- ux_icon('lucide:ruler') -}}
-                        <span>Add measurement</span>
-                    </{% if is_granted %}a{% else %}button{% endif %}>
-                </li>
-                <li class="dropdown-item">
-                    <form method="post" action="{{ path('app_workout_create') }}">
-                        <button class="dropdown-link"
-                                {% if is_granted('WORKOUT_CREATE') %}type="submit"{% else %} disabled{% endif %}>
-                            {{- ux_icon('lucide:biceps-flexed') -}}
-                            <span>Start workout</span>
-                        </button>
-                    </form>
-                </li>
-            {%- endblock -%}
-        </ul>
-    </div>
+        <twig:Dropdown:Item href="{{ path('app_mood_reflection_last_unfilled') }}"
+                            isGranted="{{ is_granted('MOOD_REFLECTION_LAST_UNFILLED') }}"
+                            icon="{{ ux_icon('lucide:scan-face') }}"
+                            name="Track mood"/>
+        <twig:Dropdown:Item href="{{ path('app_measurement_create') }}"
+                            isGranted="{{ is_granted('BODY_MEASUREMENT_CREATE') }}"
+                            icon="{{ ux_icon('lucide:ruler') }}"
+                            name="Add measurement"/>
+        <twig:Dropdown:ItemForm href="{{ path('app_workout_create') }}"
+                                isGranted="{{ is_granted('WORKOUT_CREATE') }}"
+                                icon="{{ ux_icon('lucide:biceps-flexed') }}"
+                                name="Start workout"/>
+    </twig:Dropdown>
 {% endblock %}
 
 {% block showcase -%}
@@ -165,8 +137,8 @@
                     </twig:block>
 
                     <twig:block name="title_info">
-                        {%- import 'default/_filters.html.twig' as filters -%}
-                        {{- filters.months('', measurement_days, path('app_homepage', {measurement: '###'}), [4, 6, 8, 10]) -}}
+                        <twig:MonthFilter href="{{ path('app_homepage', {measurement: '###'}) }}" months="4,6,8,10"
+                                          days="{{ measurement_days }}"/>
                     </twig:block>
                 </twig:Card:Title>
 
@@ -180,8 +152,8 @@
                 <twig:Card:Title id="card-title-workouts">
                     <twig:block name="header">Workouts</twig:block>
                     <twig:block name="title_info">
-                        {%- import 'default/_filters.html.twig' as filters -%}
-                        {{- filters.months('', workout_days, path('app_homepage', {workout: '###'}), [4, 6, 8]) -}}
+                        <twig:MonthFilter href="{{ path('app_homepage', {workout: '###'}) }}" months="4,6,8"
+                                          days="{{ workout_days }}"/>
                     </twig:block>
                 </twig:Card:Title>
 
@@ -228,8 +200,8 @@
             <twig:Card:Title id="card-title-mood-chart">
                 <twig:block name="header">Mood trend</twig:block>
                 <twig:block name="title_info">
-                    {%- import 'default/_filters.html.twig' as filters -%}
-                    {{- filters.months('', mood_reflection_days, path('app_homepage', {mood: '###'}), [4, 6, 8, 10]) -}}
+                    <twig:MonthFilter href="{{ path('app_homepage', {mood: '###'}) }}" months="4,6,8,10"
+                                      days="{{ mood_reflection_days }}"/>
                 </twig:block>
             </twig:Card:Title>
 

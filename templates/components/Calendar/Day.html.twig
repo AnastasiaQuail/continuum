@@ -1,0 +1,9 @@
+{%- props day, href = false, isGranted = false, color = false, isInactive = false, isPast = false, isCurrent = false, isWeekend = false -%}
+
+<{% if isGranted %}a{% else %}div{% endif %}
+    {% if isGranted %}href="{{ href }}"{% endif %}
+    class="day {{- isInactive ? ' day-inactive' -}} {{- isPast ? ' day-past' -}} {{- isCurrent ? ' day-current' -}} {{- isWeekend ? ' day-weekend' -}}"
+    {%- if color %}data-general-type="{{ color }}"{% endif -%}>
+    <span>{{ day }}</span>
+    <div class="day-badges">{% block content %}{% endblock %}</div>
+</{% if isGranted %}a{% else %}div{% endif %}>

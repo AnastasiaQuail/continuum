@@ -45,57 +45,26 @@
 
 {% block main -%}
     <twig:Card class="card-calendar">
-        <div class="calendar">
-            {%- set start_date = start_day.format('Y-m-d') -%}
-            {%- set current_date = user_date() -%}
-            {%- set current_month = current_date.format('Y-m') -%}
-            {%- set current = current_date.format('Y-m-d') -%}
+        {%- set start_date = start_day.format('Y-m-d') -%}
+        {%- set current_day = user_date().format('Y-m-d') -%}
 
-            {%- for month_number in 1..12 -%}
-                {%- set month = year ~ '-' ~ (month_number < 10 ? '0') ~ month_number -%}
-                {%- set first_day = month ~ '-01' -%}
-                {%- set first_week_day = first_day|date('N') -%}
+        <twig:Caledar year="{{ year }}">
+            {# "day" is an internal string in the "Y-m-d" format #}
+            {%- set event = events[day] is defined ? events[day].dayEvent : null -%}
+            {%- set badges = events[day] is defined ? events[day].hourEvents : [] -%}
 
-                <article class="month {{ month === current_month ? ' month-current' }}"
-                         style="--month-offset: {{ first_week_day - 1 }};">
-                    <div class="month-title">{{ month|date('F') }}</div>
-                    <div class="month-day-title">
-                        {%- for day_title in ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] -%}
-                            <span>{{ day_title }}</span>
-                        {%- endfor -%}
-                    </div>
-                    <div class="month-days">
-                        {%- if first_week_day > 1 -%}
-                            <div class="day fake-day" style="--fake-days: {{ first_week_day - 1 }};">
-                                <span>1</span>
-                            </div>
-                        {%- endif -%}
-
-                        {%- for day_number in 1..first_day|date('t') -%}
-                            {%- set day = month ~ '-' ~ (day_number < 10 ? '0') ~ day_number -%}
-                            {%- set is_granted = is_granted('CALENDAR_EDIT', day) -%}
-                            {%- set day_event = events[day] is defined ? events[day].dayEvent : null -%}
-                            {%- set hour_events = events[day] is defined ? events[day].hourEvents : [] -%}
-
-                            <{% if is_granted %}a{% else %}div{% endif %}
-                                {% if is_granted %}href="{{ path('app_calendar_day', {day: day}) }}"{% endif %}
-                                class="day {{- day < current ? ' day-past' -}} {{- day === current ? ' day-current' -}} {{- day < start_date ? ' day-inactive' -}} {{- day|is_weekend ? ' day-weekend' -}}"
-                                {%- if day_event !== null %}data-general-type="{{ day_event.type.value }}"{% endif -%}>
-                                <span>{{ day_number }}</span>
-
-                                {%- if hour_events is not empty -%}
-                                    <div class="day-badges">
-                                        {%- for hour_event in hour_events -%}
-                                            <span class="day-badge"
-                                                  data-general-type="{{ hour_event.type.value }}"></span>
-                                        {%- endfor -%}
-                                    </div>
-                                {%- endif -%}
-                            </{% if is_granted %}a{% else %}div{% endif %}>
-                        {%- endfor -%}
-                    </div>
-                </article>
-            {%- endfor -%}
-        </div>
+            <twig:Calendar:Day day="{{ day|date('j') }}"
+                               href="{{ path('app_calendar_day', {day: day}) }}"
+                               isGranted="{{ is_granted('CALENDAR_EDIT', day) }}"
+                               color="{{ event !== null ? event.type.value }}"
+                               isInactive="{{ day < start_date }}"
+                               isPast="{{ day < current_day }}"
+                               isCurrent="{{ day === current_day }}"
+                               isWeekend="{{ day|is_weekend }}">
+                {%- for badge in badges -%}
+                    <twig:Calendar:Badge color="{{ badge.type.value }}"/>
+                {%- endfor -%}
+            </twig:Calendar:Day>
+        </twig:Caledar>
     </twig:Card>
 {%- endblock %}

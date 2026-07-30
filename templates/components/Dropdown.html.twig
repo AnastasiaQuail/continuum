@@ -1,0 +1,6 @@
+{%- props label -%}
+
+<div class="btn btn-glass btn-dropdown" tabindex="0">
+    <span class="dropdown-label">{{ label|raw }}</span>
+    <ul class="dropdown-menu">{% block content %}{% endblock %}</ul>
+</div>
