@@ -1,4 +1,4 @@
-{%- props label = false, href, months, days = 0 -%}
+{%- props idPrefix = '', label = false, href, months, days = 0 -%}
 
 {%- if days > 0 -%}
     {%- set months_count = (days / 30)|round -%}
@@ -7,9 +7,9 @@
     {%- set label = ux_icon('lucide:sliders-horizontal') -%}
 {%- endif -%}
 
-<twig:Dropdown label="{{ label }}">
+<twig:Popover id="{{ idPrefix }}-month-filter" label="{{ label }}">
     {%- for month in months|split(',') -%}
-        <twig:Dropdown:Item href="{{ href|replace({('###'|url_encode): month}) }}"
-                                  name="{{ month }} {{ month > 1 ? 'months' : 'month' }}"/>
+        <twig:Popover:Item href="{{ href|replace({('###'|url_encode): month}) }}"
+                           name="{{ month }} {{ month > 1 ? 'months' : 'month' }}"/>
     {%- endfor -%}
-</twig:Dropdown>
+</twig:Popover>

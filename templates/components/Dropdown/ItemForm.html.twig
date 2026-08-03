@@ -1,4 +1,0 @@
-<twig:Dropdown:Item href="" :isGranted="false" type="{{ isGranted ? 'submit' : false }}" disabled="{{ not isGranted }}"
-    {{ ...attributes.without('isGranted') }}>
-    <form method="post" action="{{ href }}">{{ parent() }}</form>
-</twig:Dropdown:Item>

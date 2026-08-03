@@ -1,10 +1,10 @@
 {%- props href, isGranted = true, icon = false, name -%}
 
-<li class="dropdown-item">
+<li class="popover-item">
     {%- block content -%}
         <{% if isGranted %}a{% else %}button{% endif %}
             {% if isGranted %}href="{{ href }}"{% endif %}
-            {{ attributes.defaults({class: 'dropdown-link', disabled: not isGranted}) }}>
+            {{ attributes.defaults({class: 'popover-link', disabled: not isGranted}) }}>
             {%- if icon %}{{ icon|raw }}{% endif -%}
             <span>{{ name }}</span>
         </{% if isGranted %}a{% else %}button{% endif %}>
