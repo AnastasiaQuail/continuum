@@ -13,28 +13,28 @@
 {% set current_date = user_date() %}
 
 {% block header_actions %}
-    <twig:Dropdown label="{{ ux_icon('lucide:ellipsis') }}">
+    <twig:Popover id="homepage-actions" label="{{ ux_icon('lucide:ellipsis') }}">
         {%- set new_event_day = user_date('+1 day').format('Y-m-d') -%}
-        <twig:Dropdown:Item href="{{ path('app_calendar_day', {day: new_event_day}) }}"
-                            isGranted="{{ is_granted('CALENDAR_EDIT', new_event_day) }}"
-                            icon="{{ ux_icon('lucide:calendar-plus') }}"
-                            name="New event"/>
+        <twig:Popover:Item href="{{ path('app_calendar_day', {day: new_event_day}) }}"
+                           isGranted="{{ is_granted('CALENDAR_EDIT', new_event_day) }}"
+                           icon="{{ ux_icon('lucide:calendar-plus') }}"
+                           name="New event"/>
 
-        <twig:Dropdown:Divider/>
+        <twig:Popover:Divider/>
 
-        <twig:Dropdown:Item href="{{ path('app_mood_reflection_last_unfilled') }}"
-                            isGranted="{{ is_granted('MOOD_REFLECTION_LAST_UNFILLED') }}"
-                            icon="{{ ux_icon('lucide:scan-face') }}"
-                            name="Track mood"/>
-        <twig:Dropdown:Item href="{{ path('app_measurement_create') }}"
-                            isGranted="{{ is_granted('BODY_MEASUREMENT_CREATE') }}"
-                            icon="{{ ux_icon('lucide:ruler') }}"
-                            name="Add measurement"/>
-        <twig:Dropdown:ItemForm href="{{ path('app_workout_create') }}"
-                                isGranted="{{ is_granted('WORKOUT_CREATE') }}"
-                                icon="{{ ux_icon('lucide:biceps-flexed') }}"
-                                name="Start workout"/>
-    </twig:Dropdown>
+        <twig:Popover:Item href="{{ path('app_mood_reflection_last_unfilled') }}"
+                           isGranted="{{ is_granted('MOOD_REFLECTION_LAST_UNFILLED') }}"
+                           icon="{{ ux_icon('lucide:scan-face') }}"
+                           name="Track mood"/>
+        <twig:Popover:Item href="{{ path('app_measurement_create') }}"
+                           isGranted="{{ is_granted('BODY_MEASUREMENT_CREATE') }}"
+                           icon="{{ ux_icon('lucide:ruler') }}"
+                           name="Add measurement"/>
+        <twig:Popover:ItemForm href="{{ path('app_workout_create') }}"
+                               isGranted="{{ is_granted('WORKOUT_CREATE') }}"
+                               icon="{{ ux_icon('lucide:biceps-flexed') }}"
+                               name="Start workout"/>
+    </twig:Popover>
 {% endblock %}
 
 {% block showcase -%}
@@ -138,7 +138,7 @@
 
                     <twig:block name="title_info">
                         <twig:MonthFilter href="{{ path('app_homepage', {measurement: '###'}) }}" months="4,6,8,10"
-                                          days="{{ measurement_days }}"/>
+                                          idPrefix="measurements" days="{{ measurement_days }}"/>
                     </twig:block>
                 </twig:Card:Title>
 
@@ -153,7 +153,7 @@
                     <twig:block name="header">Workouts</twig:block>
                     <twig:block name="title_info">
                         <twig:MonthFilter href="{{ path('app_homepage', {workout: '###'}) }}" months="4,6,8"
-                                          days="{{ workout_days }}"/>
+                                          idPrefix="workouts" days="{{ workout_days }}"/>
                     </twig:block>
                 </twig:Card:Title>
 
@@ -201,7 +201,7 @@
                 <twig:block name="header">Mood trend</twig:block>
                 <twig:block name="title_info">
                     <twig:MonthFilter href="{{ path('app_homepage', {mood: '###'}) }}" months="4,6,8,10"
-                                      days="{{ mood_reflection_days }}"/>
+                                      idPrefix="mood-reflections" days="{{ mood_reflection_days }}"/>
                 </twig:block>
             </twig:Card:Title>
 

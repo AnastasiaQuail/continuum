@@ -1,0 +1,6 @@
+{%- props id, label -%}
+
+<div class="btn-popover-group">
+    <button class="btn btn-glass btn-popover-anchor" popovertarget="{{ id }}-popover">{{ label|raw }}</button>
+    <ul class="btn btn-glass btn-popover" id="{{ id }}-popover" popover>{% block content %}{% endblock %}</ul>
+</div>

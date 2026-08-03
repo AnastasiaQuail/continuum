@@ -464,17 +464,17 @@ textarea {
         gap: var(--container-gap-inline);
 
         .btn {
-            --btn-header-padding-left: var(--btn-header-padding);
-            --btn-header-padding-right: var(--btn-header-padding);
             --btn-border-radius: var(--btn-header-radius);
 
-            height: var(--btn-header-height);
-            padding: 0 var(--btn-header-padding-left) 0 var(--btn-header-padding-right);
-            justify-content: center;
+            &:not(.btn-popover) {
+                height: var(--btn-header-height);
+                padding: 0 var(--btn-header-padding);
+                justify-content: center;
+            }
 
-            &.btn-dropdown {
-                .dropdown-menu {
-                    .dropdown-link {
+            &.btn-popover {
+                .popover-item {
+                    .popover-link {
                         padding-block: calc(var(--control-padding-block) * 2);
                     }
                 }
@@ -494,7 +494,7 @@ textarea {
 
             & > *:first-child:not(:last-child) {
                 &.btn,
-                &:not(.btn) > .btn {
+                &:not(.btn) > .btn:not(.btn-popover) {
                     padding-right: calc(var(--btn-header-padding) * 0.8);
                 }
             }
@@ -507,7 +507,7 @@ textarea {
 
             & > *:last-child:not(:first-child) {
                 &.btn,
-                &:not(.btn) > .btn {
+                &:not(.btn) > .btn:not(.btn-popover) {
                     padding-left: calc(var(--btn-header-padding) * 0.8);
                 }
             }
@@ -2475,104 +2475,59 @@ textarea {
         }
     }
 
-    &.btn-dropdown {
-        --btn-dropdown-border-color: color-mix(in oklch, var(--btn-border-color) var(--btn-border-color-transparent), transparent);
-        --btn-dropdown-background-color: color-mix(in oklch, var(--btn-background-color) var(--btn-background-color-transparent), transparent);
-
-        position: relative;
+    &.btn-popover {
+        position: fixed;
+        position-area: span-bottom span-left;
+        top: calc(var(--border-width) * -1);
+        right: calc(var(--border-width) * -1);
+        gap: unset;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: var(--control-padding-block);
+        margin: 0;
+        list-style: none;
         cursor: default;
-        overflow: hidden;
-        z-index: 1;
+        transform: none !important;
 
-        .dropdown-label {
-            display: flex;
-        }
+        .popover-item {
+            width: 100%;
+            white-space: nowrap;
 
-        .dropdown-menu {
-            position: absolute;
-            top: calc(var(--border-width) * -1);
-            right: calc(var(--border-width) * -1);
-            margin: 0;
-            padding: var(--control-padding-block);
-            min-width: calc(100% + var(--border-width) * 2);
-            color: var(--btn-color);
-            border: var(--border-width) solid var(--btn-dropdown-border-color);
-            border-radius: var(--btn-border-radius);
-            background-color: var(--btn-dropdown-background-color);
-            backdrop-filter: var(--btn-backdrop-filter);
-            box-shadow: var(--btn-box-shadow);
-            list-style: none;
-            opacity: 0;
-            transition: opacity .3s;
+            .popover-link {
+                display: inline-flex;
+                align-items: center;
+                width: 100%;
+                column-gap: calc(var(--gap-inline) / 3);
+                padding: calc(var(--control-padding-block) * 1.5) var(--control-padding-inline);
+                font-weight: var(--font-weight);
+                text-decoration: none;
+                color: currentColor;
+                border: none;
+                border-radius: calc(var(--btn-border-radius) - var(--control-padding-block));
+                background-color: transparent;
+                transition: background-color .15s;
 
-            .dropdown-item {
-                white-space: nowrap;
-
-                .dropdown-link {
-                    display: inline-flex;
-                    align-items: center;
-                    width: 100%;
-                    column-gap: calc(var(--gap-inline) / 3);
-                    padding: calc(var(--control-padding-block) * 1.5) var(--control-padding-inline);
-                    font-weight: var(--font-weight);
-                    text-decoration: none;
-                    color: currentColor;
-                    border: none;
-                    border-radius: calc(var(--btn-border-radius) - var(--control-padding-block));
-                    background-color: transparent;
-                    opacity: 0;
-                    transition: background-color .15s, opacity .15s;
-
-                    &:not([disabled]):hover {
-                        background-color: color-mix(in oklch, var(--btn-dropdown-background-color) 50%, transparent);
-                    }
-
-                    &[disabled] {
-                        color: var(--color-tertiary);
-                        pointer-events: none;
-                        cursor: not-allowed;
-                    }
-
-                    & > span {
-                        opacity: 0;
-                    }
+                &:not([disabled]):hover {
+                    background-color: color-mix(in oklch, var(--btn-background-color) 40%, transparent);
                 }
 
-                .dropdown-divider {
-                    height: 0;
-                    margin: calc(var(--gap-block) / 3) var(--control-padding-inline);
-                    border: 0;
-                    border-top: var(--border-width) solid var(--btn-dropdown-border-color);
+                &[disabled] {
+                    color: var(--color-tertiary);
+                    pointer-events: none;
+                    cursor: not-allowed;
                 }
+            }
+
+            .popover-divider {
+                height: 0;
+                margin: calc(var(--gap-block) / 3) var(--control-padding-inline);
+                border: 0;
+                border-top: var(--border-width) solid color-mix(in oklch, var(--btn-color) 10%, transparent);
             }
         }
 
-        &:not([disabled]):hover,
-        &:not([disabled]):focus-visible {
-            border-color: transparent;
-            background-color: transparent;
-            backdrop-filter: none;
-            box-shadow: none;
-            overflow: unset;
-
-            .dropdown-label {
-                opacity: 0;
-            }
-
-            .dropdown-menu {
-                opacity: 1;
-
-                .dropdown-item {
-                    .dropdown-link {
-                        opacity: 1;
-
-                        & > span {
-                            opacity: 1;
-                            transition: opacity .3s;
-                        }
-                    }
-                }
-            }
+        &:not(:popover-open) {
+            display: none;
         }
     }
 
@@ -2602,7 +2557,7 @@ textarea {
             --btn-box-shadow: var(--glass-box-shadow-primary);
         }
 
-        &:not([disabled]):not(.btn-dropdown):active {
+        &:not([disabled]):not(.btn-popover-anchor):active {
             transform: scale(1.2);
             transition: none;
         }
@@ -2626,6 +2581,16 @@ textarea {
         &.btn-mobile-hidden {
             display: none;
         }
+    }
+}
+
+.btn-popover-group {
+    position: relative;
+    z-index: 1;
+
+    &:has(.btn-popover:popover-open) .btn-popover-anchor {
+        opacity: 0;
+        transition: none;
     }
 }
 
@@ -2670,16 +2635,18 @@ textarea {
 
     & > .btn,
     & > form > .btn,
-    &:has(> .btn-dropdown:is(:hover, :focus-visible)):before {
+    & > .btn-popover-group > .btn:not(.btn-popover),
+    &:has(.btn-popover:popover-open):before {
         border-color: transparent !important;
         background-color: transparent !important;
         backdrop-filter: none !important;
         box-shadow: none !important;
     }
 
-    &:has(> .btn-dropdown:is(:hover, :focus-visible)) {
-        & > .btn:not(.btn-dropdown),
-        & > form > .btn {
+    &:has(.btn-popover:popover-open) {
+        & > .btn,
+        & > form > .btn,
+        & > .btn-popover-group > .btn:not(.btn-popover) {
             opacity: 0;
         }
     }
@@ -2700,7 +2667,7 @@ textarea {
             --btn-group-box-shadow: var(--glass-box-shadow-primary);
         }
 
-        &:has(.btn-glass:not([disabled]):not(.btn-dropdown):active):before {
+        &:has(.btn-glass:not([disabled]):not(.btn-popover-anchor):active):before {
             transform: scale(1.2);
             transition: none;
         }
