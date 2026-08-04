@@ -44,9 +44,8 @@
                 {%- if back_path or sidebar_show -%}
                     <div class="btn-group btn-group-glass btn-group-header-controls">
                         {%- if back_path -%}
-                            <a id="previous-page-button" class="btn btn-glass" href="{{ back_path }}">
-                                {{- ux_icon('lucide:chevron-left', {class: 'icon-fix-scale'}) -}}
-                            </a>
+                            <twig:HeaderAction text="{{ ux_icon('lucide:chevron-left', {class: 'icon-fix-scale'}) }}"
+                                               href="{{ back_path }}" id="previous-page-button"/>
                         {%- endif -%}
                         {%- if sidebar_show -%}
                             <button id="sidebar-toggler"
@@ -91,80 +90,75 @@
                         <span>{{ app_title }}</span>
                     </a>
                 </div>
-                <nav class="navbar">
-                    <ul class="navbar-nav">
-                        <twig:Navbar:Item icon="{{ ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) }}"
-                                          name="Calendar"
-                                          path="app_calendar" related_paths="{{ ['app_calendar_day'] }}"
-                                          isGranted="{{ is_granted('CALENDAR_VIEW') }}"/>
+                <twig:Navbar>
+                    <twig:Navbar:Item icon="{{ ux_icon('lucide:calendar-heart', {class: 'icon-fix-top'}) }}"
+                                      name="Calendar"
+                                      path="app_calendar" related_paths="{{ ['app_calendar_day'] }}"
+                                      isGranted="{{ is_granted('CALENDAR_VIEW') }}"/>
 
-                        <twig:Navbar:Title name="Reflection"/>
+                    <twig:Navbar:Title name="Reflection"/>
 
-                        <twig:Navbar:Item icon="{{ ux_icon('lucide:smile-plus') }}" name="Mood tracker"
-                                          path="app_mood_reflections" related_paths="{{ ['app_mood_reflection_edit'] }}"
-                                          isGranted="{{ is_granted('MOOD_REFLECTION_VIEW') }}"/>
-                        <twig:Navbar:Item icon="{{ ux_icon('lucide:star') }}" name="Week in review"
-                                          path="app_weekly_reflections"
-                                          related_paths="{{ ['app_weekly_reflection_edit'] }}"
-                                          isGranted="{{ is_granted('WEEKLY_REFLECTION_VIEW') }}"/>
+                    <twig:Navbar:Item icon="{{ ux_icon('lucide:smile-plus') }}" name="Mood tracker"
+                                      path="app_mood_reflections" related_paths="{{ ['app_mood_reflection_edit'] }}"
+                                      isGranted="{{ is_granted('MOOD_REFLECTION_VIEW') }}"/>
+                    <twig:Navbar:Item icon="{{ ux_icon('lucide:star') }}" name="Week in review"
+                                      path="app_weekly_reflections" related_paths="{{ ['app_weekly_reflection_edit'] }}"
+                                      isGranted="{{ is_granted('WEEKLY_REFLECTION_VIEW') }}"/>
 
-                        <twig:Navbar:Title name="Health"/>
+                    <twig:Navbar:Title name="Health"/>
 
-                        <twig:Navbar:Item icon="{{ ux_icon('lucide:ruler-dimension-line') }}" name="Measurements"
-                                          path="app_measurements"
-                                          related_paths="{{ ['app_measurement_create', 'app_measurement_edit', 'app_measurements_history'] }}"
-                                          isGranted="{{ is_granted('BODY_MEASUREMENT_VIEW') }}"/>
-                        <twig:Navbar:Item icon="{{ ux_icon('lucide:dumbbell') }}" name="Workouts"
-                                          path="app_workouts"
-                                          related_paths="{{ ['app_workouts_view', 'app_exercises', 'app_exercise_create', 'app_exercise_edit'] }}"
-                                          isGranted="{{ is_granted('WORKOUT_VIEW') }}"/>
+                    <twig:Navbar:Item icon="{{ ux_icon('lucide:ruler-dimension-line') }}" name="Measurements"
+                                      path="app_measurements"
+                                      related_paths="{{ ['app_measurement_create', 'app_measurement_edit', 'app_measurements_history'] }}"
+                                      isGranted="{{ is_granted('BODY_MEASUREMENT_VIEW') }}"/>
+                    <twig:Navbar:Item icon="{{ ux_icon('lucide:dumbbell') }}" name="Workouts"
+                                      path="app_workouts"
+                                      related_paths="{{ ['app_workouts_view', 'app_exercises', 'app_exercise_create', 'app_exercise_edit'] }}"
+                                      isGranted="{{ is_granted('WORKOUT_VIEW') }}"/>
 
-                        <twig:Navbar:Title name="Settings"/>
+                    <twig:Navbar:Title name="Settings"/>
 
-                        <twig:Navbar:Item icon="{{ ux_icon('lucide:user') }}" name="Profile"
-                                          path="app_profile"
-                                          related_paths="{{ ['app_profile_location', 'app_profile_password'] }}"/>
-                        {%- if is_granted('REPORT_MONTH_VIEW') -%}
-                            <twig:Navbar:Item icon="{{ ux_icon('lucide:chart-bar-big') }}" name="Monthly report"
-                                              path="app_report_month">
-                                <twig:block name="icon">
-                                    {%- if user_date().format('j') <= 3 -%}
-                                        <twig:Navbar:Icon icon="{{ ux_icon('lucide:badge-info') }}" color="orange"/>
-                                    {%- endif -%}
-                                </twig:block>
-                            </twig:Navbar:Item>
-                        {%- endif -%}
-                        {%- if is_granted('ADMIN_USER_VIEW') -%}
-                            <twig:Navbar:Item icon="{{ ux_icon('lucide:users') }}" name="Users"
-                                              path="app_admin_users" related_paths="{{ ['app_admin_user_edit'] }}"/>
-                        {%- endif -%}
-                        {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
-                            <twig:Navbar:Item icon="{{ ux_icon('lucide:database-backup') }}" name="Backups"
-                                              path="app_admin_backups">
-                                <twig:block name="icon">
-                                    {%- if has_backup_alert() -%}
-                                        <twig:Navbar:Icon icon="{{ ux_icon('lucide:triangle-alert') }}" color="red"/>
-                                    {%- endif -%}
-                                </twig:block>
-                            </twig:Navbar:Item>
-                        {%- endif -%}
-                    </ul>
-                </nav>
+                    <twig:Navbar:Item icon="{{ ux_icon('lucide:user') }}" name="Profile"
+                                      path="app_profile"
+                                      related_paths="{{ ['app_profile_location', 'app_profile_password'] }}"/>
+                    {%- if is_granted('REPORT_MONTH_VIEW') -%}
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:chart-bar-big') }}" name="Monthly report"
+                                          path="app_report_month">
+                            <twig:block name="icon">
+                                {%- if user_date().format('j') <= 3 -%}
+                                    <twig:Navbar:Icon icon="{{ ux_icon('lucide:badge-info') }}" color="orange"/>
+                                {%- endif -%}
+                            </twig:block>
+                        </twig:Navbar:Item>
+                    {%- endif -%}
+                    {%- if is_granted('ADMIN_USER_VIEW') -%}
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:users') }}" name="Users"
+                                          path="app_admin_users" related_paths="{{ ['app_admin_user_edit'] }}"/>
+                    {%- endif -%}
+                    {%- if is_granted('ADMIN_BACKUP_VIEW') -%}
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:database-backup') }}" name="Backups"
+                                          path="app_admin_backups">
+                            <twig:block name="icon">
+                                {%- if has_backup_alert() -%}
+                                    <twig:Navbar:Icon icon="{{ ux_icon('lucide:triangle-alert') }}" color="red"/>
+                                {%- endif -%}
+                            </twig:block>
+                        </twig:Navbar:Item>
+                    {%- endif -%}
+                </twig:Navbar>
 
-                <nav class="navbar navbar-footer">
-                    <ul class="navbar-nav">
-                        <twig:Navbar:Item
-                            icon="{{ ux_icon('lucide:sun', {class: 'theme-light'}) ~ ux_icon('lucide:moon', {class: 'theme-dark'}) }}"
-                            name="Appearance"
-                            id="theme-toggler" :disabled="false"/>
+                <twig:Navbar class="navbar-footer">
+                    <twig:Navbar:Item
+                        icon="{{ ux_icon('lucide:sun', {class: 'theme-light'}) ~ ux_icon('lucide:moon', {class: 'theme-dark'}) }}"
+                        name="Appearance"
+                        id="theme-toggler" :disabled="false"/>
 
-                        {%- if is_granted('ROLE_USER') -%}
-                            <twig:Navbar:Item icon="{{ ux_icon('lucide:log-out') }}" name="Logout"
-                                              link="{{ logout_path() }}"
-                                              class="nav-link-logout"/>
-                        {%- endif -%}
-                    </ul>
-                </nav>
+                    {%- if is_granted('ROLE_USER') -%}
+                        <twig:Navbar:Item icon="{{ ux_icon('lucide:log-out') }}" name="Logout"
+                                          link="{{ logout_path() }}"
+                                          class="nav-link-logout"/>
+                    {%- endif -%}
+                </twig:Navbar>
             </aside>
         {%- endblock -%}
     {%- endif -%}

@@ -12,13 +12,8 @@
 {% set back_path = path('app_workouts') %}
 
 {% block header_actions -%}
-    {%- set is_granted = is_granted('EXERCISE_CREATE') -%}
-
-    <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path('app_exercise_create') }}"{% else %} disabled{% endif %}
-        class="btn btn-glass">
-        {{- ux_icon('lucide:plus') -}}
-    </{% if is_granted %}a{% else %}button{% endif %}>
+    <twig:HeaderAction text="{{ ux_icon('lucide:plus') }}" href="{{ path('app_exercise_create') }}" method="post"
+                       isGranted="{{ is_granted('EXERCISE_CREATE') }}"/>
 
     <twig:MonthFilter href="{{ path('app_exercises', {months: '###'}) }}" months="4,6,8,10"/>
 {%- endblock %}

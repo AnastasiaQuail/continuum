@@ -13,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class EditController extends AbstractController
@@ -21,7 +22,12 @@ final class EditController extends AbstractController
         private readonly ExerciseService $exerciseService,
     ) {}
 
-    #[Route(path: '/exercises/{id}', name: 'app_exercise_edit', methods: ['GET', 'POST'])]
+    #[Route(
+        path: '/exercises/{id}',
+        name: 'app_exercise_edit',
+        requirements: ['id' => Requirement::UUID],
+        methods: ['GET', 'POST'],
+    )]
     #[IsGranted(ExerciseVoter::EDIT, 'exercise')]
     public function __invoke(Request $request, Exercise $exercise): Response
     {

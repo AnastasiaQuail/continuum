@@ -11,11 +11,9 @@
 
 {% block header_actions -%}
     {%- set new_event_day = user_date('+1 day').format('Y-m-d') -%}
-    {%- set is_granted = is_granted('CALENDAR_EDIT', new_event_day) -%}
 
-    <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path('app_calendar_day', {day: new_event_day}) }}"{% else %} disabled{% endif %}
-        class="btn btn-glass">Add event</{% if is_granted %}a{% else %}button{% endif %}>
+    <twig:HeaderAction text="Add event" href="{{ path('app_calendar_day', {day: new_event_day}) }}"
+                       isGranted="{{ is_granted('CALENDAR_EDIT', new_event_day) }}"/>
 {%- endblock %}
 
 {% block showcase -%}

@@ -1,0 +1,16 @@
+{%- props text, href, method = 'get', isGranted = true -%}
+
+{%- if method === 'post' -%}
+    <form method="post" action="{{ href }}">
+        <button {% if isGranted %}type="submit"{% else %} disabled{% endif %}
+            {{ attributes.defaults({class: 'btn btn-glass'}) }}>
+            {{- text|raw -}}
+        </button>
+    </form>
+{%- else -%}
+    <{% if isGranted %}a{% else %}button{% endif %}
+        {% if isGranted %}href="{{ href }}"{% else %} disabled{% endif %}
+        {{ attributes.defaults({class: 'btn btn-glass'}) }}>
+        {{- text|raw -}}
+    </{% if isGranted %}a{% else %}button{% endif %}>
+{%- endif -%}

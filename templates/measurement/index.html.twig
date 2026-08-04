@@ -15,21 +15,13 @@
 {% block body_id %}body-measurements{% endblock %}
 
 {% block header_actions -%}
-    {%- set is_granted = is_granted('BODY_MEASUREMENT_CREATE') -%}
+    <twig:HeaderAction text="{{ ux_icon('lucide:plus') }}"
+                       href="{{ path('app_measurement_create') }}" method="post"
+                       isGranted="{{ is_granted('BODY_MEASUREMENT_CREATE') }}"/>
 
-    <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path('app_measurement_create') }}"{% else %} disabled{% endif %}
-        class="btn btn-glass">
-        {{- ux_icon('lucide:plus') -}}
-    </{% if is_granted %}a{% else %}button{% endif %}>
-
-    {%- set is_granted = is_granted('BODY_MEASUREMENT_HISTORY') -%}
-
-    <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path('app_measurements_history') }}"{% else %} disabled{% endif %}
-        class="btn btn-glass">
-        {{- ux_icon('lucide:chart-no-axes-combined') -}}
-    </{% if is_granted %}a{% else %}button{% endif %}>
+    <twig:HeaderAction text="{{ ux_icon('lucide:chart-no-axes-combined') }}"
+                       href="{{ path('app_measurements_history') }}"
+                       isGranted="{{ is_granted('BODY_MEASUREMENT_HISTORY') }}"/>
 {%- endblock %}
 
 {% block body_actions -%}
