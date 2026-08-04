@@ -22,7 +22,7 @@ final class CreateController extends AbstractController
         private readonly MeasurementService $measurementService,
     ) {}
 
-    #[Route(path: '/measurements/create', name: 'app_measurement_create', methods: ['GET', 'POST'])]
+    #[Route(path: '/measurements', name: 'app_measurement_create', methods: ['POST'])]
     #[IsGranted(MeasurementVoter::CREATE)]
     public function __invoke(#[CurrentUser] User $user, Request $request): Response
     {

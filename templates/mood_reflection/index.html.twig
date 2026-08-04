@@ -8,12 +8,8 @@
 {% block body_id %}mood-reflection{% endblock %}
 
 {% block header_actions -%}
-    {%- set is_granted = is_granted('MOOD_REFLECTION_LAST_UNFILLED') -%}
-
-    <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path('app_mood_reflection_last_unfilled') }}"{% else %} disabled{% endif %}
-        class="btn btn-glass">Check-in
-    </{% if is_granted %}a{% else %}button{% endif %}>
+    <twig:HeaderAction text="Check-in" href="{{ path('app_mood_reflection_last_unfilled') }}"
+                       isGranted="{{ is_granted('MOOD_REFLECTION_LAST_UNFILLED') }}"/>
 {%- endblock %}
 
 {% block showcase -%}

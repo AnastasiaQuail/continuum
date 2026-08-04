@@ -8,21 +8,11 @@
 {% block body_id %}workouts{% endblock %}
 
 {% block header_actions -%}
-    <form method="post" action="{{ path('app_workout_create') }}">
-        <button
-            class="btn btn-glass"
-            {% if is_granted('WORKOUT_CREATE') %}type="submit"{% else %} disabled{% endif %}>
-            {{- ux_icon('lucide:plus') -}}
-        </button>
-    </form>
+    <twig:HeaderAction text="{{ ux_icon('lucide:plus') }}" href="{{ path('app_workout_create') }}" method="post"
+                       isGranted="{{ is_granted('WORKOUT_CREATE') }}"/>
 
-    {%- set is_granted = is_granted('EXERCISE_VIEW') -%}
-
-    <{% if is_granted %}a{% else %}button{% endif %}
-        {% if is_granted %} href="{{ path('app_exercises') }}"{% else %} disabled{% endif %}
-        class="btn btn-glass">
-        {{- ux_icon('lucide:gallery-vertical-end') -}}
-    </{% if is_granted %}a{% else %}button{% endif %}>
+    <twig:HeaderAction text="{{ ux_icon('lucide:gallery-vertical-end') }}" href="{{ path('app_exercises') }}"
+                       isGranted="{{ is_granted('EXERCISE_VIEW') }}"/>
 {%- endblock %}
 
 {% block body_actions -%}

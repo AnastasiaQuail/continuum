@@ -20,7 +20,7 @@ final class CreateController extends AbstractController
         private readonly ExerciseService $exerciseService,
     ) {}
 
-    #[Route(path: '/exercises/create', name: 'app_exercise_create', methods: ['GET', 'POST'])]
+    #[Route(path: '/exercises', name: 'app_exercise_create', methods: ['POST'])]
     #[IsGranted(ExerciseVoter::CREATE)]
     public function __invoke(Request $request): Response
     {

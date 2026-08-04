@@ -36,6 +36,7 @@ return RectorConfig::configure()
         // wait fix by rector (shouldn't change @no-named-arguments)
         // namedArgs: true,
         instanceOf: true,
+        if: true,
         earlyReturn: true,
         rectorPreset: true,
         phpunitCodeQuality: true,

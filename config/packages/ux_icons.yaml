@@ -14,6 +14,12 @@ ux_icons:
     # Throw an exception if an icon is not
     ignore_not_found: false
 
+when@dev:
+    ux_icons:
+        iconify:
+            # To save every on-demand icon the first time it is rendered
+            auto_lock: true
+
 when@prod:
     ux_icons:
         # Suppress exceptions for missing icons in production

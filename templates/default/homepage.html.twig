@@ -26,10 +26,10 @@
                            isGranted="{{ is_granted('MOOD_REFLECTION_LAST_UNFILLED') }}"
                            icon="{{ ux_icon('lucide:scan-face') }}"
                            name="Track mood"/>
-        <twig:Popover:Item href="{{ path('app_measurement_create') }}"
-                           isGranted="{{ is_granted('BODY_MEASUREMENT_CREATE') }}"
-                           icon="{{ ux_icon('lucide:ruler') }}"
-                           name="Add measurement"/>
+        <twig:Popover:ItemForm href="{{ path('app_measurement_create') }}"
+                               isGranted="{{ is_granted('BODY_MEASUREMENT_CREATE') }}"
+                               icon="{{ ux_icon('lucide:ruler') }}"
+                               name="Add measurement"/>
         <twig:Popover:ItemForm href="{{ path('app_workout_create') }}"
                                isGranted="{{ is_granted('WORKOUT_CREATE') }}"
                                icon="{{ ux_icon('lucide:biceps-flexed') }}"

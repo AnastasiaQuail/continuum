@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Exercise{% endblock %}
+{% block title %}{{ exercise ? 'Edit exercise' : 'Add exercise' }}{% endblock %}
+{% block page_title %}Exercise{% endblock %}
 {% block body_id %}exercise-edit{% endblock %}
 
 {% set back_path = path('app_exercises') %}

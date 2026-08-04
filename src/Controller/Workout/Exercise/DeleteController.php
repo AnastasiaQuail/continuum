@@ -10,6 +10,7 @@ use Continuum\Service\Workout\ExerciseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 final class DeleteController extends AbstractController
@@ -18,7 +19,12 @@ final class DeleteController extends AbstractController
         private readonly ExerciseService $exerciseService,
     ) {}
 
-    #[Route(path: '/exercises/{id}', name: 'app_exercise_delete', methods: ['DELETE'])]
+    #[Route(
+        path: '/exercises/{id}',
+        name: 'app_exercise_delete',
+        requirements: ['id' => Requirement::UUID],
+        methods: ['DELETE'],
+    )]
     #[IsGranted(ExerciseVoter::DELETE, 'exercise')]
     public function __invoke(Exercise $exercise): RedirectResponse
     {

@@ -5,13 +5,8 @@
 {% block body_id %}admin-backups{% endblock %}
 
 {% block header_actions -%}
-    <form method="post" action="{{ path('app_admin_backup_create') }}">
-        <button
-            class="btn btn-glass"
-            {% if is_granted('ADMIN_BACKUP_CREATE') %}type="submit" {% else %}disabled{% endif %}>
-            Back up
-        </button>
-    </form>
+    <twig:HeaderAction text="Back up" href="{{ path('app_admin_backup_create') }}" method="post"
+                       isGranted="{{ is_granted('ADMIN_BACKUP_CREATE') }}"/>
 {%- endblock %}
 
 {% block main -%}
