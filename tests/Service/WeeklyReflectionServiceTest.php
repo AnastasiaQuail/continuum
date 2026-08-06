@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Continuum\Tests\Service;
 
 use Continuum\Dto\Request\Reflection\EditWeeklyReflection;
+use Continuum\Dto\Request\TextField as TextFieldDto;
 use Continuum\Entity\TextField;
 use Continuum\Entity\WeeklyReflection;
 use Continuum\Repository\WeeklyReflectionRepositoryInterface;
@@ -208,12 +209,9 @@ final class WeeklyReflectionServiceTest extends TestCase
         yield [
             $week = new DateTimeImmutable('2020-01-01')->modify('sunday'),
             new EditWeeklyReflection(
-                joy: 'joy_text',
-                isJoyPrivate: false,
-                difficulty: 'difficulty_text',
-                isDifficultyPrivate: true,
-                achievement: '---',
-                isAchievementPrivate: false,
+                joy: new TextFieldDto(text: 'joy_text', isPrivate: false),
+                difficulty: new TextFieldDto(text: 'difficulty_text', isPrivate: true),
+                achievement: new TextFieldDto(text: '---', isPrivate: false),
             ),
             new WeeklyReflection(
                 date: $week,
@@ -226,12 +224,9 @@ final class WeeklyReflectionServiceTest extends TestCase
         yield [
             null,
             new EditWeeklyReflection(
-                joy: '---',
-                isJoyPrivate: true,
-                difficulty: 'difficulty_text',
-                isDifficultyPrivate: false,
-                achievement: 'achievement_text',
-                isAchievementPrivate: true,
+                joy: new TextFieldDto(text: '---', isPrivate: true),
+                difficulty: new TextFieldDto(text: 'difficulty_text', isPrivate: false),
+                achievement: new TextFieldDto(text: 'achievement_text', isPrivate: true),
             ),
             new WeeklyReflection(
                 date: new DateTimeImmutable('2025-01-01'),
@@ -244,12 +239,9 @@ final class WeeklyReflectionServiceTest extends TestCase
         yield [
             null,
             new EditWeeklyReflection(
-                joy: 'joy_text',
-                isJoyPrivate: false,
-                difficulty: 'other_text',
-                isDifficultyPrivate: false,
-                achievement: '000',
-                isAchievementPrivate: true,
+                joy: new TextFieldDto(text: 'joy_text', isPrivate: false),
+                difficulty: new TextFieldDto(text: 'other_text', isPrivate: false),
+                achievement: new TextFieldDto(text: '000', isPrivate: true),
             ),
             new WeeklyReflection(
                 date: new DateTimeImmutable('2025-01-01'),

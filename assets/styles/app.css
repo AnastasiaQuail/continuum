@@ -1560,6 +1560,12 @@ textarea {
             color: var(--form-control-color);
         }
     }
+
+    &:is(textarea) {
+        max-width: 100%;
+        min-height: calc(var(--font-size) * 3);
+        field-sizing: content;
+    }
 }
 
 .form-plain {

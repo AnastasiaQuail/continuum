@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Continuum\Form;
 
 use Continuum\Dto\Request\Reflection\EditWeeklyReflection;
+use Continuum\Dto\Request\TextField;
 use Continuum\Entity\WeeklyReflection;
 use Continuum\Form\Type\AbstractImmutableType;
+use Continuum\Form\Type\TextFieldType;
 use Override;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,56 +23,28 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var array{weeklyReflection: null|WeeklyReflection} $options */
-        $weeklyReflection = $options['weeklyReflection'];
+        $reflection = $options['weeklyReflection'];
 
         $builder->setDataMapper($this)
-            ->add('joy', TextareaType::class, [
-                'data' => $weeklyReflection?->joy->text,
-                'attr' => [
-                    'autofocus' => true,
-                    'autocomplete' => 'off',
-                    'rows' => 5,
-                ],
+            ->add('joy', TextFieldType::class, [
+                'data' => null !== $reflection ? TextField::create($reflection->joy) : null,
+                'label' => 'Joy',
             ])
-            ->add('isJoyPrivate', CheckboxType::class, [
-                'data' => $weeklyReflection?->joy->isPrivate,
-                'label' => 'Secure',
-                'required' => false,
+            ->add('difficulty', TextFieldType::class, [
+                'data' => null !== $reflection ? TextField::create($reflection->difficulty) : null,
+                'label' => 'Difficulty',
             ])
-            ->add('difficulty', TextareaType::class, [
-                'data' => $weeklyReflection?->difficulty->text,
-                'attr' => [
-                    'autocomplete' => 'off',
-                    'rows' => 5,
-                ],
-            ])
-            ->add('isDifficultyPrivate', CheckboxType::class, [
-                'data' => $weeklyReflection?->difficulty->isPrivate,
-                'label' => 'Secure',
-                'required' => false,
-            ])
-            ->add('achievement', TextareaType::class, [
-                'data' => $weeklyReflection?->achievement->text,
-                'attr' => [
-                    'autocomplete' => 'off',
-                    'rows' => 5,
-                ],
-            ])
-            ->add('isAchievementPrivate', CheckboxType::class, [
-                'data' => $weeklyReflection?->achievement->isPrivate,
-                'label' => 'Secure',
-                'required' => false,
+            ->add('achievement', TextFieldType::class, [
+                'data' => null !== $reflection ? TextField::create($reflection->achievement) : null,
+                'label' => 'Achievement',
             ]);
     }
 
     /**
      * @param array{
-     *  joy: FormInterface<null|string>,
-     *  isJoyPrivate: FormInterface<bool>,
-     *  difficulty: FormInterface<null|string>,
-     *  isDifficultyPrivate: FormInterface<bool>,
-     *  achievement: FormInterface<null|string>,
-     *  isAchievementPrivate: FormInterface<bool>
+     *  joy: FormInterface<TextField>,
+     *  difficulty: FormInterface<TextField>,
+     *  achievement: FormInterface<TextField>,
      * } $forms
      *
      * @phpstan-ignore method.childParameterType (fix of parent stub)
@@ -81,12 +53,9 @@ final class EditWeeklyReflectionType extends AbstractImmutableType
     protected function mapDataClass(array $forms): EditWeeklyReflection
     {
         return new EditWeeklyReflection(
-            joy: $forms['joy']->getData() ?? '',
-            isJoyPrivate: $forms['isJoyPrivate']->getData(),
-            difficulty: $forms['difficulty']->getData() ?? '',
-            isDifficultyPrivate: $forms['isDifficultyPrivate']->getData(),
-            achievement: $forms['achievement']->getData() ?? '',
-            isAchievementPrivate: $forms['isAchievementPrivate']->getData(),
+            joy: $forms['joy']->getData(),
+            difficulty: $forms['difficulty']->getData(),
+            achievement: $forms['achievement']->getData(),
         );
     }
 
