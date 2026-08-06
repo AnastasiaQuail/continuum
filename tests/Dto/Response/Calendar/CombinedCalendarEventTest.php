@@ -31,11 +31,11 @@ final class CombinedCalendarEventTest extends TestCase
         );
 
         $dto = new CombinedCalendarEvent(
-            dayEvent: $dayEvent,
+            dayEvents: [$dayEvent],
             hourEvents: [$hourEvent],
         );
 
-        self::assertSame($dayEvent, $dto->dayEvent);
+        self::assertSame([$dayEvent], $dto->dayEvents);
         self::assertSame([$hourEvent], $dto->hourEvents);
     }
 
@@ -43,7 +43,7 @@ final class CombinedCalendarEventTest extends TestCase
     {
         $dto = new CombinedCalendarEvent();
 
-        self::assertNull($dto->dayEvent);
+        self::assertSame([], $dto->dayEvents);
         self::assertSame([], $dto->hourEvents);
     }
 }

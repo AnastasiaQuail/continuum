@@ -1,0 +1,9 @@
+{%- props isGranted, href, label -%}
+
+<{% if isGranted %}a{% else %}span{% endif %} class="btn btn-glass btn-pagination"
+    {% if isGranted %}href="{{ href }}"{% else %} disabled{% endif %}>
+    {%- block content -%}
+        <span>{{ label }}</span>
+        {{- ux_icon('lucide:chevron-right') -}}
+    {%- endblock -%}
+</{% if isGranted %}a{% else %}span{% endif %}>

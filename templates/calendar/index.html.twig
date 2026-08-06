@@ -24,21 +24,14 @@
     {%- endif -%}
 {%- endblock %}
 
-{% block body_actions -%}
-    <div class="body-actions actions-pagination">
-        {{ include('default/_pagination.html.twig', {
-            prev: {
-                url: path('app_calendar', {year: year - 1}),
-                label: year - 1,
-                is_granted: year > app_year_min,
-            },
-            next: {
-                url: path('app_calendar', {year: year + 1}),
-                label: year + 1,
-                is_granted: year < app_year_max,
-            },
-        }) }}
-    </div>
+{% block body_pagination_actions -%}
+    <twig:Pagination:Prev href="{{ path('app_calendar', {year: year - 1}) }}"
+                          isGranted="{{ year > app_year_min }}"
+                          label="{{ year - 1 }}"/>
+
+    <twig:Pagination:Next href="{{ path('app_calendar', {year: year + 1}) }}"
+                          isGranted="{{ year < app_year_max }}"
+                          label="{{ year + 1 }}"/>
 {%- endblock %}
 
 {% block main -%}
@@ -48,20 +41,28 @@
 
         <twig:Caledar year="{{ year }}">
             {# "day" is an internal string in the "Y-m-d" format #}
-            {%- set event = events[day] is defined ? events[day].dayEvent : null -%}
-            {%- set badges = events[day] is defined ? events[day].hourEvents : [] -%}
+            {%- set day_events = events[day] is defined ? events[day].dayEvents : [] -%}
+            {%- set main_event = day_events|first -%}
+            {%- set hour_events = events[day] is defined ? events[day].hourEvents : [] -%}
 
-            <twig:Calendar:Day day="{{ day|date('j') }}"
+            <twig:Calendar:Day day="{{ day }}"
                                href="{{ path('app_calendar_day', {day: day}) }}"
+                               hasPopover
                                isGranted="{{ is_granted('CALENDAR_EDIT', day) }}"
-                               color="{{ event !== null ? event.type.value }}"
+                               color="{{ main_event ? main_event.type.value }}"
                                isInactive="{{ day < start_date }}"
                                isPast="{{ day < current_day }}"
                                isCurrent="{{ day === current_day }}"
                                isWeekend="{{ day|is_weekend }}">
-                {%- for badge in badges -%}
-                    <twig:Calendar:Badge color="{{ badge.type.value }}"/>
+                {%- for hour_event in hour_events -%}
+                    <twig:Calendar:Badge color="{{ hour_event.type.value }}"/>
                 {%- endfor -%}
+
+                <twig:block name="popover_events">
+                    {%- for event in day_events|merge(hour_events) -%}
+                        <twig:Calendar:PopoverEvent event="{{ event }}"/>
+                    {%- endfor -%}
+                </twig:block>
             </twig:Calendar:Day>
         </twig:Caledar>
     </twig:Card>

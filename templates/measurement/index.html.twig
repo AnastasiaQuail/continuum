@@ -24,24 +24,16 @@
                        isGranted="{{ is_granted('BODY_MEASUREMENT_HISTORY') }}"/>
 {%- endblock %}
 
-{% block body_actions -%}
-    <div class="body-actions actions-pagination">
-        {% set prev_month = month.modify('-1 month') %}
-        {% set next_month = month.modify('+1 month') %}
+{% block body_pagination_actions -%}
+    {%- set prev_month = month.modify('-1 month') -%}
+    <twig:Pagination:Prev href="{{ path('app_measurements', {month: prev_month.format('Y-m')}) }}"
+                          isGranted="{{ prev_month.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prev_month) }}"
+                          label="{{ prev_month.format('F') }}"/>
 
-        {{ include('default/_pagination.html.twig', {
-            prev: {
-                url: path('app_measurements', {month: prev_month.format('Y-m')}),
-                label: prev_month.format('F'),
-                is_granted: prev_month.format('Y') >= app_year_min and is_granted('BODY_MEASUREMENT_VIEW', prev_month),
-            },
-            next: {
-                url: path('app_measurements', {month: next_month.format('Y-m')}),
-                label: next_month.format('F'),
-                is_granted: user_date().format('Y-m') >= next_month.format('Y-m'),
-            },
-        }) }}
-    </div>
+    {%- set next_month = month.modify('+1 month') -%}
+    <twig:Pagination:Next href="{{ path('app_measurements', {month: next_month.format('Y-m')}) }}"
+                          isGranted="{{ user_date().format('Y-m') >= next_month.format('Y-m') }}"
+                          label="{{ next_month.format('F') }}"/>
 {%- endblock %}
 
 {% block main -%}

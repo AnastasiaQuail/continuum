@@ -3681,6 +3681,78 @@ textarea {
         }
     }
 
+    .day-popover {
+        --day-popover-gap: var(--control-padding-block);
+        --btn-backdrop-filter: blur(12px);
+
+        [data-theme="dark"] & {
+            --btn-backdrop-filter: blur(16px) brightness(0.4);
+
+            @media (width >= 768px) {
+                --btn-backdrop-filter: blur(16px) brightness(0.8);
+            }
+        }
+
+        position-area: y-end span-right;
+        min-width: 100px;
+        row-gap: var(--day-popover-gap);
+        margin: calc(var(--month-day-gap) * 2);
+        margin-left: 0;
+        padding: calc(var(--day-popover-gap) * 2);
+        text-align: left;
+
+        .day-popover-title {
+            font-size: var(--font-size-extra-small);
+            opacity: var(--transparent-color);
+        }
+
+        .day-popover-events {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            row-gap: calc(var(--day-popover-gap) / 2);
+
+            &:empty {
+                height: calc(var(--font-size-small) * 2.5);
+
+                &:after {
+                    position: absolute;
+                    content: 'No events';
+                    inset: 0;
+                    top: var(--day-popover-gap);
+                    align-items: center;
+                    justify-content: center;
+                    display: flex;
+                    font-size: var(--font-size-small);
+                    white-space: nowrap;
+                    opacity: .2;
+                }
+            }
+
+            .day-popover-event {
+                display: flex;
+                column-gap: var(--day-popover-gap);
+                align-items: center;
+                font-size: var(--font-size-small);
+
+                > span {
+                    white-space: nowrap;
+                }
+            }
+        }
+
+        .day-popover-link {
+            white-space: nowrap;
+        }
+
+        .day-popover-events,
+        .day-popover-link {
+            width: 100%;
+            padding-top: var(--day-popover-gap);
+            border-top: var(--border-width) solid color-mix(in oklch, var(--color) 10%, transparent);
+        }
+    }
+
     @media (576px <= width < 768px) {
         --calendar-months-in-row: 3;
 
