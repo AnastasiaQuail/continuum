@@ -27,21 +27,24 @@
         {{- form_start(form, {attr: {id: 'form-weekly-reflection', class: 'form-submit-external'}}) -}}
 
         <twig:Form:Row class="form-row-text-field" data-general-type="green">
-            {{- form_label(form.joy) -}}
-            {{- form_widget(form.joy, {attr: {placeholder: 'Required'}}) -}}
-            {{- form_widget(form.isJoyPrivate) -}}
+            {{- form_label(form.joy.text) -}}
+            {{- form_widget(form.joy.text, {attr: {placeholder: 'Required'}}) -}}
+            {{- form_errors(form.joy.text) -}}
+            {{- form_widget(form.joy.isPrivate) -}}
         </twig:Form:Row>
 
         <twig:Form:Row class="form-row-text-field" data-general-type="yellow">
-            {{- form_label(form.difficulty) -}}
-            {{- form_widget(form.difficulty, {attr: {placeholder: 'Required'}}) -}}
-            {{- form_widget(form.isDifficultyPrivate) -}}
+            {{- form_label(form.difficulty.text) -}}
+            {{- form_widget(form.difficulty.text, {attr: {placeholder: 'Required'}}) -}}
+            {{- form_errors(form.difficulty.text) -}}
+            {{- form_widget(form.difficulty.isPrivate) -}}
         </twig:Form:Row>
 
         <twig:Form:Row class="form-row-text-field" data-general-type="blue">
-            {{- form_label(form.achievement) -}}
-            {{- form_widget(form.achievement, {attr: {placeholder: 'Required'}}) -}}
-            {{- form_widget(form.isAchievementPrivate) -}}
+            {{- form_label(form.achievement.text) -}}
+            {{- form_widget(form.achievement.text, {attr: {placeholder: 'Required'}}) -}}
+            {{- form_errors(form.achievement.text) -}}
+            {{- form_widget(form.achievement.isPrivate) -}}
         </twig:Form:Row>
 
         <twig:Form:Submit/>

@@ -60,9 +60,9 @@ final readonly class WeeklyReflectionService
         ?WeeklyReflection $weeklyReflection,
         EditWeeklyReflection $dto
     ): WeeklyReflection {
-        $joy = new TextField($dto->joy, $dto->isJoyPrivate);
-        $difficulty = new TextField($dto->difficulty, $dto->isDifficultyPrivate);
-        $achievement = new TextField($dto->achievement, $dto->isAchievementPrivate);
+        $joy = new TextField($dto->joy->text, $dto->joy->isPrivate);
+        $difficulty = new TextField($dto->difficulty->text, $dto->difficulty->isPrivate);
+        $achievement = new TextField($dto->achievement->text, $dto->achievement->isPrivate);
 
         if (null === $weeklyReflection) {
             $weeklyReflection = new WeeklyReflection($week, $joy, $difficulty, $achievement);
