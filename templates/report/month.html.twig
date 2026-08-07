@@ -6,24 +6,16 @@
 {% block page_subtitle %}{{ is_current_year ? month.format('F') : month.format('F Y') }}{% endblock %}
 {% block body_id %}report-month{% endblock %}
 
-{% block body_actions -%}
-    <div class="body-actions actions-pagination">
-        {%- set prev_month = month.modify('last day of previous month') -%}
-        {%- set next_month = month.modify('last day of next month') -%}
+{% block body_pagination_actions -%}
+    {%- set prev_month = month.modify('last day of previous month') -%}
+    <twig:Pagination:Prev href="{{ path('app_report_month', {month: prev_month.format('Y-m')}) }}"
+                          isGranted="{{ prev_month.format('Y') >= app_year_min and is_granted('REPORT_MONTH_VIEW', prev_month) }}"
+                          label="{{ prev_month.format('F') }}"/>
 
-        {{ include('default/_pagination.html.twig', {
-            prev: {
-                url: path('app_report_month', {month: prev_month.format('Y-m')}),
-                label: prev_month.format('F'),
-                is_granted: prev_month.format('Y') >= app_year_min and is_granted('REPORT_MONTH_VIEW', prev_month),
-            },
-            next: {
-                url: path('app_report_month', {month: next_month.format('Y-m')}),
-                label: next_month.format('F'),
-                is_granted: is_granted('REPORT_MONTH_VIEW', next_month),
-            },
-        }) }}
-    </div>
+    {%- set next_month = month.modify('last day of next month') -%}
+    <twig:Pagination:Next href="{{ path('app_report_month', {month: next_month.format('Y-m')}) }}"
+                          isGranted="{{ is_granted('REPORT_MONTH_VIEW', next_month) }}"
+                          label="{{ next_month.format('F') }}"/>
 {%- endblock %}
 
 {% block main -%}

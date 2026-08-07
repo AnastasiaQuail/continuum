@@ -18,24 +18,16 @@
     <twig:Form:ExternalSubmit target="#form-calendar"/>
 {%- endblock %}
 
-{% block body_actions -%}
-    <div class="body-actions actions-pagination">
-        {%- set prev_day = day.modify('-1 day') -%}
-        {%- set next_day = day.modify('+1 day') -%}
+{% block body_pagination_actions -%}
+    {%- set prev_day = day.modify('-1 day') -%}
+    <twig:Pagination:Prev href="{{ path('app_calendar_day', {day: prev_day.format('Y-m-d')}) }}"
+                          isGranted="{{ prev_day.format('Y') > app_year_min }}"
+                          label="{{ prev_day.format('j F') }}"/>
 
-        {{ include('default/_pagination.html.twig', {
-            prev: {
-                url: path('app_calendar_day', {day: prev_day.format('Y-m-d')}),
-                label: prev_day.format('j F'),
-                is_granted: prev_day.format('Y') > app_year_min,
-            },
-            next: {
-                url: path('app_calendar_day', {day: next_day.format('Y-m-d')}),
-                label: next_day.format('j F'),
-                is_granted: next_day.format('Y') < app_year_max,
-            },
-        }) }}
-    </div>
+    {%- set next_day = day.modify('+1 day') -%}
+    <twig:Pagination:Next href="{{ path('app_calendar_day', {day: next_day.format('Y-m-d')}) }}"
+                          isGranted="{{ next_day.format('Y') < app_year_max }}"
+                          label="{{ next_day.format('j F') }}"/>
 {%- endblock %}
 
 {% block main -%}

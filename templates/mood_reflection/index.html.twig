@@ -25,24 +25,16 @@
     </twig:Card>
 {%- endblock %}
 
-{% block body_actions -%}
-    <div class="body-actions actions-pagination">
-        {% set prev_month = month.modify('-1 month') %}
-        {% set next_month = month.modify('+1 month') %}
+{% block body_pagination_actions -%}
+    {%- set prev_month = month.modify('-1 month') -%}
+    <twig:Pagination:Prev href="{{ path('app_mood_reflections', {month: prev_month.format('Y-m')}) }}"
+                          isGranted="{{ prev_month.format('Y') >= app_year_min and is_granted('MOOD_REFLECTION_VIEW', prev_month) }}"
+                          label="{{ prev_month.format('F') }}"/>
 
-        {{ include('default/_pagination.html.twig', {
-            prev: {
-                url: path('app_mood_reflections', {month: prev_month.format('Y-m')}),
-                label: prev_month.format('F'),
-                is_granted: prev_month.format('Y') >= app_year_min and is_granted('MOOD_REFLECTION_VIEW', prev_month),
-            },
-            next: {
-                url: path('app_mood_reflections', {month: next_month.format('Y-m')}),
-                label: next_month.format('F'),
-                is_granted: current_date.format('Y-m') >= next_month.format('Y-m'),
-            },
-        }) }}
-    </div>
+    {%- set next_month = month.modify('+1 month') -%}
+    <twig:Pagination:Next href="{{ path('app_mood_reflections', {month: next_month.format('Y-m')}) }}"
+                          isGranted="{{ current_date.format('Y-m') >= next_month.format('Y-m') }}"
+                          label="{{ next_month.format('F') }}"/>
 {%- endblock %}
 
 {% block main -%}
@@ -53,7 +45,7 @@
             {# "day" is an internal string in the "Y-m-d" format #}
             {%- set mood = moods[day] is defined ? moods[day] : null -%}
 
-            <twig:Calendar:Day day="{{ day|date('j') }}"
+            <twig:Calendar:Day day="{{ day }}"
                                href="{{ path('app_mood_reflection_edit', {day: day}) }}"
                                isGranted="{{ is_granted('MOOD_REFLECTION_EDIT', day) }}"
                                color="{{ mood !== null ? mood.type.color.value }}"

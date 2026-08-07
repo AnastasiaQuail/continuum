@@ -72,7 +72,7 @@
                 {%- if block('header_actions') is defined -%}
                     <div class="header-actions">
                         <div class="btn-group btn-group-glass btn-group-header-actions">
-                            {%- block header_actions -%}{%- endblock -%}
+                            {{- block('header_actions') -}}
                         </div>
                     </div>
                 {%- endif -%}
@@ -179,7 +179,11 @@
             <main class="body-container">
                 {%- block showcase %}{% endblock -%}
 
-                {%- block body_actions -%}{%- endblock -%}
+                {%- if block('body_pagination_actions') is defined -%}
+                    <div class="body-actions actions-pagination">
+                        {{- block('body_pagination_actions') -}}
+                    </div>
+                {%- endif -%}
 
                 {%- block main %}{% endblock -%}
             </main>

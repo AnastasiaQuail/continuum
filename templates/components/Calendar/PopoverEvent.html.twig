@@ -1,0 +1,10 @@
+{# @var event \Continuum\Entity\CalendarEvent #}
+
+{%- props event -%}
+
+<div class="day-popover-event">
+    <twig:Badge color="{{ event.type.value }}">{{ event.title }}</twig:Badge>
+    {%- if not event.allDay -%}
+        <span> at {{ event.getUserDatetime(app.user).format('H:i') }}</span>
+    {%- endif -%}
+</div>

@@ -70,7 +70,7 @@ final readonly class CalendarEventService
                     static fn (CalendarEvent $a, CalendarEvent $b): int => $a->getCreatedAt() <=> $b->getCreatedAt(),
                 );
 
-                return new CombinedCalendarEvent(array_first($days), $day['hours']);
+                return new CombinedCalendarEvent($days, $day['hours']);
             },
             $events
         );

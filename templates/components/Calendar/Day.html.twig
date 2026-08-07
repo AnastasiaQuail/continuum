@@ -1,9 +1,25 @@
-{%- props day, href = false, isGranted = false, color = false, isInactive = false, isPast = false, isCurrent = false, isWeekend = false -%}
+{%- props day, href = false, hasPopover = false, isGranted = false, color = false, isInactive = false, isPast = false, isCurrent = false, isWeekend = false -%}
 
-<{% if isGranted %}a{% else %}div{% endif %}
-    {% if isGranted %}href="{{ href }}"{% endif %}
+{%- set popover_id = 'day-' ~ day ~ '-popover' -%}
+
+<{% if hasPopover %}button{% elseif isGranted %}a{% else %}div{% endif %}
+    {% if hasPopover %}popovertarget="{{ popover_id }}"{% elseif isGranted %} href="{{ href }}"{% endif %}
     class="day {{- isInactive ? ' day-inactive' -}} {{- isPast ? ' day-past' -}} {{- isCurrent ? ' day-current' -}} {{- isWeekend ? ' day-weekend' -}}"
     {%- if color %}data-general-type="{{ color }}"{% endif -%}>
-    <span>{{ day }}</span>
+    <span>{{ day|date('j') }}</span>
     <div class="day-badges">{% block content %}{% endblock %}</div>
-</{% if isGranted %}a{% else %}div{% endif %}>
+</{% if hasPopover %}button{% elseif isGranted %}a{% else %}div{% endif %}>
+
+{%- if hasPopover -%}
+    <div class="btn btn-glass btn-popover day-popover" id="{{ popover_id }}" popover>
+        <div class="day-popover-title">{{ day|date('F j') }}</div>
+        {%- if block('popover_events') is defined -%}
+            <div class="day-popover-events">{{ block('popover_events') }}</div>
+        {%- endif -%}
+        {%- if isGranted -%}
+            <div class="day-popover-link">
+                <a class="btn btn-primary btn-link" href="{{ href }}">Add events</a>
+            </div>
+        {%- endif -%}
+    </div>
+{%- endif -%}

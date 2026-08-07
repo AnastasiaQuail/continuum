@@ -9,7 +9,10 @@ use Continuum\Entity\CalendarEvent;
 final readonly class CombinedCalendarEvent
 {
     public function __construct(
-        public ?CalendarEvent $dayEvent = null,
+        /**
+         * @var list<CalendarEvent>
+         */
+        public array $dayEvents = [],
         /**
          * @var list<CalendarEvent>
          */
