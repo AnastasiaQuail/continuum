@@ -22,8 +22,11 @@ final class WorkoutSetCreateController extends AbstractController
 
     #[Route(path: '/workouts/exercises/{id}/sets', name: 'app_workout_set_create', methods: ['POST'])]
     #[IsGranted(WorkoutVoter::SET_CREATE, 'workoutExercise')]
-    public function __invoke(WorkoutExercise $workoutExercise, #[MapRequestPayload] NewWorkoutSet $dto): RedirectResponse
-    {
+    public function __invoke(
+        WorkoutExercise $workoutExercise,
+        #[MapRequestPayload]
+        NewWorkoutSet $dto,
+    ): RedirectResponse {
         $workoutSet = $this->workoutSetService->create($workoutExercise, $dto);
 
         return $this->redirectToRoute('app_workouts_view', [
