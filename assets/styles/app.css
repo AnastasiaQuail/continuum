@@ -3533,7 +3533,7 @@ textarea {
         --day-aspect-ratio: 6 / 7;
         --day-font-size: 2.8vw;
         --day-color: var(--color);
-        --day-border-width: 1px;
+        --day-border-width: var(--border-width);
         --day-border-color: var(--general-color);
         --day-border-color-transparent: 0%;
         --day-border-radius: var(--border-radius-internal);
@@ -3545,6 +3545,7 @@ textarea {
         aspect-ratio: var(--day-aspect-ratio);
         min-height: 0; /* fix for safari */
         min-width: 0; /* fix for safari */
+        padding: 0;
         align-content: center;
         font-size: var(--day-font-size);
         text-decoration: none;
@@ -3587,7 +3588,7 @@ textarea {
             width: var(--day-badge-size, 6px);
             height: var(--day-badge-size, 6px);
             margin-left: -2px;
-            border: 1px solid color-mix(in srgb, var(--day-badge-border-color) var(--day-badge-border-color-transparent), var(--background-color));
+            border: var(--border-width) solid color-mix(in srgb, var(--day-badge-border-color) var(--day-badge-border-color-transparent), var(--background-color));
             border-radius: 50%;
             background-color: color-mix(in srgb, var(--day-badge-background-color) var(--day-badge-background-color-transparent), var(--background-color));
             z-index: auto;
