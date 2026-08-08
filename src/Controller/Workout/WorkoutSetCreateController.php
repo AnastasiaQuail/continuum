@@ -24,7 +24,8 @@ final class WorkoutSetCreateController extends AbstractController
     #[IsGranted(WorkoutVoter::SET_CREATE, 'workoutExercise')]
     public function __invoke(
         WorkoutExercise $workoutExercise,
-        #[MapRequestPayload] NewWorkoutSet $dto
+        #[MapRequestPayload]
+        NewWorkoutSet $dto,
     ): RedirectResponse {
         $workoutSet = $this->workoutSetService->create($workoutExercise, $dto);
 
