@@ -22,14 +22,14 @@ final class LoginControllerTest extends WebTestCase
         $this->client = self::createClient();
     }
 
-    public function testLoginWrongEmail(): void
+    public function testLoginWrongUsername(): void
     {
-        // Denied - Can't log in with invalid email address.
+        // Denied - Can't log in with invalid identifier.
         $this->client->request(Request::METHOD_GET, '/login');
         self::assertResponseIsSuccessful();
 
         $this->client->submitForm('Sign in', [
-            '_username' => 'doesNotExist@example.com',
+            '_username' => 'does_not_exist_username',
             '_password' => 'password',
         ]);
 
@@ -40,7 +40,7 @@ final class LoginControllerTest extends WebTestCase
 
         // Ensure we do not reveal if the user exists or not.
         self::assertSelectorTextContains('.alert-danger:not(.browser-unsupport)', 'Invalid credentials.');
-        self::assertInputValueSame('_username', 'doesNotExist@example.com');
+        self::assertInputValueSame('_username', 'does_not_exist_username');
         self::assertInputValueSame('_password', '');
     }
 
@@ -51,7 +51,7 @@ final class LoginControllerTest extends WebTestCase
         self::assertResponseIsSuccessful();
 
         $this->client->submitForm('Sign in', [
-            '_username' => 'admin@continuum.com',
+            '_username' => 'admin',
             '_password' => 'bad-password',
         ]);
 
@@ -62,7 +62,7 @@ final class LoginControllerTest extends WebTestCase
 
         // Ensure we do not reveal the user exists but the password is wrong.
         self::assertSelectorTextContains('.alert-danger:not(.browser-unsupport)', 'Invalid credentials.');
-        self::assertInputValueSame('_username', 'admin@continuum.com');
+        self::assertInputValueSame('_username', 'admin');
         self::assertInputValueSame('_password', '');
     }
 
@@ -73,7 +73,7 @@ final class LoginControllerTest extends WebTestCase
 
         // Success - Login with valid credentials is allowed.
         $this->client->submitForm('Sign in', [
-            '_username' => 'admin@continuum.com',
+            '_username' => 'admin',
             '_password' => 'password',
         ]);
 

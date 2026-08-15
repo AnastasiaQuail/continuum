@@ -21,7 +21,7 @@ final class GodUserServiceTest extends TestCase
     #[DataProvider('provideGetAgeCases')]
     public function testGetAge(DateTimeZone $timezone, DateTimeImmutable $date, int $age): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->timezone = $timezone;
 
         $service = new GodUserService(userBirthDate: '2000-01-01', userHeight: 0);

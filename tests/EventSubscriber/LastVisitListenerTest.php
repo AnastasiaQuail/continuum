@@ -103,7 +103,7 @@ final class LastVisitListenerTest extends KernelTestCase
 
     private function buildUser(?DateTimeImmutable $lastVisitedAt = null): User
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->password = 'password';
 
         if (null !== $lastVisitedAt) {

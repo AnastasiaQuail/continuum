@@ -27,25 +27,25 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
 
     public function testFindById(): void
     {
-        $user = $this->repository->findOneBy(['email' => 'superadmin@continuum.com']);
+        $user = $this->repository->findOneBy(['identifier' => 'superadmin']);
         self::assertNotNull($user);
         self::clearManager();
 
         $foundUser = $this->repository->findOneById($user->id);
 
         self::assertNotNull($foundUser);
-        self::assertSame($user->email, $foundUser->email);
+        self::assertSame($user->identifier, $foundUser->identifier);
     }
 
     public function testFindOrdered(): void
     {
         $newUsers = [
-            'email-five@example.com' => '+1 month',
-            'email-six@example.com' => '+1 day',
+            'username_five' => '+1 month',
+            'username_six' => '+1 day',
         ];
 
-        foreach ($newUsers as $email => $date) {
-            $newUser = new User($email);
+        foreach ($newUsers as $identifier => $date) {
+            $newUser = new User($identifier);
             $newUser->password = 'password';
 
             new ReflectionProperty(User::class, 'lastVisitedAt')
@@ -57,8 +57,8 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
         $users = $this->repository->findOrdered();
 
         self::assertCount(6, $users);
-        self::assertSame('email-five@example.com', $users[0]->email);
-        self::assertSame('email-six@example.com', $users[1]->email);
+        self::assertSame('username_five', $users[0]->identifier);
+        self::assertSame('username_six', $users[1]->identifier);
     }
 
     public function testUpgradePasswordWrongUser(): void
@@ -80,7 +80,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
 
     public function testUpgradePassword(): void
     {
-        $user = $this->repository->findOneBy(['email' => 'superadmin@continuum.com']);
+        $user = $this->repository->findOneBy(['identifier' => 'superadmin']);
         self::assertNotNull($user);
 
         $this->repository->upgradePassword($user, 'newPassword');
@@ -92,7 +92,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
 
     public function testUpgradeEmptyPassword(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
 
         $this->expectExceptionObject(new UnsupportedUserException('New password cannot be blank.'));
 
@@ -101,7 +101,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
 
     public function testUpgradeRoles(): void
     {
-        $user = $this->repository->findOneBy(['email' => 'superadmin@continuum.com']);
+        $user = $this->repository->findOneBy(['identifier' => 'superadmin']);
         self::assertNotNull($user);
 
         $this->repository->updateRoles($user->id, UserRole::User->value);
@@ -114,7 +114,7 @@ final class UserRepositoryTest extends AbstractRepositoryTestCase
 
     public function testUpdateLastVisitedAt(): void
     {
-        $user = $this->repository->findOneBy(['email' => 'superadmin@continuum.com']);
+        $user = $this->repository->findOneBy(['identifier' => 'superadmin']);
         self::assertNotNull($user);
         $newLastVisited = $user->lastVisitedAt->modify('+1 month');
 

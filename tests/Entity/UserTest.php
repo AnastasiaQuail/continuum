@@ -24,12 +24,12 @@ final class UserTest extends TestCase
 {
     public function testCreate(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->password = 'hashed_password';
 
         self::assertInstanceOf(UuidV7::class, $user->id);
-        self::assertSame('email@example.com', $user->email);
-        self::assertSame($user->email, $user->getUserIdentifier());
+        self::assertSame('username', $user->identifier);
+        self::assertSame($user->identifier, $user->getUserIdentifier());
         self::assertSame('hashed_password', $user->password);
         self::assertSame($user->password, $user->getPassword());
         self::assertSame(UserStatus::Created, $user->status);
@@ -46,7 +46,7 @@ final class UserTest extends TestCase
     {
         $location = new Location(100.12, -50.80);
 
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->password = 'hashed_password';
         $user->status = UserStatus::Active;
         $user->addRole(UserRole::Admin);
@@ -66,16 +66,16 @@ final class UserTest extends TestCase
                 'lastVisitedAt' => $user->createdAt,
                 'location' => $location,
                 "\0" . User::class . "\0timezoneName" => 'Africa/Tunis',
-                'email' => 'email@example.com',
+                'identifier' => 'username',
                 "\0" . User::class . "\0password" => hash('crc32c', 'hashed_password'),
             ],
             $data
         );
     }
 
-    public function testEmptyEmail(): void
+    public function testEmptyIdentifier(): void
     {
-        $this->expectExceptionObject(new InvalidArgumentException('Email cannot be empty.'));
+        $this->expectExceptionObject(new InvalidArgumentException('Username cannot be empty.'));
 
         new User('');
     }
@@ -84,7 +84,7 @@ final class UserTest extends TestCase
     {
         $this->expectExceptionObject(new InvalidArgumentException('Password should be set.'));
 
-        $user = new User('email@example.com');
+        $user = new User('username');
 
         self::assertSame('--- this assert only for phpstorm ---', $user->password);
     }
@@ -93,7 +93,7 @@ final class UserTest extends TestCase
     {
         $this->expectExceptionObject(new InvalidArgumentException('Password cannot be empty.'));
 
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->password = '';
 
         self::assertSame('--- this assert only for phpstorm ---', $user->password);
@@ -101,7 +101,7 @@ final class UserTest extends TestCase
 
     public function testStatus(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
 
         foreach (UserStatus::cases() as $userStatus) {
             $user->status = $userStatus;
@@ -117,7 +117,7 @@ final class UserTest extends TestCase
     #[DataProvider('provideRolesCases')]
     public function testRoles(array $addRoles, array $resultRoles): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
 
         foreach ($addRoles as $role) {
             $user->addRole($role);
@@ -169,7 +169,7 @@ final class UserTest extends TestCase
     #[DataProvider('provideTimezoneCases')]
     public function testTimezone(string $timezoneName): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
 
         $user->timezone = new DateTimeZone($timezoneName);
 
@@ -192,7 +192,7 @@ final class UserTest extends TestCase
 
     public function testLocation(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
 
         $user->location = new Location(100.123456, 9.876543);
 
@@ -203,7 +203,7 @@ final class UserTest extends TestCase
     #[DataProvider('provideNotEqualedCases')]
     public function testNotEqualed(UserInterface $otherUser): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->password = 'hashed_password';
         $user->status = UserStatus::Active;
         $user->addRole(UserRole::Admin);
@@ -235,40 +235,40 @@ final class UserTest extends TestCase
 
         yield [$userOtherImplement];
 
-        $userOtherEmail = new User('other-email@example.com');
+        $userOtherUsername = new User('other-username');
 
-        yield [$userOtherEmail];
+        yield [$userOtherUsername];
 
-        $userDefaultStatus = new User('email@example.com');
+        $userDefaultStatus = new User('username');
 
         yield [$userDefaultStatus];
 
-        $userOtherStatus = new User('email@example.com');
+        $userOtherStatus = new User('username');
         $userOtherStatus->status = UserStatus::Disabled;
 
         yield [$userOtherStatus];
 
-        $userOtherPassword = new User('email@example.com');
+        $userOtherPassword = new User('username');
         $userOtherPassword->status = UserStatus::Active;
         $userOtherPassword->password = 'other_hashed_password';
         $userOtherPassword->addRole(UserRole::Admin);
 
         yield [$userOtherPassword];
 
-        $userDefaultRole = new User('email@example.com');
+        $userDefaultRole = new User('username');
         $userDefaultRole->status = UserStatus::Active;
         $userDefaultRole->password = 'hashed_password';
 
         yield [$userDefaultRole];
 
-        $userOtherRole = new User('email@example.com');
+        $userOtherRole = new User('username');
         $userOtherRole->status = UserStatus::Active;
         $userOtherRole->password = 'hashed_password';
         $userOtherRole->addRole(UserRole::SuperAdmin);
 
         yield [$userOtherRole];
 
-        $userOtherRoles = new User('email@example.com');
+        $userOtherRoles = new User('username');
         $userOtherRoles->status = UserStatus::Active;
         $userOtherRoles->password = 'hashed_password';
         $userOtherRoles->addRole(UserRole::Admin);
@@ -279,12 +279,12 @@ final class UserTest extends TestCase
 
     public function testSerializedPasswordNotEqualed(): void
     {
-        $otherUser = new User('email@example.com');
+        $otherUser = new User('username');
         $otherUser->password = 'hashed_password';
         $otherUser->status = UserStatus::Active;
         $otherUser->addRole(UserRole::Admin);
 
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->password = '12345678';
         $user->status = UserStatus::Active;
         $user->addRole(UserRole::Admin);
@@ -294,12 +294,12 @@ final class UserTest extends TestCase
 
     public function testSerializedPasswordEqual(): void
     {
-        $otherUser = new User('email@example.com');
+        $otherUser = new User('username');
         $otherUser->password = 'hashed_password';
         $otherUser->status = UserStatus::Active;
         $otherUser->addRole(UserRole::Admin);
 
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->password = hash('crc32c', $otherUser->password);
         $user->status = UserStatus::Active;
         $user->addRole(UserRole::Admin);
@@ -309,12 +309,12 @@ final class UserTest extends TestCase
 
     public function testEqual(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->password = 'hashed_password';
         $user->status = UserStatus::Active;
         $user->addRole(UserRole::Admin);
 
-        $otherUser = new User('email@example.com');
+        $otherUser = new User('username');
         $otherUser->password = 'hashed_password';
         $otherUser->status = UserStatus::Active;
         $otherUser->addRole(UserRole::Admin);
@@ -326,7 +326,7 @@ final class UserTest extends TestCase
 
     public function testUpdate(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         new ReflectionProperty(User::class, 'updatedAt')
             ->setValue($user, $user->updatedAt->modify('-1 year'));
 

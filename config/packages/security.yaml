@@ -9,7 +9,7 @@ security:
         app_user_provider:
             entity:
                 class: Continuum\Entity\User
-                property: email
+                property: identifier
 
     firewalls:
         dev:

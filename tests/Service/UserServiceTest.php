@@ -34,12 +34,12 @@ final class UserServiceTest extends TestCase
 
     public function testGet(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $this->repository->expects($this->once())->method('findOneById')->with($user->id)->willReturn($user);
 
         $foundUser = $this->service->get($user->id);
 
-        self::assertSame('email@example.com', $foundUser->email);
+        self::assertSame('username', $foundUser->identifier);
     }
 
     public function testGetNotFound(): void
@@ -55,9 +55,9 @@ final class UserServiceTest extends TestCase
     public function testGetAll(): void
     {
         $users = [
-            new User('email@example.com'),
-            new User('email2@example.com'),
-            new User('email3@example.com'),
+            new User('username'),
+            new User('username2'),
+            new User('username3'),
         ];
         $this->repository->expects($this->once())->method('findOrdered')->willReturn($users);
 
@@ -77,7 +77,7 @@ final class UserServiceTest extends TestCase
 
     public function testUpdateTimezone(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->timezone = new DateTimeZone('UTC');
 
         $timezone = new DateTimeZone('Asia/Shanghai');
@@ -90,7 +90,7 @@ final class UserServiceTest extends TestCase
 
     public function testUpdateLocation(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $dto = new EditLocation(10.10, -20.20);
         $this->repository->expects($this->once())->method('save')->with($user);
 
@@ -102,7 +102,7 @@ final class UserServiceTest extends TestCase
 
     public function testUpdate(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $dto = new EditUser(UserStatus::Disabled, [UserRole::User->value]);
         $this->repository->expects($this->once())->method('save')->with($user);
         $this->repository->expects($this->once())->method('updateRoles')->with($user->id, UserRole::User->value);
