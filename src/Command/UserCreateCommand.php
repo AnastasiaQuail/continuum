@@ -27,19 +27,19 @@ final readonly class UserCreateCommand
     ) {}
 
     /**
-     * @param non-empty-string $email
+     * @param non-empty-string $identifier
      * @param non-empty-string $password
      */
     public function __invoke(
         SymfonyStyle $io,
         #[Argument]
-        string $email,
+        string $identifier,
         #[Argument]
         string $password,
         #[Option]
         ?UserRole $role = null,
     ): int {
-        $user = new User($email);
+        $user = new User($identifier);
         $user->password = $this->passwordHasher->hashPassword($user, $password);
 
         if (null !== $role) {

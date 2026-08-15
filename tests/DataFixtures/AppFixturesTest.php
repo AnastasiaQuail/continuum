@@ -65,8 +65,8 @@ final class AppFixturesTest extends TestCase
         $users = array_slice($this->persisted, 0, 4);
         self::assertCount(4, $users);
         self::assertSame(
-            ['superadmin@continuum.com', 'admin@continuum.com', 'user@continuum.com', 'disabled_user@continuum.com'],
-            array_map(static fn (User $user): string => $user->email, $users),
+            ['superadmin', 'admin', 'user', 'disabled_user'],
+            array_map(static fn (User $user): string => $user->identifier, $users),
         );
         self::assertSame(
             [UserStatus::Active, UserStatus::Active, UserStatus::Active, UserStatus::Disabled],

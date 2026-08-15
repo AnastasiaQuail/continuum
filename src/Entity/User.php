@@ -21,7 +21,7 @@ use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`users`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_USERS_EMAIL', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_USERS_EMAIL', fields: ['identifier'])]
 #[ORM\HasLifecycleCallbacks]
 final class User implements UserInterface, PasswordAuthenticatedUserInterface, EquatableInterface
 {
@@ -73,9 +73,9 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     private string $timezoneName;
 
     public function __construct(
-        #[ORM\Column(length: 180)]
-        public private(set) string $email {
-            set => '' !== $value ? $value : throw new InvalidArgumentException('Email cannot be empty.');
+        #[ORM\Column(name: 'email', length: 180)]
+        public private(set) string $identifier {
+            set => '' !== $value ? $value : throw new InvalidArgumentException('Username cannot be empty.');
         }
     ) {
         $this->id = Uuid::v7();
@@ -108,7 +108,7 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
         }
 
         if (
-            $user->email !== $this->email
+            $user->identifier !== $this->identifier
             || $user->status !== $this->status
         ) {
             return false;
@@ -140,9 +140,9 @@ final class User implements UserInterface, PasswordAuthenticatedUserInterface, E
     #[Override]
     public function getUserIdentifier(): string
     {
-        assert('' !== $this->email);
+        assert('' !== $this->identifier);
 
-        return $this->email;
+        return $this->identifier;
     }
 
     /**

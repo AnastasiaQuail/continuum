@@ -5,7 +5,7 @@
 
 {% block main -%}
     {%- if app.user -%}
-        <div class="alert alert-secondary">
+        <div class="alert alert-warning">
             You are logged in as {{ app.user.userIdentifier }}, <a href="{{ logout_path() }}">Logout</a>
         </div>
         <div>
@@ -31,28 +31,24 @@
             <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
         {%- endif -%}
 
-        <form method="post" action="{{ path('app_login') }}">
-            <div>
-                <label for="username" hidden>Login</label>
-                <input type="email" value="{{ last_username }}" name="_username" id="username" class="form-control"
-                       autocomplete="email" placeholder="Login" required="required" autofocus>
-            </div>
+        <twig:CardForm>
+            <form method="post" action="{{ path('app_login') }}">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-            <div class="form-control-group">
-                <label for="password" hidden>Password</label>
-                <input type="password" name="_password" id="password" class="form-control"
-                       autocomplete="current-password" minlength="6" placeholder="Password" required="required">
-            </div>
+                <twig:Form:Row>
+                    <label for="username" hidden>Login</label>
+                    <input type="text" value="{{ last_username }}" name="_username" id="username" class="form-control"
+                           autocomplete="username" placeholder="Login" required="required" autofocus>
+                </twig:Form:Row>
 
-            <input type="hidden" name="_csrf_token" data-controller="csrf-protection"
-                   value="{{ csrf_token('authenticate') }}">
+                <twig:Form:Row>
+                    <label for="password" hidden>Password</label>
+                    <input type="password" name="_password" id="password" class="form-control"
+                           autocomplete="current-password" minlength="6" placeholder="Password" required="required">
+                </twig:Form:Row>
 
-            <div class="form-control-group">
-                <button class="btn btn-primary btn-action" type="submit" id="submit">
-                    {{ ux_icon('lucide:log-in') }}
-                    <span>Sign in</span>
-                </button>
-            </div>
-        </form>
+                <twig:Form:Submit label="{{ ux_icon('lucide:log-in') }} Sign in"/>
+            </form>
+        </twig:CardForm>
     {%- endif -%}
 {%- endblock %}

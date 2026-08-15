@@ -5,12 +5,12 @@
 
 {% block main -%}
     <twig:CardForm isPlain id="profile-card">
-        <twig:Form:RowField icon="{{ ux_icon('lucide:user') }}" label="Status">
+        <twig:Form:RowField icon="{{ ux_icon('lucide:shield-cog-corner') }}" label="Status">
             <twig:Badge color="{{ app.user.status.color.value }}">{{ app.user.status.name }}</twig:Badge>
         </twig:Form:RowField>
 
-        <twig:Form:RowField icon="{{ ux_icon('lucide:mail') }}" label="Email">
-            {{- app.user.userIdentifier|email_secure -}}
+        <twig:Form:RowField icon="{{ ux_icon('lucide:user') }}" label="Login">
+            {{- app.user.userIdentifier -}}
         </twig:Form:RowField>
 
         <twig:Form:RowField href="{{ path('app_profile_password') }}"

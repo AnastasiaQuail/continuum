@@ -28,8 +28,8 @@ final class AppFixtures extends Fixture
 
     private function loadUsers(ObjectManager $manager): void
     {
-        foreach ($this->getUserData() as [$email, $password, $status, $roles, $timezone, $location]) {
-            $user = new User($email);
+        foreach ($this->getUserData() as [$identifier, $password, $status, $roles, $timezone, $location]) {
+            $user = new User($identifier);
             $user->password = $this->passwordHasher->hashPassword($user, $password);
             $user->status = $status;
 
@@ -44,7 +44,7 @@ final class AppFixtures extends Fixture
 
             $manager->persist($user);
 
-            $this->addReference($email, $user);
+            $this->addReference($identifier, $user);
         }
 
         $manager->flush();
@@ -59,7 +59,7 @@ final class AppFixtures extends Fixture
     {
         return [
             [
-                'superadmin@continuum.com',
+                'superadmin',
                 'password',
                 UserStatus::Active,
                 [UserRole::SuperAdmin],
@@ -67,7 +67,7 @@ final class AppFixtures extends Fixture
                 new Location(41.006381, 28.975872),
             ],
             [
-                'admin@continuum.com',
+                'admin',
                 'password',
                 UserStatus::Active,
                 [UserRole::Admin],
@@ -75,7 +75,7 @@ final class AppFixtures extends Fixture
                 new Location(52.517389, 13.395131),
             ],
             [
-                'user@continuum.com',
+                'user',
                 'password',
                 UserStatus::Active,
                 [],
@@ -83,7 +83,7 @@ final class AppFixtures extends Fixture
                 null,
             ],
             [
-                'disabled_user@continuum.com',
+                'disabled_user',
                 'password',
                 UserStatus::Disabled,
                 [],

@@ -47,7 +47,7 @@ final class UserCheckerTest extends TestCase
     public function testCheckPreAuth(UserStatus $status, ?Throwable $exception): void
     {
         $userChecker = new UserChecker();
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->status = $status;
 
         if (null === $exception) {

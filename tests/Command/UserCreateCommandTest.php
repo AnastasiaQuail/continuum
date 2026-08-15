@@ -37,7 +37,7 @@ final class UserCreateCommandTest extends KernelTestCase
     public function testInvoke(?UserRole $role, array $resultRoles, UserStatus $resultStatus): void
     {
         $input = [
-            'email' => 'email@example.com',
+            'identifier' => 'username',
             'password' => 'password',
         ];
         if (null !== $role) {
@@ -48,7 +48,7 @@ final class UserCreateCommandTest extends KernelTestCase
 
         self::assertSame(Command::SUCCESS, $commandTester->statusCode);
         self::assertStringContainsString('The user has been created.', $commandTester->getDisplay());
-        self::assertInstanceOf(User::class, $user = $this->repository->findOneBy(['email' => 'email@example.com']));
+        self::assertInstanceOf(User::class, $user = $this->repository->findOneBy(['identifier' => 'username']));
         self::assertTrue($this->passwordHasher->isPasswordValid($user, 'password'));
         self::assertSame(
             array_map(

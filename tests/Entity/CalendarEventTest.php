@@ -22,7 +22,7 @@ final class CalendarEventTest extends TestCase
 {
     public function testCreate(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->timezone = new DateTimeZone('Africa/Tunis');
 
         $calendarEvent = new CalendarEvent(
@@ -72,7 +72,7 @@ final class CalendarEventTest extends TestCase
 
     public function testFormat(): void
     {
-        $user = new User('email@example.com');
+        $user = new User('username');
         $user->timezone = new DateTimeZone('US/Michigan');
 
         $calendarEvent = new CalendarEvent(

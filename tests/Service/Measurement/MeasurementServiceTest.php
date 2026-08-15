@@ -36,7 +36,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testGetByMonth(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $month = new DateTimeImmutable('2025-01-01');
 
         $m1 = new BodyMeasurement(age: 25, height: 180);
@@ -70,7 +70,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testGetByMonthEmpty(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $month = new DateTimeImmutable('2025-02-01');
         $this->repository->expects($this->once())->method('findByRange')->willReturn([]);
 
@@ -81,7 +81,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testGetByRange(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $fromDay = new DateTimeImmutable('2025-01-05');
         $toDay = new DateTimeImmutable('2025-01-10');
 
@@ -146,7 +146,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testGetInitMeasurement(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $date = new DateTimeImmutable('2025-02-01');
 
         $measurement = new BodyMeasurement(age: 25, height: 180);
@@ -169,7 +169,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testGetInitMeasurementNull(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $date = new DateTimeImmutable('2025-02-01');
         $this->repository->expects($this->once())->method('findOneLastByMonth')->willReturn(null);
 
@@ -180,7 +180,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testSaveCreatesNewMeasurement(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $user->password = 'password';
         $user->timezone = new DateTimeZone('UTC');
 
@@ -218,7 +218,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testSaveUpdatesExistingMeasurement(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $user->password = 'password';
 
         $existing = new BodyMeasurement(age: 28, height: 175);
@@ -260,7 +260,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testSaveWithPartialMeasurements(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $user->password = 'password';
         $user->timezone = new DateTimeZone('UTC');
 
@@ -285,7 +285,7 @@ final class MeasurementServiceTest extends TestCase
 
     public function testSaveDatetimeConvertedToUtc(): void
     {
-        $user = new User('test@example.com');
+        $user = new User('identifier');
         $user->password = 'password';
         $user->timezone = new DateTimeZone('UTC');
 
